@@ -1,0 +1,103 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String?  @unique
+  anon_id   String
+  created_at DateTime @default(now())
+  sessions  Session[]
+  images    Image[]
+  proRequests ProRequest[]
+}
+
+model Session {
+  id          String   @id @default(uuid())
+  user        User?    @relation(fields: [userId], references: [id])
+  userId      String?
+  ip_truncated String
+  started_at  DateTime @default(now())
+}
+
+model Image {
+  id            String   @id @default(uuid())
+  user          User?    @relation(fields: [userId], references: [id])
+  userId        String?
+  orig_filename String
+  content_type  String
+  width         Int
+  height        Int
+  size_bytes    Int
+  sha256        String   @unique
+  storage_url   String
+  expires_at    DateTime
+  created_at    DateTime @default(now())
+  jobs          Job[]
+  result        Result?
+  tags          ImageTag[]
+
+  @@index([sha256])
+  @@index([created_at(sort: Desc)])
+}
+
+model Job {
+  id           String   @id @default(uuid())
+  image        Image    @relation(fields: [imageId], references: [id])
+  imageId      String
+  model_name   String
+  status       String
+  duration     Int?
+  cost_yen     Float?
+  created_at   DateTime @default(now())
+  completed_at DateTime?
+
+  @@index([imageId])
+  @@index([status])
+}
+
+model Result {
+  id           String   @id @default(uuid())
+  image        Image    @relation(fields: [imageId], references: [id])
+  imageId      String   @unique
+  result_url   String
+  format       String
+  watermark    Boolean  @default(true)
+  simple_label Boolean  @default(false)
+  created_at   DateTime @default(now())
+
+  @@index([created_at(sort: Desc)])
+}
+
+model Tag {
+  id    String  @id @default(uuid())
+  name  String  @unique
+  images ImageTag[]
+}
+
+model ImageTag {
+  image   Image @relation(fields: [imageId], references: [id])
+  imageId String
+  tag     Tag   @relation(fields: [tagId], references: [id])
+  tagId   String
+
+  @@id([imageId, tagId])
+}
+
+model ProRequest {
+  id            String   @id @default(uuid())
+  user          User?    @relation(fields: [userId], references: [id])
+  userId        String?
+  image         Image?   @relation(fields: [imageId], references: [id])
+  imageId       String?
+  contact_email String
+  note          String?
+  created_at    DateTime @default(now())
+
+  @@index([created_at(sort: Desc)])
+}
