@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>建設会社 | 会社紹介ランディングページ</title>
+  <link rel="preload" as="image" href="assets/images/hero.jpg" type="image/jpeg">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <header class="site-header" id="top">
+    <div class="container header-inner">
+      <a href="#top" class="brand" aria-label="トップへ戻る">
+        <img src="assets/images/logo.svg" alt="建設会社ロゴ" width="160" height="40">
+      </a>
+      <button class="nav-toggle" aria-controls="primary-nav" aria-expanded="false" aria-label="メニューを開閉">
+        <span class="nav-toggle__bar" aria-hidden="true"></span>
+        <span class="nav-toggle__bar" aria-hidden="true"></span>
+        <span class="nav-toggle__bar" aria-hidden="true"></span>
+      </button>
+      <nav id="primary-nav" class="site-nav" aria-label="メインナビゲーション">
+        <ul>
+          <li><a href="#hero">トップ</a></li>
+          <li><a href="#policy">会社方針</a></li>
+          <li><a href="#services">事業内容</a></li>
+          <li><a href="#news">お知らせ</a></li>
+          <li><a href="#info">企業情報</a></li>
+          <li><a href="#contact">お問い合わせ</a></li>
+        </ul>
+      </nav>
+      <a class="header-phone" href="tel:0123456789" aria-label="電話でお問い合わせ 0123-456-789">0123-456-789</a>
+    </div>
+  </header>
+
+  <main>
+    <section id="hero" class="hero" aria-labelledby="hero-title">
+      <div class="container hero__content">
+        <div class="hero__text">
+          <p class="hero__eyebrow">未来を築くパートナー</p>
+          <h1 id="hero-title">堅実な技術と信頼で街を創る建設会社</h1>
+          <p class="hero__lead">公共施設から民間プロジェクトまで、安全・品質・地域共創を実現する総合建設パートナーです。</p>
+          <div class="hero__actions">
+            <a class="btn btn--primary" href="#contact">無料相談</a>
+            <a class="btn btn--secondary" href="#services">事業内容を見る</a>
+          </div>
+        </div>
+        <figure class="hero__figure">
+          <img src="assets/images/hero.jpg" width="640" height="480" alt="建設現場の俯瞰写真" decoding="async">
+          <figcaption class="visually-hidden">建設現場の俯瞰写真</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="policy" class="policy" aria-labelledby="policy-title">
+      <div class="container">
+        <header class="section-header">
+          <h2 id="policy-title">会社方針</h2>
+          <p>安全・品質・地域貢献の3つの柱で未来につながる価値を提供します。</p>
+        </header>
+        <figure class="policy__figure">
+          <img src="assets/images/policy.jpg" alt="安全な施工現場を見守るスタッフ" width="960" height="320" decoding="async">
+          <figcaption>現場と地域をつなぐ建設力</figcaption>
+        </figure>
+        <div class="tabs" data-tabs>
+          <div class="tabs__list" role="tablist" aria-label="会社方針のカテゴリ">
+            <button role="tab" aria-selected="true" aria-controls="tab-panel-safety" id="tab-safety" tabindex="0" data-tab="safety">安全</button>
+            <button role="tab" aria-selected="false" aria-controls="tab-panel-quality" id="tab-quality" tabindex="-1" data-tab="quality">品質</button>
+            <button role="tab" aria-selected="false" aria-controls="tab-panel-community" id="tab-community" tabindex="-1" data-tab="community">地域貢献</button>
+          </div>
+          <div class="tabs__panels">
+            <section id="tab-panel-safety" class="tabs__panel" role="tabpanel" aria-labelledby="tab-safety">
+              <h3>安全第一で人を守る</h3>
+              <p>全ての現場でゼロ災害を掲げ、徹底した安全管理と教育でスタッフと地域住民の安心を守ります。</p>
+              <ul class="kpi-list">
+                <li><strong>無事故日数</strong> 365日以上を継続</li>
+                <li><strong>安全研修受講率</strong> 100%</li>
+              </ul>
+            </section>
+            <section id="tab-panel-quality" class="tabs__panel" role="tabpanel" aria-labelledby="tab-quality" hidden>
+              <h3>品質基準の徹底</h3>
+              <p>国際規格に準拠した品質管理体制で、長寿命で価値ある建造物をお届けします。</p>
+              <ul class="kpi-list">
+                <li><strong>監査適合率</strong> 99%</li>
+                <li><strong>リワーク削減</strong> 過去3年で-25%</li>
+              </ul>
+            </section>
+            <section id="tab-panel-community" class="tabs__panel" role="tabpanel" aria-labelledby="tab-community" hidden>
+              <h3>地域との共創</h3>
+              <p>地域企業や学校と連携し、街の活性化と次世代育成に貢献します。</p>
+              <ul class="kpi-list">
+                <li><strong>地域協力会社</strong> 120社</li>
+                <li><strong>地域イベント参加</strong> 年間24回</li>
+              </ul>
+            </section>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="services" class="services" aria-labelledby="services-title">
+      <div class="container">
+        <header class="section-header">
+          <h2 id="services-title">事業内容</h2>
+          <p>設計から保守まで一貫してサポートする総合力が強みです。</p>
+        </header>
+        <div class="services__grid" id="services-grid" aria-live="polite"></div>
+        <article class="representative" id="representative" aria-labelledby="representative-title">
+          <div class="representative__photo">
+            <img src="assets/images/rep.jpg" alt="代表取締役の写真" width="200" height="200" decoding="async">
+          </div>
+          <div class="representative__content">
+            <h3 id="representative-title">代表プロフィール</h3>
+            <p class="representative__name" id="representative-name"></p>
+            <p class="representative__title" id="representative-title-text"></p>
+            <div>
+              <h4>経歴</h4>
+              <ul id="representative-bio"></ul>
+            </div>
+            <div>
+              <h4>保有資格</h4>
+              <ul id="representative-credentials"></ul>
+            </div>
+            <p class="representative__message" id="representative-message"></p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="news" class="news" aria-labelledby="news-title">
+      <div class="container">
+        <header class="section-header">
+          <h2 id="news-title">お知らせ</h2>
+          <p>最新情報や取り組みをお届けします。</p>
+        </header>
+        <div class="news__tags" aria-label="タグで絞り込み" role="group" id="news-tags"></div>
+        <div class="news__list" id="news-list" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section id="faq" class="faq" aria-labelledby="faq-title">
+      <div class="container">
+        <header class="section-header">
+          <h2 id="faq-title">よくあるご質問</h2>
+          <p>カテゴリを選んで疑問を解消してください。</p>
+        </header>
+        <div class="faq__filters" role="group" aria-label="FAQカテゴリフィルター" id="faq-filters"></div>
+        <div class="faq__list" id="faq-list"></div>
+      </div>
+    </section>
+
+    <section id="info" class="company-info" aria-labelledby="info-title">
+      <div class="container company-info__layout">
+        <div class="company-info__map">
+          <iframe src="about:blank" title="建設会社所在地の地図" loading="lazy"></iframe>
+        </div>
+        <div class="company-info__details">
+          <header class="section-header">
+            <h2 id="info-title">企業情報</h2>
+          </header>
+          <address>
+            <p>〒100-0000 東京都千代田区丸の内1-1-1</p>
+            <p><strong>アクセス（公共交通）：</strong> JR東京駅 丸の内北口より徒歩5分</p>
+            <p><strong>アクセス（お車）：</strong> 首都高速都心環状線 神田橋出口より約10分 ※駐車場あり（要予約）</p>
+            <p><strong>電話：</strong> <a href="tel:0123456789">0123-456-789</a></p>
+          </address>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="contact" aria-labelledby="contact-title">
+      <div class="container">
+        <header class="section-header">
+          <h2 id="contact-title">お問い合わせ</h2>
+          <p>下記フォームよりお気軽にご相談ください。必須項目はすべてご入力ください。</p>
+        </header>
+        <form id="contact-form" novalidate>
+          <div class="form-group">
+            <label for="name">氏名<span aria-hidden="true">*</span></label>
+            <input type="text" id="name" name="name" autocomplete="name" required aria-describedby="error-name">
+            <p class="form-error" id="error-name" role="status" aria-live="polite"></p>
+          </div>
+          <div class="form-group">
+            <label for="email">メールアドレス<span aria-hidden="true">*</span></label>
+            <input type="email" id="email" name="email" autocomplete="email" required aria-describedby="error-email">
+            <p class="form-error" id="error-email" role="status" aria-live="polite"></p>
+          </div>
+          <div class="form-group">
+            <label for="phone">電話番号</label>
+            <input type="tel" id="phone" name="phone" autocomplete="tel" inputmode="tel" aria-describedby="error-phone">
+            <p class="form-error" id="error-phone" role="status" aria-live="polite"></p>
+          </div>
+          <div class="form-group">
+            <label for="purpose">要件<span aria-hidden="true">*</span></label>
+            <select id="purpose" name="purpose" required aria-describedby="error-purpose">
+              <option value="">選択してください</option>
+              <option value="estimate">見積のご相談</option>
+              <option value="project">プロジェクトのご依頼</option>
+              <option value="partnership">協業・パートナーシップ</option>
+              <option value="other">その他のお問い合わせ</option>
+            </select>
+            <p class="form-error" id="error-purpose" role="status" aria-live="polite"></p>
+          </div>
+          <div class="form-group">
+            <label for="message">お問い合わせ内容<span aria-hidden="true">*</span></label>
+            <textarea id="message" name="message" rows="6" minlength="20" required aria-describedby="error-message"></textarea>
+            <p class="form-error" id="error-message" role="status" aria-live="polite"></p>
+          </div>
+          <div class="form-group form-group--checkbox">
+            <input type="checkbox" id="consent" name="consent" required aria-describedby="error-consent">
+            <label for="consent">個人情報の取り扱いに同意します<span aria-hidden="true">*</span></label>
+            <p class="form-error" id="error-consent" role="status" aria-live="polite"></p>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn--primary">送信内容を確認</button>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <a href="tel:0123456789" class="sticky-phone" aria-label="今すぐ電話で相談">0123-456-789</a>
+
+  <div id="toast-container" class="toast-container" aria-live="polite" role="status"></div>
+
+  <script type="module" src="assets/js/main.js"></script>
+</body>
+</html>
