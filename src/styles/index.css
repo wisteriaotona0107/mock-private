@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  @apply bg-[#0B1020] text-[#E6EDF8] font-sans;
+}
+
+a {
+  @apply text-accent;
+}
+
+.neon-theme {
+  background: radial-gradient(circle at top, rgba(61, 178, 255, 0.08), transparent 60%), #0B1020;
+}
+
+.focus-ring {
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+}
+
+.neon-card {
+  @apply bg-surface/90 border border-white/10 rounded-2xl shadow-lg shadow-accent/30 backdrop-blur;
+}
+
+.neon-border {
+  box-shadow: 0 0 0 1px rgba(61, 178, 255, 0.35);
+}
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(61, 178, 255, 0.65);
+  border-radius: 999px;
+}
+
+.card-grid {
+  @apply grid gap-6 md:grid-cols-3;
+}
+
+.table-header {
+  @apply text-left text-xs uppercase tracking-wider text-accent/80;
+}
+
+.badge {
+  @apply inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide;
+}
+
+.badge-pending {
+  @apply badge bg-slate/30 text-slate;
+}
+
+.badge-progress {
+  @apply badge bg-accent/20 text-accent;
+}
+
+.badge-done {
+  @apply badge bg-success/20 text-success;
+}
+
+.badge-milestone {
+  @apply badge bg-milestone/20 text-milestone;
+}
