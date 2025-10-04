@@ -1,0 +1,13 @@
+{
+  "name": "mock-private",
+  "version": "1.0.0",
+  "description": "private mockup",
+  "main": "index.js",
+  "scripts": {
+    "test": "node tests/simulation.test.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
