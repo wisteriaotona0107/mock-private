@@ -80,6 +80,11 @@ class GameEngine {
     this.eventLog.push({ type: 'directionFocusSet', material });
   }
 
+  clearDirectionFocus() {
+    this.runState.directionFocus = undefined;
+    this.eventLog.push({ type: 'directionFocusCleared' });
+  }
+
   getTheme() {
     return this.themes[this.runState.theme];
   }
