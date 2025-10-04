@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>配置×コンボ×一時バフ プロトタイプ</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="page-header">
+      <h1>配置×コンボ×一時バフ プロトタイプ</h1>
+      <p class="tagline">ブロック配置とコンボ演出をコンソールからブラウザで確認できるモック</p>
+    </header>
+
+    <main class="layout">
+      <section class="panel" aria-labelledby="run-settings">
+        <h2 id="run-settings">周回設定</h2>
+        <div class="field-group">
+          <label for="theme-select">テーマ</label>
+          <select id="theme-select"></select>
+        </div>
+        <div class="field-group">
+          <label for="cancel-mode">キャンセル時の挙動</label>
+          <select id="cancel-mode">
+            <option value="SKIP">SKIP（演出省略）</option>
+            <option value="VIEW_ONLY">VIEW ONLY（演出のみ）</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label for="gamble-behavior">完全博打の選択</label>
+          <select id="gamble-behavior">
+            <option value="cancel">常にキャンセル</option>
+            <option value="challenge">常に挑戦</option>
+          </select>
+        </div>
+        <button id="start-run" class="primary">新しい周回を開始</button>
+      </section>
+
+      <section class="panel" aria-labelledby="placement-controls">
+        <h2 id="placement-controls">配置操作</h2>
+        <div class="field-group">
+          <label for="focus-select">素材の方向性</label>
+          <select id="focus-select">
+            <option value="">未選択</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label for="block-select">配置ブロック</label>
+          <select id="block-select"></select>
+        </div>
+        <div class="block-details" id="block-details"></div>
+        <div class="button-row">
+          <button id="place-block" class="primary">ブロックを配置</button>
+          <button id="force-combo" class="secondary">コンボ精算</button>
+        </div>
+        <div class="result" id="placement-result" aria-live="polite"></div>
+      </section>
+
+      <section class="panel" aria-labelledby="run-state">
+        <h2 id="run-state">現在のステータス</h2>
+        <div class="state-grid">
+          <div>
+            <h3>コンボ</h3>
+            <p id="combo-value" class="big-number">0</p>
+            <p class="sub">方向性: <span id="direction-label">未設定</span></p>
+          </div>
+          <div>
+            <h3>素材ストック</h3>
+            <table id="materials-table"></table>
+          </div>
+          <div>
+            <h3>保留中バフ</h3>
+            <ul id="buff-list" class="tag-list"></ul>
+          </div>
+          <div>
+            <h3>配置上限</h3>
+            <ul id="limit-list" class="tag-list"></ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="event-log">
+        <h2 id="event-log">イベントログ</h2>
+        <ul id="event-feed" class="log"></ul>
+      </section>
+
+      <section class="panel" aria-labelledby="fx-log">
+        <h2 id="fx-log">演出ログ</h2>
+        <ul id="fx-feed" class="log"></ul>
+      </section>
+    </main>
+
+    <footer class="page-footer">
+      <p>シミュレーションロジック: Node用エンジンを流用。<br />高コンボ博打や小/大演出の発火状況をブラウザで確認できます。</p>
+    </footer>
+
+    <script defer src="app.js"></script>
+  </body>
+</html>

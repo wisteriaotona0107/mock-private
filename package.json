@@ -1,0 +1,16 @@
+{
+  "name": "mock-private",
+  "version": "1.0.0",
+  "description": "private mockup",
+  "main": "index.js",
+  "scripts": {
+    "test": "node tests/simulation.test.js",
+    "build:web": "node scripts/build-web.js",
+    "watch:web": "node scripts/build-web.js --watch",
+    "dev:web": "node scripts/build-web.js --serve"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
