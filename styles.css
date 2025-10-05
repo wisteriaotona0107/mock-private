@@ -1,0 +1,147 @@
+:root {
+  color-scheme: dark;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: #0a0d12;
+  overflow: hidden;
+}
+
+#ui-root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+#game {
+  width: 100%;
+  height: 100%;
+  display: block;
+  image-rendering: pixelated;
+  background: linear-gradient(#1c2333, #050608 60%);
+}
+
+#debug-panel {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: 6px;
+  color: #e8f1ff;
+  font-size: 12px;
+  line-height: 1.5;
+  min-width: 180px;
+  pointer-events: none;
+}
+
+#hotbar {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  padding: 10px 12px;
+  background: rgba(10, 14, 22, 0.7);
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+.hotbar-slot {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #f4f4f4;
+  font-size: 12px;
+  position: relative;
+  user-select: none;
+}
+
+.hotbar-slot.selected {
+  border-color: #87f1ff;
+  box-shadow: 0 0 10px rgba(135, 241, 255, 0.7);
+}
+
+.hotbar-slot .label {
+  position: absolute;
+  bottom: 4px;
+  right: 6px;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.hotbar-slot .count {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+#menu {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(5, 10, 16, 0.92);
+  padding: 24px 32px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  color: #f2f7ff;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  z-index: 10;
+}
+
+#menu button {
+  padding: 10px 24px;
+  background: linear-gradient(135deg, #1fa2ff, #12d8fa);
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  color: #0c1724;
+  font-weight: 600;
+  transition: transform 0.15s ease;
+}
+
+#menu button:hover {
+  transform: scale(1.05);
+}
+
+#menu.hidden {
+  display: none;
+}
+
+#menu .hint {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+#notification {
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 20px;
+  background: rgba(25, 32, 44, 0.85);
+  color: #e5faff;
+  border-radius: 999px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  transition: opacity 0.3s ease;
+}
+
+#notification.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
