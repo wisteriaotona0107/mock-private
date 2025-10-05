@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Roguelite Sandbox Prototype</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div id="ui-root">
+      <canvas id="game" aria-label="Sandbox world"></canvas>
+      <div id="debug-panel"></div>
+      <div id="hotbar"></div>
+      <div id="menu" class="hidden" role="dialog" aria-modal="true">
+        <h2>Pause Menu</h2>
+        <button id="save-btn">Save</button>
+        <button id="load-btn">Load</button>
+        <button id="reset-btn">Reset World</button>
+        <p class="hint">Esc で閉じる</p>
+      </div>
+      <div id="notification" class="hidden"></div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
