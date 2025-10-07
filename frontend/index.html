@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>マスタメンテ</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <h1>マスタメンテ</h1>
+      <p class="app-subtitle">検索・編集が1画面で完結するシンプルなマスタ管理ツール</p>
+    </header>
+
+    <main class="app-main">
+      <section class="panel search-panel" aria-label="検索と一覧">
+        <form id="search-form" class="search-form" novalidate>
+          <label for="search-input">キーワード検索</label>
+          <div class="search-input-group">
+            <input id="search-input" name="q" type="search" placeholder="コード / 名前" />
+            <div class="search-buttons">
+              <button type="submit">検索</button>
+              <button type="button" id="clear-search">クリア</button>
+            </div>
+          </div>
+        </form>
+
+        <div class="table-wrapper" aria-live="polite">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">コード</th>
+                <th scope="col">名前</th>
+                <th scope="col">有効</th>
+                <th scope="col">更新日時</th>
+                <th scope="col">編集</th>
+              </tr>
+            </thead>
+            <tbody id="items-body"></tbody>
+          </table>
+        </div>
+
+        <div class="paging-controls">
+          <button type="button" id="prev-page" disabled>前へ</button>
+          <button type="button" id="next-page" disabled>次へ</button>
+        </div>
+      </section>
+
+      <section class="panel form-panel" aria-label="編集フォーム">
+        <form id="item-form" novalidate>
+          <input type="hidden" name="id" id="item-id" />
+          <input type="hidden" name="version" id="item-version" />
+
+          <fieldset>
+            <legend>基本情報</legend>
+            <div class="form-group">
+              <label for="item-code">コード <span aria-hidden="true" class="required">*</span></label>
+              <input id="item-code" name="code" type="text" maxlength="64" required />
+            </div>
+            <div class="form-group">
+              <label for="item-name">名前 <span aria-hidden="true" class="required">*</span></label>
+              <input id="item-name" name="name" type="text" maxlength="128" required />
+            </div>
+            <div class="form-group">
+              <label for="item-description">説明</label>
+              <textarea id="item-description" name="description" rows="4" maxlength="512"></textarea>
+            </div>
+            <div class="form-group checkbox">
+              <input id="item-enabled" name="enabled" type="checkbox" />
+              <label for="item-enabled">有効</label>
+            </div>
+          </fieldset>
+
+          <div class="form-actions">
+            <button type="submit" id="save-button">保存</button>
+            <button type="button" id="reset-button">リセット</button>
+            <button type="button" id="delete-button" class="danger">削除</button>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <div id="toast-container" aria-live="assertive" role="status"></div>
+
+    <script type="module" src="config.js"></script>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

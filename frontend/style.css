@@ -1,0 +1,275 @@
+:root {
+  color-scheme: light;
+  font-family: "Segoe UI", "Hiragino Kaku Gothic ProN", "BIZ UDPGothic", sans-serif;
+  background-color: #f5f6fa;
+  color: #1f2933;
+  line-height: 1.5;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+.app-header {
+  background: linear-gradient(135deg, #4c6ef5, #228be6);
+  color: #fff;
+  padding: 1.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.app-header h1 {
+  margin: 0 0 0.5rem;
+  font-size: 1.8rem;
+}
+
+.app-subtitle {
+  margin: 0;
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+.app-main {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  align-items: flex-start;
+}
+
+.panel {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  padding: 1.5rem;
+}
+
+.search-panel {
+  flex: 1 1 55%;
+}
+
+.form-panel {
+  flex: 1 1 45%;
+  position: sticky;
+  top: 1.5rem;
+}
+
+.search-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.search-input-group {
+  display: flex;
+  gap: 0.5rem;
+  align-items: stretch;
+}
+
+.search-input-group input[type="search"] {
+  flex: 1;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #d0d7e2;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.search-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1.1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  background: #4263eb;
+  color: #fff;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+button:disabled {
+  background: #c5cee0;
+  color: #fff;
+  cursor: not-allowed;
+  transform: none;
+}
+
+button:not(:disabled):hover,
+button:not(:disabled):focus-visible {
+  background: #364fc7;
+}
+
+button:not(:disabled):active {
+  transform: translateY(1px);
+}
+
+button.danger {
+  background: #f03e3e;
+}
+
+button.danger:hover,
+button.danger:focus-visible {
+  background: #c92a2a;
+}
+
+.table-wrapper {
+  max-height: 60vh;
+  overflow: auto;
+  border: 1px solid #e1e7f0;
+  border-radius: 8px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+thead {
+  background: #f1f4ff;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+th,
+td {
+  padding: 0.6rem 0.8rem;
+  border-bottom: 1px solid #eef1f7;
+  text-align: left;
+  vertical-align: middle;
+}
+
+tbody tr:hover {
+  background: #f8f9ff;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  background: #e7f5ff;
+  color: #1c7ed6;
+}
+
+.badge.disabled {
+  background: #fff5f5;
+  color: #c92a2a;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.form-group input,
+.form-group textarea {
+  padding: 0.65rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid #d5ddea;
+  font-size: 1rem;
+}
+
+.form-group.checkbox {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.form-group.checkbox input[type="checkbox"] {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.required {
+  color: #f03e3e;
+  font-weight: bold;
+}
+
+#toast-container {
+  position: fixed;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 999;
+}
+
+.toast {
+  padding: 0.9rem 1.1rem;
+  border-radius: 10px;
+  color: #fff;
+  min-width: 240px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.35);
+  opacity: 0;
+  transform: translateY(10px);
+  animation: toast-in 200ms ease forwards, toast-out 400ms ease forwards 3600ms;
+}
+
+.toast.success {
+  background: #37b24d;
+}
+
+.toast.error {
+  background: #fa5252;
+}
+
+.toast.info {
+  background: #4263eb;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes toast-out {
+  to {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+@media (max-width: 960px) {
+  .app-main {
+    flex-direction: column;
+  }
+
+  .form-panel {
+    position: static;
+    width: 100%;
+  }
+
+  .table-wrapper {
+    max-height: none;
+  }
+}
+
+tbody tr.selected {
+  background: #e7f5ff !important;
+}
