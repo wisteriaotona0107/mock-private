@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>マスタメンテ Web アプリ (Mock)</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <h1>マスタメンテ Web アプリ</h1>
+      <p class="subtitle">DynamoDB マスタデータ管理のモックツール</p>
+    </header>
+
+    <main class="app-main">
+      <section class="panel" aria-labelledby="table-controls-title">
+        <div class="panel-header">
+          <h2 id="table-controls-title">テーブル選択と検索条件</h2>
+        </div>
+        <form id="table-form" class="form-grid">
+          <label class="form-field">
+            <span class="form-label">テーブル</span>
+            <select id="table-select" name="table" aria-label="対象テーブル">
+              <!-- オプションは JavaScript で挿入 -->
+            </select>
+          </label>
+
+          <fieldset class="conditions" aria-label="検索条件">
+            <legend>検索条件</legend>
+            <div id="condition-list" class="condition-list" role="list">
+              <!-- 条件行を挿入 -->
+            </div>
+            <div class="condition-actions">
+              <button type="button" id="add-condition" class="btn ghost">条件を追加</button>
+            </div>
+          </fieldset>
+
+          <div class="form-actions">
+            <button type="submit" class="btn primary">検索</button>
+            <button type="button" id="reset-conditions" class="btn ghost">条件クリア</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="panel" aria-labelledby="json-input-title">
+        <div class="panel-header">
+          <h2 id="json-input-title">JSON データ入力</h2>
+          <p class="panel-subtitle">DynamoDB 形式の JSON をペーストし、読み込みボタンで反映します。</p>
+        </div>
+        <div class="json-input">
+          <textarea id="json-source" spellcheck="false" aria-label="JSON データ入力"></textarea>
+          <div class="json-actions">
+            <button type="button" id="load-json" class="btn secondary">JSON 読み込み</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="result-title">
+        <div class="panel-header">
+          <h2 id="result-title">検索結果</h2>
+          <div class="panel-actions">
+            <button type="button" id="add-row" class="btn secondary">行を追加</button>
+            <button type="button" id="update-data" class="btn primary">更新</button>
+          </div>
+        </div>
+        <div id="feedback" role="status" aria-live="polite" class="feedback"></div>
+        <div class="table-wrapper">
+          <table id="result-table">
+            <thead></thead>
+            <tbody></tbody>
+          </table>
+          <div id="empty-state" class="empty-state" hidden>
+            <p>条件に一致するレコードがありません。</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <small>このアプリは DynamoDB マスタメンテナンスのモック実装です。</small>
+    </footer>
+
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>
