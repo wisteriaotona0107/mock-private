@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tarot Gacha Mock App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Marcellus&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <aside class="app__nav" aria-label="スクリーン切替">
+        <div class="logo">Tarot Gacha</div>
+        <nav>
+          <button class="nav__item is-active" data-screen="top">トップ</button>
+          <button class="nav__item" data-screen="banner">バナー詳細</button>
+          <button class="nav__item" data-screen="gacha">ガチャ演出</button>
+          <button class="nav__item" data-screen="result">リザルト</button>
+          <button class="nav__item" data-screen="library">図鑑</button>
+          <button class="nav__item" data-screen="mypage">マイページ</button>
+          <button class="nav__item" data-screen="cms">管理</button>
+          <button class="nav__item" data-screen="components">コンポーネント</button>
+          <button class="nav__item" data-screen="states">ステート</button>
+        </nav>
+      </aside>
+      <main class="app__content">
+        <header class="app__header">
+          <h1>Tarot Gacha UI Mock</h1>
+          <p>ハイファイモックをレスポンシブフレームとコンポーネントで再現したデモアプリです。</p>
+        </header>
+
+        <section id="screen-top" class="screen is-visible" aria-label="トップ画面">
+          <div class="frame-grid">
+            <h2 class="screen__title">トップ / バナー一覧</h2>
+            <div class="frame-grid__layout">
+              <div class="frame frame--desktop">
+                <header class="hero">
+                  <div>
+                    <span class="eyebrow">Mystic Collection</span>
+                    <h3>Tarot Gacha</h3>
+                    <p>静かな高揚感の中で、フェルトの卓上にカードが舞う。</p>
+                    <button class="btn btn--primary">バナーを見る</button>
+                  </div>
+                  <div class="hero__cards" aria-hidden="true">
+                    <div class="card card--back"></div>
+                    <div class="card card--back"></div>
+                    <div class="card card--back"></div>
+                  </div>
+                </header>
+                <section class="banner-grid">
+                  <article class="banner-card">
+                    <div class="banner-card__visual"></div>
+                    <header>
+                      <span class="badge badge--period">〜11/30</span>
+                      <h4>月光に瞬く幻夢</h4>
+                    </header>
+                    <div class="banner-card__meta">
+                      <button class="btn btn--ghost">提供割合</button>
+                      <div class="pity">
+                        <span>Pity</span>
+                        <div class="pity__bar"><span style="width: 65%"></span></div>
+                      </div>
+                    </div>
+                  </article>
+                  <article class="banner-card">
+                    <div class="banner-card__visual banner-card__visual--purple"></div>
+                    <header>
+                      <span class="badge badge--period">〜12/12</span>
+                      <h4>翡翠の調律</h4>
+                    </header>
+                    <div class="banner-card__meta">
+                      <button class="btn btn--ghost">提供割合</button>
+                      <div class="pity">
+                        <span>Pity</span>
+                        <div class="pity__bar"><span style="width: 20%"></span></div>
+                      </div>
+                    </div>
+                  </article>
+                  <article class="banner-card">
+                    <div class="banner-card__visual banner-card__visual--emerald"></div>
+                    <header>
+                      <span class="badge badge--period">常設</span>
+                      <h4>神託スタンダード</h4>
+                    </header>
+                    <div class="banner-card__meta">
+                      <button class="btn btn--ghost">提供割合</button>
+                      <div class="pity">
+                        <span>Pity</span>
+                        <div class="pity__bar"><span style="width: 80%"></span></div>
+                      </div>
+                    </div>
+                  </article>
+                </section>
+                <footer class="page-footer">
+                  <div class="footer__legal">
+                    <a href="#">提供割合</a>
+                    <a href="#">利用規約</a>
+                  </div>
+                </footer>
+              </div>
+
+              <div class="frame frame--mobile">
+                <div class="frame__header">トップ / モバイル</div>
+                <div class="mobile-hero">
+                  <div>
+                    <h3>Tarot Gacha</h3>
+                    <p>神秘的なガチャ体験へ。</p>
+                  </div>
+                  <button class="btn btn--primary">バナーを見る</button>
+                </div>
+                <div class="mobile-banner-list">
+                  <article class="banner-card banner-card--compact">
+                    <div class="banner-card__visual"></div>
+                    <div>
+                      <header>
+                        <span class="badge badge--period">〜11/30</span>
+                        <h4>月光に瞬く幻夢</h4>
+                      </header>
+                      <div class="pity pity--compact">
+                        <span>Pity 65%</span>
+                        <div class="pity__bar"><span style="width: 65%"></span></div>
+                      </div>
+                    </div>
+                  </article>
+                  <article class="banner-card banner-card--compact">
+                    <div class="banner-card__visual banner-card__visual--purple"></div>
+                    <div>
+                      <header>
+                        <span class="badge badge--period">〜12/12</span>
+                        <h4>翡翠の調律</h4>
+                      </header>
+                      <div class="pity pity--compact">
+                        <span>Pity 20%</span>
+                        <div class="pity__bar"><span style="width: 20%"></span></div>
+                      </div>
+                    </div>
+                  </article>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="screen-banner" class="screen" aria-label="バナー詳細">
+          <div class="frame-grid">
+            <h2 class="screen__title">バナー詳細</h2>
+            <div class="frame-grid__layout">
+              <div class="frame frame--desktop">
+                <div class="banner-detail">
+                  <header class="banner-detail__header">
+                    <div>
+                      <h3>月光に瞬く幻夢</h3>
+                      <p>開催期間: 2025/10/01〜2025/11/30</p>
+                    </div>
+                    <div class="progress">
+                      <span>ピティ残 12</span>
+                      <div class="progress__bar"><span style="width: 40%"></span></div>
+                      <button class="btn btn--ghost">提供割合</button>
+                    </div>
+                  </header>
+                  <div class="spread-selector" role="tablist">
+                    <button class="spread-tab is-active" role="tab">1枚</button>
+                    <button class="spread-tab" role="tab">3枚</button>
+                    <button class="spread-tab" role="tab">ケルト十字</button>
+                  </div>
+                  <div class="spread-preview">
+                    <div class="spread-card" style="top: 20%; left: 25%; transform: rotate(-6deg);"></div>
+                    <div class="spread-card" style="top: 40%; left: 40%; transform: rotate(4deg);"></div>
+                    <div class="spread-card" style="top: 60%; left: 55%; transform: rotate(-2deg);"></div>
+                  </div>
+                  <div class="cta-group">
+                    <button class="btn btn--primary">単発</button>
+                    <button class="btn btn--primary">10連</button>
+                    <span class="badge badge--info">残チケット 3</span>
+                  </div>
+                </div>
+              </div>
+              <div class="frame frame--mobile">
+                <div class="frame__header">バナー詳細 / モバイル</div>
+                <div class="banner-detail banner-detail--mobile">
+                  <header class="banner-detail__header">
+                    <div>
+                      <h3>月光に瞬く幻夢</h3>
+                      <p>10/01〜11/30</p>
+                    </div>
+                    <button class="btn btn--ghost">提供割合</button>
+                  </header>
+                  <div class="progress progress--mobile">
+                    <span>ピティ残 12</span>
+                    <div class="progress__bar"><span style="width: 40%"></span></div>
+                  </div>
+                  <div class="spread-selector spread-selector--mobile">
+                    <button class="spread-tab is-active">1枚</button>
+                    <button class="spread-tab">3枚</button>
+                    <button class="spread-tab">ケルト十字</button>
+                  </div>
+                  <div class="spread-preview spread-preview--mobile">
+                    <div class="spread-card" style="top: 30%; left: 45%; transform: rotate(8deg);"></div>
+                    <div class="spread-card" style="top: 45%; left: 55%; transform: rotate(-4deg);"></div>
+                  </div>
+                  <div class="cta-group cta-group--stack">
+                    <button class="btn btn--primary">単発</button>
+                    <button class="btn btn--primary">10連</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <dialog class="modal" open>
+              <header>
+                <h3>提供割合</h3>
+                <button class="modal__close" aria-label="閉じる">×</button>
+              </header>
+              <div class="modal__grid">
+                <div>
+                  <h4>レア分布</h4>
+                  <ul>
+                    <li>UR: 2%</li>
+                    <li>SR: 8%</li>
+                    <li>R: 30%</li>
+                    <li>N: 60%</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4>正逆比率</h4>
+                  <p>正位置 70% / 逆位置 30%</p>
+                </div>
+              </div>
+              <p class="modal__note">※ 提供割合は小数点第3位を切り捨て表示しています。</p>
+            </dialog>
+          </div>
+        </section>
+
+        <section id="screen-gacha" class="screen" aria-label="ガチャ演出">
+          <div class="frame-grid">
+            <h2 class="screen__title">ガチャ演出</h2>
+            <div class="frame-grid__layout">
+              <div class="frame frame--desktop frame--gacha">
+                <div class="gacha-stage">
+                  <div class="gacha-stage__table">
+                    <div class="gacha-card" data-rarity="sr" style="top: 32%; left: 28%; transform: rotate(-8deg)">
+                      <div class="gacha-card__face gacha-card__face--back"></div>
+                      <div class="gacha-card__face gacha-card__face--front">
+                        <span>星の導き</span>
+                        <span class="gacha-card__orientation">▲</span>
+                      </div>
+                    </div>
+                    <div class="gacha-card" data-rarity="ur" style="top: 40%; left: 48%; transform: rotate(5deg)">
+                      <div class="gacha-card__face gacha-card__face--back"></div>
+                      <div class="gacha-card__face gacha-card__face--front">
+                        <span>聖杯 Ace</span>
+                        <span class="gacha-card__orientation">▽</span>
+                      </div>
+                    </div>
+                    <div class="gacha-card" data-rarity="r" style="top: 50%; left: 65%; transform: rotate(-3deg)">
+                      <div class="gacha-card__face gacha-card__face--back"></div>
+                      <div class="gacha-card__face gacha-card__face--front">
+                        <span>王国の盾</span>
+                        <span class="gacha-card__orientation">▲</span>
+                      </div>
+                    </div>
+                  </div>
+                  <button class="skip-button">スキップ</button>
+                </div>
+              </div>
+              <div class="frame frame--mobile">
+                <div class="frame__header">ガチャ演出 / モバイル</div>
+                <div class="gacha-stage gacha-stage--mobile">
+                  <div class="gacha-card" data-rarity="r">
+                    <div class="gacha-card__face gacha-card__face--back"></div>
+                    <div class="gacha-card__face gacha-card__face--front">
+                      <span>正義</span>
+                      <span class="gacha-card__orientation">▲</span>
+                    </div>
+                  </div>
+                  <button class="skip-button">スキップ</button>
+                </div>
+              </div>
+            </div>
+            <div class="legend">
+              <h3>レア演出レジェンド</h3>
+              <ul>
+                <li><span class="legend__swatch legend__swatch--n"></span>N: 淡金パーティクル</li>
+                <li><span class="legend__swatch legend__swatch--r"></span>R: 金箔の光輪</li>
+                <li><span class="legend__swatch legend__swatch--sr"></span>SR: 紫金の光流</li>
+                <li><span class="legend__swatch legend__swatch--ur"></span>UR: 白金＋星屑</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="screen-result" class="screen" aria-label="リザルト">
+          <div class="frame-grid">
+            <h2 class="screen__title">リザルト</h2>
+            <div class="frame-grid__layout">
+              <div class="frame frame--desktop">
+                <div class="result-layout">
+                  <div class="result-grid">
+                    <div class="card-tile" data-rarity="ur">
+                      <div class="card-tile__orientation">▽</div>
+                      <div class="card-tile__name">愚者 0</div>
+                    </div>
+                    <div class="card-tile" data-rarity="sr">
+                      <div class="card-tile__orientation">▲</div>
+                      <div class="card-tile__name">星 XVII</div>
+                    </div>
+                    <div class="card-tile" data-rarity="sr">
+                      <div class="card-tile__orientation">▲</div>
+                      <div class="card-tile__name">月 XVIII</div>
+                    </div>
+                    <div class="card-tile" data-rarity="r">
+                      <div class="card-tile__orientation">▽</div>
+                      <div class="card-tile__name">節制 XIV</div>
+                    </div>
+                    <div class="card-tile" data-rarity="n">
+                      <div class="card-tile__orientation">▲</div>
+                      <div class="card-tile__name">杖の6</div>
+                    </div>
+                  </div>
+                  <aside class="result-detail">
+                    <div class="result-detail__header">
+                      <h3>愚者 0</h3>
+                      <span class="badge badge--rarity">UR</span>
+                      <div class="orientation-tabs">
+                        <button class="orientation-tab is-active">正位置</button>
+                        <button class="orientation-tab">逆位置</button>
+                      </div>
+                    </div>
+                    <div class="result-detail__body">
+                      <h4>新たな旅路</h4>
+                      <p>制約から解き放たれ、未知へ踏み出す軽やかなエネルギー。</p>
+                      <div class="tag-group">
+                        <span class="tag">冒険</span>
+                        <span class="tag">可能性</span>
+                        <span class="tag">自由</span>
+                      </div>
+                    </div>
+                    <div class="result-detail__footer">
+                      <button class="btn btn--outline">シェア</button>
+                    </div>
+                  </aside>
+                </div>
+                <div class="cta-group">
+                  <button class="btn btn--primary">もう一度引く</button>
+                  <button class="btn btn--outline">図鑑へ</button>
+                </div>
+              </div>
+              <div class="frame frame--mobile">
+                <div class="frame__header">リザルト / モバイル</div>
+                <div class="result-mobile">
+                  <div class="result-mobile__header">
+                    <h3>結果一覧</h3>
+                    <button class="btn btn--outline">シェア</button>
+                  </div>
+                  <div class="result-mobile__grid">
+                    <div class="card-tile" data-rarity="sr">
+                      <div class="card-tile__orientation">▲</div>
+                      <div class="card-tile__name">恋人 VI</div>
+                    </div>
+                    <div class="card-tile" data-rarity="r">
+                      <div class="card-tile__orientation">▽</div>
+                      <div class="card-tile__name">塔 XVI</div>
+                    </div>
+                  </div>
+                  <div class="result-mobile__detail">
+                    <h4>恋人 VI</h4>
+                    <p>相互理解と調和。</p>
+                  </div>
+                  <div class="cta-group cta-group--stack">
+                    <button class="btn btn--primary">もう一度引く</button>
+                    <button class="btn btn--outline">図鑑へ</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="screen-library" class="screen" aria-label="図鑑">
+          <div class="frame-grid">
+            <h2 class="screen__title">図鑑</h2>
+            <div class="frame-grid__layout">
+              <div class="frame frame--desktop">
+                <div class="library-toolbar">
+                  <div class="toggle-group">
+                    <button class="toggle is-active">UR</button>
+                    <button class="toggle">SR</button>
+                    <button class="toggle">R</button>
+                    <button class="toggle">N</button>
+                  </div>
+                  <div class="chip-group">
+                    <span class="chip">冒険</span>
+                    <span class="chip chip--selected">癒し</span>
+                    <span class="chip">運命</span>
+                    <span class="chip">夢</span>
+                  </div>
+                  <label class="switch">
+                    <input type="checkbox" checked />
+                    <span class="switch__track"></span>
+                    <span class="switch__label">所持のみ</span>
+                  </label>
+                </div>
+                <div class="library-grid">
+                  <div class="card-tile card-tile--skeleton"></div>
+                  <div class="card-tile" data-rarity="sr">
+                    <div class="card-tile__orientation">▲</div>
+                    <div class="card-tile__name">太陽 XIX</div>
+                  </div>
+                  <div class="card-tile" data-rarity="r">
+                    <div class="card-tile__orientation">▽</div>
+                    <div class="card-tile__name">剣の2</div>
+                  </div>
+                  <div class="card-tile" data-rarity="n">
+                    <div class="card-tile__orientation">▲</div>
+                    <div class="card-tile__name">杯の4</div>
+                  </div>
+                </div>
+              </div>
+              <div class="frame frame--mobile">
+                <div class="frame__header">図鑑 / モバイル</div>
+                <div class="library-mobile">
+                  <div class="chip-group chip-group--wrap">
+                    <span class="chip chip--selected">癒し</span>
+                    <span class="chip">運命</span>
+                  </div>
+                  <div class="library-mobile__list">
+                    <div class="card-tile" data-rarity="sr">
+                      <div class="card-tile__orientation">▲</div>
+                      <div class="card-tile__name">太陽 XIX</div>
+                    </div>
+                    <div class="card-tile card-tile--skeleton"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal library-modal">
+              <header>
+                <h3>太陽 XIX</h3>
+                <div class="orientation-tabs">
+                  <button class="orientation-tab is-active">正位置</button>
+                  <button class="orientation-tab">逆位置</button>
+                </div>
+              </header>
+              <p>祝福と生命力が満ちる時期。光の下で新たな芽が育ちます。</p>
+              <footer>
+                <span class="badge badge--info">登場バナー: 月光に瞬く幻夢</span>
+              </footer>
+            </div>
+          </div>
+        </section>
+
+        <section id="screen-mypage" class="screen" aria-label="マイページ">
+          <div class="frame-grid">
+            <h2 class="screen__title">マイページ</h2>
+            <div class="frame-grid__layout">
+              <div class="frame frame--desktop">
+                <div class="mypage">
+                  <section class="mypage__timeline">
+                    <h3>最近の結果</h3>
+                    <ul>
+                      <li>
+                        <time>2025/10/09</time>
+                        <span>UR 愚者 (逆位置)</span>
+                      </li>
+                      <li>
+                        <time>2025/10/05</time>
+                        <span>SR 星 (正位置)</span>
+                      </li>
+                    </ul>
+                  </section>
+                  <section class="mypage__favorites">
+                    <h3>ピン留めカード</h3>
+                    <div class="favorites-grid">
+                      <div class="card-tile" data-rarity="ur">
+                        <div class="card-tile__orientation">▲</div>
+                        <div class="card-tile__name">世界 XXI</div>
+                      </div>
+                      <div class="card-tile" data-rarity="sr">
+                        <div class="card-tile__orientation">▽</div>
+                        <div class="card-tile__name">月 XVIII</div>
+                      </div>
+                    </div>
+                  </section>
+                  <section class="mypage__settings">
+                    <h3>基本設定</h3>
+                    <div class="setting-row">
+                      <label class="switch">
+                        <input type="checkbox" checked />
+                        <span class="switch__track"></span>
+                        <span class="switch__label">演出スキップを確認</span>
+                      </label>
+                      <label class="switch">
+                        <input type="checkbox" />
+                        <span class="switch__track"></span>
+                        <span class="switch__label">ライトテーマ</span>
+                      </label>
+                    </div>
+                  </section>
+                </div>
+              </div>
+              <div class="frame frame--mobile">
+                <div class="frame__header">マイページ / モバイル</div>
+                <div class="mypage-mobile">
+                  <section>
+                    <h3>最近の結果</h3>
+                    <ul>
+                      <li>
+                        <time>10/09</time>
+                        <span>UR 愚者 ▽</span>
+                      </li>
+                      <li>
+                        <time>10/05</time>
+                        <span>SR 星 ▲</span>
+                      </li>
+                    </ul>
+                  </section>
+                  <section>
+                    <h3>設定</h3>
+                    <label class="switch">
+                      <input type="checkbox" checked />
+                      <span class="switch__track"></span>
+                      <span class="switch__label">演出確認</span>
+                    </label>
+                  </section>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="screen-cms" class="screen" aria-label="管理">
+          <div class="frame-grid">
+            <h2 class="screen__title">管理（CMS）</h2>
+            <div class="frame-grid__layout">
+              <div class="frame frame--desktop">
+                <div class="cms">
+                  <form class="cms__form">
+                    <h3>バナー設定</h3>
+                    <label>
+                      バナータイトル
+                      <input type="text" value="月光に瞬く幻夢" />
+                    </label>
+                    <label>
+                      開催期間
+                      <input type="text" value="2025/10/01 - 2025/11/30" />
+                    </label>
+                    <label>
+                      正逆比率
+                      <input type="range" min="0" max="100" value="70" />
+                      <span class="helper">正 70% / 逆 30%</span>
+                    </label>
+                  </form>
+                  <div class="cms__spread-editor">
+                    <h3>スプレッド定義</h3>
+                    <div class="spread-canvas">
+                      <div class="spread-card" style="top: 40%; left: 30%; transform: rotate(-6deg);"></div>
+                      <div class="spread-card" style="top: 45%; left: 50%; transform: rotate(2deg);"></div>
+                      <div class="spread-card" style="top: 52%; left: 70%; transform: rotate(-3deg);"></div>
+                    </div>
+                    <pre class="json-preview">{
+  "spread": "celtic-cross",
+  "cards": [
+    { "id": 1, "x": 0.3, "y": 0.4, "rotation": -6 },
+    { "id": 2, "x": 0.5, "y": 0.45, "rotation": 2 },
+    { "id": 3, "x": 0.7, "y": 0.52, "rotation": -3 }
+  ]
+}</pre>
+                  </div>
+                  <section class="cms__audit">
+                    <h3>監査ログ</h3>
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>日時</th>
+                          <th>ユーザー</th>
+                          <th>変更差分</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>2025-10-08 22:14</td>
+                          <td>designer_a</td>
+                          <td><code>+ spread.cards[2].rotation: -3</code></td>
+                        </tr>
+                        <tr>
+                          <td>2025-10-07 18:03</td>
+                          <td>pm_hina</td>
+                          <td><code>* pity.softCap = 70</code></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </section>
+                </div>
+              </div>
+              <div class="frame frame--mobile">
+                <div class="frame__header">CMS / モバイル</div>
+                <div class="cms-mobile">
+                  <form>
+                    <label>
+                      タイトル
+                      <input type="text" value="幻夢" />
+                    </label>
+                    <label>
+                      開催期間
+                      <input type="text" value="10/01-11/30" />
+                    </label>
+                  </form>
+                  <pre class="json-preview">{"spread":"1-card"}</pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="screen-components" class="screen" aria-label="コンポーネントライブラリ">
+          <div class="frame-grid">
+            <h2 class="screen__title">コンポーネントライブラリ</h2>
+            <div class="components-grid">
+              <section>
+                <h3>Atoms</h3>
+                <div class="atoms">
+                  <button class="btn btn--primary">Primary</button>
+                  <button class="btn btn--outline">Outline</button>
+                  <button class="btn btn--ghost">Text</button>
+                  <span class="badge badge--info">Badge</span>
+                  <span class="badge badge--rarity">UR</span>
+                  <div class="pity pity--compact">
+                    <span>Progress</span>
+                    <div class="pity__bar"><span style="width: 50%"></span></div>
+                  </div>
+                </div>
+              </section>
+              <section>
+                <h3>Molecules</h3>
+                <div class="molecules">
+                  <article class="banner-card">
+                    <div class="banner-card__visual banner-card__visual--purple"></div>
+                    <header>
+                      <span class="badge badge--period">〜12/31</span>
+                      <h4>ミスティックナイト</h4>
+                    </header>
+                  </article>
+                  <div class="spread-preview spread-preview--mini">
+                    <div class="spread-card" style="top: 30%; left: 35%; transform: rotate(-4deg);"></div>
+                    <div class="spread-card" style="top: 45%; left: 50%; transform: rotate(6deg);"></div>
+                  </div>
+                  <div class="filter-group">
+                    <span class="chip chip--selected">癒し</span>
+                    <span class="chip">夢</span>
+                  </div>
+                </div>
+              </section>
+              <section>
+                <h3>Organisms</h3>
+                <div class="organisms">
+                  <div class="result-grid">
+                    <div class="card-tile" data-rarity="sr">
+                      <div class="card-tile__orientation">▲</div>
+                      <div class="card-tile__name">節制 XIV</div>
+                    </div>
+                    <div class="card-tile" data-rarity="r">
+                      <div class="card-tile__orientation">▽</div>
+                      <div class="card-tile__name">剣の9</div>
+                    </div>
+                  </div>
+                  <div class="spread-canvas spread-canvas--mini">
+                    <div class="spread-card" style="top: 30%; left: 40%; transform: rotate(-3deg);"></div>
+                    <div class="spread-card" style="top: 55%; left: 60%; transform: rotate(5deg);"></div>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </div>
+        </section>
+
+        <section id="screen-states" class="screen" aria-label="ステートボード">
+          <div class="frame-grid">
+            <h2 class="screen__title">状態一覧</h2>
+            <div class="state-board">
+              <div>
+                <h3>ボタンステート</h3>
+                <div class="state-row">
+                  <button class="btn btn--primary">Default</button>
+                  <button class="btn btn--primary is-hover">Hover</button>
+                  <button class="btn btn--primary is-pressed">Pressed</button>
+                  <button class="btn btn--primary" disabled>Disabled</button>
+                  <button class="btn btn--primary is-focus">Focus</button>
+                </div>
+              </div>
+              <div>
+                <h3>カードステート</h3>
+                <div class="state-row">
+                  <div class="gacha-card" data-state="idle">
+                    <div class="gacha-card__face gacha-card__face--back"></div>
+                  </div>
+                  <div class="gacha-card gacha-card--hover" data-state="hover">
+                    <div class="gacha-card__face gacha-card__face--back"></div>
+                  </div>
+                  <div class="gacha-card is-revealing" data-state="revealing">
+                    <div class="gacha-card__face gacha-card__face--back"></div>
+                  </div>
+                  <div class="gacha-card is-revealed" data-state="revealed">
+                    <div class="gacha-card__face gacha-card__face--front">
+                      <span>世界 XXI</span>
+                      <span class="gacha-card__orientation">▲</span>
+                    </div>
+                  </div>
+                  <div class="gacha-card is-revealed is-reversed" data-state="reversed">
+                    <div class="gacha-card__face gacha-card__face--front">
+                      <span>世界 XXI</span>
+                      <span class="gacha-card__orientation">▽</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="annotations">
+              <h3>グリッドアノテーション</h3>
+              <div class="grid-guide">
+                <div class="grid-guide__column"></div>
+                <div class="grid-guide__column"></div>
+                <div class="grid-guide__column"></div>
+                <div class="grid-guide__column"></div>
+                <div class="grid-guide__column"></div>
+                <div class="grid-guide__column"></div>
+                <div class="grid-guide__column"></div>
+                <div class="grid-guide__column"></div>
+                <div class="grid-guide__column"></div>
+                <div class="grid-guide__column"></div>
+                <div class="grid-guide__column"></div>
+                <div class="grid-guide__column"></div>
+                <span class="grid-guide__label">12 columns / 80px margin / 24px gutter</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="./app.js" defer></script>
+  </body>
+</html>
