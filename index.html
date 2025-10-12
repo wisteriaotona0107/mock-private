@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>当日のメニュー管理</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app" id="app">
+    <header class="app-header">
+      <div class="title-block">
+        <h1>当日のメニュー管理</h1>
+        <p class="subtitle">本日の提供メニューを洗練されたカードで管理します</p>
+      </div>
+      <div class="header-controls">
+        <label class="date-picker">
+          <span>対象日</span>
+          <input type="date" id="menu-date" aria-label="対象日を選択" />
+        </label>
+        <label class="theme-toggle" for="theme-switch">
+          <span class="toggle-label">ライト / ダーク</span>
+          <input type="checkbox" id="theme-switch" aria-label="テーマを切り替え" />
+          <span class="switch-track" aria-hidden="true">
+            <span class="switch-thumb"></span>
+          </span>
+        </label>
+        <button class="icon-button" id="help-button" type="button" aria-haspopup="dialog" aria-controls="help-modal" title="操作ガイドを表示">
+          <span aria-hidden="true">?</span>
+          <span class="sr-only">操作ガイド</span>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <section class="toolbar" aria-label="操作ツールバー">
+        <div class="toolbar-left">
+          <button type="button" class="ghost" id="load-button">読み込み</button>
+          <button type="button" class="ghost" id="copy-button">前日からコピー</button>
+        </div>
+        <div class="toolbar-right">
+          <span class="status-badge" id="status-badge" data-status="draft" aria-live="polite">下書き</span>
+          <span class="timestamp" id="last-updated">保存済み --:--</span>
+          <button type="button" class="secondary" id="draft-button">下書き保存</button>
+          <button type="button" class="primary" id="publish-button">公開</button>
+        </div>
+      </section>
+      <div class="progress-bar" id="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" hidden>
+        <span class="progress-fill"></span>
+      </div>
+
+      <section class="card-grid" aria-label="メニューカード一覧">
+        <div class="skeleton-overlay" id="skeleton-overlay" aria-hidden="true"></div>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <p><strong>ショートカット：</strong><span class="kbd">Ctrl / Cmd + S</span> で下書き保存、<span class="kbd">Ctrl / Cmd + Enter</span> で公開、<span class="kbd">Esc</span> でアクティブカードの入力をクリアできます。</p>
+    </footer>
+  </div>
+
+  <template id="card-template">
+    <article class="menu-card" data-slot="">
+      <header class="card-header">
+        <h2>スロット <span class="slot-number"></span></h2>
+      </header>
+      <div class="dropzone" tabindex="0" role="button" aria-label="画像をドラッグ&ドロップ、またはクリックして選択" data-dropzone>
+        <input type="file" accept="image/png, image/jpeg, image/webp" class="file-input" aria-label="画像ファイルを選択" />
+        <div class="preview" aria-hidden="true">
+          <img alt="" />
+          <div class="preview-placeholder">
+            <span>画像を追加</span>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <label for="name-">お酒の名前<span class="required">必須</span></label>
+        <input type="text" id="name-" name="name" maxlength="50" placeholder="例：純米大吟醸 山田錦" autocomplete="off" />
+      </div>
+      <div class="field">
+        <label for="desc-">説明 <span class="optional">任意</span></label>
+        <textarea id="desc-" name="desc" rows="4" maxlength="1000" placeholder="味わいや提供スタイルなどを記入"></textarea>
+        <div class="char-counter" aria-live="polite"><span class="count">1000</span> 字残り</div>
+      </div>
+      <div class="field">
+        <label for="alt-">代替テキスト <span class="optional">任意</span></label>
+        <input type="text" id="alt-" name="alt" maxlength="80" placeholder="画像が表示できない場合の説明" />
+      </div>
+      <div class="card-footer">
+        <span class="file-name" aria-live="polite">画像未選択</span>
+        <button type="button" class="text-button" data-clear>クリア</button>
+      </div>
+    </article>
+  </template>
+
+  <div class="toast-container" aria-live="assertive" aria-atomic="true"></div>
+
+  <div class="modal" id="warning-modal" role="dialog" aria-modal="true" aria-labelledby="warning-title" hidden>
+    <div class="modal-content">
+      <h2 id="warning-title">公開前の確認</h2>
+      <p>以下のスロットで画像または名前が未設定です。内容を確認してください。</p>
+      <ul class="warning-list" id="warning-list"></ul>
+      <div class="modal-actions">
+        <button type="button" class="ghost" id="warning-cancel">キャンセル</button>
+        <button type="button" class="primary" id="warning-continue">公開を続ける</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="help-modal" role="dialog" aria-modal="true" aria-labelledby="help-title" hidden>
+    <div class="modal-content">
+      <h2 id="help-title">操作ガイド</h2>
+      <ul>
+        <li><span class="kbd">Ctrl / Cmd + S</span>：下書き保存</li>
+        <li><span class="kbd">Ctrl / Cmd + Enter</span>：公開</li>
+        <li><span class="kbd">Esc</span>：アクティブカードの入力をクリア</li>
+        <li>ドラッグ&ドロップまたはクリックで画像を追加できます。</li>
+        <li>文字数カウントを確認しながら説明文を編集できます。</li>
+      </ul>
+      <div class="modal-actions">
+        <button type="button" class="primary" id="help-close">閉じる</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
