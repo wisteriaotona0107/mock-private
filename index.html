@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAKE CURATION - 小規模飲食店向け日本酒紹介SPA</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600&family=Zen+Kaku+Gothic+New:wght@300;500;700&display=swap');
+
+    :root {
+      --bg-gradient: radial-gradient(circle at 0% 0%, rgba(255,255,255,0.3), rgba(255,255,255,0) 40%),
+                      linear-gradient(135deg, #111927, #0f3b4c 60%, #1c5674);
+      --accent: #f0b429;
+      --accent-soft: rgba(240,180,41,0.18);
+      --text-primary: #f5f7fa;
+      --text-secondary: rgba(245,247,250,0.8);
+      --card-bg: rgba(10, 21, 33, 0.74);
+      --card-border: rgba(255,255,255,0.08);
+      --backdrop: rgba(5, 12, 20, 0.72);
+      font-size: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Zen Kaku Gothic New', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    a {
+      color: var(--accent);
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      backdrop-filter: blur(18px);
+      background: rgba(9, 18, 30, 0.72);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.2rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(240,180,41,0.65), rgba(19,71,99,0.95));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1.2rem;
+      letter-spacing: 0.18em;
+      color: #0a111d;
+      border: 1px solid rgba(255,255,255,0.2);
+      box-shadow: 0 10px 30px rgba(8, 16, 26, 0.35);
+    }
+
+    .brand-title {
+      display: flex;
+      flex-direction: column;
+      font-family: 'Shippori Mincho', serif;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      font-size: 0.85rem;
+      line-height: 1.3;
+    }
+
+    .hamburger {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(11, 26, 40, 0.7);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: transform 0.25s ease, background 0.25s ease;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 20px;
+      height: 2px;
+      background: var(--text-primary);
+      position: relative;
+    }
+
+    .hamburger span::before,
+    .hamburger span::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      background: var(--text-primary);
+      left: 0;
+      transition: transform 0.3s ease, top 0.3s ease;
+    }
+
+    .hamburger span::before {
+      top: -6px;
+    }
+
+    .hamburger span::after {
+      top: 6px;
+    }
+
+    .hamburger.open span {
+      background: transparent;
+    }
+
+    .hamburger.open span::before {
+      top: 0;
+      transform: rotate(45deg);
+    }
+
+    .hamburger.open span::after {
+      top: 0;
+      transform: rotate(-45deg);
+    }
+
+    main {
+      flex: 1;
+      width: 100%;
+    }
+
+    .section {
+      display: none;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem 5rem;
+      animation: fadeIn 0.6s ease;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1, h2, h3 {
+      font-family: 'Shippori Mincho', serif;
+      letter-spacing: 0.12em;
+      font-weight: 600;
+      margin-top: 0;
+    }
+
+    h1 {
+      font-size: clamp(2.4rem, 4vw, 3.1rem);
+      margin-bottom: 2.2rem;
+    }
+
+    h2 {
+      font-size: clamp(1.8rem, 3vw, 2.3rem);
+      margin-bottom: 1.8rem;
+    }
+
+    p, li {
+      color: var(--text-secondary);
+      line-height: 1.8;
+      font-size: 1.02rem;
+    }
+
+    .intro-panel {
+      background: linear-gradient(135deg, rgba(21, 40, 56, 0.75), rgba(16, 33, 48, 0.6));
+      border-radius: 28px;
+      padding: 2.5rem 3rem;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 25px 60px rgba(5, 16, 30, 0.45);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .intro-panel::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 85% 20%, rgba(240,180,41,0.25), transparent 45%);
+      pointer-events: none;
+    }
+
+    .tech-stack {
+      margin-top: 2.2rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .pill {
+      padding: 0.9rem 1.2rem;
+      background: rgba(240,180,41,0.1);
+      border: 1px solid rgba(240,180,41,0.3);
+      border-radius: 16px;
+      font-size: 0.95rem;
+      color: var(--text-primary);
+      backdrop-filter: blur(4px);
+    }
+
+    /* Drawer */
+    .drawer-scrim {
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 10, 18, 0.5);
+      backdrop-filter: blur(2px);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease;
+      z-index: 35;
+    }
+
+    .drawer-scrim.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: -320px;
+      width: min(320px, 80vw);
+      height: 100vh;
+      background: rgba(10, 21, 33, 0.96);
+      backdrop-filter: blur(16px);
+      border-left: 1px solid rgba(255,255,255,0.08);
+      transition: right 0.35s ease;
+      z-index: 50;
+      padding: 4rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .drawer.active {
+      right: 0;
+    }
+
+    .drawer a {
+      text-decoration: none;
+      color: var(--text-primary);
+      font-size: 1.05rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding-bottom: 0.7rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .drawer a.active-link {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* Sake grid */
+    .sake-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.8rem;
+    }
+
+    .sake-card {
+      background: var(--card-bg);
+      border-radius: 22px;
+      overflow: hidden;
+      border: 1px solid var(--card-border);
+      box-shadow: 0 16px 40px rgba(7, 15, 27, 0.35);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .sake-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 60px rgba(8, 18, 31, 0.5);
+    }
+
+    .sake-card img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      filter: saturate(1.1);
+    }
+
+    .sake-card-body {
+      padding: 1.4rem 1.5rem 1.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+
+    .sake-card h3 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+
+    .sake-card p {
+      margin: 0;
+      font-size: 0.92rem;
+    }
+
+    .pagination {
+      margin-top: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .pagination button {
+      padding: 0.65rem 1.1rem;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(10, 24, 36, 0.7);
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .pagination button[disabled] {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .pagination button:not([disabled]):hover {
+      background: var(--accent-soft);
+      transform: translateY(-2px);
+    }
+
+    .page-indicator {
+      font-size: 0.9rem;
+      letter-spacing: 0.15em;
+      color: var(--text-secondary);
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(7, 12, 19, 0.8);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      z-index: 80;
+    }
+
+    .modal-backdrop.active {
+      display: flex;
+    }
+
+    .modal {
+      background: rgba(11, 23, 35, 0.95);
+      border-radius: 26px;
+      width: min(860px, 100%);
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: 0 25px 80px rgba(5, 12, 23, 0.6);
+      overflow: hidden;
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+
+    .modal img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .modal-content {
+      padding: 2.2rem 2.6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .modal h3 {
+      font-size: 1.8rem;
+    }
+
+    .modal ul {
+      list-style: none;
+      padding: 0;
+      margin: 1rem 0 0;
+      display: grid;
+      gap: 0.6rem;
+    }
+
+    .modal li {
+      font-size: 0.95rem;
+      letter-spacing: 0.08em;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.2rem;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(13, 29, 42, 0.7);
+      color: var(--text-primary);
+      font-size: 1.3rem;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: background 0.3s ease;
+    }
+
+    .modal-close:hover {
+      background: rgba(240,180,41,0.2);
+    }
+
+    .callout {
+      margin-top: 2rem;
+      padding: 1.8rem;
+      border-radius: 20px;
+      border: 1px solid rgba(240,180,41,0.3);
+      background: rgba(240,180,41,0.08);
+    }
+
+    .howto-list {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .howto-item {
+      padding: 1.6rem;
+      border-radius: 20px;
+      background: rgba(13, 30, 45, 0.72);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 14px 35px rgba(5,12,24,0.4);
+    }
+
+    .shops-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.6rem;
+    }
+
+    .shop-card {
+      padding: 1.6rem;
+      border-radius: 20px;
+      background: rgba(12, 28, 42, 0.7);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    footer {
+      padding: 2rem 1.5rem;
+      text-align: center;
+      color: rgba(255,255,255,0.55);
+      font-size: 0.85rem;
+      letter-spacing: 0.15em;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      background: rgba(8, 16, 28, 0.9);
+    }
+
+    @media (max-width: 640px) {
+      .header-inner {
+        padding: 1rem 1.1rem;
+      }
+
+      .intro-panel {
+        padding: 2rem 1.6rem;
+      }
+
+      .modal {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="drawer-scrim" id="drawerScrim"></div>
+  <div class="drawer" id="drawer">
+    <a href="#intro" data-route="#intro">サイト紹介</a>
+    <a href="#list" data-route="#list">日本酒一覧</a>
+    <a href="#howto" data-route="#howto">日本酒の飲み方</a>
+    <a href="#shops" data-route="#shops">おすすめのお店</a>
+    <a href="#contact" data-route="#contact">問い合わせ先</a>
+  </div>
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-mark">匠</div>
+        <div class="brand-title">
+          <span>SAKE CURATION</span>
+          <small>FOR SMALL DINING</small>
+        </div>
+      </div>
+      <div class="hamburger" id="hamburger" aria-label="メニューを開く" role="button">
+        <span></span>
+      </div>
+    </div>
+  </header>
+  <main>
+    <section class="section" id="intro">
+      <div class="intro-panel">
+        <h1>SAKE CURATION</h1>
+        <p>小規模飲食店のための日本酒セレクトを、視覚的にわかりやすく、すばやく更新できる形でお届けします。旬の銘柄から定番の一本まで、飲食店のストーリーに寄り添いながら提案できるよう、香り・味わい・造り手の背景までコンパクトに整理しました。</p>
+        <p>本サイトは HTML + Vanilla JavaScript の SPA として構築されており、日本酒一覧はサーバサイド API (<code>GET /api/sakes</code>) から取得します。API が利用できない場合はローカルのモックデータでフェイルセーフ表示を行い、情報の供給を止めません。</p>
+        <p>ご質問や掲載依頼は <a href="mailto:hello@sakecuration.jp">hello@sakecuration.jp</a> までお気軽にどうぞ。</p>
+        <div class="tech-stack">
+          <div class="pill">Single Page Application / Hash Routing</div>
+          <div class="pill">Remote API Fetch + Local Fallback</div>
+          <div class="pill">Vanilla JavaScript UI Components</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="list">
+      <h2>日本酒一覧</h2>
+      <p>酒蔵の哲学と味わいの個性を 6 本ずつピックアップ。カードから詳細モーダルが開き、仕入れ時のキーポイントがすぐ確認できます。</p>
+      <div class="sake-grid" id="sakeGrid" aria-live="polite"></div>
+      <div class="pagination" id="pagination">
+        <button id="prevPage">PREV</button>
+        <span class="page-indicator" id="pageIndicator">1 / 1</span>
+        <button id="nextPage">NEXT</button>
+      </div>
+    </section>
+
+    <section class="section" id="howto">
+      <h2>日本酒の飲み方</h2>
+      <div class="howto-list">
+        <div class="howto-item">
+          <h3>温度帯をデザインする</h3>
+          <p>お燗から花冷えまで、銘柄ごとの適温をスタッフと共有しましょう。温度帯によって味のふくらみが大きく変わるため、提供時のストーリーを添えると印象に残ります。</p>
+        </div>
+        <div class="howto-item">
+          <h3>酒器でテクスチャを操作</h3>
+          <p>薄張りグラスで香りを生かすか、平盃で穏やかに広げるか。店の空間に合わせた酒器の選択が味わいの輪郭を際立たせます。</p>
+        </div>
+        <div class="howto-item">
+          <h3>ペアリングをストックする</h3>
+          <p>旬の食材との相性メモを 3 パターンほど用意しておくと、スタッフが自信を持って提案できます。特に塩味・旨味・酸味のバランスに注目しましょう。</p>
+        </div>
+      </div>
+      <div class="callout">
+        <strong>TIP:</strong> テーブルオーダー用の QR メニューと連動させることで、常連客にも新しい日本酒体験をスムーズに届けられます。
+      </div>
+    </section>
+
+    <section class="section" id="shops">
+      <h2>おすすめのお店</h2>
+      <div class="shops-grid">
+        <div class="shop-card">
+          <h3>酒縁 小町</h3>
+          <p>東京・日本橋。旬の海鮮と共に四季の日本酒を 8 タップで提供。店主が毎週蔵元を訪ね、確かな情報を添えて提案します。</p>
+        </div>
+        <div class="shop-card">
+          <h3>灯り坂</h3>
+          <p>京都・祇園。町家をリノベーションした空間で、温度帯違いのペアリングコースが人気。酒器のセレクトも常に進化中。</p>
+        </div>
+        <div class="shop-card">
+          <h3>霧の蔵</h3>
+          <p>札幌・円山。北海道産の食材とローカル酒蔵の新作をマリアージュ。テイスティングノートを店内のモニターで共有しています。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <h2>問い合わせ先</h2>
+      <p>SAKE CURATION 編集部</p>
+      <p>MAIL: <a href="mailto:hello@sakecuration.jp">hello@sakecuration.jp</a></p>
+      <p>仕入れ相談・掲載依頼・コラボレーションのご相談は上記メールにて承ります。酒蔵様からの新商品情報も歓迎しています。</p>
+    </section>
+  </main>
+
+  <div class="modal-backdrop" id="modalBackdrop" aria-modal="true" role="dialog">
+    <div class="modal" role="document">
+      <button class="modal-close" id="modalClose" aria-label="閉じる">&times;</button>
+      <img id="modalImage" src="" alt="">
+      <div class="modal-content">
+        <h3 id="modalTitle"></h3>
+        <p id="modalDesc"></p>
+        <ul>
+          <li><strong>原料米:</strong> <span id="modalRice"></span></li>
+          <li><strong>精米歩合:</strong> <span id="modalPolish"></span>%</li>
+          <li><strong>アルコール度数:</strong> <span id="modalAbv"></span>%</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    © SAKE CURATION / Crafted for boutique dining experiences.
+  </footer>
+
+  <script>
+    const ITEMS_PER_PAGE = 6;
+    const fallbackSakes = [
+      {
+        id: 1,
+        name: '獺祭 純米大吟醸 45',
+        desc: '華やかな吟醸香とキレの良さ。前菜や白身魚に。',
+        rice: '山田錦',
+        polish: 45,
+        abv: 16,
+        img: 'https://images.unsplash.com/photo-1583083527882-4bee9aba2a5a?auto=format&fit=crop&w=800&q=80'
+      },
+      {
+        id: 2,
+        name: '新政 No.6 S type',
+        desc: 'ジューシーな酸が際立つ生酒。モダンなペアリングに。',
+        rice: '秋田酒こまち',
+        polish: 55,
+        abv: 15,
+        img: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1c?auto=format&fit=crop&w=800&q=80'
+      },
+      {
+        id: 3,
+        name: '而今 特別純米',
+        desc: '穏やかな香りと旨味。常温〜ぬる燗で真価を発揮。',
+        rice: '山田錦',
+        polish: 55,
+        abv: 16,
+        img: 'https://images.unsplash.com/photo-1558640468-9d2a7deb7f62?auto=format&fit=crop&w=800&q=80'
+      },
+      {
+        id: 4,
+        name: '醸し人九平次 雄町',
+        desc: '旨味と酸のバランスが秀逸。熟成チーズにも好相性。',
+        rice: '雄町',
+        polish: 50,
+        abv: 16,
+        img: 'https://images.unsplash.com/photo-1510626176961-4b37d0e0865c?auto=format&fit=crop&w=800&q=80'
+      },
+      {
+        id: 5,
+        name: '東洋美人 壱番纏',
+        desc: '透明感ある甘みと余韻。デザートとの合わせにも。',
+        rice: '山田錦',
+        polish: 40,
+        abv: 16,
+        img: 'https://images.unsplash.com/photo-1532635256-7ee37f3ff9cd?auto=format&fit=crop&w=800&q=80'
+      },
+      {
+        id: 6,
+        name: '伯楽星 純米吟醸',
+        desc: 'きりりとした辛口。海鮮の塩味を引き立てる定番。',
+        rice: '蔵の華',
+        polish: 55,
+        abv: 16,
+        img: 'https://images.unsplash.com/photo-1527169402691-feff5539e52c?auto=format&fit=crop&w=800&q=80'
+      },
+      {
+        id: 7,
+        name: '田酒 山廃純米',
+        desc: '厚みのある旨味。肉料理や熟成チーズに合わせたい。',
+        rice: '華吹雪',
+        polish: 65,
+        abv: 16,
+        img: 'https://images.unsplash.com/photo-1497534446932-c925b458314e?auto=format&fit=crop&w=800&q=80'
+      },
+      {
+        id: 8,
+        name: '仙禽 ナチュール',
+        desc: 'ナチュラルワイン的な酸が特徴。新しい日本酒体験。',
+        rice: 'ドメーヌさくら山田錦',
+        polish: 60,
+        abv: 14,
+        img: 'https://images.unsplash.com/photo-1532635217-1ed4b7a3d620?auto=format&fit=crop&w=800&q=80'
+      },
+      {
+        id: 9,
+        name: '飛露喜 特別純米',
+        desc: '芳醇な旨味とキレ。グリル料理との相性抜群。',
+        rice: '五百万石',
+        polish: 55,
+        abv: 16,
+        img: 'https://images.unsplash.com/photo-1458891216473-4f26bb4eb40e?auto=format&fit=crop&w=800&q=80'
+      },
+      {
+        id: 10,
+        name: '花陽浴 八反錦',
+        desc: 'トロピカルな香りとジューシーな甘み。アジアン料理と。',
+        rice: '八反錦',
+        polish: 50,
+        abv: 16,
+        img: 'https://images.unsplash.com/photo-1514361892635-6e122620e8d1?auto=format&fit=crop&w=800&q=80'
+      },
+      {
+        id: 11,
+        name: '黒龍 しずく',
+        desc: '透き通るような透明感。特別な会食に合わせたい逸品。',
+        rice: '山田錦',
+        polish: 35,
+        abv: 16,
+        img: 'https://images.unsplash.com/photo-1527169402693-3fb1d18e54d2?auto=format&fit=crop&w=800&q=80'
+      },
+      {
+        id: 12,
+        name: '仙介 無濾過生',
+        desc: 'フレッシュなガス感と果実味。春メニューの主役に。',
+        rice: '兵庫夢錦',
+        polish: 60,
+        abv: 15,
+        img: 'https://images.unsplash.com/photo-1513569771920-c9e1d31714af?auto=format&fit=crop&w=800&q=80'
+      }
+    ];
+
+    const state = {
+      sakes: [],
+      page: 1
+    };
+
+    const sections = document.querySelectorAll('.section');
+    const drawer = document.getElementById('drawer');
+    const drawerLinks = drawer.querySelectorAll('a[data-route]');
+    const drawerScrim = document.getElementById('drawerScrim');
+    const hamburger = document.getElementById('hamburger');
+
+    const sakeGrid = document.getElementById('sakeGrid');
+    const pageIndicator = document.getElementById('pageIndicator');
+    const prevPageBtn = document.getElementById('prevPage');
+    const nextPageBtn = document.getElementById('nextPage');
+
+    const modalBackdrop = document.getElementById('modalBackdrop');
+    const modalClose = document.getElementById('modalClose');
+    const modalImage = document.getElementById('modalImage');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDesc = document.getElementById('modalDesc');
+    const modalRice = document.getElementById('modalRice');
+    const modalPolish = document.getElementById('modalPolish');
+    const modalAbv = document.getElementById('modalAbv');
+
+    function toggleDrawer(force) {
+      const willOpen = force !== undefined ? force : !drawer.classList.contains('active');
+      drawer.classList.toggle('active', willOpen);
+      drawerScrim.classList.toggle('active', willOpen);
+      hamburger.classList.toggle('open', willOpen);
+    }
+
+    hamburger.addEventListener('click', () => toggleDrawer());
+    drawerScrim.addEventListener('click', () => toggleDrawer(false));
+
+    drawerLinks.forEach(link => {
+      link.addEventListener('click', () => toggleDrawer(false));
+    });
+
+    function setActiveSection(hash) {
+      const target = hash || '#intro';
+      sections.forEach(section => {
+        section.classList.toggle('active', `#${section.id}` === target);
+      });
+      drawerLinks.forEach(link => {
+        link.classList.toggle('active-link', link.dataset.route === target);
+      });
+    }
+
+    function ensureHash() {
+      if (!location.hash || !['#intro', '#list', '#howto', '#shops', '#contact'].includes(location.hash)) {
+        history.replaceState(null, '', '#intro');
+      }
+      setActiveSection(location.hash);
+    }
+
+    window.addEventListener('hashchange', () => setActiveSection(location.hash));
+    ensureHash();
+
+    async function loadSakes() {
+      try {
+        const response = await fetch('/api/sakes');
+        if (!response.ok) {
+          throw new Error('Failed to fetch');
+        }
+        const data = await response.json();
+        if (!Array.isArray(data) || data.length === 0) {
+          throw new Error('No data');
+        }
+        state.sakes = data;
+      } catch (error) {
+        console.warn('APIからの取得に失敗したためモックデータを使用します。', error);
+        state.sakes = fallbackSakes;
+      }
+      state.page = 1;
+      renderSakeList();
+    }
+
+    function paginate(items, page, perPage) {
+      const total = items.length;
+      const totalPages = Math.max(1, Math.ceil(total / perPage));
+      const clampedPage = Math.min(Math.max(page, 1), totalPages);
+      const start = (clampedPage - 1) * perPage;
+      const end = start + perPage;
+      const slice = items.slice(start, end);
+      return { slice, totalPages, page: clampedPage };
+    }
+
+    function renderSakeList() {
+      const { slice, totalPages, page } = paginate(state.sakes, state.page, ITEMS_PER_PAGE);
+      state.page = page;
+
+      sakeGrid.innerHTML = '';
+      if (slice.length === 0) {
+        sakeGrid.innerHTML = '<p>日本酒データが見つかりませんでした。</p>';
+      } else {
+        slice.forEach(item => {
+          const card = document.createElement('article');
+          card.className = 'sake-card';
+          card.innerHTML = `
+            <img src="${item.img}" alt="${item.name}">
+            <div class="sake-card-body">
+              <h3>${item.name}</h3>
+              <p>${item.desc}</p>
+            </div>
+          `;
+          card.addEventListener('click', () => openModal(item));
+          sakeGrid.appendChild(card);
+        });
+      }
+
+      pageIndicator.textContent = `${page} / ${totalPages}`;
+      prevPageBtn.disabled = page <= 1;
+      nextPageBtn.disabled = page >= totalPages;
+    }
+
+    prevPageBtn.addEventListener('click', () => {
+      state.page = Math.max(1, state.page - 1);
+      renderSakeList();
+    });
+
+    nextPageBtn.addEventListener('click', () => {
+      state.page = Math.min(Math.ceil(state.sakes.length / ITEMS_PER_PAGE), state.page + 1);
+      renderSakeList();
+    });
+
+    function openModal(item) {
+      modalImage.src = item.img;
+      modalImage.alt = item.name;
+      modalTitle.textContent = item.name;
+      modalDesc.textContent = item.desc;
+      modalRice.textContent = item.rice;
+      modalPolish.textContent = item.polish;
+      modalAbv.textContent = item.abv;
+      modalBackdrop.classList.add('active');
+    }
+
+    function closeModal() {
+      modalBackdrop.classList.remove('active');
+      modalImage.src = '';
+    }
+
+    modalClose.addEventListener('click', closeModal);
+    modalBackdrop.addEventListener('click', (event) => {
+      if (event.target === modalBackdrop) {
+        closeModal();
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && modalBackdrop.classList.contains('active')) {
+        closeModal();
+      }
+    });
+
+    loadSakes();
+  </script>
+</body>
+</html>
