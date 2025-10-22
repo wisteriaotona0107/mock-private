@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>町の建設パートナー | まちづくり工務店</title>
+  <style>
+    :root {
+      --primary: #1b5e20;
+      --primary-light: #2e7d32;
+      --accent: #f9a825;
+      --text-dark: #2f2f2f;
+      --text-light: #f7f7f7;
+      --bg-light: #f3f5f4;
+      --max-width: 1100px;
+      font-family: 'Noto Sans JP', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--text-dark);
+      background: white;
+      line-height: 1.6;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .nav-container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1.5rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .logo span {
+      display: inline-block;
+      padding: 0.35rem 0.6rem;
+      background: var(--primary);
+      color: var(--text-light);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--text-dark);
+      font-weight: 600;
+      font-size: 0.95rem;
+      position: relative;
+    }
+
+    nav a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -0.3rem;
+      width: 0;
+      height: 2px;
+      background: var(--accent);
+      transition: width 0.2s ease;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    .cta-btn {
+      background: var(--accent);
+      color: var(--text-dark);
+      padding: 0.6rem 1.2rem;
+      border-radius: 999px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 6px 18px rgba(249, 168, 37, 0.2);
+    }
+
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 22px rgba(249, 168, 37, 0.25);
+    }
+
+    .hero {
+      padding: 5rem 1.5rem 4rem;
+      background: linear-gradient(135deg, rgba(27, 94, 32, 0.1), rgba(27, 94, 32, 0));
+    }
+
+    .hero-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: grid;
+      gap: 2.5rem;
+      align-items: center;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+
+    .hero h1 {
+      font-size: clamp(2.2rem, 3vw + 1.5rem, 3.5rem);
+      margin-bottom: 1rem;
+      line-height: 1.2;
+      color: var(--primary);
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+
+    .badge {
+      padding: 0.4rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid rgba(27, 94, 32, 0.2);
+      background: white;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .hero-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 16px;
+      box-shadow: 0 12px 40px rgba(17, 51, 28, 0.12);
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .hero-card img {
+      width: 100%;
+      border-radius: 12px;
+      height: 220px;
+      object-fit: cover;
+    }
+
+    .hero-card .stat {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.75rem 1rem;
+      background: var(--bg-light);
+      border-radius: 12px;
+    }
+
+    .hero-card .stat strong {
+      font-size: 1.3rem;
+      color: var(--primary);
+    }
+
+    section {
+      padding: 4rem 1.5rem;
+    }
+
+    .section-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-title h2 {
+      font-size: clamp(1.8rem, 2vw + 1rem, 2.5rem);
+      margin: 0.5rem 0;
+      color: var(--primary);
+    }
+
+    .section-title p {
+      color: #666;
+      margin: 0 auto;
+      max-width: 620px;
+    }
+
+    .features {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+
+    .feature-card {
+      padding: 1.5rem;
+      border-radius: 16px;
+      background: white;
+      border: 1px solid rgba(27, 94, 32, 0.08);
+      box-shadow: 0 18px 40px rgba(27, 94, 32, 0.08);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 45px rgba(27, 94, 32, 0.12);
+    }
+
+    .feature-card h3 {
+      margin: 0.5rem 0 0.8rem;
+      color: var(--primary);
+    }
+
+    .feature-card p {
+      margin: 0;
+      color: #555;
+    }
+
+    .services-grid {
+      display: grid;
+      gap: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+
+    .service-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(27, 94, 32, 0.1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .service-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .service-card .service-content {
+      padding: 1.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      flex: 1;
+    }
+
+    .service-card ul {
+      margin: 0;
+      padding-left: 1.2rem;
+      color: #555;
+      font-size: 0.95rem;
+    }
+
+    .project-grid {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    .project-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .project-card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+    }
+
+    .project-card .project-content {
+      padding: 1.25rem;
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    .project-card span {
+      font-size: 0.85rem;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .testimonials {
+      background: var(--bg-light);
+    }
+
+    .testimonial-grid {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+
+    .testimonial-card {
+      background: white;
+      border-radius: 16px;
+      padding: 1.5rem;
+      border: 1px solid rgba(27, 94, 32, 0.08);
+      position: relative;
+    }
+
+    .testimonial-card::before {
+      content: "\201C";
+      font-size: 3rem;
+      color: rgba(27, 94, 32, 0.15);
+      position: absolute;
+      top: 0.3rem;
+      left: 1rem;
+    }
+
+    .testimonial-card strong {
+      display: block;
+      margin-top: 1.2rem;
+      color: var(--primary);
+    }
+
+    .steps {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    .step-card {
+      background: white;
+      border-radius: 16px;
+      padding: 1.5rem;
+      border: 1px solid rgba(27, 94, 32, 0.08);
+      display: grid;
+      gap: 0.6rem;
+    }
+
+    .step-number {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+    }
+
+    .contact {
+      background: linear-gradient(135deg, rgba(27, 94, 32, 0.1), rgba(27, 94, 32, 0));
+    }
+
+    .contact-inner {
+      background: white;
+      border-radius: 18px;
+      box-shadow: 0 20px 45px rgba(27, 94, 32, 0.12);
+      padding: 2rem;
+      display: grid;
+      gap: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+
+    .contact-info {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .contact-info a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    form {
+      display: grid;
+      gap: 1rem;
+    }
+
+    label {
+      font-weight: 600;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      border-radius: 12px;
+      border: 1px solid rgba(27, 94, 32, 0.2);
+      font: inherit;
+      resize: vertical;
+      transition: border 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(27, 94, 32, 0.15);
+    }
+
+    footer {
+      background: #0f1f14;
+      color: var(--text-light);
+      padding: 2rem 1.5rem;
+    }
+
+    .footer-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: grid;
+      gap: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      font-size: 0.95rem;
+    }
+
+    .footer-inner ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 0.4rem;
+    }
+
+    .footer-inner a {
+      color: rgba(255, 255, 255, 0.85);
+      text-decoration: none;
+    }
+
+    .footer-bottom {
+      max-width: var(--max-width);
+      margin: 2rem auto 0;
+      text-align: center;
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .mobile-menu-toggle {
+      display: none;
+      width: 2.2rem;
+      height: 2.2rem;
+      border-radius: 50%;
+      border: 1px solid rgba(27, 94, 32, 0.3);
+      background: white;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .mobile-menu-toggle span,
+    .mobile-menu-toggle::before,
+    .mobile-menu-toggle::after {
+      content: "";
+      display: block;
+      width: 1.2rem;
+      height: 2px;
+      background: var(--primary);
+      transition: transform 0.3s ease;
+    }
+
+    .mobile-menu-toggle span {
+      margin: 0.3rem 0;
+    }
+
+    @media (max-width: 768px) {
+      nav ul {
+        position: absolute;
+        top: 100%;
+        right: 1rem;
+        background: white;
+        border-radius: 12px;
+        padding: 1rem;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+        display: none;
+        flex-direction: column;
+        gap: 1rem;
+        min-width: 200px;
+      }
+
+      nav ul.open {
+        display: flex;
+      }
+
+      .mobile-menu-toggle {
+        display: inline-flex;
+        flex-direction: column;
+      }
+
+      .hero {
+        padding-top: 4rem;
+      }
+
+      .footer-inner {
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-card img {
+        height: 180px;
+      }
+
+      .service-card img {
+        height: 160px;
+      }
+
+      section {
+        padding: 3rem 1.1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav-container">
+      <a href="#top" class="logo">
+        <span>LOCAL</span>
+        <div>
+          <div>まちづくり工務店</div>
+          <small>地域密着の建設パートナー</small>
+        </div>
+      </a>
+      <nav>
+        <button class="mobile-menu-toggle" aria-label="メニューを開く"><span></span></button>
+        <ul>
+          <li><a href="#features">選ばれる理由</a></li>
+          <li><a href="#services">サービス</a></li>
+          <li><a href="#projects">施工事例</a></li>
+          <li><a href="#voice">お客様の声</a></li>
+          <li><a href="#contact">お問い合わせ</a></li>
+        </ul>
+      </nav>
+      <a href="#contact" class="cta-btn">無料相談はこちら</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="top">
+      <div class="hero-inner">
+        <div>
+          <h1>地域に寄り添う<br>暮らしのための建設・リフォーム</h1>
+          <p>創業35年、地域の風土や暮らしに根差した設計・施工で、住まいと街並みを支えてきました。
+            小さな修繕から公共工事まで、お客様の「任せて良かった」に応えます。</p>
+          <div class="badges">
+            <div class="badge">🏠 戸建て・店舗施工 1200件以上</div>
+            <div class="badge">🛠 24時間 緊急対応</div>
+            <div class="badge">🤝 市内10社以上の連携ネットワーク</div>
+          </div>
+        </div>
+        <div class="hero-card">
+          <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=900&q=80" alt="施工中の写真">
+          <div class="stat">
+            <div>
+              <strong>95%</strong>
+              <div>ご紹介・リピート率</div>
+            </div>
+            <div>
+              <strong>35年</strong>
+              <div>地域で培った信頼</div>
+            </div>
+          </div>
+          <a href="#contact" class="cta-btn" style="justify-self:start;">現地調査を依頼する</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="features">
+      <div class="section-inner">
+        <div class="section-title">
+          <span class="badge">まちづくり工務店が選ばれる理由</span>
+          <h2>地域密着だからできる、きめ細やかな対応</h2>
+          <p>地元の気候・地盤を熟知したスタッフが、企画から施工・アフターまで一貫してサポート。長く安心して住める住まいをつくります。</p>
+        </div>
+        <div class="features">
+          <article class="feature-card">
+            <h3>1. 地域特性を活かした設計</h3>
+            <p>断熱・耐震など地域の暮らしに合わせた提案で、快適で安全な住まいを実現。自治体の補助金申請も代行します。</p>
+          </article>
+          <article class="feature-card">
+            <h3>2. 小回りの利く自社職人チーム</h3>
+            <p>経験豊富な職人が在籍し、迅速な現場対応が可能。緊急修繕や台風時の駆けつけなどもお任せください。</p>
+          </article>
+          <article class="feature-card">
+            <h3>3. 地元協力業者とのネットワーク</h3>
+            <p>設備・造園・インテリアなど地域の専門業者と連携し、ワンストップで理想の暮らしをかなえます。</p>
+          </article>
+          <article class="feature-card">
+            <h3>4. 完工後も続く伴走サポート</h3>
+            <p>定期点検・ライフスタイルの変化に合わせた提案など、長期的な住まいのパートナーとして寄り添います。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="services" class="services">
+      <div class="section-inner">
+        <div class="section-title">
+          <span class="badge">Service</span>
+          <h2>暮らしと街を支えるサービス</h2>
+          <p>住宅・店舗・公共工事まで幅広く対応。地域の皆さまが安心して暮らせる環境づくりに貢献します。</p>
+        </div>
+        <div class="services-grid">
+          <article class="service-card">
+            <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=900&q=80" alt="住宅施工">
+            <div class="service-content">
+              <h3>住宅新築・リノベーション</h3>
+              <p>自然素材と耐久性を両立し、地域の気候に合わせた設計で快適な住まいをご提供します。</p>
+              <ul>
+                <li>耐震・断熱性能の向上</li>
+                <li>二世帯住宅・空き家活用</li>
+                <li>バリアフリーリフォーム</li>
+              </ul>
+            </div>
+          </article>
+          <article class="service-card">
+            <img src="https://images.unsplash.com/photo-1582719478190-ef42c26b51b1?auto=format&fit=crop&w=900&q=80" alt="店舗改装">
+            <div class="service-content">
+              <h3>店舗・事務所改装</h3>
+              <p>来店動線やブランドイメージを反映した空間づくりで、集客と働きやすさを両立します。</p>
+              <ul>
+                <li>内装デザイン・家具造作</li>
+                <li>設備更新・省エネ改修</li>
+                <li>開店までのスケジュール管理</li>
+              </ul>
+            </div>
+          </article>
+          <article class="service-card">
+            <img src="https://images.unsplash.com/photo-1531835551805-16d864c8d588?auto=format&fit=crop&w=900&q=80" alt="公共工事">
+            <div class="service-content">
+              <h3>公共工事・インフラ整備</h3>
+              <p>地域行政との協働で道路・校舎・公園など地域の基盤整備を担います。安全管理を徹底。</p>
+              <ul>
+                <li>各種補修工事・防災対策</li>
+                <li>緑地保全・外構整備</li>
+                <li>公共施設のバリアフリー化</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects">
+      <div class="section-inner">
+        <div class="section-title">
+          <span class="badge">Works</span>
+          <h2>最近の施工事例</h2>
+          <p>地域の暮らしに寄り添った施工実績です。現地見学やオンライン相談もお気軽にお問い合わせください。</p>
+        </div>
+        <div class="project-grid">
+          <article class="project-card">
+            <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=900&q=80" alt="北側断熱改修">
+            <div class="project-content">
+              <span>戸建てリノベーション</span>
+              <h3>築40年の耐震＆断熱改修</h3>
+              <p>地元の木材を活用し、冬の寒さ対策を実現。光熱費が年間15%削減。</p>
+            </div>
+          </article>
+          <article class="project-card">
+            <img src="https://images.unsplash.com/photo-1529429617124-aee0a92761bb?auto=format&fit=crop&w=900&q=80" alt="商店街の店舗">
+            <div class="project-content">
+              <span>店舗改装</span>
+              <h3>商店街カフェの全面リニューアル</h3>
+              <p>回遊しやすい導線と自然素材の内装で、開店半年で来店者数が140%に。</p>
+            </div>
+          </article>
+          <article class="project-card">
+            <img src="https://images.unsplash.com/photo-1503389152951-9f343605f61e?auto=format&fit=crop&w=900&q=80" alt="学校改修">
+            <div class="project-content">
+              <span>公共工事</span>
+              <h3>市立小学校の耐震補強工事</h3>
+              <p>授業への影響を最小限に抑えた施工計画で、予定より2週間前倒しで完工。</p>
+            </div>
+          </article>
+          <article class="project-card">
+            <img src="https://images.unsplash.com/photo-1529429617124-aee0a92761bb?auto=format&fit=crop&w=900&q=80" alt="外構工事">
+            <div class="project-content">
+              <span>外構・造園</span>
+              <h3>地域公園の遊歩道整備</h3>
+              <p>高齢者やベビーカーにも優しいバリアフリーデザインで、地域住民の憩いの場に。</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="voice" class="testimonials">
+      <div class="section-inner">
+        <div class="section-title">
+          <span class="badge">Voice</span>
+          <h2>お客様からの声</h2>
+          <p>地域のお客様と共に歩んできた私たちの取り組みが、安心と満足につながっています。</p>
+        </div>
+        <div class="testimonial-grid">
+          <article class="testimonial-card">
+            <p>台風被害で屋根が破損した際、夜間にもかかわらずすぐに駆けつけてくださり本当に助かりました。翌日の仮復旧から本工事まで丁寧に対応してもらえました。</p>
+            <strong>南町在住 S様</strong>
+          </article>
+          <article class="testimonial-card">
+            <p>古い店舗を活かしたリニューアルで、まちの雰囲気にも馴染むデザインを提案してもらいました。地域のお客様からも好評です。</p>
+            <strong>桜商店街 カフェオーナー</strong>
+          </article>
+          <article class="testimonial-card">
+            <p>学校の耐震補強では、安全対策とコミュニケーションが徹底され、保護者からの信頼も得られました。地域の頼れるパートナーです。</p>
+            <strong>市立第一小学校 PTA</strong>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="process">
+      <div class="section-inner">
+        <div class="section-title">
+          <span class="badge">Flow</span>
+          <h2>ご相談からアフターサポートまでの流れ</h2>
+          <p>地域密着のフットワークで、最適な提案とスムーズな工事進行を実現します。</p>
+        </div>
+        <div class="steps">
+          <div class="step-card">
+            <div class="step-number">1</div>
+            <h3>お問い合わせ・ヒアリング</h3>
+            <p>ご希望や予算、今抱えているお困りごとを丁寧に伺います。オンライン相談も対応しています。</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">2</div>
+            <h3>現地調査・プラン提案</h3>
+            <p>地域特性を踏まえた最適なプラン・概算お見積もりをご提案。補助金の活用方法もご案内。</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">3</div>
+            <h3>施工・進捗共有</h3>
+            <p>自社職人が丁寧に施工。進捗はLINEやメールでこまめにご報告し、安心して任せていただけます。</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">4</div>
+            <h3>お引き渡し・アフター</h3>
+            <p>完成後の定期点検・メンテナンスもお任せください。小さな修繕も迅速に対応します。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="contact">
+      <div class="section-inner">
+        <div class="section-title">
+          <span class="badge">Contact</span>
+          <h2>お気軽にご相談ください</h2>
+          <p>地域の皆さまの暮らしを支えるパートナーとして、最適なご提案をいたします。お電話・メール・オンライン相談などご希望の方法で承ります。</p>
+        </div>
+        <div class="contact-inner">
+          <div class="contact-info">
+            <h3>お電話・メール</h3>
+            <p>受付時間：平日・土曜 9:00〜18:00（日祝定休）</p>
+            <p>電話：<a href="tel:0123456789">012-345-6789</a></p>
+            <p>メール：<a href="mailto:info@machidukuri-koumuten.jp">info@machidukuri-koumuten.jp</a></p>
+            <h3>対応エリア</h3>
+            <p>〇〇市・△△市・□□町 ほか、車で1時間圏内</p>
+            <div class="badge">初回相談・現地調査 無料</div>
+          </div>
+          <form>
+            <label for="name">お名前</label>
+            <input type="text" id="name" name="name" placeholder="例）山田 太郎" required>
+            <label for="email">メールアドレス</label>
+            <input type="email" id="email" name="email" placeholder="例）example@mail.jp" required>
+            <label for="message">ご相談内容</label>
+            <textarea id="message" name="message" rows="4" placeholder="ご希望やお悩みをご記入ください" required></textarea>
+            <button type="submit" class="cta-btn" style="border:none; cursor:pointer; justify-self:start;">送信する</button>
+            <small>送信いただいた内容は、プライバシーポリシーに基づいて管理します。</small>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <h3>まちづくり工務店</h3>
+        <p>〒000-0000 〇〇県〇〇市〇〇町1-2-3<br>営業時間：平日・土曜 9:00〜18:00（日祝定休）</p>
+      </div>
+      <div>
+        <h4>事業内容</h4>
+        <ul>
+          <li>住宅新築・リフォーム</li>
+          <li>店舗・事務所改装</li>
+          <li>公共工事・インフラ整備</li>
+          <li>外構・造園・メンテナンス</li>
+        </ul>
+      </div>
+      <div>
+        <h4>各種情報</h4>
+        <ul>
+          <li><a href="#">会社概要</a></li>
+          <li><a href="#">施工事例</a></li>
+          <li><a href="#">採用情報</a></li>
+          <li><a href="#">プライバシーポリシー</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">&copy; 2024 まちづくり工務店. All rights reserved.</div>
+  </footer>
+
+  <script>
+    const toggle = document.querySelector('.mobile-menu-toggle');
+    const navList = document.querySelector('nav ul');
+
+    toggle.addEventListener('click', () => {
+      navList.classList.toggle('open');
+      toggle.classList.toggle('open');
+    });
+
+    // Close menu when link clicked on mobile
+    navList.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (navList.classList.contains('open')) {
+          navList.classList.remove('open');
+          toggle.classList.remove('open');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
