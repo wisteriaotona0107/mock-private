@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 60" role="img" aria-labelledby="title desc">
+  <title id="title">旭匠建設ロゴ</title>
+  <desc id="desc">山並みをモチーフにした建設会社のロゴ</desc>
+  <rect width="220" height="60" fill="#101010" rx="12" />
+  <path d="M30 45L55 15l25 30H30z" fill="#E6A400"/>
+  <text x="95" y="38" font-family="'Noto Sans JP', sans-serif" font-weight="700" font-size="22" fill="#ffffff">旭匠建設</text>
+</svg>

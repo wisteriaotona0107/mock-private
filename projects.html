@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>代表実績一覧 | 旭匠建設</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo" aria-label="旭匠建設トップ">
+        <img src="assets/logo.svg" alt="旭匠建設のロゴ">
+      </a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="primary-navigation">メニュー</button>
+      <nav class="primary-nav" id="primary-navigation" aria-label="メインメニュー">
+        <ul>
+          <li><a href="index.html">ホーム</a></li>
+          <li><a href="projects.html" aria-current="page">実績</a></li>
+          <li><a href="company.html">会社情報</a></li>
+          <li><a href="contact.html">お問い合わせ</a></li>
+        </ul>
+      </nav>
+    </div>
+    <nav class="breadcrumb" aria-label="パンくずリスト">
+      <ol>
+        <li><a href="index.html">ホーム</a></li>
+        <li><span aria-current="page">代表実績</span></li>
+      </ol>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <h1>代表実績一覧</h1>
+        <p>地域課題に応えるプロジェクトから、最新の都市開発まで。案件ごとの成果をご紹介します。</p>
+      </div>
+    </section>
+
+    <section class="project-listing" aria-labelledby="project-list-title">
+      <div class="container">
+        <h2 id="project-list-title">プロジェクト</h2>
+        <div id="project-grid" class="project-grid" role="list"></div>
+      </div>
+    </section>
+
+    <section class="cta" aria-labelledby="cta-project">
+      <div class="container">
+        <h2 id="cta-project">プロジェクトのご相談はこちら</h2>
+        <p>構想段階からお手伝いが可能です。お気軽にお問い合わせください。</p>
+        <div class="cta-actions">
+          <a class="btn primary" href="contact.html">相談する</a>
+          <a class="btn" href="contact.html#materials">資料を受け取る</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <img src="assets/logo.svg" alt="旭匠建設">
+        <p>旭匠建設株式会社<br>〒123-4567 東京都港区未来町1-2-3</p>
+      </div>
+      <div class="footer-links">
+        <h3>リンク</h3>
+        <ul>
+          <li><a href="projects.html">代表実績</a></li>
+          <li><a href="company.html">会社情報</a></li>
+          <li><a href="contact.html">お問い合わせ</a></li>
+          <li><a href="contact.html#recruit">採用情報</a></li>
+        </ul>
+      </div>
+      <div class="footer-contact">
+        <h3>連絡先</h3>
+        <p>TEL: 03-1234-5678<br>Email: info@kyokushou.co.jp</p>
+      </div>
+    </div>
+    <p class="footer-copy">&copy; 2024 Kyokushou Construction Inc.</p>
+  </footer>
+
+  <script src="assets/js/scroll-effects.js" defer></script>
+  <script src="assets/js/main.js" defer></script>
+  <script src="assets/js/projects.js" defer></script>
+</body>
+</html>
