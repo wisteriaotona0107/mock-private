@@ -1,0 +1,62 @@
+[
+  {
+    "id": "green-dam",
+    "title": "緑のダム計画",
+    "summary": "治水公園と透水性舗装で、豪雨時の水害リスクを軽減した地域連携プロジェクト。",
+    "location": "宮城県石巻市",
+    "year": "2023年3月竣工",
+    "division": "防災インフラ事業部",
+    "description": [
+      "豪雨による河川氾濫を防ぐため、河川敷を活用した調整池兼公園を計画。",
+      "住民ワークショップで提案された多目的広場を盛り込み、平常時はコミュニティの場として活用。"
+    ],
+    "results": [
+      "浸水想定エリアの住宅被害リスク38%低減",
+      "年間イベント開催数12件増",
+      "維持管理コスト15%削減"
+    ],
+    "thumbnail": "assets/images/project-green-dam-thumb.svg",
+    "before": "assets/images/green-dam-before.svg",
+    "after": "assets/images/green-dam-after.svg"
+  },
+  {
+    "id": "smart-campus",
+    "title": "スマートキャンパス化",
+    "summary": "省エネと学習体験の向上を両立した大学キャンパスのZEB化プロジェクト。",
+    "location": "神奈川県横浜市",
+    "year": "2022年9月竣工",
+    "division": "都市創造事業部",
+    "description": [
+      "老朽化した校舎をZEB Readyレベルまで改修し、太陽光発電と蓄電を導入。",
+      "ICTインフラを刷新し、スマートカードでの入退室管理と学習データの連携を実現。"
+    ],
+    "results": [
+      "エネルギーコスト42%削減",
+      "再生可能エネルギー比率65%達成",
+      "学生満足度4.7/5"
+    ],
+    "thumbnail": "assets/images/project-smart-campus-thumb.svg",
+    "before": "assets/images/smart-campus-before.svg",
+    "after": "assets/images/smart-campus-after.svg"
+  },
+  {
+    "id": "coastal-line",
+    "title": "沿線まちづくりプロジェクト",
+    "summary": "地域鉄道の利用者増と沿線活性化を目指した駅前複合開発。",
+    "location": "福井県敦賀市",
+    "year": "2021年6月竣工",
+    "division": "地域共創推進部",
+    "description": [
+      "遊休地を活かした駅前複合施設の整備と、交通結節点としてのバスターミナルを整備。",
+      "地域事業者と連携したマルシェスペースとスタートアップ支援拠点を併設。"
+    ],
+    "results": [
+      "沿線来訪者2.3倍",
+      "空き店舗率55%→18%",
+      "沿線雇用210人増"
+    ],
+    "thumbnail": "assets/images/project-coastal-thumb.svg",
+    "before": "assets/images/coastal-before.svg",
+    "after": "assets/images/coastal-after.svg"
+  }
+]
