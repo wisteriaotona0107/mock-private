@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>匠建設パートナーズ | 個人事業者向け建設ソリューション</title>
+  <style>
+    :root {
+      --primary: #1d5c63;
+      --secondary: #0f2c33;
+      --accent: #f4a259;
+      --light: #f8f8f8;
+      --dark: #1a1a1a;
+      --gradient: linear-gradient(135deg, rgba(29, 92, 99, 0.9), rgba(15, 44, 51, 0.95));
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
+      color: var(--dark);
+      background-color: var(--light);
+      line-height: 1.6;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      transition: padding 0.3s ease;
+    }
+
+    .header-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 24px;
+    }
+
+    .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: 0.05em;
+    }
+
+    nav ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: flex;
+      gap: 24px;
+      font-size: 0.95rem;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--secondary);
+      padding-bottom: 4px;
+      border-bottom: 2px solid transparent;
+      transition: color 0.3s ease, border-color 0.3s ease;
+    }
+
+    nav a:hover,
+    nav a.active {
+      color: var(--primary);
+      border-color: var(--accent);
+    }
+
+    main {
+      margin-top: 88px;
+    }
+
+    section {
+      padding: 80px 24px;
+    }
+
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      background: url('https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1400&q=80') center/cover no-repeat;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--gradient);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 600px;
+      padding: 40px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.2rem, 4vw, 3.2rem);
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    .hero p {
+      font-size: 1.05rem;
+      margin: 0;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .cta-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 28px;
+      border-radius: 999px;
+      font-weight: 600;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--secondary);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-outline {
+      border: 2px solid rgba(255, 255, 255, 0.7);
+      color: white;
+      background: transparent;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25);
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.9rem;
+    }
+
+    .badge-row span {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .section-title {
+      font-size: 2rem;
+      margin-bottom: 16px;
+      color: var(--secondary);
+    }
+
+    .section-subtitle {
+      color: #516066;
+      max-width: 620px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 24px;
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 16px 32px rgba(15, 44, 51, 0.08);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      background: rgba(29, 92, 99, 0.08);
+      transition: opacity 0.3s ease;
+      z-index: 0;
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .card h3 {
+      margin-top: 0;
+      margin-bottom: 12px;
+      color: var(--primary);
+    }
+
+    .card p {
+      margin: 0;
+      color: #405056;
+      font-size: 0.95rem;
+    }
+
+    .icon-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(29, 92, 99, 0.12);
+      display: grid;
+      place-items: center;
+      font-size: 1.2rem;
+      color: var(--primary);
+      margin-bottom: 16px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 24px;
+      margin-top: 48px;
+    }
+
+    .stat-box {
+      background: white;
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06);
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 0;
+    }
+
+    .stat-label {
+      margin-top: 8px;
+      color: #6b7a80;
+    }
+
+    .process {
+      background: white;
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 28px;
+      border-left: 2px solid rgba(29, 92, 99, 0.2);
+      margin-top: 32px;
+      display: grid;
+      gap: 24px;
+    }
+
+    .timeline-step {
+      position: relative;
+    }
+
+    .timeline-step::before {
+      content: attr(data-step);
+      position: absolute;
+      left: -48px;
+      top: 0;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      box-shadow: 0 8px 16px rgba(29, 92, 99, 0.3);
+    }
+
+    .testimonial-section {
+      background: #f0f5f5;
+    }
+
+    .testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 32px;
+    }
+
+    .testimonial {
+      background: white;
+      padding: 24px;
+      border-radius: 20px;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .testimonial blockquote {
+      margin: 0;
+      font-size: 0.98rem;
+      color: #425056;
+      line-height: 1.8;
+    }
+
+    .testimonial footer {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      font-size: 0.9rem;
+      color: #6b7a80;
+    }
+
+    .cta-section {
+      background: var(--gradient);
+      color: white;
+      text-align: center;
+      border-radius: 24px;
+      padding: 60px 40px;
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.2);
+      margin-top: 48px;
+    }
+
+    .cta-section h2 {
+      margin-top: 0;
+      font-size: 2.2rem;
+    }
+
+    .contact-section {
+      background: white;
+    }
+
+    form {
+      display: grid;
+      gap: 16px;
+      margin-top: 32px;
+    }
+
+    label {
+      font-weight: 600;
+      color: var(--secondary);
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid rgba(29, 92, 99, 0.3);
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      font-family: inherit;
+      background: #fbfbfb;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(29, 92, 99, 0.2);
+      background: white;
+    }
+
+    textarea {
+      min-height: 140px;
+      resize: vertical;
+    }
+
+    .footer {
+      background: var(--secondary);
+      color: rgba(255, 255, 255, 0.75);
+      padding: 40px 24px;
+    }
+
+    .footer-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: grid;
+      gap: 24px;
+    }
+
+    .footer-top {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px;
+      justify-content: space-between;
+    }
+
+    .footer-nav {
+      display: grid;
+      gap: 8px;
+    }
+
+    .footer-nav a {
+      color: rgba(255, 255, 255, 0.75);
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+
+    .footer-nav a:hover {
+      color: white;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      padding-top: 16px;
+      font-size: 0.8rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: space-between;
+    }
+
+    .floating-contact {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--accent);
+      color: var(--secondary);
+      padding: 16px 22px;
+      border-radius: 999px;
+      box-shadow: 0 16px 32px rgba(244, 162, 89, 0.35);
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .floating-contact span {
+      font-size: 1.2rem;
+    }
+
+    @media (max-width: 768px) {
+      nav ul {
+        display: none;
+      }
+
+      .header-inner {
+        padding: 14px 20px;
+      }
+
+      main {
+        margin-top: 72px;
+      }
+
+      section {
+        padding: 64px 20px;
+      }
+
+      .cta-group {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .cta-section {
+        margin: 32px 0;
+      }
+
+      .floating-contact {
+        bottom: 16px;
+        right: 16px;
+        padding: 12px 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <div class="logo">匠建設パートナーズ</div>
+      <nav>
+        <ul>
+          <li><a href="#services">サービス</a></li>
+          <li><a href="#process">進め方</a></li>
+          <li><a href="#voice">お客様の声</a></li>
+          <li><a href="#contact">お問い合わせ</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="hero">
+      <div class="container">
+        <div class="hero-content">
+          <div class="badge-row">
+            <span>小規模工事から大型案件まで対応</span>
+            <span>完全自社施工でスピーディ</span>
+          </div>
+          <h1>個人事業者の挑戦を支える<br />建設パートナー</h1>
+          <p>匠建設パートナーズは、現場で培った確かな技術と柔軟な体制で、個人事業者さまのプロジェクトを成功へ導きます。現場調整から資材調達までワンストップで対応いたします。</p>
+          <div class="cta-group">
+            <a class="btn btn-primary" href="#contact">無料相談を予約する</a>
+            <a class="btn btn-outline" href="#services">サービスを見る</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="services">
+      <div class="container">
+        <h2 class="section-title">3つの専門サービス</h2>
+        <p class="section-subtitle">個人事業者ならではのスピード感とコスト感覚に寄り添い、建設のプロが現場の課題を総合的にサポートします。</p>
+        <div class="grid grid-3" style="margin-top: 40px;">
+          <article class="card">
+            <div class="card-content">
+              <div class="icon-circle">🏗️</div>
+              <h3>施工マネジメント</h3>
+              <p>工程表の作成から協力会社の手配までを一括管理。現場の進捗をリアルタイムで共有し、トラブルを未然に防ぎます。</p>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-content">
+              <div class="icon-circle">📐</div>
+              <h3>設計・図面サポート</h3>
+              <p>専門の設計士による図面作成・修正はもちろん、建築確認申請などの行政手続きもサポート。設計段階から安心です。</p>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-content">
+              <div class="icon-circle">🚚</div>
+              <h3>資材調達・コスト最適化</h3>
+              <p>自社ルートを活用した資材調達でコスト削減を実現。現場に合わせた資材の選定と納期管理も任せてください。</p>
+            </div>
+          </article>
+        </div>
+        <div class="stats">
+          <div class="stat-box">
+            <p class="stat-value">98%</p>
+            <p class="stat-label">工期遵守率</p>
+          </div>
+          <div class="stat-box">
+            <p class="stat-value">150社</p>
+            <p class="stat-label">年間支援企業数</p>
+          </div>
+          <div class="stat-box">
+            <p class="stat-value">24時間以内</p>
+            <p class="stat-label">初回対応スピード</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="process" id="process">
+      <div class="container">
+        <h2 class="section-title">プロジェクトの進め方</h2>
+        <p class="section-subtitle">全フェーズで専任チームが伴走し、限られた予算・期間でも安心してお任せいただける体制を整えています。</p>
+        <div class="timeline">
+          <div class="timeline-step" data-step="1">
+            <h3>ヒアリング &amp; 現地調査</h3>
+            <p>ご要望の確認と現地調査を同日に実施。現場の状況とリスクを洗い出し、最適な進め方をご提案します。</p>
+          </div>
+          <div class="timeline-step" data-step="2">
+            <h3>設計・見積り</h3>
+            <p>図面作成から見積り提出まで最短5営業日。複数パターンのコストシミュレーションで判断をサポートします。</p>
+          </div>
+          <div class="timeline-step" data-step="3">
+            <h3>施工・品質管理</h3>
+            <p>現場監督が常駐し、品質基準と安全管理を徹底。進捗レポートはオンラインでいつでも確認できます。</p>
+          </div>
+          <div class="timeline-step" data-step="4">
+            <h3>引き渡し &amp; アフターケア</h3>
+            <p>完工後は保証書を発行し、定期点検と緊急対応窓口をご用意。ビジネスの継続を支えます。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="testimonial-section" id="voice">
+      <div class="container">
+        <h2 class="section-title">お客様の声</h2>
+        <p class="section-subtitle">個人事業者さまの現場課題を共に解決し、事業の成長に貢献してきた事例の一部をご紹介します。</p>
+        <div class="testimonial-grid">
+          <article class="testimonial">
+            <blockquote>
+              「図面の急な変更にも即日対応いただき、工期に遅れなく納品できました。現場監督の方が毎日進捗を共有してくれたおかげで安心でした。」
+            </blockquote>
+            <footer>
+              <strong>山田工務店</strong>
+              <span>木造住宅リノベーション / 東京都足立区</span>
+            </footer>
+          </article>
+          <article class="testimonial">
+            <blockquote>
+              「資材調達まで任せたことで原価を8%削減。限られたスタッフでも大型案件を無事完遂できました。」
+            </blockquote>
+            <footer>
+              <strong>株式会社ナガト建設</strong>
+              <span>商業施設内装工事 / 神奈川県川崎市</span>
+            </footer>
+          </article>
+          <article class="testimonial">
+            <blockquote>
+              「初回相談から着工までのスピードが速く、急ぎの案件にも柔軟に対応いただけました。アフター対応も丁寧です。」
+            </blockquote>
+            <footer>
+              <strong>松井設備</strong>
+              <span>設備改修工事 / 埼玉県さいたま市</span>
+            </footer>
+          </article>
+        </div>
+
+        <div class="cta-section">
+          <h2>まずは30分のオンライン相談から</h2>
+          <p>現場の写真や図面がなくてもOK。ヒアリングシートを基に最適なスケジュールと費用感をご案内します。</p>
+          <a class="btn btn-primary" href="#contact" style="margin-top: 24px;">無料相談を申し込む</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact-section" id="contact">
+      <div class="container">
+        <h2 class="section-title">お問い合わせ</h2>
+        <p class="section-subtitle">24時間以内に担当者から折り返しご連絡いたします。案件内容やご要望をなるべく詳しくご記入ください。</p>
+        <form id="contact-form">
+          <div>
+            <label for="name">お名前</label>
+            <input type="text" id="name" name="name" placeholder="例）山田 太郎" required />
+          </div>
+          <div>
+            <label for="business">事業形態</label>
+            <select id="business" name="business" required>
+              <option value="">選択してください</option>
+              <option value="construction">個人事業主（建設業）</option>
+              <option value="interior">個人事業主（内装・設備）</option>
+              <option value="architect">設計事務所</option>
+              <option value="other">その他</option>
+            </select>
+          </div>
+          <div>
+            <label for="email">メールアドレス</label>
+            <input type="email" id="email" name="email" placeholder="info@example.com" required />
+          </div>
+          <div>
+            <label for="phone">電話番号</label>
+            <input type="tel" id="phone" name="phone" placeholder="03-1234-5678" />
+          </div>
+          <div>
+            <label for="budget">ご予算帯</label>
+            <select id="budget" name="budget">
+              <option value="未定">未定</option>
+              <option value="~300万">~300万円</option>
+              <option value="300-1000万">300-1,000万円</option>
+              <option value="1000-3000万">1,000-3,000万円</option>
+              <option value="3000万~">3,000万円以上</option>
+            </select>
+          </div>
+          <div>
+            <label for="message">ご相談内容</label>
+            <textarea id="message" name="message" placeholder="案件の概要や希望工期などをご記入ください" required></textarea>
+          </div>
+          <button class="btn btn-primary" type="submit">送信する</button>
+          <p id="form-message" style="margin: 0; font-size: 0.9rem; color: var(--primary);"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div>
+          <div class="logo" style="color: white;">匠建設パートナーズ</div>
+          <p style="max-width: 360px;">東京都千代田区丸の内1-1-1<br />TEL: 03-0000-1234 / FAX: 03-0000-5678</p>
+        </div>
+        <div class="footer-nav">
+          <a href="#services">サービス</a>
+          <a href="#process">進め方</a>
+          <a href="#voice">お客様の声</a>
+          <a href="#contact">お問い合わせ</a>
+        </div>
+        <div class="footer-nav">
+          <a href="#">会社概要</a>
+          <a href="#">採用情報</a>
+          <a href="#">プライバシーポリシー</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2024 Takumi Construction Partners. All rights reserved.</span>
+        <span>建設業許可番号: 東京都知事許可(般-4)第00000号</span>
+      </div>
+    </div>
+  </footer>
+
+  <a class="floating-contact" href="#contact" aria-label="無料相談を申し込む">
+    <span>✉️</span>
+    <span>相談する</span>
+  </a>
+
+  <script>
+    const header = document.querySelector('header');
+    const navLinks = document.querySelectorAll('nav a');
+    const sections = Array.from(navLinks).map((link) => document.querySelector(link.getAttribute('href')));
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 10) {
+        header.style.padding = '6px 0';
+      } else {
+        header.style.padding = '';
+      }
+
+      const scrollPos = window.scrollY + 120;
+      sections.forEach((section, index) => {
+        if (!section) return;
+        const top = section.offsetTop;
+        const bottom = top + section.offsetHeight;
+        const link = navLinks[index];
+        if (scrollPos >= top && scrollPos < bottom) {
+          navLinks.forEach((navLink) => navLink.classList.remove('active'));
+          link.classList.add('active');
+        }
+      });
+    });
+
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener('click', function (e) {
+        const targetId = this.getAttribute('href');
+        const target = document.querySelector(targetId);
+        if (target) {
+          e.preventDefault();
+          window.scrollTo({
+            top: target.offsetTop - 80,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+
+    const form = document.getElementById('contact-form');
+    const messageElement = document.getElementById('form-message');
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const formData = new FormData(form);
+      const name = formData.get('name');
+      messageElement.textContent = `${name} 様、送信が完了しました。担当者よりご連絡いたします。`;
+      form.reset();
+    });
+  </script>
+</body>
+</html>
