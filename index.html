@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAKURA Grotto | 日本酒セレクション</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <div class="background-veil"></div>
+  <header class="top-bar">
+    <div class="brand">
+      <span class="brand-kanji">櫻窟</span>
+      <span class="brand-roman">SAKURA GROTTO</span>
+    </div>
+    <button class="hamburger" aria-label="メニューを開く" aria-expanded="false" aria-controls="drawer">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </header>
+
+  <div class="scrim" hidden></div>
+  <nav id="drawer" class="drawer" aria-hidden="true">
+    <ul>
+      <li><a href="#intro">サイト紹介</a></li>
+      <li><a href="#list">日本酒一覧</a></li>
+      <li><a href="#howto">日本酒の飲み方</a></li>
+      <li><a href="#shops">おすすめのお店</a></li>
+      <li><a href="#contact">問い合わせ先</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <section id="intro" class="section active">
+      <div class="section-inner">
+        <h1>隠れ家で味わう、珠玉の日本酒体験</h1>
+        <p>「櫻窟 - SAKURA GROTTO」は、小規模飲食店向けに厳選した日本酒の魅力を伝えるためのモックサイトです。四季折々に寄り添う酒蔵の想い、料理との調和、香り立つ瞬間を丁寧にお届けします。</p>
+        <p>本サイトは HTML+Vanilla JS の SPA で、日本酒一覧はサーバサイドAPIから取得します。APIが利用できない場合でもローカルのモックデータでフェイルセーフに表示されます。</p>
+        <p>気になる点やお取り扱いのご相談は <a href="mailto:info@sakura-grotto.example">info@sakura-grotto.example</a> までお気軽にご連絡ください。</p>
+      </div>
+    </section>
+
+    <section id="list" class="section">
+      <div class="section-inner">
+        <div class="section-header">
+          <h2>日本酒一覧</h2>
+          <p class="data-notice" id="data-notice"></p>
+        </div>
+        <div class="sake-grid" id="sake-grid" aria-live="polite"></div>
+        <div class="pagination" id="pagination"></div>
+      </div>
+    </section>
+
+    <section id="howto" class="section">
+      <div class="section-inner">
+        <h2>日本酒の飲み方</h2>
+        <div class="howto-grid">
+          <article>
+            <h3>温度で楽しむ</h3>
+            <p>冷酒・常温・燗酒など、温度によって香りや味わいが劇的に変化します。繊細な香りを引き出したいときは冷やして、米の旨味を感じたいときはぬる燗で。</p>
+          </article>
+          <article>
+            <h3>器を選ぶ</h3>
+            <p>薄張りグラスや錫製のちろりなど、器の質感が舌触りに影響します。料理やシーンに合わせて器を変えることで、隠れ家の時間がより一層深まります。</p>
+          </article>
+          <article>
+            <h3>ペアリングを意識する</h3>
+            <p>海鮮にはキレのある吟醸酒、肉料理には濃醇な純米酒。食材の旨味と酒の酸味・甘味を重ね合わせ、余韻を楽しむのが真の贅沢です。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="shops" class="section">
+      <div class="section-inner">
+        <h2>おすすめのお店</h2>
+        <div class="shops-list">
+          <article>
+            <h3>灯 - Akari</h3>
+            <p>ほの暗い灯りと季節の料理が迎える、12席だけの割烹バー。ペアリングコースで日本酒の奥深さを体験できます。</p>
+          </article>
+          <article>
+            <h3>滴 - Shizuku</h3>
+            <p>地下の石畳を抜けた先にある、カウンター8席の隠れ家。温度帯の違いを楽しめる酒器がずらりと並び、酒器のセレクトも購入可能です。</p>
+          </article>
+          <article>
+            <h3>透 - Suishō</h3>
+            <p>ガラス越しに庭園を望むラウンジ。静謐な時間の中、店主厳選の熟成酒と季節のフィンガーフードを合わせて提供しています。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section">
+      <div class="section-inner">
+        <h2>問い合わせ先</h2>
+        <p>取り扱い希望・仕入れのご相談・イベント開催のご依頼など、こちらからお問い合わせください。</p>
+        <ul class="contact-list">
+          <li>メール：<a href="mailto:info@sakura-grotto.example">info@sakura-grotto.example</a></li>
+          <li>電話：03-1234-5678（平日 12:00 - 20:00）</li>
+          <li>所在地：東京都港区南青山 3-12-7 地下1階</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal" id="sake-modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-content" role="document">
+      <button class="modal-close" aria-label="モーダルを閉じる">×</button>
+      <div class="modal-body">
+        <img src="" alt="" id="modal-image">
+        <div class="modal-details">
+          <h3 id="modal-name"></h3>
+          <p id="modal-desc"></p>
+          <dl>
+            <div>
+              <dt>原料米</dt>
+              <dd id="modal-rice"></dd>
+            </div>
+            <div>
+              <dt>精米歩合</dt>
+              <dd><span id="modal-polish"></span>%</dd>
+            </div>
+            <div>
+              <dt>アルコール度数</dt>
+              <dd><span id="modal-abv"></span>%</dd>
+            </div>
+            <div>
+              <dt>価格</dt>
+              <dd>¥<span id="modal-price"></span></dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <small>© 2024 Sakura Grotto. Crafted for intimate dining experiences.</small>
+  </footer>
+</body>
+</html>
