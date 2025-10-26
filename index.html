@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="都会の喧騒から離れた大人の隠れ家日本酒バー『静滴』。静寂と酒の物語に浸る夜を。">
+  <meta property="og:title" content="静滴 | 隠れ家日本酒バー">
+  <meta property="og:description" content="静寂と酒の物語に浸る夜を。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://example.com/">
+  <meta property="og:image" content="assets/hero-fallback.jpg">
+  <title>静滴 | 隠れ家日本酒バー</title>
+  <link rel="stylesheet" href="styles.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BarOrPub",
+    "name": "静滴",
+    "image": "https://example.com/assets/hero-fallback.jpg",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "東京都港区静町1-8-12",
+      "addressLocality": "港区",
+      "addressRegion": "東京都",
+      "postalCode": "106-0032",
+      "addressCountry": "JP"
+    },
+    "telephone": "+81-3-0000-1111",
+    "servesCuisine": ["Japanese", "Small Plates"],
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday"],
+        "opens": "18:00",
+        "closes": "24:00"
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Friday", "Saturday"],
+        "opens": "18:00",
+        "closes": "26:00"
+      }
+    ],
+    "url": "https://example.com/",
+    "priceRange": "\u00a5\u00a5\u00a5"
+  }
+  </script>
+</head>
+<body>
+  <div class="background-noise" aria-hidden="true"></div>
+  <header class="site-header" id="top">
+    <div class="container header-inner">
+      <a class="brand" href="#home">
+        <img src="assets/logo-min.svg" alt="静滴ロゴ" width="64" height="64" loading="lazy">
+        <span class="brand-text">静滴</span>
+      </a>
+      <div class="header-controls">
+        <div class="quietness" aria-live="polite">
+          <span class="quietness-label">本日の静けさ</span>
+          <span class="quietness-indicator" id="quietnessIndicator" role="status">
+            <span class="dot" aria-hidden="true"></span>
+            <span class="quietness-state" id="quietnessState">静寂</span>
+          </span>
+        </div>
+        <button class="menu-toggle" id="menuToggle" aria-controls="primaryNav" aria-expanded="false">
+          <span class="sr-only">メニューを開く</span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="offcanvas" id="primaryNav" aria-hidden="true" aria-label="メインメニュー">
+    <div class="offcanvas-inner">
+      <button class="offcanvas-close" id="navClose">
+        <span class="sr-only">メニューを閉じる</span>
+        <span aria-hidden="true">×</span>
+      </button>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#philosophy">Philosophy</a></li>
+        <li><a href="#sake-stories">Sake Stories</a></li>
+        <li><a href="#menu">Menu</a></li>
+        <li><a href="#reservation">Reservation</a></li>
+        <li><a href="#access">Access</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="mainContent">
+    <section class="hero" id="home">
+      <div class="hero-media">
+        <video id="heroVideo" autoplay muted loop playsinline poster="assets/hero-fallback.jpg">
+          <source src="assets/hero.mp4" type="video/mp4">
+          <img src="assets/hero-fallback.jpg" alt="グラスに注がれる日本酒" loading="lazy" width="1280" height="720">
+        </video>
+        <button class="hero-video-toggle" id="videoToggle" aria-pressed="true">一時停止</button>
+      </div>
+      <div class="hero-content container">
+        <p class="eyebrow">SILENT NIGHT BAR</p>
+        <h1>静けさに溶ける、一杯。</h1>
+        <p class="lead">深藍の闇に灯る、ひとしずくの余韻。常連だけが知る静かな夜を、丁寧な温度でお届けします。</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#reservation">席を予約する</a>
+          <span class="hero-subnote">静かに時間が流れる場所で。</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="philosophy reveal" id="philosophy">
+      <div class="container">
+        <header class="section-header">
+          <h2>Philosophy</h2>
+          <p>静寂・器・温度。三つの余白が醸す夜の設え。</p>
+        </header>
+        <div class="philosophy-grid">
+          <article>
+            <h3>静寂</h3>
+            <p>耳をすませば、氷の音さえゆっくりと溶けていく。言葉は最小限に、気配だけを灯す時間。</p>
+          </article>
+          <article>
+            <h3>器</h3>
+            <p>酒器は季節ごとに。掌に沿う薄さと重みを選び、香りの立ち上がりを静かに導きます。</p>
+          </article>
+          <article>
+            <h3>温度</h3>
+            <p>冷・常温・燗。ほんの数度の揺らぎで変わる物語を、夜に馴染む速度で整えます。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="sake-stories reveal" id="sake-stories">
+      <div class="container">
+        <header class="section-header">
+          <h2>Sake Stories</h2>
+          <p>銘柄ごとに異なる静かな物語をご案内します。</p>
+        </header>
+        <div class="cards" id="sakeCards" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="menu reveal" id="menu">
+      <div class="container">
+        <header class="section-header">
+          <h2>Menu</h2>
+          <p>酒の余韻を支える、少数精鋭の小料理。</p>
+        </header>
+        <div class="cards" id="menuCards" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="reservation reveal" id="reservation">
+      <div class="container">
+        <header class="section-header">
+          <h2>Reservation</h2>
+          <p>静かな夜を確実に迎えるために。ご希望を添えてご予約ください。</p>
+        </header>
+        <form id="reservationForm" novalidate>
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="guestName">お名前（任意）</label>
+              <input type="text" id="guestName" name="guestName" autocomplete="name" placeholder="例：山路">
+            </div>
+            <div class="form-field required">
+              <label for="reservationDate">日付</label>
+              <input type="date" id="reservationDate" name="reservationDate" required>
+            </div>
+            <div class="form-field required">
+              <label for="reservationTime">時間</label>
+              <input type="time" id="reservationTime" name="reservationTime" required>
+            </div>
+            <div class="form-field required">
+              <label for="partySize">人数</label>
+              <input type="number" id="partySize" name="partySize" min="1" max="6" required placeholder="2">
+            </div>
+            <div class="form-field">
+              <label for="sakePreference">ご希望の銘柄</label>
+              <input type="text" id="sakePreference" name="sakePreference" placeholder="例：静の雫 純米大吟醸">
+            </div>
+            <div class="form-field">
+              <label for="requestNote">ご要望</label>
+              <textarea id="requestNote" name="requestNote" rows="3" placeholder="静かな席を希望 など"></textarea>
+            </div>
+          </div>
+          <button type="submit" class="btn primary">この内容で予約する</button>
+          <p class="form-note">入力は暗号化通信で送信されます。返信は翌営業日までに。</p>
+        </form>
+      </div>
+    </section>
+
+    <section class="access reveal" id="access">
+      <div class="container">
+        <header class="section-header">
+          <h2>Access</h2>
+          <p>静かな路地にひっそりと灯る看板を目印に。</p>
+        </header>
+        <div class="access-grid">
+          <div>
+            <dl class="definition-list">
+              <div>
+                <dt>住所</dt>
+                <dd>東京都港区静町1-8-12 地下1階</dd>
+              </div>
+              <div>
+                <dt>最寄駅</dt>
+                <dd>霞灯駅 徒歩4分</dd>
+              </div>
+              <div>
+                <dt>営業時間</dt>
+                <dd id="openHours"></dd>
+              </div>
+            </dl>
+            <div class="badge" id="seatStatus">今夜の空席状況：余裕あり</div>
+          </div>
+          <figure class="map-placeholder" aria-label="地図は後日掲載予定">
+            <img src="assets/interior-01.jpg" alt="店内の静かなカウンター" loading="lazy" width="640" height="400">
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact reveal" id="contact">
+      <div class="container">
+        <header class="section-header">
+          <h2>Contact</h2>
+          <p>静かに繋がるための窓口。</p>
+        </header>
+        <div class="contact-grid">
+          <div>
+            <p><a href="mailto:reserve@seihteki.example" class="link">reserve@seihteki.example</a></p>
+            <div class="socials" aria-label="SNS">
+              <a href="#" aria-label="Instagram" class="icon-link">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4zm5 6a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm6.5-.75a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/></svg>
+              </a>
+              <a href="#" aria-label="Twitter" class="icon-link">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.6 7.2c.5-.4.9-.9 1.2-1.5-.5.2-1 .4-1.6.5a2.7 2.7 0 0 0-4.7 1.8c0 .2 0 .4.1.6A7.6 7.6 0 0 1 4.6 6a2.7 2.7 0 0 0 .8 3.7 2.6 2.6 0 0 1-1.2-.3v.1a2.7 2.7 0 0 0 2.2 2.6 2.7 2.7 0 0 1-1.2.1 2.7 2.7 0 0 0 2.5 1.9A5.4 5.4 0 0 1 4 16.5 7.6 7.6 0 0 0 8.1 18c5 0 7.7-4.1 7.7-7.7v-.4c.5-.3 1-.8 1.4-1.2z"/></svg>
+              </a>
+            </div>
+            <details>
+              <summary>よくある質問</summary>
+              <p>Q. 香りの強い香水は避けた方がよいですか？<br> A. はい。香りが酒の余韻に影響するため、控えめな香りでお越しください。</p>
+              <p>Q. 未成年の同席は可能ですか？<br> A. 法令により20歳未満の方はご入店いただけません。</p>
+            </details>
+          </div>
+          <aside class="notes">
+            <p>お願い：静寂を好むお客様が多いため、お電話は控えめな声で。</p>
+            <p>強い香水をまとわれた方は入店をお断りする場合がございます。</p>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <small>&copy; <span id="currentYear"></span> 静滴</small>
+      <button class="bgm-toggle" id="bgmToggle" aria-pressed="false">BGM 停止中</button>
+    </div>
+  </footer>
+
+  <div class="modal" id="storyModal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="storyTitle">
+    <div class="modal-backdrop" data-close-modal></div>
+    <div class="modal-content" role="document">
+      <button class="modal-close" data-close-modal aria-label="閉じる">×</button>
+      <div class="modal-body">
+        <img id="storyImage" src="" alt="" width="360" height="480" loading="lazy">
+        <div class="modal-text">
+          <h3 id="storyTitle"></h3>
+          <p id="storyType"></p>
+          <p id="storyRegion"></p>
+          <p id="storyDescription"></p>
+          <button class="btn secondary" id="storyReserve">この銘柄で予約</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="confirmationModal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="confirmationTitle">
+    <div class="modal-backdrop" data-close-modal></div>
+    <div class="modal-content" role="document">
+      <button class="modal-close" data-close-modal aria-label="閉じる">×</button>
+      <div class="modal-text">
+        <h3 id="confirmationTitle">ご予約を承りました</h3>
+        <p>静かな夜の準備を整えてお待ちしております。追って担当者よりご連絡いたします。</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
