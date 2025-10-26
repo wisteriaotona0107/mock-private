@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 40" role="img" aria-labelledby="title desc">
+  <title id="title">Junmai Journey Logo</title>
+  <desc id="desc">Stylized sake cup with waves</desc>
+  <rect width="120" height="40" fill="#0B1E2D" rx="6"/>
+  <circle cx="25" cy="20" r="12" fill="#F6F3EA"/>
+  <path d="M17 15c4 4 12 4 16 0v3c-4 4-12 4-16 0z" fill="#B6463A"/>
+  <text x="50" y="25" font-family="'Times New Roman', serif" font-size="16" fill="#F6F3EA">Junmai</text>
+</svg>

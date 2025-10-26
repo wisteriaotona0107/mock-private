@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="ja" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="京都の路地に佇む小規模日本酒バーで、旅人のための地酒体験を。">
+  <meta property="og:title" content="Junmai Journey - Kyoto Sake Bar">
+  <meta property="og:description" content="旅人の夜を彩る和モダンな地酒体験。">
+  <!-- Placeholder image URL replacing removed local asset assets/hero.jpg -->
+  <meta property="og:image" content="https://placehold.co/1280x720?text=Kyoto+Sake+Bar">
+  <title>Junmai Journey | 京都の小さな日本酒バー</title>
+  <link rel="stylesheet" href="styles.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BarOrPub",
+    "name": "Junmai Journey",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "京都市東山区旅情町12-3",
+      "addressLocality": "京都市",
+      "addressRegion": "京都府",
+      "postalCode": "605-0821",
+      "addressCountry": "JP"
+    },
+    "telephone": "+81-75-000-1234",
+    "servesCuisine": "Japanese",
+    "openingHours": "Mo-Su 17:00-24:00",
+    "url": "https://example.com",
+    "image": "https://placehold.co/1280x720?text=Kyoto+Sake+Bar",
+    "priceRange": "$$",
+    "acceptsReservations": "True",
+    "maximumAttendeeCapacity": "14"
+  }
+  </script>
+</head>
+<body>
+  <header class="site-header" data-i18n-scope="header">
+    <div class="container header-inner">
+      <a href="#home" class="logo-link" aria-label="Junmai Journey Home">
+        <img src="assets/logo.svg" alt="Junmai Journey" width="120" height="40" loading="lazy">
+      </a>
+      <div class="header-controls">
+        <button class="lang-toggle" data-lang="ja" type="button" aria-label="Switch language">JA</button>
+        <button class="lang-toggle" data-lang="en" type="button" aria-label="Switch language">EN</button>
+        <button class="menu-toggle" type="button" aria-label="Toggle navigation" aria-controls="site-nav" aria-expanded="false">
+          <span class="menu-bar"></span>
+          <span class="menu-bar"></span>
+          <span class="menu-bar"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <nav id="site-nav" class="site-nav" aria-label="Primary">
+    <div class="nav-inner" role="dialog" aria-modal="true" aria-label="Menu">
+      <button class="nav-close" type="button" aria-label="Close navigation">&times;</button>
+      <ul>
+        <li><a href="#home" data-nav data-i18n="nav.home">Home</a></li>
+        <li><a href="#region" data-nav data-i18n="nav.region">Region Map</a></li>
+        <li><a href="#sake" data-nav data-i18n="nav.localSake">Local Sake</a></li>
+        <li><a href="#gallery" data-nav data-i18n="nav.gallery">Gallery</a></li>
+        <li><a href="#experience" data-nav data-i18n="nav.experience">Experience</a></li>
+        <li><a href="#access" data-nav data-i18n="nav.access">Access</a></li>
+        <li><a href="#contact" data-nav data-i18n="nav.contact">Contact</a></li>
+      </ul>
+      <div class="nav-lang">
+        <button class="lang-toggle" data-lang="ja" type="button">JA</button>
+        <button class="lang-toggle" data-lang="en" type="button">EN</button>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section id="home" class="hero" data-observe>
+      <div class="hero-image">
+        <!-- Placeholder image URL replacing removed local asset assets/hero.jpg -->
+        <img src="https://placehold.co/1280x720?text=Kyoto+Sake+Bar" alt="木造のカウンターが並ぶ日本酒バー" width="1280" height="720" loading="lazy">
+      </div>
+      <div class="hero-content container">
+        <p class="hero-kicker" data-i18n="hero.kicker">旅情とともに味わう一献</p>
+        <h1 data-i18n="hero.title">京の路地裏、小さな日本酒バーへようこそ</h1>
+        <p data-i18n="hero.subtitle">季節の地酒と和菓子のペアリングで、旅の夜を彩ります。</p>
+        <button class="btn primary" data-scroll="#sake" data-i18n="hero.cta">今夜の日本酒と出会う</button>
+      </div>
+    </section>
+
+    <section id="region" class="section region" data-observe>
+      <div class="container">
+        <header class="section-header">
+          <p class="eyebrow" data-i18n="region.eyebrow">地域で探す</p>
+          <h2 data-i18n="region.title">地図で選ぶ地酒</h2>
+          <p data-i18n="region.description">右のリストから都道府県を選ぶと、その土地の地酒をご紹介します。</p>
+        </header>
+        <div class="region-grid">
+          <figure class="map">
+            <img src="assets/map-japan.svg" alt="日本地図のシルエット" width="200" height="400" loading="lazy">
+          </figure>
+          <div class="prefecture-list" id="prefecture-list" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="sake" class="section local-sake" data-observe>
+      <div class="container">
+        <header class="section-header">
+          <p class="eyebrow" data-i18n="localSake.eyebrow">今月のおすすめ</p>
+          <h2 data-i18n="localSake.title">季節の地酒セレクション</h2>
+          <p data-i18n="localSake.description">旬の味わいを旅の記憶に。季節限定の銘柄を厳選しました。</p>
+        </header>
+        <div class="carousel" aria-label="Seasonal sake carousel">
+          <button class="carousel-control prev" type="button" aria-label="Previous">
+            <span aria-hidden="true">&#8592;</span>
+          </button>
+          <div class="carousel-track" id="sake-carousel" tabindex="0"></div>
+          <button class="carousel-control next" type="button" aria-label="Next">
+            <span aria-hidden="true">&#8594;</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section id="gallery" class="section gallery" data-observe>
+      <div class="container">
+        <header class="section-header">
+          <p class="eyebrow" data-i18n="gallery.eyebrow">雰囲気を見る</p>
+          <h2 data-i18n="gallery.title">ギャラリー</h2>
+          <p data-i18n="gallery.description">和モダンな店内の様子や季節の器をご覧ください。</p>
+        </header>
+        <div class="gallery-grid" id="gallery-grid">
+          <button class="gallery-item" type="button" data-index="0">
+            <!-- Placeholder image URL replacing removed local asset assets/gallery-01.jpg -->
+            <img src="https://placehold.co/800x600?text=Gallery+1" alt="木目調のカウンター" width="800" height="600" loading="lazy">
+          </button>
+          <button class="gallery-item" type="button" data-index="1">
+            <!-- Placeholder image URL replacing removed local asset assets/gallery-02.jpg -->
+            <img src="https://placehold.co/800x600?text=Gallery+2" alt="紅色の器と日本酒" width="800" height="600" loading="lazy">
+          </button>
+          <button class="gallery-item" type="button" data-index="2">
+            <!-- Placeholder image URL replacing removed local asset assets/gallery-03.jpg -->
+            <img src="https://placehold.co/800x600?text=Gallery+3" alt="金色の和紙と酒器" width="800" height="600" loading="lazy">
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section id="experience" class="section experience" data-observe>
+      <div class="container">
+        <header class="section-header">
+          <p class="eyebrow" data-i18n="experience.eyebrow">予約する</p>
+          <h2 data-i18n="experience.title">地酒体験のご予約</h2>
+          <p data-i18n="experience.description">日付と時間を選んで、旅に寄り添うテイスティングをお楽しみください。</p>
+        </header>
+        <form id="experience-form" novalidate>
+          <div class="form-grid">
+            <label>
+              <span data-i18n="experience.fields.date">日付</span>
+              <input type="date" name="date" required>
+            </label>
+            <label>
+              <span data-i18n="experience.fields.time">時間</span>
+              <input type="time" name="time" required>
+            </label>
+            <label>
+              <span data-i18n="experience.fields.people">人数</span>
+              <input type="number" name="people" min="1" max="6" required>
+            </label>
+            <label>
+              <span data-i18n="experience.fields.language">ご希望の言語</span>
+              <select name="language" required>
+                <option value="ja" data-i18n="experience.options.ja">日本語</option>
+                <option value="en" data-i18n="experience.options.en">English</option>
+              </select>
+            </label>
+            <label>
+              <span data-i18n="experience.fields.sake">希望銘柄</span>
+              <input type="text" name="sake" placeholder="京の雫 純米吟醸" data-i18n-placeholder="experience.placeholders.sake">
+            </label>
+            <label>
+              <span data-i18n="experience.fields.requests">ご要望</span>
+              <textarea name="requests" rows="3" placeholder="例：アレルギー、ペアリングの希望など" data-i18n-placeholder="experience.placeholders.requests"></textarea>
+            </label>
+          </div>
+          <button class="btn primary" type="submit" data-i18n="experience.submit">体験を予約する</button>
+        </form>
+      </div>
+    </section>
+
+    <section id="access" class="section access" data-observe>
+      <div class="container">
+        <header class="section-header">
+          <p class="eyebrow" data-i18n="access.eyebrow">アクセス</p>
+          <h2 data-i18n="access.title">小路の奥でお待ちしています</h2>
+          <p data-i18n="access.description">京都祇園エリア・花見小路から徒歩3分。夜風を感じながらお越しください。</p>
+        </header>
+        <div class="access-grid">
+          <div>
+            <h3 data-i18n="access.addressHeading">住所</h3>
+            <p data-i18n="access.address">京都府京都市東山区旅情町12-3 路地裏小路1F</p>
+            <p><strong data-i18n="access.stationLabel">最寄駅:</strong> <span data-i18n="access.station">京阪 祇園四条駅 徒歩5分</span></p>
+            <p><strong data-i18n="access.hoursLabel">営業時間:</strong> <span data-i18n="access.hours">17:00 - 24:00 (L.O. 23:30)</span></p>
+          </div>
+          <div class="map-placeholder" aria-hidden="true">Map Placeholder</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section contact" data-observe>
+      <div class="container">
+        <header class="section-header">
+          <p class="eyebrow" data-i18n="contact.eyebrow">つながる</p>
+          <h2 data-i18n="contact.title">お問い合わせ</h2>
+          <p data-i18n="contact.description">ご質問や貸切のご相談はお気軽にどうぞ。</p>
+        </header>
+        <div class="contact-grid">
+          <div class="contact-info">
+            <a href="mailto:hello@junmaijourney.jp" class="contact-link">hello@junmaijourney.jp</a>
+            <div class="sns">
+              <a href="#" aria-label="Instagram" class="sns-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="5"></circle></svg>
+              </a>
+              <a href="#" aria-label="Facebook" class="sns-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"></rect><path d="M13 10h2V8h-2c-1.1 0-2 .9-2 2v2h-2v2h2v6h2v-6h2l1-2h-3v-2c0-.6.4-1 1-1z"></path></svg>
+              </a>
+            </div>
+          </div>
+          <div class="faq">
+            <details>
+              <summary data-i18n="contact.faq1.q">体験の所要時間は？</summary>
+              <p data-i18n="contact.faq1.a">約90分を予定しています。ご希望に合わせて調整も可能です。</p>
+            </details>
+            <details>
+              <summary data-i18n="contact.faq2.q">英語のサポートはありますか？</summary>
+              <p data-i18n="contact.faq2.a">はい、英語での案内とテイスティングノートをご用意しています。</p>
+            </details>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>&copy; <span id="current-year"></span> Junmai Journey</p>
+      <div class="footer-lang">
+        <button class="lang-toggle" data-lang="ja" type="button">JA</button>
+        <button class="lang-toggle" data-lang="en" type="button">EN</button>
+      </div>
+    </div>
+  </footer>
+
+  <div class="modal-backdrop" id="modal-backdrop" hidden></div>
+
+  <div class="modal" id="sake-modal" role="dialog" aria-modal="true" aria-labelledby="sake-modal-title" hidden>
+    <div class="modal-content">
+      <button class="modal-close" type="button" aria-label="Close">&times;</button>
+      <div class="modal-body">
+        <h3 id="sake-modal-title"></h3>
+        <p class="modal-brewery"></p>
+        <p class="modal-story"></p>
+        <dl class="modal-meta">
+          <div><dt data-i18n="modal.abv">アルコール度数</dt><dd class="modal-abv"></dd></div>
+          <div><dt data-i18n="modal.temp">提供温度</dt><dd class="modal-temp"></dd></div>
+          <div><dt data-i18n="modal.pairing">ペアリング</dt><dd class="modal-pairing"></dd></div>
+          <div><dt data-i18n="modal.ingredients">原料メモ</dt><dd class="modal-ingredients"></dd></div>
+        </dl>
+        <button class="btn primary modal-reserve" type="button" data-i18n="modal.reserve">体験を予約</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="gallery-modal" role="dialog" aria-modal="true" aria-labelledby="gallery-modal-label" hidden>
+    <div class="modal-content">
+      <button class="modal-close" type="button" aria-label="Close">&times;</button>
+      <div class="modal-body gallery-modal-body">
+        <img src="" alt="" id="gallery-modal-image" loading="lazy">
+        <p id="gallery-modal-caption"></p>
+        <div class="gallery-modal-controls">
+          <button class="btn" type="button" data-gallery-prev aria-label="Previous image">&#8592;</button>
+          <button class="btn" type="button" data-gallery-next aria-label="Next image">&#8594;</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="confirmation-modal" role="alertdialog" aria-modal="true" aria-labelledby="confirmation-title" hidden>
+    <div class="modal-content">
+      <button class="modal-close" type="button" aria-label="Close">&times;</button>
+      <div class="modal-body">
+        <h3 id="confirmation-title" data-i18n="confirmation.title">ご予約ありがとうございます</h3>
+        <p data-i18n="confirmation.message">担当者より24時間以内にご連絡いたします。</p>
+        <button class="btn primary" type="button" data-confirm-close data-i18n="confirmation.close">閉じる</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="sr-only" id="focus-sentinel-start" tabindex="0"></div>
+  <div class="sr-only" id="focus-sentinel-end" tabindex="0"></div>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
