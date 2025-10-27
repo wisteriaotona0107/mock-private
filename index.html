@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>町家の酒庵 - 和モダンな日本酒バー</title>
+  <meta name="description" content="町家の静けさに包まれた小規模日本酒バー『町家の酒庵』。今夜のおすすめと季節の味わいをご紹介。">
+  <meta property="og:title" content="町家の酒庵 - 和モダンな日本酒バー">
+  <meta property="og:description" content="町家の静けさで、一献。季節の日本酒とお料理をご紹介します。">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1514361892635-eae31a46f3f4">
+  <link rel="stylesheet" href="styles.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BarOrPub",
+    "name": "町家の酒庵",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "〒600-0000 京都府京都市中京区町家町1-1",
+      "addressLocality": "京都市",
+      "addressRegion": "京都府",
+      "postalCode": "600-0000",
+      "addressCountry": "JP"
+    },
+    "telephone": "+81-75-000-0000",
+    "openingHoursSpecification": [{
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday"
+      ],
+      "opens": "17:00",
+      "closes": "23:30"
+    }],
+    "servesCuisine": ["Japanese", "Sake"]
+  }
+  </script>
+</head>
+<body>
+  <header class="site-header" data-observe>
+    <div class="container header-inner">
+      <a class="logo" href="#home" aria-label="町家の酒庵 ホーム">
+        <svg viewBox="0 0 120 32" role="img" aria-hidden="true">
+          <rect x="0" y="0" width="32" height="32" rx="4" fill="var(--color-gold)"></rect>
+          <text x="40" y="22" fill="var(--color-cream)" font-size="18" font-family="'Yu Mincho', 'Hiragino Mincho ProN', serif">酒庵</text>
+        </svg>
+      </a>
+      <button class="menu-toggle" aria-expanded="false" aria-controls="primary-nav">
+        <span class="menu-label">メニュー</span>
+        <span class="menu-icon" aria-hidden="true"></span>
+      </button>
+    </div>
+    <nav id="primary-nav" class="offcanvas" aria-hidden="true">
+      <div class="offcanvas-inner">
+        <button class="offcanvas-close" aria-label="メニューを閉じる">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#philosophy">Philosophy</a></li>
+          <li><a href="#seasonal-sake">Seasonal Sake</a></li>
+          <li><a href="#seasonal-dish">Seasonal Dish</a></li>
+          <li><a href="#utensils">Utensils</a></li>
+          <li><a href="#access">Access</a></li>
+          <li><a href="#reservation">Reservation</a></li>
+        </ul>
+      </div>
+    </nav>
+    <div class="offcanvas-backdrop" hidden></div>
+  </header>
+
+  <main>
+    <section id="home" class="hero" aria-labelledby="hero-title" data-observe>
+      <div class="hero-overlay"></div>
+      <div class="container hero-content">
+        <h1 id="hero-title">町家の静けさで、一献。</h1>
+        <p>和紙の灯りと木の香りに包まれた小さな酒席で、今夜だけの旬をお愉しみください。</p>
+        <a class="btn btn-primary" href="#seasonal-sake">今夜のおすすめへ</a>
+      </div>
+    </section>
+
+    <section id="philosophy" class="section philosophy" aria-labelledby="philosophy-title" data-observe>
+      <div class="container">
+        <h2 id="philosophy-title">店の想い</h2>
+        <div class="philosophy-grid">
+          <article class="philosophy-item">
+            <h3>水</h3>
+            <p>比叡山から流れる伏流水。柔らかで澄んだ一滴が、酒の輪郭を決めます。</p>
+          </article>
+          <article class="philosophy-item">
+            <h3>米</h3>
+            <p>契約農家の山田錦を中心に、京都・滋賀の米で季節ごとに表情を変えます。</p>
+          </article>
+          <article class="philosophy-item">
+            <h3>器</h3>
+            <p>丹波焼や輪島塗。口当たりや香りの立ち方まで設計された器を揃えました。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="seasonal-sake" class="section seasonal-sake" aria-labelledby="seasonal-sake-title" data-observe>
+      <div class="container">
+        <div class="section-header">
+          <h2 id="seasonal-sake-title">今月のおすすめ</h2>
+          <div class="carousel-controls">
+            <button class="carousel-btn prev" aria-label="前の日本酒へ">
+              <span aria-hidden="true">&#x2039;</span>
+            </button>
+            <button class="carousel-btn next" aria-label="次の日本酒へ">
+              <span aria-hidden="true">&#x203a;</span>
+            </button>
+          </div>
+        </div>
+        <div class="sake-carousel" tabindex="0" aria-label="日本酒のおすすめ一覧"></div>
+      </div>
+      <dialog class="sake-dialog" aria-labelledby="sake-dialog-title">
+        <form method="dialog">
+          <div class="dialog-header">
+            <h3 id="sake-dialog-title"></h3>
+            <button type="button" class="dialog-close" aria-label="閉じる">&times;</button>
+          </div>
+          <div class="dialog-body">
+            <img class="dialog-image" src="" alt="" loading="lazy" width="480" height="320">
+            <dl class="dialog-details"></dl>
+          </div>
+          <div class="dialog-actions">
+            <button type="button" class="btn-secondary dialog-reserve">この銘柄で予約</button>
+            <button type="submit" class="btn-primary">閉じる</button>
+          </div>
+        </form>
+      </dialog>
+    </section>
+
+    <section id="seasonal-dish" class="section seasonal-dish" aria-labelledby="seasonal-dish-title" data-observe>
+      <div class="container">
+        <h2 id="seasonal-dish-title">季節の一品</h2>
+        <div class="dish-grid"></div>
+      </div>
+    </section>
+
+    <section id="utensils" class="section utensils" aria-labelledby="utensils-title" data-observe>
+      <div class="container utensils-content">
+        <div class="utensils-image-wrapper">
+          <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994" alt="漆器の盃" loading="lazy" width="560" height="420">
+        </div>
+        <div class="utensils-text">
+          <h2 id="utensils-title">こだわりの器</h2>
+          <p>器は味と香りを完成させる最後の要素。丹波の陶工が仕立てた器は、淡い艶と薄口の飲み口で酒の香りを引き立てます。木地と漆の柔らかな手触りは、町家の梁と呼応するように落ち着いた余韻を残します。</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="access" class="section access" aria-labelledby="access-title" data-observe>
+      <div class="container">
+        <h2 id="access-title">アクセス</h2>
+        <div class="access-info">
+          <div>
+            <p><strong>住所：</strong>京都府京都市中京区町家町1-1 町家の酒庵</p>
+            <p><strong>最寄駅：</strong>阪急京都線 河原町駅 徒歩5分</p>
+            <p><strong>営業時間：</strong>17:00 - 23:30（L.O. 23:00）</p>
+            <p><strong>定休日：</strong>日曜・祝日</p>
+          </div>
+          <div class="map-placeholder" role="img" aria-label="地図表示エリア（モック）">地図表示エリア</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="reservation" class="section reservation" aria-labelledby="reservation-title" data-observe>
+      <div class="container">
+        <h2 id="reservation-title">ご予約</h2>
+        <form id="reservation-form" novalidate>
+          <div class="form-grid">
+            <label>
+              日付
+              <input type="date" name="date" required>
+            </label>
+            <label>
+              時間
+              <input type="time" name="time" min="17:00" max="23:00" required>
+            </label>
+            <label>
+              人数
+              <input type="number" name="party" min="1" max="6" required placeholder="2">
+            </label>
+            <label>
+              ご希望の銘柄
+              <input type="text" name="sake" placeholder="例：京の雫 純米吟醸">
+            </label>
+            <label class="textarea">
+              ご要望
+              <textarea name="notes" rows="4" placeholder="お席やペアリングのご希望があればご記入ください"></textarea>
+            </label>
+          </div>
+          <button type="submit" class="btn-primary">送信する</button>
+        </form>
+        <dialog class="reservation-dialog" aria-labelledby="reservation-dialog-title">
+          <form method="dialog">
+            <div class="dialog-header">
+              <h3 id="reservation-dialog-title">ご予約を承りました</h3>
+              <button type="button" class="dialog-close" aria-label="閉じる">&times;</button>
+            </div>
+            <p>ご入力いただいた内容を確認し、24時間以内にご連絡差し上げます。</p>
+            <div class="dialog-actions">
+              <button type="submit" class="btn-primary">閉じる</button>
+            </div>
+          </form>
+        </dialog>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" data-observe>
+    <div class="container">
+      <p>&copy; 2024 町家の酒庵</p>
+      <p><a href="mailto:info@machiya-syuan.jp">info@machiya-syuan.jp</a></p>
+    </div>
+  </footer>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
