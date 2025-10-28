@@ -105,6 +105,25 @@ const reservationDialog = document.querySelector('.reservation-dialog');
 const reservationForm = document.getElementById('reservation-form');
 const reserveSakeInput = reservationForm.elements['sake'];
 
+const supportsDialog =
+  typeof HTMLDialogElement !== 'undefined' &&
+  typeof HTMLDialogElement.prototype.showModal === 'function';
+const fallbackBackdrop = supportsDialog
+  ? null
+  : (() => {
+      const overlay = document.createElement('div');
+      overlay.className = 'dialog-fallback-backdrop';
+      overlay.hidden = true;
+      document.body.appendChild(overlay);
+      return overlay;
+    })();
+
+if (!supportsDialog) {
+  [sakeDialog, reservationDialog].forEach((dialog) => {
+    dialog.setAttribute('aria-hidden', 'true');
+  });
+}
+
 let activeDialog = null;
 let lastFocusedElement = null;
 
@@ -182,19 +201,23 @@ navLinks.forEach((link) => {
 });
 
 // IntersectionObserver for fade-in animations
-const observer = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('fade-in');
-        observer.unobserve(entry.target);
-      }
-    });
-  },
-  { threshold: 0.2 }
-);
+if ('IntersectionObserver' in window) {
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('fade-in');
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.2 }
+  );
 
-document.querySelectorAll('[data-observe]').forEach((el) => observer.observe(el));
+  document.querySelectorAll('[data-observe]').forEach((el) => observer.observe(el));
+} else {
+  document.querySelectorAll('[data-observe]').forEach((el) => el.classList.add('fade-in'));
+}
 
 // Render sake carousel
 function createSakeCard(sake) {
@@ -233,23 +256,54 @@ carouselButtons.forEach((btn) => {
 
 // Sake modal handling
 function openDialog(dialog) {
-  if (!dialog.open) {
-    lastFocusedElement = document.activeElement;
+  if ((supportsDialog && dialog.open) || (!supportsDialog && dialog.hasAttribute('open'))) {
+    return;
+  }
+
+  lastFocusedElement = document.activeElement;
+
+  if (supportsDialog) {
     dialog.showModal();
-    activeDialog = dialog;
-    lockScroll();
-    trapDialogFocus(dialog);
+  } else {
+    dialog.setAttribute('open', '');
+    dialog.classList.add('dialog-open-fallback');
+    dialog.setAttribute('aria-hidden', 'false');
+    dialog.setAttribute('tabindex', '-1');
+    if (fallbackBackdrop) {
+      fallbackBackdrop.hidden = false;
+      fallbackBackdrop.onclick = () => closeDialog(dialog);
+    }
+  }
+
+  activeDialog = dialog;
+  lockScroll();
+  trapDialogFocus(dialog);
+  if (!supportsDialog && typeof dialog.focus === 'function') {
+    dialog.focus();
   }
 }
 
 function closeDialog(dialog) {
-  if (dialog.open) {
+  const isOpen = supportsDialog ? dialog.open : dialog.hasAttribute('open');
+  if (!isOpen) return;
+
+  if (supportsDialog) {
     dialog.close();
-    activeDialog = null;
-    unlockScroll();
-    if (lastFocusedElement) {
-      lastFocusedElement.focus();
+  } else {
+    dialog.removeAttribute('open');
+    dialog.classList.remove('dialog-open-fallback');
+    dialog.setAttribute('aria-hidden', 'true');
+    dialog.removeAttribute('tabindex');
+    if (fallbackBackdrop) {
+      fallbackBackdrop.hidden = true;
+      fallbackBackdrop.onclick = null;
     }
+  }
+
+  activeDialog = null;
+  unlockScroll();
+  if (lastFocusedElement) {
+    lastFocusedElement.focus();
   }
 }
 

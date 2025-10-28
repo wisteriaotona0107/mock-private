@@ -254,6 +254,10 @@ main {
   padding: 12px 24px;
   border-radius: 999px;
   transition: transform var(--transition-base), box-shadow var(--transition-base);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
 }
 
 .btn-primary {
@@ -305,11 +309,13 @@ main {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
+  flex-wrap: wrap;
 }
 
 .carousel-controls {
   display: flex;
   gap: 12px;
+  align-items: center;
 }
 
 .carousel-btn {
@@ -529,6 +535,27 @@ textarea:invalid {
   min-width: min(90vw, 520px);
 }
 
+.dialog-open-fallback {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  width: min(92vw, 520px);
+  max-width: 100%;
+}
+
+.dialog-fallback-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 999;
+}
+
+.dialog-fallback-backdrop[hidden] {
+  display: none;
+}
+
 .dialog-header {
   display: flex;
   justify-content: space-between;
@@ -568,6 +595,99 @@ textarea:invalid {
 
 ::backdrop {
   background: rgba(0, 0, 0, 0.6);
+}
+
+@media (max-width: 599px) {
+  .logo svg {
+    width: 150px;
+  }
+
+  .section {
+    padding: 60px 0;
+  }
+
+  .hero {
+    min-height: 72vh;
+  }
+
+  .hero-content {
+    padding: 96px 0 72px;
+    gap: 20px;
+  }
+
+  .hero-content p {
+    font-size: 1rem;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .carousel-controls {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .sake-carousel {
+    grid-auto-columns: minmax(220px, 85vw);
+    padding-bottom: 4px;
+  }
+
+  .sake-card {
+    padding: 20px;
+  }
+
+  .dish-grid {
+    gap: 24px;
+  }
+
+  .dish-card {
+    padding: 20px;
+  }
+
+  .utensils-content {
+    gap: 24px;
+  }
+
+  .map-placeholder {
+    padding: 32px 20px;
+    font-size: 0.75rem;
+  }
+
+  .form-grid {
+    gap: 16px;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+    text-align: center;
+  }
+
+  .dialog-header,
+  .dialog-body,
+  .dialog-actions {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .dialog-actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .sake-dialog,
+  .reservation-dialog {
+    min-width: 100%;
+    max-width: 100%;
+    border-radius: 0;
+    margin: 0;
+  }
+
+  .dialog-open-fallback {
+    width: 100%;
+  }
 }
 
 @media (min-width: 480px) {
