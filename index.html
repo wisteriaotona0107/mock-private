@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小規模店舗向けPOSレジ</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="app-header">
+        <h1>小規模店舗向け POS レジ</h1>
+        <div class="status-bar">
+            <div>
+                <label for="taxRate">消費税率:</label>
+                <input type="number" id="taxRate" min="0" max="100" step="0.1">%
+                <button id="saveTaxRate" class="secondary">設定保存</button>
+            </div>
+            <div id="clock"></div>
+        </div>
+    </header>
+
+    <main class="app-layout">
+        <section class="panel" id="productPanel">
+            <h2>商品管理</h2>
+            <form id="productForm" class="card">
+                <input type="hidden" id="productId">
+                <div class="form-row">
+                    <label for="productName">商品名</label>
+                    <input type="text" id="productName" required>
+                </div>
+                <div class="form-row">
+                    <label for="productSku">SKU / バーコード</label>
+                    <input type="text" id="productSku" placeholder="任意">
+                </div>
+                <div class="form-row">
+                    <label for="productPrice">価格 (円)</label>
+                    <input type="number" id="productPrice" min="0" step="1" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" id="productSubmit" class="primary">商品登録</button>
+                    <button type="button" id="productCancel" class="secondary">取消</button>
+                </div>
+            </form>
+
+            <div class="card product-list">
+                <div class="list-header">
+                    <h3>商品一覧</h3>
+                    <input type="search" id="productSearch" placeholder="商品名・SKUで検索">
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>商品名</th>
+                            <th>SKU</th>
+                            <th class="align-right">価格</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productTableBody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="panel" id="checkoutPanel">
+            <h2>会計</h2>
+            <div class="card">
+                <div class="form-row">
+                    <label for="itemPicker">商品選択</label>
+                    <input type="search" id="itemSearch" placeholder="商品検索">
+                    <select id="itemPicker"></select>
+                </div>
+                <div class="form-row">
+                    <label for="itemQuantity">数量</label>
+                    <input type="number" id="itemQuantity" value="1" min="1">
+                </div>
+                <div class="form-actions">
+                    <button id="addToCart" class="primary">カートに追加</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>カート</h3>
+                <table class="cart-table">
+                    <thead>
+                        <tr>
+                            <th>商品</th>
+                            <th class="align-right">数量</th>
+                            <th class="align-right">単価</th>
+                            <th class="align-right">小計</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="cartTableBody"></tbody>
+                </table>
+                <div class="totals">
+                    <div><span>小計:</span><span id="subtotal" class="value">¥0</span></div>
+                    <div><span>消費税:</span><span id="taxAmount" class="value">¥0</span></div>
+                    <div class="total"><span>合計:</span><span id="totalAmount" class="value">¥0</span></div>
+                </div>
+                <div class="payment">
+                    <label for="cashTendered">お預かり金額</label>
+                    <input type="number" id="cashTendered" min="0" step="1">
+                    <div class="change-display">お釣り: <span id="changeAmount">¥0</span></div>
+                </div>
+                <div class="form-actions">
+                    <button id="finalizeSale" class="primary">会計確定</button>
+                    <button id="clearCart" class="secondary">カートを空にする</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel" id="salesPanel">
+            <h2>売上履歴</h2>
+            <div class="card">
+                <div class="sales-filters">
+                    <label for="salesDateFilter">日付</label>
+                    <input type="date" id="salesDateFilter">
+                    <button id="clearSalesFilter" class="secondary">フィルター解除</button>
+                </div>
+                <table class="sales-table">
+                    <thead>
+                        <tr>
+                            <th>日時</th>
+                            <th>取引番号</th>
+                            <th class="align-right">点数</th>
+                            <th class="align-right">合計</th>
+                            <th>詳細</th>
+                        </tr>
+                    </thead>
+                    <tbody id="salesTableBody"></tbody>
+                </table>
+                <div class="sales-summary">
+                    <div><span>取引件数:</span><span id="salesCount">0</span></div>
+                    <div><span>総売上:</span><span id="salesTotal">¥0</span></div>
+                </div>
+            </div>
+
+            <div class="card" id="receiptCard">
+                <h3>レシート</h3>
+                <pre id="receiptViewer">最新のレシートがここに表示されます。</pre>
+                <div class="form-actions">
+                    <button id="printReceipt" class="secondary">レシート印刷</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <small>データはブラウザのローカルストレージに保存されます。バックアップは定期的にエクスポートしてください。</small>
+    </footer>
+
+    <script src="app.js" type="module"></script>
+</body>
+</html>
