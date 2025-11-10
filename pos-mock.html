@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>日本酒バー POSシステム モック</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F6F1E7;
+      --main: #2E4633;
+      --accent: #C99868;
+      --card-bg: rgba(255, 255, 255, 0.9);
+      --muted: #6F6F6F;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Noto Sans JP', sans-serif;
+      background: var(--bg);
+      color: var(--main);
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(246, 241, 231, 0.95);
+      backdrop-filter: blur(6px);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header .info {
+      display: flex;
+      gap: 24px;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    header button {
+      padding: 10px 18px;
+      border: none;
+      background: var(--accent);
+      color: white;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    main {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      max-width: 1200px;
+      margin: 0 auto 64px;
+    }
+
+    .screen {
+      display: none;
+      min-height: 70vh;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    /* Top screen */
+    .top-screen {
+      background: linear-gradient(135deg, rgba(201, 152, 104, 0.35), rgba(46, 70, 51, 0.2));
+      border-radius: 20px;
+      padding: 60px 40px;
+      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 32px;
+    }
+
+    .top-screen h1 {
+      font-size: 2.2rem;
+      letter-spacing: 0.08em;
+    }
+
+    .top-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      width: min(320px, 90%);
+    }
+
+    .top-buttons button {
+      padding: 16px;
+      border-radius: 12px;
+      border: none;
+      background: var(--main);
+      color: var(--bg);
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(46, 70, 51, 0.3);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .top-buttons button.secondary {
+      background: var(--accent);
+      box-shadow: 0 6px 16px rgba(201, 152, 104, 0.35);
+    }
+
+    .top-buttons button:hover {
+      transform: translateY(-2px);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 70% 30%;
+      gap: 24px;
+    }
+
+    .panel {
+      background: var(--card-bg);
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    }
+
+    .panel h2 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.4rem;
+      margin-top: 0;
+    }
+
+    .search-area {
+      display: grid;
+      grid-template-columns: 1fr 180px;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .search-area input,
+    .search-area select {
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(46, 70, 51, 0.2);
+      background: white;
+      font-size: 0.95rem;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 18px;
+    }
+
+    .product-card {
+      background: white;
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: inset 0 0 0 1px rgba(46, 70, 51, 0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(160deg, rgba(201, 152, 104, 0.08), transparent);
+      pointer-events: none;
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 10px;
+      background: rgba(46, 70, 51, 0.08);
+    }
+
+    .product-card .name {
+      font-weight: 600;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(46, 70, 51, 0.1);
+      color: var(--main);
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+    }
+
+    .product-card button {
+      margin-top: auto;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: none;
+      background: var(--main);
+      color: var(--bg);
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .cart-panel {
+      position: sticky;
+      top: 120px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      height: fit-content;
+    }
+
+    .cart-items {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: 320px;
+      overflow: auto;
+    }
+
+    .cart-item {
+      display: grid;
+      grid-template-columns: 1fr auto auto auto;
+      gap: 8px;
+      align-items: center;
+      padding: 12px;
+      border-radius: 12px;
+      background: white;
+    }
+
+    .cart-item input {
+      width: 60px;
+      padding: 6px;
+      border-radius: 6px;
+      border: 1px solid rgba(46, 70, 51, 0.2);
+    }
+
+    .cart-item button {
+      border: none;
+      background: none;
+      color: #B94A48;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .totals {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      display: grid;
+      gap: 8px;
+      font-size: 0.95rem;
+    }
+
+    .totals span {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .checkout {
+      display: grid;
+      gap: 12px;
+    }
+
+    .checkout select,
+    .checkout textarea {
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(46, 70, 51, 0.2);
+      font-size: 0.95rem;
+      font-family: inherit;
+    }
+
+    .checkout textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    .checkout button {
+      padding: 14px;
+      border-radius: 10px;
+      border: none;
+      background: var(--accent);
+      color: white;
+      font-size: 1.05rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 12px 20px rgba(201, 152, 104, 0.25);
+    }
+
+    .history-layout {
+      display: grid;
+      gap: 24px;
+    }
+
+    .history-table {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 480px;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid rgba(46, 70, 51, 0.12);
+      font-size: 0.95rem;
+    }
+
+    th {
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .history-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .history-actions button {
+      padding: 12px 18px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      color: white;
+      background: var(--main);
+    }
+
+    .history-actions button.secondary {
+      background: var(--accent);
+    }
+
+    .graph-area {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+    }
+
+    .graph-card {
+      background: white;
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+      min-height: 180px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .graph-placeholder {
+      flex: 1;
+      background: repeating-linear-gradient(135deg, rgba(46, 70, 51, 0.08), rgba(46, 70, 51, 0.08) 12px, transparent 12px, transparent 24px);
+      border-radius: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .graph-placeholder::after {
+      content: "グラフプレビュー";
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(46, 70, 51, 0.4);
+      font-size: 0.95rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 24px;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .nav-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 10px;
+      border: none;
+      background: rgba(46, 70, 51, 0.12);
+      color: var(--main);
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    @media (max-width: 1024px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .cart-panel {
+        position: relative;
+        top: 0;
+      }
+    }
+
+    @media (max-width: 640px) {
+      header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+      }
+
+      header .info {
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      main {
+        padding: 18px;
+      }
+
+      .top-screen {
+        padding: 40px 24px;
+      }
+
+      .search-area {
+        grid-template-columns: 1fr;
+      }
+
+      .cart-item {
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas:
+          "name name"
+          "qty subtotal"
+          "remove remove";
+        gap: 6px;
+      }
+
+      .cart-item .name {
+        grid-area: name;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="info">
+      <span>📅 <strong id="today"></strong></span>
+      <span>🏮 木漏れ日 日本酒スタンド</span>
+    </div>
+    <button type="button">ログアウト</button>
+  </header>
+
+  <main>
+    <section class="screen top-screen active" id="screen-top">
+      <h1>日本酒バー POSシステム</h1>
+      <p>木の温もりとともに、日々の会計をシンプルに。</p>
+      <div class="top-buttons">
+        <button data-target="sales">販売登録</button>
+        <button class="secondary" data-target="products">商品登録</button>
+        <button class="secondary" data-target="history">履歴確認</button>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-sales">
+      <div class="layout">
+        <div class="panel">
+          <h2>🍶 商品一覧</h2>
+          <div class="search-area">
+            <input type="search" placeholder="商品名で検索">
+            <select>
+              <option>カテゴリを選択</option>
+              <option>日本酒</option>
+              <option>焼酎</option>
+              <option>おつまみ</option>
+            </select>
+          </div>
+          <div class="product-grid">
+            <article class="product-card">
+              <img src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=300&q=80" alt="獺祭 純米大吟醸45">
+              <div class="badge">日本酒</div>
+              <div class="name">獺祭 純米大吟醸45</div>
+              <div class="price">¥900</div>
+              <button>追加</button>
+            </article>
+            <article class="product-card">
+              <img src="https://images.unsplash.com/photo-1532634896-26909d0d4b89?auto=format&fit=crop&w=300&q=80" alt="十四代 本丸">
+              <div class="badge">日本酒</div>
+              <div class="name">十四代 本丸</div>
+              <div class="price">¥1,200</div>
+              <button>追加</button>
+            </article>
+            <article class="product-card">
+              <img src="https://images.unsplash.com/photo-1604908177000-0a04959ce67b?auto=format&fit=crop&w=300&q=80" alt="新政 No.6 R-type">
+              <div class="badge">限定酒</div>
+              <div class="name">新政 No.6 R-type</div>
+              <div class="price">¥1,100</div>
+              <button>追加</button>
+            </article>
+            <article class="product-card">
+              <img src="https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?auto=format&fit=crop&w=300&q=80" alt="南部美人 純米吟醸">
+              <div class="badge">日本酒</div>
+              <div class="name">南部美人 純米吟醸</div>
+              <div class="price">¥850</div>
+              <button>追加</button>
+            </article>
+            <article class="product-card">
+              <img src="https://images.unsplash.com/photo-1604908177113-70f51ac3aaee?auto=format&fit=crop&w=300&q=80" alt="だし巻き玉子">
+              <div class="badge">おつまみ</div>
+              <div class="name">だし巻き玉子</div>
+              <div class="price">¥600</div>
+              <button>追加</button>
+            </article>
+            <article class="product-card">
+              <img src="https://images.unsplash.com/photo-1588361861040-6a06832c87bd?auto=format&fit=crop&w=300&q=80" alt="酒盗クリームチーズ">
+              <div class="badge">おつまみ</div>
+              <div class="name">酒盗クリームチーズ</div>
+              <div class="price">¥500</div>
+              <button>追加</button>
+            </article>
+          </div>
+        </div>
+
+        <aside class="panel cart-panel">
+          <h2>🛒 カート</h2>
+          <div class="cart-items">
+            <div class="cart-item">
+              <div class="name">獺祭 純米大吟醸45</div>
+              <input type="number" value="1" min="1">
+              <div class="subtotal">¥900</div>
+              <button>×</button>
+            </div>
+            <div class="cart-item">
+              <div class="name">酒盗クリームチーズ</div>
+              <input type="number" value="2" min="1">
+              <div class="subtotal">¥1,000</div>
+              <button>×</button>
+            </div>
+          </div>
+          <div class="totals">
+            <span><label>小計</label><strong>¥1,900</strong></span>
+            <span><label>消費税 (10%)</label><strong>¥190</strong></span>
+            <span><label>合計</label><strong>¥2,090</strong></span>
+          </div>
+          <div class="checkout">
+            <select>
+              <option>支払方法を選択</option>
+              <option>現金</option>
+              <option>カード</option>
+              <option>QR</option>
+            </select>
+            <textarea placeholder="備考（常連名・開栓メモなど）"></textarea>
+            <button>会計確定</button>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-products">
+      <div class="layout">
+        <div class="panel">
+          <h2>🍶 商品登録</h2>
+          <p style="color: var(--muted); margin-top: 0;">仕入れた銘柄やおつまみを素早くメニューへ追加します。</p>
+          <form class="product-form" style="display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+            <label style="display: flex; flex-direction: column; gap: 6px;">
+              商品名
+              <input type="text" placeholder="例：獺祭 純米大吟醸45" style="padding: 12px; border-radius: 10px; border: 1px solid rgba(46, 70, 51, 0.2);">
+            </label>
+            <label style="display: flex; flex-direction: column; gap: 6px;">
+              カテゴリ
+              <select style="padding: 12px; border-radius: 10px; border: 1px solid rgba(46, 70, 51, 0.2);">
+                <option>日本酒</option>
+                <option>焼酎</option>
+                <option>ワイン</option>
+                <option>おつまみ</option>
+              </select>
+            </label>
+            <label style="display: flex; flex-direction: column; gap: 6px;">
+              価格 (税込)
+              <input type="number" placeholder="900" style="padding: 12px; border-radius: 10px; border: 1px solid rgba(46, 70, 51, 0.2);">
+            </label>
+            <label style="display: flex; flex-direction: column; gap: 6px;">
+              オプション
+              <input type="text" placeholder="例：冷／燗" style="padding: 12px; border-radius: 10px; border: 1px solid rgba(46, 70, 51, 0.2);">
+            </label>
+            <label style="display: flex; flex-direction: column; gap: 6px;">
+              在庫数
+              <input type="number" placeholder="10" style="padding: 12px; border-radius: 10px; border: 1px solid rgba(46, 70, 51, 0.2);">
+            </label>
+            <label style="display: flex; flex-direction: column; gap: 6px;">
+              メモ
+              <textarea placeholder="仕入先や味わいメモ" style="padding: 12px; border-radius: 10px; border: 1px solid rgba(46, 70, 51, 0.2); min-height: 100px;"></textarea>
+            </label>
+            <div style="display: flex; gap: 12px; align-items: flex-end;">
+              <button type="button" style="padding: 14px 24px; background: var(--main); color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer;">登録</button>
+              <button type="reset" style="padding: 14px 24px; background: rgba(46, 70, 51, 0.12); color: var(--main); border: none; border-radius: 10px; font-weight: 600; cursor: pointer;">クリア</button>
+            </div>
+          </form>
+        </div>
+
+        <aside class="panel" style="display: flex; flex-direction: column; gap: 16px;">
+          <h2>📦 登録予定リスト</h2>
+          <div style="background: white; border-radius: 12px; padding: 16px; display: grid; gap: 10px;">
+            <div style="display: flex; justify-content: space-between;">
+              <span>獺祭 純米大吟醸45</span>
+              <span>¥900</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; color: var(--muted); font-size: 0.9rem;">
+              <span>カテゴリ: 日本酒</span>
+              <span>在庫: 10</span>
+            </div>
+            <button style="align-self: flex-end; padding: 10px 16px; border: none; background: var(--accent); color: white; border-radius: 8px; font-weight: 600; cursor: pointer;">反映する</button>
+          </div>
+          <p style="color: var(--muted); font-size: 0.9rem;">JSON構造例：</p>
+          <pre style="background: rgba(46, 70, 51, 0.08); padding: 12px; border-radius: 12px; font-family: 'Fira Code', monospace; overflow: auto;">
+{
+  "id": "sake-001",
+  "name": "獺祭 純米大吟醸45",
+  "price": 900,
+  "category": "日本酒",
+  "options": ["冷", "燗"],
+  "stock": 10
+}
+          </pre>
+        </aside>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-history">
+      <div class="history-layout">
+        <div class="history-table">
+          <h2>📜 取引履歴</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>日時</th>
+                <th>合計金額</th>
+                <th>支払方法</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>2024-05-01 21:35</td>
+                <td>¥8,450</td>
+                <td>カード</td>
+              </tr>
+              <tr>
+                <td>2024-05-01 20:10</td>
+                <td>¥5,600</td>
+                <td>現金</td>
+              </tr>
+              <tr>
+                <td>2024-05-01 19:45</td>
+                <td>¥3,200</td>
+                <td>QR</td>
+              </tr>
+              <tr>
+                <td>2024-04-30 22:10</td>
+                <td>¥6,150</td>
+                <td>カード</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="graph-area">
+          <div class="graph-card">
+            <h3>📈 日次売上推移</h3>
+            <div class="graph-placeholder"></div>
+          </div>
+          <div class="graph-card">
+            <h3>🍶 商品カテゴリ構成</h3>
+            <div class="graph-placeholder"></div>
+          </div>
+        </div>
+
+        <div class="history-actions">
+          <button class="secondary">CSV出力</button>
+          <button class="secondary">JSON出力</button>
+          <button class="nav-back" data-target="top">◀︎ トップに戻る</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © 2024 木漏れ日 日本酒スタンド POSモック
+  </footer>
+
+  <script>
+    const today = new Date().toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit' });
+    document.getElementById('today').textContent = today;
+
+    const buttons = document.querySelectorAll('[data-target]');
+    const screens = {
+      top: document.getElementById('screen-top'),
+      sales: document.getElementById('screen-sales'),
+      products: document.getElementById('screen-products'),
+      history: document.getElementById('screen-history')
+    };
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = btn.dataset.target;
+        Object.values(screens).forEach(screen => screen.classList.remove('active'));
+        (screens[target] || screens.top).classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+  </script>
+</body>
+</html>
