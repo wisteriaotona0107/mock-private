@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>日本酒品質管理モック</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <div class="logo">日本酒品質管理</div>
+    <nav>
+      <button class="nav-link active" data-view="dashboard">ダッシュボード</button>
+      <button class="nav-link" data-view="daily-records">日次記録</button>
+      <button class="nav-link" data-view="gantt">ガントチャート</button>
+      <button class="nav-link" data-view="lot-management">ロット管理</button>
+    </nav>
+  </header>
+  <main>
+    <section id="dashboard" class="view active">
+      <h2>ダッシュボード</h2>
+      <div class="card">
+        <h3>本日の記録状況</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>ロット番号</th>
+              <th>銘柄名</th>
+              <th>保管場所</th>
+              <th>最新ステータス</th>
+            </tr>
+          </thead>
+          <tbody id="unrecordedTable"></tbody>
+        </table>
+      </div>
+      <div class="card">
+        <h3>今日のアラート</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>日付</th>
+              <th>ロット番号</th>
+              <th>銘柄名</th>
+              <th>ステータス</th>
+              <th>コメント抜粋</th>
+            </tr>
+          </thead>
+          <tbody id="alertTable"></tbody>
+        </table>
+      </div>
+      <div class="actions">
+        <button id="goToDaily" class="primary">今日の記録をつける</button>
+      </div>
+    </section>
+
+    <section id="daily-records" class="view">
+      <h2>日次品質記録</h2>
+      <div class="controls">
+        <label>記録日: <input type="date" id="recordDate"></label>
+      </div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>ロット番号</th>
+              <th>銘柄名</th>
+              <th>保管場所</th>
+              <th>温度 (°C)</th>
+              <th>香り</th>
+              <th>味</th>
+              <th>見た目</th>
+              <th>ステータス</th>
+              <th>コメント</th>
+            </tr>
+          </thead>
+          <tbody id="dailyRecordsBody"></tbody>
+        </table>
+      </div>
+      <div class="actions">
+        <button id="copyPrevious">前日の値をコピー</button>
+        <button id="saveRecords" class="primary">保存</button>
+      </div>
+      <div id="saveMessage" class="message" aria-live="polite"></div>
+    </section>
+
+    <section id="gantt" class="view">
+      <h2>ガントチャート風ビュー</h2>
+      <div class="filters">
+        <label>期間 From <input type="date" id="ganttFrom"></label>
+        <label>To <input type="date" id="ganttTo"></label>
+        <label>銘柄
+          <select id="ganttBrand">
+            <option value="all">すべて</option>
+          </select>
+        </label>
+        <label>ステータス
+          <select id="ganttStatus">
+            <option value="all">すべて</option>
+            <option value="OK">OK</option>
+            <option value="注意">注意</option>
+            <option value="NG">NG</option>
+          </select>
+        </label>
+      </div>
+      <div class="gantt-container">
+        <div id="ganttRows"></div>
+        <div id="ganttDetail" class="gantt-detail">バーをクリックすると詳細が表示されます。</div>
+      </div>
+    </section>
+
+    <section id="lot-management" class="view">
+      <h2>ロット管理</h2>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>ロット番号</th>
+              <th>銘柄名</th>
+              <th>入荷日</th>
+              <th>提供開始日</th>
+              <th>提供終了日</th>
+              <th>保管場所</th>
+              <th>ステータス</th>
+            </tr>
+          </thead>
+          <tbody id="lotTable"></tbody>
+        </table>
+      </div>
+      <div class="card">
+        <h3>新規ロット追加（モック）</h3>
+        <form id="lotForm">
+          <div class="form-grid">
+            <label>ロット番号<input type="text" name="batchCode" required></label>
+            <label>銘柄
+              <select name="sakeId" required></select>
+            </label>
+            <label>入荷日<input type="date" name="receivedDate" required></label>
+            <label>提供開始日<input type="date" name="serveStartDate" required></label>
+            <label>提供終了日<input type="date" name="serveEndDate" required></label>
+            <label>保管場所<input type="text" name="storageLocation" required></label>
+            <label>ステータス
+              <select name="status">
+                <option value="OK">OK</option>
+                <option value="注意">注意</option>
+                <option value="NG">NG</option>
+              </select>
+            </label>
+          </div>
+          <div class="actions">
+            <button type="submit" class="primary">追加する</button>
+          </div>
+        </form>
+        <div id="lotMessage" class="message"></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
