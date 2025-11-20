@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>管理UIモック - 日本酒バー霧島</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="admin.js"></script>
+</head>
+<body>
+  <main style="max-width:1100px;margin:2rem auto;padding:0 1.5rem 3rem;">
+    <header class="section-header" style="margin-top:1rem;">
+      <div>
+        <p class="eyebrow">ADMIN MOCK</p>
+        <h1>管理UIモック</h1>
+        <p class="note">JSONファイルの更新・並び替え・相対パス採番をローカルで試せます。保存後は public/data/ 配下のJSONを上書きアップロードしてください。</p>
+      </div>
+      <a class="ghost" href="index.html">サイトへ戻る</a>
+    </header>
+
+    <section class="panel">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">SAKE CRUD</p>
+          <h2>日本酒一覧 管理</h2>
+        </div>
+        <button id="exportSake" class="ghost">JSONを書き出す</button>
+      </div>
+      <div class="admin-grid">
+        <form id="sakeForm" class="reservation-form">
+          <input type="hidden" name="id" />
+          <div class="form-group"><label>名称</label><input name="name" required /></div>
+          <div class="form-group"><label>蔵元</label><input name="brewery" required /></div>
+          <div class="form-row">
+            <div class="form-group"><label>都道府県</label><input name="prefecture" required /></div>
+            <div class="form-group"><label>タイプ</label><input name="type" required /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>精米歩合</label><input name="polishing" type="number" min="1" max="100" /></div>
+            <div class="form-group"><label>提供温度</label><input name="serving" /></div>
+          </div>
+          <div class="form-group"><label>グラス</label><input name="glass" /></div>
+          <div class="form-group"><label>テイスティング</label><textarea name="tasting" rows="2"></textarea></div>
+          <div class="form-group"><label>画像URL</label><input name="image" placeholder="https://..." /></div>
+          <button type="submit">保存/更新</button>
+        </form>
+        <div>
+          <h3>登録済み</h3>
+          <ul id="sakeList" style="list-style:none;padding:0;display:grid;gap:0.5rem;"></ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel alt">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">MENU OPS</p>
+          <h2>メニュー管理</h2>
+        </div>
+        <button id="exportMenu" class="ghost">JSONを書き出す</button>
+      </div>
+      <div class="admin-grid">
+        <form id="menuForm" class="reservation-form">
+          <input type="hidden" name="id" />
+          <div class="form-row">
+            <div class="form-group"><label>カテゴリー</label><input name="category" required /></div>
+            <div class="form-group"><label>品名</label><input name="name" required /></div>
+          </div>
+          <div class="form-group"><label>説明</label><textarea name="description" rows="2"></textarea></div>
+          <div class="form-row">
+            <div class="form-group"><label>価格</label><input name="price" required /></div>
+            <div class="form-group"><label>ペアリング</label><input name="pairing" /></div>
+          </div>
+          <button type="submit">保存/更新</button>
+        </form>
+        <div>
+          <h3>並び替え / 削除</h3>
+          <ul id="menuList" style="list-style:none;padding:0;display:grid;gap:0.5rem;"></ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">MEDIA</p>
+          <h2>画像パス採番</h2>
+        </div>
+      </div>
+      <div class="reservation-form">
+        <div class="form-row">
+          <div class="form-group"><label>保存先フォルダ</label><input id="folder" value="images/gallery" /></div>
+          <div class="form-group"><label>拡張子</label><input id="ext" value=".jpg" /></div>
+        </div>
+        <button id="generatePath" type="button">相対パスを生成</button>
+        <pre id="pathPreview" style="background:#0f0c09;border:1px solid var(--border);padding:1rem;border-radius:12px;margin:0;"></pre>
+        <p class="note">撮影した画像は public/images/ に配置し、生成された相対パスを gallery.json に追加してください。</p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

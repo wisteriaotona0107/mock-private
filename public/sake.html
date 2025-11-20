@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>日本酒一覧 - 日本酒バー霧島</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="sake.js"></script>
+</head>
+<body>
+  <main style="max-width:1100px;margin:2rem auto;padding:0 1.5rem 3rem;">
+    <header class="section-header" style="margin-top:1rem;">
+      <div>
+        <p class="eyebrow">SAKE LIST</p>
+        <h1>日本酒一覧</h1>
+        <p class="note">フィルターでタイプ・都道府県を絞り込みできます。データは public/data/sake.json からロードしています。</p>
+      </div>
+      <a class="ghost" href="index.html">トップへ戻る</a>
+    </header>
+    <div class="filters" style="margin-bottom:1rem;">
+      <select id="prefFilter">
+        <option value="">すべての地域</option>
+      </select>
+      <select id="typeFilter">
+        <option value="">すべてのタイプ</option>
+        <option value="純米">純米</option>
+        <option value="純米吟醸">純米吟醸</option>
+        <option value="純米大吟醸">純米大吟醸</option>
+        <option value="吟醸">吟醸</option>
+        <option value="本醸造">本醸造</option>
+      </select>
+    </div>
+    <div id="sakeCards" class="card-grid"></div>
+  </main>
+</body>
+</html>
