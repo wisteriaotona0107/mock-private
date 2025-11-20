@@ -1,0 +1,14 @@
+Options -Indexes
+AddDefaultCharset UTF-8
+Header always set X-Content-Type-Options "nosniff"
+# 同一オリジンのみ許可
+<IfModule mod_headers.c>
+    SetEnvIf Origin "^https?://([^/]+)$" ORIGIN=$1
+    Header always set Access-Control-Allow-Origin "%{HTTP_ORIGIN}e" env=ORIGIN
+    Header always set Vary "Origin"
+</IfModule>
+
+# セッション固定攻撃対策
+php_flag session.use_strict_mode On
+php_flag session.cookie_httponly On
+php_flag session.use_only_cookies On

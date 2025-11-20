@@ -1,0 +1,18 @@
+[
+  {
+    "id": "dish001",
+    "name": "Seasonal Sashimi",
+    "price": 1800,
+    "tags": ["fish", "raw"],
+    "image": "images/dish001.jpg",
+    "display_order": 1
+  },
+  {
+    "id": "dish002",
+    "name": "Grilled Mackerel",
+    "price": 1400,
+    "tags": ["fish", "grill"],
+    "image": "images/dish002.jpg",
+    "display_order": 2
+  }
+]
