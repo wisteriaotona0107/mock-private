@@ -1,0 +1,5 @@
+Options -Indexes
+<FilesMatch "\.json$">
+  Header set Access-Control-Allow-Origin "same-origin"
+  Header set Cache-Control "no-store"
+</FilesMatch>

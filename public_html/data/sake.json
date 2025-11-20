@@ -1,0 +1,20 @@
+[
+  {
+    "id": "sake001",
+    "name": "Junmai Daiginjo",
+    "region": "Niigata",
+    "abv": 15.5,
+    "description": "Clean and crisp with notes of melon and apple.",
+    "image": "images/sake001.jpg",
+    "display_order": 1
+  },
+  {
+    "id": "sake002",
+    "name": "Yamahai",
+    "region": "Ishikawa",
+    "abv": 16.0,
+    "description": "Rich umami with earthy aroma and a dry finish.",
+    "image": "images/sake002.jpg",
+    "display_order": 2
+  }
+]
