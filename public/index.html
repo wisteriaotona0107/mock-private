@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>霧島 - 日本酒バー</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <header class="hero">
+    <div class="overlay">
+      <p class="badge">小規模バー向けモック</p>
+      <h1>日本酒バー「霧島」</h1>
+      <p>利き酒師が選ぶ限定酒と、旬の小鉢でおもてなし。</p>
+      <nav class="main-nav">
+        <a href="#sake-list">日本酒一覧</a>
+        <a href="#daily-menu">本日のおすすめ</a>
+        <a href="#news">お知らせ</a>
+        <a href="#gallery">ギャラリー</a>
+        <a href="#info">店舗情報</a>
+        <a href="#reservation">来店予約</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section id="sake-list" class="panel">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">SAKE LINEUP</p>
+          <h2>日本酒一覧</h2>
+        </div>
+        <div class="filters">
+          <select id="prefFilter">
+            <option value="">すべての地域</option>
+          </select>
+          <select id="typeFilter">
+            <option value="">すべてのタイプ</option>
+            <option value="純米">純米</option>
+            <option value="純米吟醸">純米吟醸</option>
+            <option value="吟醸">吟醸</option>
+            <option value="本醸造">本醸造</option>
+          </select>
+        </div>
+      </div>
+      <div id="sakeCards" class="card-grid"></div>
+    </section>
+
+    <section id="daily-menu" class="panel alt">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">TODAY'S PAIRING</p>
+          <h2>本日のおすすめ</h2>
+        </div>
+        <button id="shuffleMenu" class="ghost">ペアリングを更新</button>
+      </div>
+      <div id="menuList" class="list-grid"></div>
+    </section>
+
+    <section id="news" class="panel">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">NEWS</p>
+          <h2>お知らせ</h2>
+        </div>
+        <a class="ghost" href="news.html">一覧ページへ</a>
+      </div>
+      <div id="newsList" class="news-grid"></div>
+    </section>
+
+    <section id="gallery" class="panel alt">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">GALLERY</p>
+          <h2>ギャラリー</h2>
+          <p class="note">画像はサンプルURLで表示されています。実運用時は店舗撮影画像に差し替えてください。</p>
+        </div>
+        <a class="ghost" href="gallery.html">もっと見る</a>
+      </div>
+      <div id="galleryGrid" class="gallery-grid"></div>
+    </section>
+
+    <section id="info" class="panel">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">ABOUT</p>
+          <h2>店舗情報</h2>
+        </div>
+        <a class="ghost" href="info.html">詳細ページ</a>
+      </div>
+      <div class="info-grid">
+        <div>
+          <h3>営業時間</h3>
+          <p>平日 17:00 - 24:00 / 土曜 15:00 - 24:00 / 日祝 休</p>
+          <h3>住所</h3>
+          <p>東京都新宿区◯◯ 1-2-3 木の温もりビル2F</p>
+          <h3>アクセス</h3>
+          <p>新宿三丁目駅 C5出口より徒歩3分</p>
+        </div>
+        <div>
+          <h3>席数・設備</h3>
+          <ul>
+            <li>カウンター8席 / テーブル10席</li>
+            <li>Wi-Fi / 電源 / USB-Cポート完備</li>
+            <li>全席禁煙・加湿器設置</li>
+          </ul>
+          <h3>こだわり</h3>
+          <p>冷蔵2温度帯・ワイングラス提供・酒器セレクト有り。季節酒を週替わりで仕入れ、ペアリング小鉢を毎日更新します。</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="reservation" class="panel alt">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">RESERVATION</p>
+          <h2>来店予約</h2>
+          <p class="note">入力内容はダミー処理です。送信先サーバーと紐付けて実運用してください。</p>
+        </div>
+        <a class="ghost" href="reserve.html">フォームを開く</a>
+      </div>
+      <form class="reservation-form">
+        <div class="form-group">
+          <label for="name">お名前</label>
+          <input id="name" name="name" type="text" placeholder="例: 山田 太郎" required />
+        </div>
+        <div class="form-group">
+          <label for="email">メール</label>
+          <input id="email" name="email" type="email" placeholder="例: sample@example.com" required />
+        </div>
+        <div class="form-group">
+          <label for="date">ご来店日</label>
+          <input id="date" name="date" type="date" required />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="time">時間</label>
+            <input id="time" name="time" type="time" required />
+          </div>
+          <div class="form-group">
+            <label for="people">人数</label>
+            <select id="people" name="people" required>
+              <option value="1">1名</option>
+              <option value="2">2名</option>
+              <option value="3">3名</option>
+              <option value="4">4名</option>
+              <option value="5">5名</option>
+              <option value="6">6名</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="note">リクエスト</label>
+          <textarea id="note" name="note" rows="3" placeholder="アレルギーや席の希望など"></textarea>
+        </div>
+        <button type="submit">予約内容を送信（ダミー）</button>
+      </form>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© 2024 日本酒バー「霧島」 / このサイトは日本酒バーオーナー向けモックです。</p>
+    <div class="footer-links">
+      <a href="admin.html">管理UIモック</a>
+      <a href="menu.html">メニュー更新ページ</a>
+    </div>
+  </footer>
+</body>
+</html>

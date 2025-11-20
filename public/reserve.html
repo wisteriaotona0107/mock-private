@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>来店予約 - 日本酒バー霧島</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.querySelector('form');
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        alert('送信はダミーです。バックエンドAPIに接続してご利用ください。');
+      });
+    });
+  </script>
+</head>
+<body>
+  <main style="max-width:720px;margin:2rem auto;padding:0 1.5rem 3rem;">
+    <header class="section-header" style="margin-top:1rem;">
+      <div>
+        <p class="eyebrow">RESERVATION</p>
+        <h1>来店予約フォーム</h1>
+        <p class="note">フォーム送信はデモ処理です。Googleフォームや自前APIと連携してください。</p>
+      </div>
+      <a class="ghost" href="index.html">トップへ戻る</a>
+    </header>
+    <section class="panel" style="margin-top:1rem;">
+      <form class="reservation-form">
+        <div class="form-group">
+          <label for="name">お名前</label>
+          <input id="name" name="name" type="text" required />
+        </div>
+        <div class="form-group">
+          <label for="email">メールアドレス</label>
+          <input id="email" name="email" type="email" required />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="date">ご来店日</label>
+            <input id="date" name="date" type="date" required />
+          </div>
+          <div class="form-group">
+            <label for="time">時間</label>
+            <input id="time" name="time" type="time" required />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="people">人数</label>
+            <select id="people" name="people" required>
+              <option value="1">1名</option>
+              <option value="2">2名</option>
+              <option value="3">3名</option>
+              <option value="4">4名</option>
+              <option value="5">5名</option>
+              <option value="6">6名</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="seat">席タイプ</label>
+            <select id="seat" name="seat">
+              <option value="counter">カウンター</option>
+              <option value="table">テーブル</option>
+              <option value="either">どちらでも</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="note">リクエスト</label>
+          <textarea id="note" name="note" rows="3"></textarea>
+        </div>
+        <button type="submit">予約内容を送信（デモ）</button>
+      </form>
+    </section>
+  </main>
+</body>
+</html>
