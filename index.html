@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>漫画サイト横断検索モック</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+  <header class="bg-white shadow-sm border-b border-slate-200">
+    <div class="max-w-6xl mx-auto px-4 py-6">
+      <p class="text-sm text-indigo-600 font-semibold mb-1">モック版</p>
+      <h1 class="text-3xl font-bold mb-2">漫画サイト横断検索リンク集</h1>
+      <p class="text-slate-600">キーワードを入れると、主要な漫画サイトの検索結果ページへのリンクをまとめて表示します。ページ遷移せず、リンク先で作品の有無を確認してください。</p>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-8 space-y-8">
+    <section class="bg-white shadow-sm border border-slate-200 rounded-lg p-6">
+      <div class="flex flex-col gap-4 md:flex-row md:items-end md:gap-6">
+        <div class="flex-1">
+          <label for="keyword" class="block text-sm font-medium text-slate-700">作品名や作者名などのキーワード</label>
+          <input id="keyword" type="text" class="mt-2 w-full rounded-md border border-slate-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="例：進撃の巨人" />
+        </div>
+        <button id="searchButton" class="inline-flex items-center justify-center h-11 px-6 rounded-md bg-indigo-600 text-white font-semibold shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600">検索リンクを更新</button>
+      </div>
+      <p class="mt-3 text-sm text-slate-500">※ このページでは API 呼び出しやスクレイピングによる結果取得は行いません。各サイトの検索 URL を <code class="font-mono">encodeURIComponent</code> で組み立ててリンク表示するだけです。</p>
+    </section>
+
+    <section class="space-y-3">
+      <div class="flex items-center justify-between">
+        <h2 class="text-2xl font-bold">検索結果リンク</h2>
+        <span id="keywordDisplay" class="text-sm text-slate-500"></span>
+      </div>
+      <div id="results" class="card-grid"></div>
+    </section>
+  </main>
+
+  <footer class="border-t border-slate-200 bg-white">
+    <div class="max-w-6xl mx-auto px-4 py-6 text-sm text-slate-500 space-y-1">
+      <p>検索 URL のみを提供するモックです。実際の配信状況や在庫は各サイトで確認してください。</p>
+      <p>外部 API もスクレイピングも行わず、静的にリンクを生成する方針です。<!-- API やスクレイピングはサイト規約や負荷の観点で行わない。モックとしてリンク生成のみ行う。 --></p>
+    </div>
+  </footer>
+
+  <script>
+    const SITES = [
+      { id: 'cmoa', name: 'コミックシーモア', type: '電子書籍ストア', buildSearchUrl: (q) => `https://www.cmoa.jp/search/result/?header_word=${encodeURIComponent(q)}` },
+      { id: 'booklive', name: 'BookLive!', type: '電子書籍ストア', buildSearchUrl: (q) => `https://booklive.jp/search/keyword/?keyword=${encodeURIComponent(q)}` },
+      { id: 'ebookjapan', name: 'ebookjapan', type: '電子書籍ストア', buildSearchUrl: (q) => `https://ebookjapan.yahoo.co.jp/search/?keyword=${encodeURIComponent(q)}` },
+      { id: 'renta', name: 'Renta!', type: '電子書籍ストア', buildSearchUrl: (q) => `https://renta.papy.co.jp/renta/sc/frm/search?word=${encodeURIComponent(q)}` },
+      { id: 'readerstore', name: 'Reader Store', type: '電子書籍ストア', buildSearchUrl: (q) => `https://ebookstore.sony.jp/search/?q=${encodeURIComponent(q)}` },
+      { id: 'honto', name: 'honto', type: '電子書籍ストア', buildSearchUrl: (q) => `https://honto.jp/netstore/search_022_10_${encodeURIComponent(q)}.html` },
+      { id: 'linemanga', name: 'LINEマンガ', type: '配信アプリ', buildSearchUrl: (q) => `https://manga.line.me/search_keyword?query=${encodeURIComponent(q)}` },
+      { id: 'piccoma', name: 'ピッコマ', type: '配信アプリ', buildSearchUrl: (q) => `https://piccoma.com/web/search?search_type=titles&query=${encodeURIComponent(q)}` },
+      { id: 'jumpplus', name: '少年ジャンプ＋', type: '出版社公式', buildSearchUrl: (q) => `https://shonenjumpplus.com/search?q=${encodeURIComponent(q)}` },
+      { id: 'magapoke', name: 'マガポケ', type: '出版社公式', buildSearchUrl: (q) => `https://pocket.shonenmagazine.com/search?q=${encodeURIComponent(q)}` },
+      { id: 'zebrack', name: 'ゼブラック', type: '出版社公式', buildSearchUrl: (q) => `https://zebrack-comic.shueisha.co.jp/search?q=${encodeURIComponent(q)}` },
+      { id: 'mangaone', name: 'マンガONE', type: '配信アプリ', buildSearchUrl: (q) => `https://manga-one.com/search?keyword=${encodeURIComponent(q)}` },
+      { id: 'sundaywebry', name: 'サンデーうぇぶり', type: '配信アプリ', buildSearchUrl: (q) => `https://www.sunday-webry.com/search?keyword=${encodeURIComponent(q)}` },
+      { id: 'mangabang', name: 'マンガBANG!', type: '配信アプリ', buildSearchUrl: (q) => `https://manga-bang.com/search?keyword=${encodeURIComponent(q)}` },
+      { id: 'comico', name: 'comico', type: '配信アプリ', buildSearchUrl: (q) => `https://www.comico.jp/search?keyword=${encodeURIComponent(q)}` },
+      { id: 'mangaup', name: 'マンガUP!', type: '配信アプリ', buildSearchUrl: (q) => `https://comic-gardo.com/search?word=${encodeURIComponent(q)}` }
+    ];
+
+    function buildCard(site, keyword) {
+      const url = site.buildSearchUrl(keyword);
+      const card = document.createElement('article');
+      card.className = 'bg-white border border-slate-200 rounded-lg p-4 shadow-sm flex flex-col gap-3';
+
+      const header = document.createElement('div');
+      header.className = 'flex items-start justify-between gap-2';
+      const title = document.createElement('h3');
+      title.className = 'text-lg font-semibold';
+      title.textContent = site.name;
+      const type = document.createElement('span');
+      type.className = 'text-xs font-semibold px-2 py-1 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100';
+      type.textContent = site.type;
+      header.append(title, type);
+
+      const link = document.createElement('a');
+      link.href = url;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.className = 'inline-flex items-center justify-center gap-2 rounded-md bg-indigo-600 text-white px-4 py-2 text-sm font-semibold shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600';
+      link.textContent = 'このサイトで検索する';
+
+      const urlText = document.createElement('p');
+      urlText.className = 'text-xs text-slate-500 break-all font-mono bg-slate-50 border border-slate-200 rounded-md p-2';
+      urlText.textContent = url;
+
+      card.append(header, link, urlText);
+      return card;
+    }
+
+    function renderResults(keyword) {
+      const results = document.getElementById('results');
+      results.innerHTML = '';
+
+      SITES.forEach((site) => {
+        const card = buildCard(site, keyword);
+        results.appendChild(card);
+      });
+
+      const display = document.getElementById('keywordDisplay');
+      display.textContent = keyword ? `キーワード: "${keyword}"` : 'キーワード未入力';
+    }
+
+    function onSearch() {
+      const keywordInput = document.getElementById('keyword');
+      const keyword = keywordInput.value.trim();
+      renderResults(keyword);
+    }
+
+    document.getElementById('searchButton').addEventListener('click', onSearch);
+    document.getElementById('keyword').addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        onSearch();
+      }
+    });
+
+    const defaultKeyword = '進撃の巨人 1';
+    document.getElementById('keyword').value = defaultKeyword;
+    renderResults(defaultKeyword);
+  </script>
+</body>
+</html>
