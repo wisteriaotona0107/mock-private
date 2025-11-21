@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>C言語学習モック</title>
+  <style>
+    :root {
+      --primary: #1e88e5;
+      --primary-light: #63a4ff;
+      --bg: #f5f7fb;
+      --text: #2c3e50;
+      --muted: #6b7b8c;
+      --card: #ffffff;
+      --success: #2ecc71;
+      --warning: #f39c12;
+      --danger: #e74c3c;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+      background: var(--card);
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .logo {
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: 1px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: 600;
+      background: var(--primary);
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .btn.secondary {
+      background: #e0e6ef;
+      color: var(--text);
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 24px auto;
+      padding: 0 16px 48px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .view {
+      display: none;
+      min-height: 80vh;
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    /* ログイン */
+    .login-wrapper {
+      max-width: 420px;
+      margin: 60px auto;
+      text-align: center;
+    }
+
+    .field {
+      text-align: left;
+      margin-bottom: 16px;
+    }
+
+    .field label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .field input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #d7dde5;
+      font-size: 14px;
+    }
+
+    .error {
+      color: var(--danger);
+      font-size: 13px;
+      min-height: 18px;
+    }
+
+    /* ダッシュボード */
+    .welcome {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: url("https://via.placeholder.com/120") center/cover;
+      border: 3px solid var(--primary-light);
+    }
+
+    .course-card h3 {
+      margin: 0 0 8px;
+    }
+
+    .progress-bar {
+      background: #e6eef7;
+      border-radius: 10px;
+      overflow: hidden;
+      height: 10px;
+      margin: 8px 0 12px;
+    }
+
+    .progress-bar span {
+      display: block;
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      width: 0;
+      transition: width 0.3s ease;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .badge.success { background: var(--success); }
+    .badge.warning { background: var(--warning); }
+    .badge.danger { background: var(--danger); }
+
+    /* レッスン一覧 */
+    .lesson-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px;
+      border: 1px solid #e6eaf0;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      background: #fff;
+    }
+
+    .lesson-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--danger);
+    }
+
+    .status-dot.done {
+      background: var(--success);
+    }
+
+    .lesson-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    pre {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 16px;
+      border-radius: 10px;
+      overflow-x: auto;
+    }
+
+    code {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 14px;
+    }
+
+    /* モーダル */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.35);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 20;
+    }
+
+    .modal {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      max-width: 480px;
+      width: 100%;
+      box-shadow: var(--shadow);
+    }
+
+    .modal-backdrop.active {
+      display: flex;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+
+      .lesson-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .lesson-actions {
+        width: 100%;
+        justify-content: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">C-Learn Mock</div>
+    <div id="header-actions" class="header-actions" style="display:none;">
+      <button class="btn secondary" id="open-goal">学習目標</button>
+      <button class="btn" id="to-dashboard">ダッシュボードへ</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="login-view" class="view active">
+      <div class="login-wrapper card">
+        <h2>ログイン</h2>
+        <p>社会人向けC言語学習サイト（モック）</p>
+        <div class="field">
+          <label for="email">メールアドレス</label>
+          <input type="email" id="email" placeholder="example@mail.com" />
+        </div>
+        <div class="field">
+          <label for="password">パスワード</label>
+          <input type="password" id="password" placeholder="4文字以上" />
+        </div>
+        <div class="error" id="login-error"></div>
+        <button class="btn" id="login-btn">ログイン</button>
+      </div>
+    </section>
+
+    <section id="dashboard-view" class="view">
+      <div class="welcome card">
+        <div class="avatar"></div>
+        <div>
+          <p class="muted">ようこそ</p>
+          <h2 id="user-name">山田 太郎</h2>
+          <p id="goal-status" class="muted">目標未設定</p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+          <h3 style="margin:0;">受講中コース</h3>
+          <button class="btn secondary" id="refresh-progress">進捗再計算</button>
+        </div>
+        <div id="course-grid" class="grid" style="margin-top:12px;"></div>
+      </div>
+    </section>
+
+    <section id="course-view" class="view">
+      <div class="card" style="margin-bottom:16px;">
+        <button class="btn secondary" id="back-dashboard">← ダッシュボード</button>
+        <h2 id="course-title"></h2>
+        <p id="course-summary" class="muted"></p>
+      </div>
+      <div class="card">
+        <h3>レッスン一覧</h3>
+        <div id="lesson-list"></div>
+      </div>
+    </section>
+
+    <section id="lesson-view" class="view">
+      <div class="card">
+        <button class="btn secondary" id="back-course">← コース詳細</button>
+        <h2 id="lesson-title"></h2>
+        <p id="lesson-desc" class="muted"></p>
+        <img id="lesson-image" src="https://via.placeholder.com/400x200" alt="lesson" style="width:100%;border-radius:10px;margin:12px 0;" />
+        <h4>コード例</h4>
+        <pre><code id="lesson-code"></code></pre>
+        <button class="btn" id="complete-lesson">レッスン完了</button>
+      </div>
+    </section>
+  </main>
+
+  <div id="goal-modal" class="modal-backdrop">
+    <div class="modal">
+      <h3>学習目標設定</h3>
+      <div class="field">
+        <label for="goal-date">目標完了日</label>
+        <input type="date" id="goal-date" />
+      </div>
+      <p id="goal-feedback" class="muted">日付を選択してください。</p>
+      <div style="display:flex;gap:8px;justify-content:flex-end;">
+        <button class="btn secondary" id="close-goal">閉じる</button>
+        <button class="btn" id="save-goal">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      // テストデータと状態管理
+      const state = {
+        user: { name: "山田 太郎" },
+        startDate: new Date(new Date().setDate(new Date().getDate() - 20)),
+        goalDate: null,
+        courses: [
+          {
+            id: "intro",
+            name: "C言語入門",
+            summary: "C言語の基本構文と開発環境の使い方を学ぶコース。",
+            lessons: [
+              { id: "intro-1", title: "開発環境の準備", minutes: 10, completed: true, description: "コンパイラの導入と初期設定。", code: "#include <stdio.h>\n\nint main(void) {\n    printf(\"Hello C!\\n\");\n    return 0;\n}" },
+              { id: "intro-2", title: "printfで出力", minutes: 8, completed: true, description: "標準出力の基本。", code: "printf(\"Number: %d\\n\", 10);" },
+              { id: "intro-3", title: "変数と型", minutes: 12, completed: false, description: "intやdoubleなどの基本型を理解。", code: "int age = 30;\ndouble rate = 1.5;" },
+              { id: "intro-4", title: "演算子", minutes: 9, completed: false, description: "算術・比較・論理演算子の使い方。", code: "int sum = a + b;\nif (sum > 10) { /* ... */ }" },
+              { id: "intro-5", title: "条件分岐", minutes: 15, completed: false, description: "if文とswitch文を学ぶ。", code: "if (score >= 60) {\n    printf(\"Pass\\n\");\n} else {\n    printf(\"Retry\\n\");\n}" }
+            ]
+          },
+          {
+            id: "basic",
+            name: "C言語基礎",
+            summary: "配列、ポインタ、関数分割など実務で使う基礎を習得。",
+            lessons: [
+              { id: "basic-1", title: "配列の基本", minutes: 12, completed: true, description: "配列宣言と初期化。", code: "int scores[3] = {90, 80, 70};" },
+              { id: "basic-2", title: "ループ処理", minutes: 14, completed: true, description: "forとwhileの使い分け。", code: "for (int i = 0; i < 3; i++) {\n    printf(\"%d\\n\", scores[i]);\n}" },
+              { id: "basic-3", title: "関数の作り方", minutes: 16, completed: false, description: "戻り値と引数を理解。", code: "int add(int a, int b) { return a + b; }" },
+              { id: "basic-4", title: "ポインタ入門", minutes: 18, completed: false, description: "ポインタの概念と基礎操作。", code: "int value = 5;\nint *ptr = &value;\nprintf(\"%d\", *ptr);" },
+              { id: "basic-5", title: "文字列処理", minutes: 20, completed: false, description: "文字列と標準ライブラリ関数。", code: "char name[20];\nstrcpy(name, \"Yamada\");" },
+              { id: "basic-6", title: "構造体", minutes: 22, completed: false, description: "構造体定義と利用方法。", code: "struct User {\n    char name[20];\n    int age;\n};" }
+            ]
+          }
+        ],
+        currentCourseId: null,
+        currentLessonId: null
+      };
+
+      // 汎用ビュー切り替え
+      const views = {
+        login: document.getElementById("login-view"),
+        dashboard: document.getElementById("dashboard-view"),
+        course: document.getElementById("course-view"),
+        lesson: document.getElementById("lesson-view"),
+      };
+
+      const headerActions = document.getElementById("header-actions");
+      const goalModal = document.getElementById("goal-modal");
+
+      // 進捗計算ロジック
+      function calculateCourseProgress(course) {
+        const total = course.lessons.length;
+        const done = course.lessons.filter((l) => l.completed).length;
+        return total === 0 ? 0 : Math.round((done / total) * 100);
+      }
+
+      function calculateAverageProgress(courses) {
+        if (!courses.length) return 0;
+        const sum = courses.reduce((acc, c) => acc + calculateCourseProgress(c), 0);
+        return Math.round(sum / courses.length);
+      }
+
+      function expectedProgress(start, goal, today = new Date()) {
+        if (!goal || goal <= start) return 0;
+        const totalDays = Math.max(1, (goal - start) / 86400000);
+        const elapsed = Math.min(totalDays, (today - start) / 86400000);
+        return Math.min(100, Math.round((elapsed / totalDays) * 100));
+      }
+
+      function progressStatus(actual, expectedValue) {
+        if (actual - expectedValue >= 5) return { label: "前倒し", tone: "success" };
+        if (expectedValue - actual > 5) return { label: "遅延", tone: "danger" };
+        return { label: "予定通り", tone: "warning" };
+      }
+
+      // DOM更新
+      function switchView(target) {
+        Object.values(views).forEach((v) => v.classList.remove("active"));
+        views[target].classList.add("active");
+        headerActions.style.display = target === "login" ? "none" : "flex";
+      }
+
+      function renderDashboard() {
+        const grid = document.getElementById("course-grid");
+        grid.innerHTML = "";
+        state.courses.forEach((course) => {
+          const progress = calculateCourseProgress(course);
+          const badge = progress >= 70 ? { text: "前倒し", tone: "success" } : progress >= 40 ? { text: "予定通り", tone: "warning" } : { text: "遅延", tone: "danger" };
+          const card = document.createElement("div");
+          card.className = "card course-card";
+          card.innerHTML = `
+            <h3>${course.name}</h3>
+            <p class="muted">${course.summary}</p>
+            <div class="progress-bar"><span style="width:${progress}%;"></span></div>
+            <p><strong>${progress}%</strong> 完了</p>
+            <span class="badge ${badge.tone}">${badge.text}</span>
+            <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
+              <button class="btn secondary" data-course="${course.id}">概要を見る</button>
+              <button class="btn" data-continue="${course.id}">続きから</button>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+      }
+
+      function renderCourse(courseId) {
+        const course = state.courses.find((c) => c.id === courseId);
+        if (!course) return;
+        state.currentCourseId = courseId;
+        document.getElementById("course-title").textContent = course.name;
+        document.getElementById("course-summary").textContent = course.summary;
+        const list = document.getElementById("lesson-list");
+        list.innerHTML = "";
+        course.lessons.forEach((lesson) => {
+          const row = document.createElement("div");
+          row.className = "lesson-row";
+          row.innerHTML = `
+            <div class="lesson-meta">
+              <span class="status-dot ${lesson.completed ? "done" : ""}"></span>
+              <div>
+                <strong class="lesson-link" data-lesson="${lesson.id}" style="cursor:pointer;">${lesson.title}</strong>
+                <p class="muted" style="margin:4px 0 0;">${lesson.completed ? "完了" : "未完了"} ・ ${lesson.minutes}分</p>
+              </div>
+            </div>
+            <div class="lesson-actions">
+              <button class="btn secondary" data-lesson="${lesson.id}">開く</button>
+            </div>
+          `;
+          list.appendChild(row);
+        });
+      }
+
+      function renderLesson(courseId, lessonId) {
+        const course = state.courses.find((c) => c.id === courseId);
+        const lesson = course?.lessons.find((l) => l.id === lessonId);
+        if (!course || !lesson) return;
+        state.currentLessonId = lessonId;
+        document.getElementById("lesson-title").textContent = lesson.title;
+        document.getElementById("lesson-desc").textContent = lesson.description;
+        document.getElementById("lesson-code").textContent = lesson.code;
+        document.getElementById("lesson-image").src = "https://via.placeholder.com/640x320";
+      }
+
+      function updateGoalUI() {
+        const average = calculateAverageProgress(state.courses);
+        const expected = expectedProgress(state.startDate, state.goalDate);
+        const status = progressStatus(average, expected);
+        const text = state.goalDate
+          ? `目標日: ${state.goalDate.toLocaleDateString()} / 実績 ${average}% ・ 期待 ${expected}% → ${status.label}`
+          : "目標未設定";
+        document.getElementById("goal-status").textContent = text;
+        document.getElementById("goal-feedback").textContent = text;
+      }
+
+      // イベント登録
+      document.getElementById("login-btn").addEventListener("click", () => {
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+        const error = document.getElementById("login-error");
+        error.textContent = "";
+
+        // 簡易バリデーション
+        if (!email || !email.includes("@")) {
+          error.textContent = "メールアドレスを入力してください。";
+          return;
+        }
+        if (!password || password.length < 4) {
+          error.textContent = "パスワードは4文字以上で入力してください。";
+          return;
+        }
+
+        // ダミーログイン
+        document.getElementById("user-name").textContent = state.user.name;
+        renderDashboard();
+        updateGoalUI();
+        switchView("dashboard");
+      });
+
+      document.getElementById("course-grid").addEventListener("click", (e) => {
+        const courseId = e.target.getAttribute("data-course") || e.target.getAttribute("data-continue");
+        if (!courseId) return;
+        renderCourse(courseId);
+        switchView("course");
+      });
+
+      document.getElementById("lesson-list").addEventListener("click", (e) => {
+        const lessonId = e.target.getAttribute("data-lesson");
+        if (!lessonId) return;
+        renderLesson(state.currentCourseId, lessonId);
+        switchView("lesson");
+      });
+
+      document.getElementById("complete-lesson").addEventListener("click", () => {
+        const course = state.courses.find((c) => c.id === state.currentCourseId);
+        const lesson = course?.lessons.find((l) => l.id === state.currentLessonId);
+        if (!lesson) return;
+        lesson.completed = true;
+        renderDashboard();
+        renderCourse(course.id);
+        renderLesson(course.id, lesson.id);
+        updateGoalUI();
+        alert("レッスンを完了にしました。ダッシュボードの進捗を更新しました。");
+      });
+
+      document.getElementById("back-dashboard").addEventListener("click", () => {
+        renderDashboard();
+        updateGoalUI();
+        switchView("dashboard");
+      });
+
+      document.getElementById("back-course").addEventListener("click", () => {
+        renderCourse(state.currentCourseId);
+        switchView("course");
+      });
+
+      document.getElementById("to-dashboard").addEventListener("click", () => {
+        renderDashboard();
+        updateGoalUI();
+        switchView("dashboard");
+      });
+
+      document.getElementById("refresh-progress").addEventListener("click", () => {
+        renderDashboard();
+        updateGoalUI();
+      });
+
+      document.getElementById("open-goal").addEventListener("click", () => {
+        goalModal.classList.add("active");
+      });
+
+      document.getElementById("close-goal").addEventListener("click", () => {
+        goalModal.classList.remove("active");
+      });
+
+      document.getElementById("save-goal").addEventListener("click", () => {
+        const value = document.getElementById("goal-date").value;
+        if (!value) {
+          document.getElementById("goal-feedback").textContent = "日付を選択してください。";
+          return;
+        }
+        state.goalDate = new Date(value);
+        updateGoalUI();
+        goalModal.classList.remove("active");
+      });
+
+      // 初期表示
+      renderDashboard();
+    })();
+  </script>
+</body>
+</html>
