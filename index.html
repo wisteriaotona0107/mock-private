@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>隠れ家日本酒バー ペアリングナビ（モック）</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <h1>隠れ家日本酒バー ペアリングナビ（モック）</h1>
+    <p class="lead">温度と味わい、ペアリングで楽しむ日本酒ガイド</p>
+    <nav class="nav-buttons">
+      <button data-target="top" class="nav-btn">トップ</button>
+      <button data-target="list" class="nav-btn">日本酒一覧（温度で探す）</button>
+      <button data-target="food2sake" class="nav-btn">ペアリング：料理から探す</button>
+      <button data-target="sake2food" class="nav-btn">ペアリング：日本酒から探す</button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section id="view-top" class="view active">
+      <div class="card intro">
+        <h2>ようこそ、和モダンな日本酒バーへ</h2>
+        <p>温度帯や味わいで日本酒を絞り込んだり、料理とのペアリングを試してみましょう。すべてスタンドアロンで動作するモックアプリです。</p>
+        <ul class="intro-points">
+          <li>温度帯（冷酒・常温・燗酒）でサクッと絞り込み</li>
+          <li>味わいの傾向でさらに詳細に検索</li>
+          <li>料理から日本酒、日本酒から料理の双方でペアリング候補を表示</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="view-list" class="view">
+      <div class="panel">
+        <h2>日本酒一覧（温度・味わいでフィルタ）</h2>
+        <div class="filters">
+          <div class="filter-block">
+            <h3>温度帯</h3>
+            <label><input type="checkbox" name="temperature" value="冷酒" /> 冷酒（5〜10℃）</label>
+            <label><input type="checkbox" name="temperature" value="常温" /> 常温（15〜20℃）</label>
+            <label><input type="checkbox" name="temperature" value="燗酒" /> 燗酒（日向燗〜ぬる燗〜上燗）</label>
+          </div>
+          <div class="filter-block">
+            <h3>味わい</h3>
+            <select id="taste-select">
+              <option value="all">指定なし</option>
+              <option value="軽快・すっきり">軽快・すっきり</option>
+              <option value="旨口">旨口</option>
+              <option value="濃醇">濃醇</option>
+              <option value="甘口寄り">甘口寄り</option>
+              <option value="辛口寄り">辛口寄り</option>
+            </select>
+          </div>
+        </div>
+        <div id="sake-list" class="card-grid"></div>
+      </div>
+    </section>
+
+    <section id="view-food2sake" class="view">
+      <div class="panel">
+        <h2>料理から日本酒を探す</h2>
+        <div class="filter-inline">
+          <label for="food-category">カテゴリを選択:</label>
+          <select id="food-category"></select>
+        </div>
+        <div class="split">
+          <div class="card">
+            <h3>料理リスト</h3>
+            <ul id="food-list" class="simple-list"></ul>
+          </div>
+          <div class="card">
+            <h3>おすすめの日本酒</h3>
+            <div id="pairing-result" class="pairing-result"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="view-sake2food" class="view">
+      <div class="panel">
+        <h2>日本酒から料理・おつまみを探す</h2>
+        <div class="filter-inline">
+          <label for="sake-select">日本酒を選択:</label>
+          <select id="sake-select"></select>
+        </div>
+        <div class="card">
+          <h3>相性の良い料理</h3>
+          <div id="food-pairing-result" class="pairing-result"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="modal" class="modal hidden">
+    <div class="modal-content">
+      <button id="modal-close" aria-label="閉じる">×</button>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <small>© 隠れ家日本酒バー ペアリングナビ（モック）</small>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
