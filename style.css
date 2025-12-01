@@ -1,0 +1,257 @@
+:root {
+  --bg: #f6f1e7;
+  --text: #2c2c2c;
+  --accent: #2e4633;
+  --badge-gold: #c99868;
+  --badge-green: #3b7351;
+  --divider: #ddd;
+  --highlight: #e9efe9;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+@page {
+  size: A4 portrait;
+  margin: 15mm;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans JP', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.sheet {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12mm;
+  padding: 12mm 0 20mm;
+}
+
+.page {
+  width: 180mm;
+  min-height: 267mm;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6mm;
+}
+
+.page-header {
+  text-align: left;
+  border-bottom: 0.25pt solid var(--divider);
+  padding-bottom: 4mm;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 16pt;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.page-header .sub {
+  margin: 2mm 0 0;
+  font-size: 9pt;
+  color: #4b4b4b;
+}
+
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.card-row {
+  position: relative;
+  margin-bottom: 4mm;
+}
+
+.card-row:last-child {
+  margin-bottom: 0;
+}
+
+.card-row:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2mm;
+  height: 0.3pt;
+  background: var(--divider);
+}
+
+.card {
+  width: 100%;
+  height: 44.5mm;
+  display: flex;
+  gap: 6mm;
+  padding: 4mm 6mm;
+  background: #fff;
+  border-radius: 2mm;
+  border: 0.25pt solid rgba(46, 70, 51, 0.12);
+  position: relative;
+  overflow: hidden;
+}
+
+.card.card--highlight {
+  background: var(--highlight);
+}
+
+.card__image {
+  width: 60mm;
+  height: 40mm;
+  border-radius: 3mm;
+  overflow: hidden;
+  background: linear-gradient(135deg, #d3c4ad, #f6f1e7);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0.25pt solid rgba(0, 0, 0, 0.05);
+}
+
+.card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2mm;
+  min-width: 0;
+}
+
+.card__heading {
+  display: flex;
+  align-items: center;
+  gap: 3mm;
+  justify-content: space-between;
+}
+
+.card__title {
+  margin: 0;
+  font-size: 12pt;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1.2;
+}
+
+.card__desc {
+  margin: 0;
+  font-size: 9pt;
+  line-height: 1.4;
+}
+
+.card__metrics {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3mm;
+  font-size: 8pt;
+  color: #4b4b4b;
+}
+
+.card__tags {
+  display: flex;
+  gap: 3mm;
+  align-items: center;
+  font-size: 9pt;
+}
+
+.tag {
+  padding: 1mm 3mm;
+  border-radius: 3mm;
+  background: rgba(46, 70, 51, 0.08);
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 8pt;
+  border: 0.25pt solid rgba(46, 70, 51, 0.2);
+}
+
+.card__footer {
+  margin-top: auto;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.price {
+  margin: 0;
+  font-size: 13pt;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.badge {
+  position: absolute;
+  top: 4mm;
+  right: 6mm;
+  padding: 1.5mm 4mm;
+  border-radius: 3mm;
+  font-size: 8pt;
+  font-weight: 700;
+  color: #fff;
+  background: var(--badge-gold);
+  border: 0.25pt solid rgba(0, 0, 0, 0.06);
+}
+
+.badge.badge--green {
+  background: var(--badge-green);
+}
+
+.qr-note {
+  margin-top: auto;
+  font-size: 9pt;
+  color: #4b4b4b;
+  border-top: 0.25pt solid var(--divider);
+  padding-top: 3mm;
+}
+
+.qr-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4mm;
+}
+
+.qr-placeholder {
+  width: 20mm;
+  height: 20mm;
+  border: 0.4pt dashed var(--accent);
+  border-radius: 2mm;
+  display: grid;
+  place-items: center;
+  font-size: 7pt;
+  color: var(--accent);
+  background: #fff;
+}
+
+@media print {
+  body {
+    padding: 0;
+  }
+
+  .sheet {
+    gap: 0;
+    padding: 0;
+  }
+
+  .page {
+    page-break-after: always;
+  }
+
+  .page:last-child {
+    page-break-after: auto;
+  }
+}
