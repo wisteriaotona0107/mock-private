@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>日本酒バー座席管理（Sake Seat Manager）モック</title>
+  <style>
+    :root {
+      --bg: #0e1117;
+      --panel: #161b22;
+      --accent: #c2fbd7;
+      --muted: #a0b0c0;
+      --border: #2d333b;
+      --occupied: #ff8a80;
+      --vacant: #8be9fd;
+      --billing: #ffd166;
+      --reserved: #b388eb;
+      --text: #e6edf3;
+      --pill: #242c36;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Inter", "Hiragino Sans", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.05), transparent 35%),
+                  radial-gradient(circle at 70% 10%, rgba(255,255,255,0.04), transparent 30%),
+                  var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 32px;
+    }
+    h1, h2, h3 {
+      margin: 0 0 8px 0;
+      letter-spacing: 0.01em;
+    }
+    p { color: var(--muted); }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin: 16px 0 24px;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+      position: relative;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: var(--pill);
+      border-radius: 999px;
+      font-size: 12px;
+      border: 1px solid var(--border);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .status-vacant { color: var(--vacant); border-color: var(--vacant); }
+    .status-occupied { color: var(--occupied); border-color: var(--occupied); }
+    .status-billing { color: var(--billing); border-color: var(--billing); }
+    .status-reserved { color: var(--reserved); border-color: var(--reserved); }
+    .seat-id { font-size: 24px; font-weight: 700; }
+    .meta {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 8px;
+      margin: 8px 0 12px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .meta span { display: flex; align-items: center; gap: 4px; }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    button, select, input, textarea {
+      background: #0f141b;
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 14px;
+      transition: all 0.2s ease;
+    }
+    button:hover { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; cursor: pointer; }
+    button.secondary { background: transparent; }
+    .toolbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      margin: 16px 0;
+    }
+    .table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .table th, .table td { padding: 10px; border-bottom: 1px solid var(--border); text-align: left; }
+    .muted { color: var(--muted); font-size: 12px; }
+    code {
+      background: #0f141b;
+      padding: 4px 6px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+    .qr-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+    .qr-block {
+      background: #0f141b;
+      border: 1px dashed var(--border);
+      padding: 12px;
+      border-radius: 12px;
+    }
+    .qr-visual {
+      height: 120px;
+      background: repeating-linear-gradient(45deg, #222 0 8px, #111 8px 16px);
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      color: var(--accent);
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    textarea { width: 100%; min-height: 180px; resize: vertical; }
+    .badge-row { display: flex; gap: 6px; flex-wrap: wrap; }
+    .note-input { width: 100%; min-height: 70px; }
+    .toast {
+      background: rgba(194, 251, 215, 0.1);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 10px 12px;
+      border-radius: 12px;
+      margin-top: 12px;
+      display: none;
+    }
+    .toast.visible { display: block; }
+    .legend { display: flex; gap: 10px; flex-wrap: wrap; }
+    .legend .pill { background: #0f141b; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>日本酒バー座席管理（Sake Seat Manager）モック</h1>
+    <p>プラグイン名：<strong>sake-seat-manager</strong> ／ WP option: <code>sake_seat_state</code> に JSON を保存する想定（ローカルでは <code>localStorage</code> を使用）。</p>
+    <div class="legend">
+      <span class="pill status-vacant">vacant</span>
+      <span class="pill status-occupied">occupied</span>
+      <span class="pill status-billing">billing</span>
+      <span class="pill status-reserved">reserved</span>
+    </div>
+  </header>
+
+  <section class="panel">
+    <div class="toolbar">
+      <button id="resetState">初期化（全席 vacant）</button>
+      <button id="vacateAll">一括で vacant に戻す</button>
+      <span class="muted">URL に <code>?seat=C1</code> のように付けると、その席を「着席(occupied)」にするモック挙動です。</span>
+    </div>
+    <div id="toast" class="toast"></div>
+  </section>
+
+  <section>
+    <h2>座席カード</h2>
+    <div id="seatGrid" class="grid"></div>
+  </section>
+
+  <section class="panel">
+    <div class="header">
+      <h3>店主向け：座席ダッシュボード</h3>
+      <span class="pill">inline editor</span>
+    </div>
+    <table class="table" id="dashboardTable">
+      <thead>
+        <tr>
+          <th>Seat</th>
+          <th>Type</th>
+          <th>Status</th>
+          <th>Party</th>
+          <th>Started</th>
+          <th>Note</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <section class="panel">
+    <h3>QR（URL）モック</h3>
+    <p class="muted">実際の QR 画像は生成せず、リンクと疑似 QR を表示します。席ごとの URL をお客様が開くと、その席が occupied として登録されます。</p>
+    <div id="qrGrid" class="qr-grid"></div>
+  </section>
+
+  <section class="panel">
+    <h3>WP options に保存する JSON（モック）</h3>
+    <p class="muted">読み取り専用。表示内容は常に <code>localStorage.sake_seat_state</code> と同期します。</p>
+    <textarea id="jsonPreview" readonly></textarea>
+  </section>
+
+  <script>
+    const OPTION_NAME = 'sake_seat_state';
+    const defaultSeats = [
+      { seat_id: 'C1', type: 'counter', status: 'vacant', party: null, started_at: null, note: '' },
+      { seat_id: 'C2', type: 'counter', status: 'vacant', party: null, started_at: null, note: '' },
+      { seat_id: 'C3', type: 'counter', status: 'vacant', party: null, started_at: null, note: '' },
+      { seat_id: 'C4', type: 'counter', status: 'vacant', party: null, started_at: null, note: '' },
+      { seat_id: 'C5', type: 'counter', status: 'vacant', party: null, started_at: null, note: '' },
+      { seat_id: 'C6', type: 'counter', status: 'vacant', party: null, started_at: null, note: '' },
+      { seat_id: 'T1', type: 'table', status: 'vacant', party: null, started_at: null, note: '' },
+      { seat_id: 'T2', type: 'table', status: 'vacant', party: null, started_at: null, note: '' }
+    ];
+
+    const statusLabels = {
+      vacant: 'vacant',
+      occupied: 'occupied',
+      billing: 'billing',
+      reserved: 'reserved'
+    };
+
+    let seats = loadSeatState();
+
+    function loadSeatState() {
+      const saved = localStorage.getItem(OPTION_NAME);
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed)) return parsed;
+        } catch (e) {
+          console.warn('Failed to parse saved state, falling back to defaults');
+        }
+      }
+      return JSON.parse(JSON.stringify(defaultSeats));
+    }
+
+    function persistState() {
+      localStorage.setItem(OPTION_NAME, JSON.stringify(seats, null, 2));
+      renderJson();
+    }
+
+    function formatDate(date = new Date()) {
+      const pad = (n) => String(n).padStart(2, '0');
+      return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('visible');
+      setTimeout(() => toast.classList.remove('visible'), 2400);
+    }
+
+    function setSeat(seatId, updater) {
+      seats = seats.map((seat) => {
+        if (seat.seat_id !== seatId) return seat;
+        const updated = { ...seat, ...updater };
+        if (updated.status === 'vacant') {
+          updated.party = null;
+          updated.started_at = null;
+        }
+        if (updated.status === 'occupied' && !updated.started_at) {
+          updated.started_at = formatDate();
+        }
+        return updated;
+      });
+      persistState();
+      render();
+    }
+
+    function bulkVacate() {
+      seats = seats.map((seat) => ({ ...seat, status: 'vacant', party: null, started_at: null }));
+      persistState();
+      render();
+      showToast('全席を vacant に戻しました');
+    }
+
+    function resetState() {
+      seats = JSON.parse(JSON.stringify(defaultSeats));
+      persistState();
+      render();
+      showToast('初期状態にリセットしました');
+    }
+
+    function renderSeatCards() {
+      const grid = document.getElementById('seatGrid');
+      grid.innerHTML = '';
+      seats
+        .slice()
+        .sort((a, b) => a.seat_id.localeCompare(b.seat_id))
+        .forEach((seat) => {
+          const card = document.createElement('div');
+          card.className = 'card';
+          const badge = `<span class="pill status-${seat.status}">${statusLabels[seat.status]}</span>`;
+          card.innerHTML = `
+            <div class="header">
+              <div class="seat-id">${seat.seat_id}</div>
+              ${badge}
+            </div>
+            <div class="meta">
+              <span>タイプ: ${seat.type}</span>
+              <span>人数: ${seat.party ?? '—'}</span>
+              <span>開始: ${seat.started_at ?? '—'}</span>
+            </div>
+            <p class="muted">${seat.note || 'メモなし'}</p>
+            <div class="actions">
+              <button data-action="occupied">着席</button>
+              <button data-action="billing">会計</button>
+              <button data-action="reserved">予約</button>
+              <button class="secondary" data-action="vacant">vacant</button>
+            </div>
+          `;
+          card.querySelectorAll('button').forEach((btn) => {
+            btn.addEventListener('click', () => {
+              const action = btn.dataset.action;
+              if (action === 'occupied') setSeat(seat.seat_id, { status: 'occupied' });
+              if (action === 'billing') setSeat(seat.seat_id, { status: 'billing' });
+              if (action === 'reserved') setSeat(seat.seat_id, { status: 'reserved' });
+              if (action === 'vacant') setSeat(seat.seat_id, { status: 'vacant' });
+            });
+          });
+          grid.appendChild(card);
+        });
+    }
+
+    function renderDashboard() {
+      const tbody = document.querySelector('#dashboardTable tbody');
+      tbody.innerHTML = '';
+      seats
+        .slice()
+        .sort((a, b) => a.seat_id.localeCompare(b.seat_id))
+        .forEach((seat) => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><strong>${seat.seat_id}</strong></td>
+            <td>${seat.type}</td>
+            <td>
+              <select data-seat="${seat.seat_id}">
+                ${Object.keys(statusLabels).map((key) => `<option value="${key}" ${seat.status === key ? 'selected' : ''}>${statusLabels[key]}</option>`).join('')}
+              </select>
+            </td>
+            <td><input type="number" min="1" placeholder="人数" value="${seat.party ?? ''}" data-party="${seat.seat_id}" /></td>
+            <td>
+              <div style="display:flex; gap:6px; align-items:center;">
+                <input type="text" placeholder="YYYY-MM-DD HH:MM:SS" value="${seat.started_at ?? ''}" data-started="${seat.seat_id}" style="flex:1;" />
+                <button data-startnow="${seat.seat_id}">now</button>
+              </div>
+            </td>
+            <td><textarea class="note-input" data-note="${seat.seat_id}" placeholder="メモ">${seat.note}</textarea></td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+      tbody.querySelectorAll('select[data-seat]').forEach((select) => {
+        select.addEventListener('change', (e) => {
+          const seatId = e.target.dataset.seat;
+          setSeat(seatId, { status: e.target.value });
+        });
+      });
+
+      tbody.querySelectorAll('input[data-party]').forEach((input) => {
+        input.addEventListener('change', (e) => {
+          const seatId = e.target.dataset.party;
+          const value = e.target.value === '' ? null : Number(e.target.value);
+          setSeat(seatId, { party: value });
+        });
+      });
+
+      tbody.querySelectorAll('input[data-started]').forEach((input) => {
+        input.addEventListener('change', (e) => {
+          const seatId = e.target.dataset.started;
+          setSeat(seatId, { started_at: e.target.value || null });
+        });
+      });
+
+      tbody.querySelectorAll('button[data-startnow]').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          const seatId = e.target.dataset.startnow;
+          setSeat(seatId, { started_at: formatDate(), status: 'occupied' });
+        });
+      });
+
+      tbody.querySelectorAll('textarea[data-note]').forEach((area) => {
+        area.addEventListener('input', (e) => {
+          const seatId = e.target.dataset.note;
+          setSeat(seatId, { note: e.target.value });
+        });
+      });
+    }
+
+    function renderJson() {
+      const textarea = document.getElementById('jsonPreview');
+      textarea.value = JSON.stringify(seats, null, 2);
+    }
+
+    function renderQrGrid() {
+      const container = document.getElementById('qrGrid');
+      container.innerHTML = '';
+      const baseUrl = `${location.origin}${location.pathname}`;
+      seats
+        .slice()
+        .sort((a, b) => a.seat_id.localeCompare(b.seat_id))
+        .forEach((seat) => {
+          const url = `${baseUrl}?seat=${encodeURIComponent(seat.seat_id)}`;
+          const block = document.createElement('div');
+          block.className = 'qr-block';
+          block.innerHTML = `
+            <div class="qr-visual">QR: ${seat.seat_id}</div>
+            <div class="badge-row">
+              <span class="pill">${seat.seat_id}</span>
+              <span class="pill status-${seat.status}">${statusLabels[seat.status]}</span>
+            </div>
+            <p class="muted">URL: <code>${url}</code></p>
+            <button data-copy="${url}">URL をコピー</button>
+          `;
+          block.querySelector('button[data-copy]').addEventListener('click', async (e) => {
+            try {
+              await navigator.clipboard.writeText(url);
+              showToast(`${seat.seat_id} の URL をコピーしました`);
+            } catch (err) {
+              console.error(err);
+              showToast('クリップボードコピーに失敗しました');
+            }
+          });
+          container.appendChild(block);
+        });
+    }
+
+    function applySeatFromQuery() {
+      const params = new URLSearchParams(location.search);
+      const seatId = params.get('seat');
+      if (!seatId) return;
+      const exists = seats.find((s) => s.seat_id === seatId);
+      if (!exists) {
+        showToast(`seat=${seatId} は存在しません`);
+        return;
+      }
+      setSeat(seatId, { status: 'occupied', started_at: formatDate(), party: exists.party ?? 1 });
+      showToast(`${seatId} を occupied にしました（QR モック）`);
+    }
+
+    function render() {
+      renderSeatCards();
+      renderDashboard();
+      renderQrGrid();
+      renderJson();
+    }
+
+    document.getElementById('vacateAll').addEventListener('click', bulkVacate);
+    document.getElementById('resetState').addEventListener('click', resetState);
+
+    render();
+    applySeatFromQuery();
+  </script>
+</body>
+</html>
