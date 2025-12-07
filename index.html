@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>日本酒バー HACCP ダッシュボード</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="top-header">
+    <div>
+      <h1>日本酒バー HACCP 管理モック</h1>
+      <p class="subtitle">温度・日本酒・清掃・衛生の簡易チェック</p>
+    </div>
+    <div class="today-box">
+      <span>今日の日付</span>
+      <strong id="todayDate"></strong>
+    </div>
+  </header>
+
+  <nav class="nav-tabs">
+    <button class="tab-btn active" data-target="H_TOP">ダッシュボード</button>
+    <button class="tab-btn" data-target="H_TEMP">温度記録</button>
+    <button class="tab-btn" data-target="H_SAKE">日本酒管理</button>
+    <button class="tab-btn" data-target="H_CLEAN">清掃チェック</button>
+    <button class="tab-btn" data-target="H_STAFF">従業員衛生</button>
+    <button class="tab-btn" data-target="H_LOG">記録ログ</button>
+  </nav>
+
+  <main>
+    <section id="H_TOP" class="view active-view"></section>
+    <section id="H_TEMP" class="view"></section>
+    <section id="H_SAKE" class="view"></section>
+    <section id="H_CLEAN" class="view"></section>
+    <section id="H_STAFF" class="view"></section>
+    <section id="H_LOG" class="view"></section>
+  </main>
+
+  <footer class="footer">スタンドアロンモック | HTML + CSS + JavaScriptのみ</footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
