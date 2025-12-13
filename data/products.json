@@ -1,0 +1,26 @@
+[
+  {
+    "id":1,
+    "name":"自家製からあげ",
+    "desc":"ジューシーな鶏もも肉を特製タレで漬け込み",
+    "price":680,
+    "category_id":1,
+    "is_active":true,
+    "sort_order":1,
+    "abv":null,
+    "polish":null,
+    "updated_at":"2024-11-01T10:00:00Z"
+  },
+  {
+    "id":2,
+    "name":"生ビール中",
+    "desc":"キレのある冷えた一杯",
+    "price":550,
+    "category_id":2,
+    "is_active":true,
+    "sort_order":2,
+    "abv":5,
+    "volume_ml":400,
+    "updated_at":"2024-11-01T10:00:00Z"
+  }
+]
