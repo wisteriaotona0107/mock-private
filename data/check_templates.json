@@ -1,0 +1,11 @@
+[
+  {
+    "id":1,
+    "name":"開店前チェック",
+    "items":[
+      {"key":"fridge_temp","label":"冷蔵庫温度","type":"text","required":true},
+      {"key":"clean_floor","label":"床の清掃","type":"select","options":["未","完了"],"required":true}
+    ],
+    "updated_at":"2024-11-01T08:00:00Z"
+  }
+]

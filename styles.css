@@ -1,0 +1,71 @@
+:root {
+  --primary: #2e7d32;
+  --secondary: #f1f3f4;
+  --danger: #c62828;
+  --muted: #666;
+}
+* { box-sizing: border-box; }
+body {
+  font-family: "Noto Sans JP", system-ui, -apple-system, sans-serif;
+  margin: 0;
+  background: #fafafa;
+  color: #222;
+}
+header {
+  position: sticky;
+  top: 0;
+  background: white;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 10;
+}
+header h1 { flex: 1; font-size: 18px; margin: 0; text-align: center; }
+button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  background: var(--primary);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+button.secondary { background: #ccc; color: #111; }
+button.danger { background: var(--danger); }
+button:disabled { opacity: 0.6; cursor: not-allowed; }
+main { padding: 16px; }
+.card {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+}
+input, select, textarea {
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+  margin-bottom: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+label { font-weight: 600; display: block; }
+.flex { display: flex; gap: 12px; }
+.flex .col { flex: 1; }
+.table { width: 100%; border-collapse: collapse; }
+.table th, .table td { padding: 8px; border-bottom: 1px solid #eee; text-align: left; }
+.badge { padding: 2px 8px; border-radius: 12px; background: var(--secondary); color: #111; font-size: 12px; }
+.error-summary { background: #ffebee; border: 1px solid #ffcdd2; color: #b71c1c; padding: 8px; margin-bottom: 12px; }
+.error-text { color: #d32f2f; font-size: 12px; margin-top: -4px; margin-bottom: 8px; }
+nav.tabs { display: flex; gap: 8px; margin-bottom: 12px; }
+nav.tabs a { padding: 8px 12px; border-radius: 8px; background: #e8f5e9; color: #1b5e20; text-decoration: none; font-weight: 700; }
+.toolbar { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+.list-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border: 1px solid #eee; border-radius: 8px; margin-bottom: 8px; background: white; }
+small.muted { color: var(--muted); }
+.tag { border-radius: 6px; padding: 4px 8px; background: #e0e0e0; }
+textarea { min-height: 100px; }
+.notice { background: #fff3e0; border: 1px solid #ffe0b2; padding: 10px; border-radius: 6px; margin-bottom: 12px; }

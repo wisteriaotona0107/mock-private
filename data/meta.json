@@ -1,0 +1,10 @@
+{
+  "next_ids": {
+    "products": 3,
+    "categories": 3,
+    "announcements": 2,
+    "check_templates": 2,
+    "daily_checks": 2
+  },
+  "daily_check_month": "202411"
+}

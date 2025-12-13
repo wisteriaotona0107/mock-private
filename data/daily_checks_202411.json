@@ -1,0 +1,9 @@
+[
+  {
+    "id":1,
+    "template_id":1,
+    "target_date":"2024-11-02",
+    "values":{"fridge_temp":"4.0","clean_floor":"完了"},
+    "updated_at":"2024-11-02T06:00:00Z"
+  }
+]
