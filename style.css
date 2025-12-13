@@ -155,9 +155,70 @@ button.ghost {
 
 .fridge {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
+  gap: 12px;
   margin-top: 12px;
+}
+
+.fridge-empty {
+  text-align: center;
+  margin: 0;
+}
+
+.fridge-group {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.fridge-group-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.fridge-name {
+  margin: 0;
+}
+
+.count-badge.mini {
+  padding: 6px 10px;
+}
+
+.count-badge.mini .count-number {
+  font-size: 18px;
+}
+
+.depth-stack {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+.depth-layer {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.02);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.depth-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 700;
+  color: var(--muted);
+  margin: 4px 0 8px;
+}
+
+.fridge-grid {
+  --slot-count: 3;
+  display: grid;
+  grid-template-columns: repeat(var(--slot-count), 1fr);
+  gap: 6px;
 }
 
 .fridge-cell {
@@ -167,6 +228,12 @@ button.ghost {
   min-height: 90px;
   background: rgba(255, 255, 255, 0.02);
   position: relative;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.fridge-cell.filled {
+  border-color: rgba(86, 198, 255, 0.6);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(86, 198, 255, 0.3);
 }
 
 .fridge-cell .position-label {
@@ -193,13 +260,18 @@ button.ghost {
 
 .table-row {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1.5fr auto;
+  grid-template-columns: 1fr 1.6fr 0.9fr 1.1fr 1.4fr auto;
   align-items: center;
   gap: 8px;
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 10px 12px;
   background: rgba(255, 255, 255, 0.02);
+}
+
+.table-cell.fridge {
+  color: var(--muted);
+  font-weight: 700;
 }
 
 .table-cell.name {
@@ -238,11 +310,13 @@ button.ghost {
   .table-row {
     grid-template-columns: 1fr 1fr;
     grid-template-areas:
+      "fridge fridge"
       "name name"
       "price position"
       "notes actions";
   }
 
+  .table-cell.fridge { grid-area: fridge; }
   .table-cell.name { grid-area: name; }
   .table-cell.price { grid-area: price; }
   .table-cell.position { grid-area: position; }

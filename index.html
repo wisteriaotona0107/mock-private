@@ -23,6 +23,9 @@
     <section class="panel">
       <h2>追加する</h2>
       <form id="bottleForm" class="form-grid">
+        <label>冷蔵庫（識別名）
+          <input type="text" name="fridge" placeholder="例：日本酒用1号機" required />
+        </label>
         <label>商品名<span class="note">（ラベル写真を見ながら入力）</span>
           <input type="text" name="name" placeholder="例：純米吟醸 ○○" required />
         </label>
@@ -30,10 +33,13 @@
           <input type="number" min="0" step="1" name="price" placeholder="例：3200" />
         </label>
         <label>段（上から）
-          <input type="number" min="1" name="shelf" placeholder="1" required />
+          <input type="number" min="1" max="3" name="shelf" placeholder="1" required />
         </label>
         <label>位置（左から）
-          <input type="number" min="1" name="slot" placeholder="1" required />
+          <input type="number" min="1" max="3" name="slot" placeholder="1" required />
+        </label>
+        <label>奥行き（手前から）
+          <input type="number" min="1" max="3" name="depth" placeholder="1" required />
         </label>
         <label>メモ
           <input type="text" name="notes" placeholder="特徴や撮影リンクなど" />
@@ -50,7 +56,7 @@
           <span>本</span>
         </div>
       </div>
-      <p class="helper">段と位置は手入力で決めた番号を使います。登録済みのボトルは棚のマスに表示されます。</p>
+      <p class="helper">段（上から3）、左右3、奥行き3を想定した3×3×3の棚を複数冷蔵庫分管理できます。登録済みのボトルは対応する冷蔵庫と奥行きレイヤーごとに表示されます。</p>
       <div class="fridge" id="fridge"></div>
     </section>
 
@@ -65,6 +71,7 @@
 
   <template id="bottleRowTemplate">
     <div class="table-row">
+      <div class="table-cell fridge"></div>
       <div class="table-cell name"></div>
       <div class="table-cell price"></div>
       <div class="table-cell position"></div>
