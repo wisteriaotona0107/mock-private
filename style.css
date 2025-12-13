@@ -1,0 +1,251 @@
+:root {
+  --bg: #0f1419;
+  --panel: #171e26;
+  --accent: #56c6ff;
+  --text: #e6ecf2;
+  --muted: #a8b3c1;
+  --border: #22303a;
+  --positive: #5ce3a8;
+  --danger: #ff8f8f;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', 'Noto Sans JP', system-ui, -apple-system, sans-serif;
+  color: var(--text);
+  background: linear-gradient(120deg, #0b1016 0%, #0f171f 40%, #0a1118 100%);
+  min-height: 100vh;
+  padding: 24px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.eyebrow {
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 0;
+  font-weight: 700;
+}
+
+h1 {
+  margin: 4px 0 8px;
+  font-size: 28px;
+}
+
+.lede {
+  margin: 0;
+  color: var(--muted);
+}
+
+.badge {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.badge span {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  font-weight: 600;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+h2 {
+  margin: 0 0 12px;
+}
+
+.helper {
+  margin-top: 0;
+  color: var(--muted);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.note {
+  color: var(--muted);
+  font-weight: 500;
+  font-size: 12px;
+  margin-left: 6px;
+}
+
+input, button {
+  font: inherit;
+}
+
+input {
+  border: 1px solid var(--border);
+  background: #0c1218;
+  color: var(--text);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+button.primary {
+  border: none;
+  background: linear-gradient(120deg, #56c6ff, #63e0ff);
+  color: #0b1016;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  margin-top: 12px;
+}
+
+button.primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 25px rgba(86, 198, 255, 0.35);
+}
+
+button.ghost {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.fridge {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.fridge-cell {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px;
+  min-height: 90px;
+  background: rgba(255, 255, 255, 0.02);
+  position: relative;
+}
+
+.fridge-cell .position-label {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.fridge-cell .name {
+  font-weight: 700;
+}
+
+.fridge-cell .price {
+  color: var(--muted);
+  margin: 4px 0 0;
+}
+
+.table {
+  display: grid;
+  gap: 8px;
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1.5fr auto;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.table-cell.name {
+  font-weight: 700;
+}
+
+.table-cell.price {
+  color: var(--positive);
+}
+
+.table-cell.position,
+.table-cell.notes {
+  color: var(--muted);
+}
+
+.count-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.count-number {
+  font-size: 24px;
+  font-weight: 800;
+}
+
+@media (max-width: 640px) {
+  body {
+    padding: 16px;
+  }
+
+  .table-row {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "name name"
+      "price position"
+      "notes actions";
+  }
+
+  .table-cell.name { grid-area: name; }
+  .table-cell.price { grid-area: price; }
+  .table-cell.position { grid-area: position; }
+  .table-cell.notes { grid-area: notes; }
+  .table-cell.actions { grid-area: actions; display: flex; justify-content: flex-end; }
+}

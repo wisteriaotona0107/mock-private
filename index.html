@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>冷蔵庫内の一升瓶カウント</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">モック</p>
+      <h1>縦型冷蔵庫の一升瓶チェック</h1>
+      <p class="lede">縦型冷蔵庫に入った一升瓶の本数、配置、商品名、価格をまとめて確認できるシンプルなモックです。名前や値段は手入力で管理します。</p>
+    </div>
+    <div class="badge">
+      <span>手入力</span>
+      <span>写真メモ歓迎</span>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="panel">
+      <h2>追加する</h2>
+      <form id="bottleForm" class="form-grid">
+        <label>商品名<span class="note">（ラベル写真を見ながら入力）</span>
+          <input type="text" name="name" placeholder="例：純米吟醸 ○○" required />
+        </label>
+        <label>価格（円）
+          <input type="number" min="0" step="1" name="price" placeholder="例：3200" />
+        </label>
+        <label>段（上から）
+          <input type="number" min="1" name="shelf" placeholder="1" required />
+        </label>
+        <label>位置（左から）
+          <input type="number" min="1" name="slot" placeholder="1" required />
+        </label>
+        <label>メモ
+          <input type="text" name="notes" placeholder="特徴や撮影リンクなど" />
+        </label>
+        <button type="submit" class="primary">一升瓶を追加</button>
+      </form>
+    </section>
+
+    <section class="panel">
+      <div class="panel-header">
+        <h2>冷蔵庫レイアウト</h2>
+        <div class="count-badge">
+          <span class="count-number" id="bottleCount">0</span>
+          <span>本</span>
+        </div>
+      </div>
+      <p class="helper">段と位置は手入力で決めた番号を使います。登録済みのボトルは棚のマスに表示されます。</p>
+      <div class="fridge" id="fridge"></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-header">
+        <h2>一覧</h2>
+        <button id="clearAll" class="ghost">すべて削除</button>
+      </div>
+      <div id="bottleList" class="table"></div>
+    </section>
+  </main>
+
+  <template id="bottleRowTemplate">
+    <div class="table-row">
+      <div class="table-cell name"></div>
+      <div class="table-cell price"></div>
+      <div class="table-cell position"></div>
+      <div class="table-cell notes"></div>
+      <div class="table-cell actions"><button class="ghost">削除</button></div>
+    </div>
+  </template>
+
+  <script src="script.js"></script>
+</body>
+</html>
