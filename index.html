@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>お昼休憩ログ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="hero__overlay"></div>
+    <div class="hero__content">
+      <p class="eyebrow">Lunch Refresh</p>
+      <h1>お昼休憩・仮眠の記録をスマートに</h1>
+      <p class="lede">効率的な休憩や睡眠方法をメモし、効果を振り返れるローカル専用のミニアプリです。データはブラウザにだけ保存されます。</p>
+      <div class="hero__meta">
+        <span>記録</span>
+        <span>振り返り</span>
+        <span>改善</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="panel">
+      <div class="panel__header">
+        <div>
+          <p class="eyebrow">New entry</p>
+          <h2>休憩・睡眠ログを追加</h2>
+          <p class="muted">ランチタイムの短時間仮眠・散歩・ストレッチなどを記録し、どれが効果的か振り返りましょう。</p>
+        </div>
+        <div class="badge">ローカル保存</div>
+      </div>
+      <form id="entryForm" class="form-grid">
+        <label class="field">
+          <span>開始日時</span>
+          <input type="datetime-local" id="entryTime" required />
+        </label>
+        <label class="field">
+          <span>カテゴリ</span>
+          <select id="entryCategory" required>
+            <option value="ランチ仮眠">ランチ仮眠</option>
+            <option value="リラックス">リラックス</option>
+            <option value="散歩">散歩</option>
+            <option value="ストレッチ">ストレッチ</option>
+            <option value="瞑想">瞑想</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>方法・場所</span>
+          <input type="text" id="entryMethod" placeholder="例: ソファで15分仮眠" required />
+        </label>
+        <label class="field">
+          <span>時間 (分)</span>
+          <input type="number" min="1" id="entryDuration" placeholder="20" required />
+        </label>
+        <label class="field">
+          <span>休憩後の体感</span>
+          <select id="entryEnergy" required>
+            <option value="とても良い">とても良い</option>
+            <option value="良い">良い</option>
+            <option value="普通">普通</option>
+            <option value="イマイチ">イマイチ</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>メモ</span>
+          <textarea id="entryNote" rows="2" placeholder="気付きをメモ"></textarea>
+        </label>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">記録する</button>
+          <button type="button" id="demoButton" class="btn">デモデータ追加</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="panel stats">
+      <div class="panel__header">
+        <div>
+          <p class="eyebrow">Insights</p>
+          <h2>今日の振り返り</h2>
+        </div>
+        <div class="controls">
+          <label class="chip">
+            <span>カテゴリ</span>
+            <select id="filterCategory">
+              <option value="">すべて</option>
+            </select>
+          </label>
+          <label class="chip">
+            <span>検索</span>
+            <input type="search" id="searchKeyword" placeholder="方法やメモを検索" />
+          </label>
+        </div>
+      </div>
+      <div class="stat-grid">
+        <article class="stat-card">
+          <p class="muted">今日の記録数</p>
+          <p class="stat-number" id="statToday">0</p>
+          <p class="stat-detail" id="statLast">最新の記録: -</p>
+        </article>
+        <article class="stat-card">
+          <p class="muted">平均休憩時間</p>
+          <p class="stat-number" id="statAvgDuration">0 分</p>
+          <p class="stat-detail">直近7日で計算</p>
+        </article>
+        <article class="stat-card">
+          <p class="muted">気分スコア</p>
+          <p class="stat-number" id="statEnergy">-</p>
+          <p class="stat-detail">主に「とても良い」の割合</p>
+        </article>
+        <article class="stat-card">
+          <p class="muted">人気メソッド</p>
+          <p class="stat-number" id="statFavorite">-</p>
+          <p class="stat-detail">直近7日で最多の方法</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel__header">
+        <div>
+          <p class="eyebrow">Entries</p>
+          <h2>履歴</h2>
+          <p class="muted">タイトルやメモで検索したり、カテゴリで絞り込めます。古い順・新しい順で並び替えできます。</p>
+        </div>
+        <div class="controls">
+          <button class="btn" id="sortToggle">新しい順</button>
+          <button class="btn btn-ghost" id="clearAll">全件クリア</button>
+        </div>
+      </div>
+      <div id="emptyState" class="empty-state">
+        <p>まだ記録がありません。上のフォームから記録を追加してみましょう。</p>
+      </div>
+      <div id="entryList" class="entry-list"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>ローカル専用のモックアプリです。リロードしても記録が残ります。</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
