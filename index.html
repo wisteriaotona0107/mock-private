@@ -190,6 +190,56 @@
       margin: 6px 0 10px 20px;
     }
 
+    .stage-guide {
+      margin-top: 18px;
+      border: 1px dashed var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      background: #fffef8;
+    }
+
+    .stage-guide h2 {
+      margin-bottom: 8px;
+    }
+
+    .stage-guide .stage-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .stage-guide details {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 10px;
+      background: #fff;
+    }
+
+    .stage-guide summary {
+      cursor: pointer;
+      font-weight: 700;
+      outline: none;
+    }
+
+    .stage-guide summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .stage-guide summary::before {
+      content: '\25B6';
+      display: inline-block;
+      margin-right: 8px;
+      transform: rotate(0deg);
+      transition: transform 0.15s ease;
+    }
+
+    .stage-guide details[open] summary::before {
+      transform: rotate(90deg);
+    }
+
+    .stage-guide ul {
+      margin: 6px 0 10px 20px;
+    }
+
     .print-note {
       font-size: 0.9rem;
       color: var(--muted);
@@ -212,6 +262,7 @@
     @media (min-width: 720px) {
       .grid { grid-template-columns: 1fr 1fr; }
       .items { grid-template-columns: 1fr; }
+      .stage-guide .stage-grid { grid-template-columns: 1fr 1fr; }
     }
 
     @media print {
@@ -245,6 +296,16 @@
     <div class="result" id="result" aria-live="polite">
       <h2>結果</h2>
       <p>チェックを入力すると合計点と推奨導線を表示します。</p>
+    </div>
+
+    <div class="controls" style="justify-content:flex-end; margin-top: 10px;">
+      <button id="toggle-stage-guide" class="secondary">段階の詳細を表示</button>
+    </div>
+
+    <div class="stage-guide" id="stage-guide" hidden aria-live="polite">
+      <h2>推奨導線の詳細</h2>
+      <p style="margin-bottom: 8px;">各段階の狙い・必要要素・注意点をまとめています。印刷時も参照できます。</p>
+      <div class="stage-grid" id="stage-grid"></div>
     </div>
   </div>
 
@@ -366,6 +427,9 @@
 
     const formArea = document.getElementById('form-area');
     const resultEl = document.getElementById('result');
+    const stageGuide = document.getElementById('stage-guide');
+    const stageGrid = document.getElementById('stage-grid');
+    const toggleStageGuideBtn = document.getElementById('toggle-stage-guide');
 
     function renderForm() {
       const frag = document.createDocumentFragment();
@@ -393,6 +457,7 @@
           const title = document.createElement('div');
           title.className = 'item-title';
           title.textContent = `${cIdx * 3 + idx + 1}) ${itemDef.label}`;
+          title.tabIndex = 0;
           item.appendChild(title);
 
           const scale = document.createElement('div');
@@ -432,10 +497,13 @@
           hint.textContent = itemDef.hint;
           item.appendChild(hint);
 
-          item.addEventListener('pointerenter', () => toggleHint(item, true));
-          item.addEventListener('pointerleave', () => toggleHint(item, false));
-          item.addEventListener('focusin', () => toggleHint(item, true));
-          item.addEventListener('focusout', () => toggleHint(item, false));
+          title.addEventListener('pointerenter', () => toggleHint(item, true));
+          title.addEventListener('pointerleave', () => toggleHint(item, false));
+          title.addEventListener('pointerdown', () => toggleHint(item, true));
+          title.addEventListener('pointerup', () => toggleHint(item, false));
+          title.addEventListener('pointercancel', () => toggleHint(item, false));
+          title.addEventListener('focus', () => toggleHint(item, true));
+          title.addEventListener('blur', () => toggleHint(item, false));
 
           items.appendChild(item);
         });
@@ -443,6 +511,59 @@
         frag.appendChild(catWrap);
       });
       formArea.appendChild(frag);
+    }
+
+    function renderStageGuide() {
+      if (!stageGrid) return;
+      stageGrid.innerHTML = '';
+      const frag = document.createDocumentFragment();
+      ['1', '2', '3', '4'].forEach(key => {
+        const preset = stagePresets[key];
+        if (!preset) return;
+        const details = document.createElement('details');
+        const summary = document.createElement('summary');
+        summary.textContent = preset.name;
+        details.appendChild(summary);
+
+        const aimP = document.createElement('p');
+        aimP.style.margin = '6px 0';
+        aimP.textContent = `狙い：${preset.aim}`;
+        details.appendChild(aimP);
+
+        const essWrap = document.createElement('div');
+        const essTitle = document.createElement('strong');
+        essTitle.textContent = '最低限の必要要素';
+        essWrap.appendChild(essTitle);
+        const essUl = document.createElement('ul');
+        preset.essentials.forEach(text => {
+          const li = document.createElement('li');
+          li.textContent = text;
+          essUl.appendChild(li);
+        });
+        essWrap.appendChild(essUl);
+        details.appendChild(essWrap);
+
+        const cautionWrap = document.createElement('div');
+        const cautionTitle = document.createElement('strong');
+        cautionTitle.textContent = '運用上の注意';
+        cautionWrap.appendChild(cautionTitle);
+        const cautionUl = document.createElement('ul');
+        preset.cautions.forEach(text => {
+          const li = document.createElement('li');
+          li.textContent = text;
+          cautionUl.appendChild(li);
+        });
+        cautionWrap.appendChild(cautionUl);
+        details.appendChild(cautionWrap);
+
+        const nextP = document.createElement('p');
+        nextP.style.margin = '6px 0';
+        nextP.textContent = `次の一歩：${preset.next}`;
+        details.appendChild(nextP);
+
+        frag.appendChild(details);
+      });
+      stageGrid.appendChild(frag);
     }
 
     function getScores() {
@@ -600,11 +721,24 @@
       tryClipboard();
     }
 
+    function toggleStageGuide() {
+      const isHidden = stageGuide.hasAttribute('hidden');
+      if (isHidden) {
+        stageGuide.removeAttribute('hidden');
+        toggleStageGuideBtn.textContent = '段階の詳細を隠す';
+      } else {
+        stageGuide.setAttribute('hidden', '');
+        toggleStageGuideBtn.textContent = '段階の詳細を表示';
+      }
+    }
+
     document.getElementById('evaluate').addEventListener('click', () => evaluate(true));
     document.getElementById('reset').addEventListener('click', resetForm);
     document.getElementById('copy').addEventListener('click', copyResult);
+    toggleStageGuideBtn.addEventListener('click', toggleStageGuide);
 
     renderForm();
+    renderStageGuide();
   </script>
 </body>
 </html>
