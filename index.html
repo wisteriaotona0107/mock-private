@@ -111,11 +111,26 @@
 
     .item-title { font-weight: 600; margin-bottom: 4px; }
 
+    .scale {
+      margin-top: 4px;
+    }
+
+    .scale-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--muted);
+      padding: 0 2px 2px;
+      letter-spacing: 0.08em;
+    }
+
+    .scale-labels span { font-weight: 700; }
+
     .radio-group {
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
-      margin-top: 4px;
+      align-items: center;
     }
 
     .radio-group label {
@@ -124,6 +139,8 @@
       gap: 6px;
       cursor: pointer;
     }
+
+    .radio-group input { width: 18px; height: 18px; }
 
     .badge {
       display: inline-block;
@@ -179,6 +196,19 @@
       text-align: right;
     }
 
+    .item-hint {
+      display: none;
+      margin-top: 6px;
+      font-size: 0.9rem;
+      color: #2f4f4f;
+      background: #f6fbff;
+      border: 1px dashed #b5d5ff;
+      border-radius: 6px;
+      padding: 6px 8px;
+    }
+
+    .item.show-hint .item-hint { display: block; }
+
     @media (min-width: 720px) {
       .grid { grid-template-columns: 1fr 1fr; }
       .items { grid-template-columns: 1fr; }
@@ -223,27 +253,47 @@
       {
         key: 'cat1',
         title: '① 店舗規模・物理条件',
-        items: ['席数', '席の形', '店主と客の距離']
+        items: [
+          { label: '席数', lowChar: '少', highChar: '多', hint: '評価目安：1=10席未満、3=10〜20席、5=30席以上。席数に応じてデジタル導線の必要度が変わります。' },
+          { label: '席の形', lowChar: '散', highChar: '整', hint: '評価目安：1=バラバラで見通しが悪い、3=一部まとまっている、5=配置が揃い案内しやすい。' },
+          { label: '店主と客の距離', lowChar: '近', highChar: '遠', hint: '評価目安：1=常に近距離で声が届く、3=場所により届きにくい、5=距離があり呼び出し手段が必要。' }
+        ]
       },
       {
         key: 'cat2',
         title: '② 営業スタイル・混雑状況',
-        items: ['混雑頻度', '注文待ち', '会話余裕']
+        items: [
+          { label: '混雑頻度', lowChar: '稀', highChar: '頻', hint: '評価目安：1=ほぼ混まない、3=曜日や時間で波がある、5=ピークが毎日発生する。' },
+          { label: '注文待ち', lowChar: '短', highChar: '長', hint: '評価目安：1=待ちがほぼ出ない、3=数分待ちが日常的、5=10分以上の待ちが発生しやすい。' },
+          { label: '会話余裕', lowChar: '少', highChar: '余', hint: '評価目安：1=ほぼ余裕なし、3=繁忙時は難しいが平常時は可能、5=常に声掛けする余裕がある。' }
+        ]
       },
       {
         key: 'cat3',
         title: '③ 客層・IT耐性',
-        items: ['常連比率', '年齢層', 'スマホ操作']
+        items: [
+          { label: '常連比率', lowChar: '新', highChar: '常', hint: '評価目安：1=初めてが多い、3=半々くらい、5=常連ばかりで説明が簡潔にできる。' },
+          { label: '年齢層', lowChar: '若', highChar: '幅', hint: '評価目安：1=若年中心、3=中年中心、5=幅広い年齢が混在し幅広い案内が必要。' },
+          { label: 'スマホ操作', lowChar: '苦', highChar: '慣', hint: '評価目安：1=スマホ操作が苦手な人が多い、3=平均的、5=スマホ操作に慣れた人が多い。' }
+        ]
       },
       {
         key: 'cat4',
         title: '④ 店主の運用余力',
-        items: ['営業中の操作', '設定・更新', 'トラブル対応']
+        items: [
+          { label: '営業中の操作', lowChar: '無', highChar: '余', hint: '評価目安：1=営業中はほぼ手が離せない、3=隙間時間に少し触れる、5=画面操作の余裕が十分ある。' },
+          { label: '設定・更新', lowChar: '苦', highChar: '慣', hint: '評価目安：1=設定変更が苦手・時間が取れない、3=手順書があれば対応可能、5=自力で素早く更新できる。' },
+          { label: 'トラブル対応', lowChar: '弱', highChar: '強', hint: '評価目安：1=機器やネットの不調に弱い、3=簡単な再起動対応は可能、5=原因切り分けと代替策を即断できる。' }
+        ]
       },
       {
         key: 'cat5',
         title: '⑤ 店舗が大事にしたい価値',
-        items: ['会話・接客', '雰囲気', 'デジタル感']
+        items: [
+          { label: '会話・接客', lowChar: '重', highChar: '効', hint: '評価目安：1=会話体験を最重視、3=会話と効率の両立を狙う、5=効率重視で会話は補助的。' },
+          { label: '雰囲気', lowChar: '静', highChar: '活', hint: '評価目安：1=静かで落ち着いた空気を重視、3=時間帯で雰囲気が変化、5=活気と回転の良さを重視。' },
+          { label: 'デジタル感', lowChar: '薄', highChar: '濃', hint: '評価目安：1=アナログ感を保ちたい、3=デジタル案内を一部入れたい、5=デジタル表示・操作を前面に出したい。' }
+        ]
       }
     ];
 
@@ -335,15 +385,27 @@
 
         const items = document.createElement('div');
         items.className = 'items';
-        cat.items.forEach((label, idx) => {
+        cat.items.forEach((itemDef, idx) => {
           const id = `q${cIdx * 3 + idx + 1}`;
           const item = document.createElement('div');
           item.className = 'item';
           item.dataset.question = id;
           const title = document.createElement('div');
           title.className = 'item-title';
-          title.textContent = `${cIdx * 3 + idx + 1}) ${label}`;
+          title.textContent = `${cIdx * 3 + idx + 1}) ${itemDef.label}`;
           item.appendChild(title);
+
+          const scale = document.createElement('div');
+          scale.className = 'scale';
+
+          const scaleLabels = document.createElement('div');
+          scaleLabels.className = 'scale-labels';
+          const low = document.createElement('span');
+          low.textContent = itemDef.lowChar;
+          const high = document.createElement('span');
+          high.textContent = itemDef.highChar;
+          scaleLabels.append(low, high);
+          scale.appendChild(scaleLabels);
 
           const radios = document.createElement('div');
           radios.className = 'radio-group';
@@ -362,7 +424,19 @@
             labelEl.appendChild(span);
             radios.appendChild(labelEl);
           }
-          item.appendChild(radios);
+          scale.appendChild(radios);
+          item.appendChild(scale);
+
+          const hint = document.createElement('div');
+          hint.className = 'item-hint';
+          hint.textContent = itemDef.hint;
+          item.appendChild(hint);
+
+          item.addEventListener('pointerenter', () => toggleHint(item, true));
+          item.addEventListener('pointerleave', () => toggleHint(item, false));
+          item.addEventListener('focusin', () => toggleHint(item, true));
+          item.addEventListener('focusout', () => toggleHint(item, false));
+
           items.appendChild(item);
         });
         catWrap.appendChild(items);
@@ -389,6 +463,14 @@
         scores.categories[cat.key] = catSum;
       });
       return scores;
+    }
+
+    function toggleHint(itemEl, show) {
+      if (show) {
+        itemEl.classList.add('show-hint');
+      } else {
+        itemEl.classList.remove('show-hint');
+      }
     }
 
     function updateBadges(catScores) {
