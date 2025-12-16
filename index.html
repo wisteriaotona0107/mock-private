@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>店舗の現実チェックリスト診断</title>
+  <style>
+    :root {
+      --accent: #1f7a8c;
+      --accent-2: #f4a261;
+      --bg: #f7f7f7;
+      --border: #d9d9d9;
+      --text: #1b1b1b;
+      --muted: #5a5a5a;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Noto Sans JP", "Hiragino Sans", "Yu Gothic", sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.6;
+      padding: 16px;
+    }
+
+    h1, h2, h3 { margin: 0 0 8px; }
+    h1 { font-size: 1.6rem; }
+    h2 { font-size: 1.2rem; border-left: 4px solid var(--accent); padding-left: 8px; }
+    h3 { font-size: 1rem; color: var(--muted); }
+
+    p { margin: 4px 0 12px; }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .intro {
+      background: #fff7ea;
+      border: 1px solid #f3d9a4;
+      border-radius: 6px;
+      padding: 12px 14px;
+      margin: 12px 0 18px;
+      color: #6f4f1f;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 12px 0 18px;
+    }
+
+    button {
+      border: 1px solid var(--accent);
+      background: var(--accent);
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: transform 0.08s ease, box-shadow 0.08s ease;
+    }
+    button.secondary {
+      background: #fff;
+      color: var(--accent);
+    }
+    button:hover { transform: translateY(-1px); box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    button:active { transform: translateY(0); box-shadow: none; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .category {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      background: #fcfcfc;
+    }
+
+    .category-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .items {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .item {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px;
+      background: #fff;
+    }
+
+    .item-title { font-weight: 600; margin-bottom: 4px; }
+
+    .scale {
+      margin-top: 4px;
+    }
+
+    .scale-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--muted);
+      padding: 0 2px 2px;
+      letter-spacing: 0.08em;
+    }
+
+    .scale-labels span { font-weight: 700; }
+
+    .radio-group {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .radio-group label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .radio-group input { width: 18px; height: 18px; }
+
+    .badge {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 12px;
+      padding: 2px 10px;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .totals {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 10px 0 2px;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .result {
+      margin-top: 16px;
+      border: 2px solid var(--accent);
+      border-radius: 10px;
+      padding: 14px;
+      background: #f2fbff;
+    }
+
+    .result h2 { margin-bottom: 4px; }
+
+    .result .score {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .missing {
+      color: #b00020;
+      font-weight: 700;
+    }
+
+    .list-block {
+      margin-top: 8px;
+    }
+
+    .list-block ul {
+      margin: 6px 0 10px 20px;
+    }
+
+    .stage-guide {
+      margin-top: 18px;
+      border: 1px dashed var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      background: #fffef8;
+    }
+
+    .stage-guide h2 {
+      margin-bottom: 8px;
+    }
+
+    .stage-guide .stage-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .stage-guide details {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 10px;
+      background: #fff;
+    }
+
+    .stage-guide summary {
+      cursor: pointer;
+      font-weight: 700;
+      outline: none;
+    }
+
+    .stage-guide summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .stage-guide summary::before {
+      content: '\25B6';
+      display: inline-block;
+      margin-right: 8px;
+      transform: rotate(0deg);
+      transition: transform 0.15s ease;
+    }
+
+    .stage-guide details[open] summary::before {
+      transform: rotate(90deg);
+    }
+
+    .stage-guide ul {
+      margin: 6px 0 10px 20px;
+    }
+
+    .print-note {
+      font-size: 0.9rem;
+      color: var(--muted);
+      text-align: right;
+    }
+
+    .item-hint {
+      display: none;
+      margin-top: 6px;
+      font-size: 0.9rem;
+      color: #2f4f4f;
+      background: #f6fbff;
+      border: 1px dashed #b5d5ff;
+      border-radius: 6px;
+      padding: 6px 8px;
+    }
+
+    .item.show-hint .item-hint { display: block; }
+
+    @media (min-width: 720px) {
+      .grid { grid-template-columns: 1fr 1fr; }
+      .items { grid-template-columns: 1fr; }
+      .stage-guide .stage-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media print {
+      body { background: #fff; padding: 0; }
+      .container { box-shadow: none; border: none; padding: 12mm; }
+      .controls, .print-note { display: none; }
+      .result { background: #fff; border-color: #000; }
+      .category, .item { background: #fff; }
+      .intro { background: #fff; border-color: #000; color: #000; }
+      button { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>店舗の現実チェックリスト診断</h1>
+    <p class="print-note">印刷想定：A4・1枚／ローカル動作</p>
+    <div class="intro">
+      <strong>使い方：</strong>15項目を1〜5で評価してください。すべて回答すると自動で判定されます。<br>
+      未回答がある場合は「判定する」で不足箇所を表示します。結果はコピーしてメモに貼り付けできます。
+    </div>
+
+    <div class="controls">
+      <button id="evaluate">判定する</button>
+      <button id="reset" class="secondary">リセット</button>
+      <button id="copy" class="secondary">結果をコピー</button>
+    </div>
+
+    <div id="form-area" class="grid" aria-live="polite"></div>
+
+    <div class="result" id="result" aria-live="polite">
+      <h2>結果</h2>
+      <p>チェックを入力すると合計点と推奨導線を表示します。</p>
+    </div>
+
+    <div class="controls" style="justify-content:flex-end; margin-top: 10px;">
+      <button id="toggle-stage-guide" class="secondary">段階の詳細を表示</button>
+    </div>
+
+    <div class="stage-guide" id="stage-guide" hidden aria-live="polite">
+      <h2>推奨導線の詳細</h2>
+      <p style="margin-bottom: 8px;">各段階の狙い・必要要素・注意点をまとめています。印刷時も参照できます。</p>
+      <div class="stage-grid" id="stage-grid"></div>
+    </div>
+  </div>
+
+  <script>
+    const categories = [
+      {
+        key: 'cat1',
+        title: '① 店舗規模・物理条件',
+        items: [
+          { label: '席数', lowChar: '少', highChar: '多', hint: '評価目安：1=10席未満、3=10〜20席、5=30席以上。席数に応じてデジタル導線の必要度が変わります。' },
+          { label: '席の形', lowChar: '散', highChar: '整', hint: '評価目安：1=バラバラで見通しが悪い、3=一部まとまっている、5=配置が揃い案内しやすい。' },
+          { label: '店主と客の距離', lowChar: '近', highChar: '遠', hint: '評価目安：1=常に近距離で声が届く、3=場所により届きにくい、5=距離があり呼び出し手段が必要。' }
+        ]
+      },
+      {
+        key: 'cat2',
+        title: '② 営業スタイル・混雑状況',
+        items: [
+          { label: '混雑頻度', lowChar: '稀', highChar: '頻', hint: '評価目安：1=ほぼ混まない、3=曜日や時間で波がある、5=ピークが毎日発生する。' },
+          { label: '注文待ち', lowChar: '短', highChar: '長', hint: '評価目安：1=待ちがほぼ出ない、3=数分待ちが日常的、5=10分以上の待ちが発生しやすい。' },
+          { label: '会話余裕', lowChar: '少', highChar: '余', hint: '評価目安：1=ほぼ余裕なし、3=繁忙時は難しいが平常時は可能、5=常に声掛けする余裕がある。' }
+        ]
+      },
+      {
+        key: 'cat3',
+        title: '③ 客層・IT耐性',
+        items: [
+          { label: '常連比率', lowChar: '新', highChar: '常', hint: '評価目安：1=初めてが多い、3=半々くらい、5=常連ばかりで説明が簡潔にできる。' },
+          { label: '年齢層', lowChar: '若', highChar: '幅', hint: '評価目安：1=若年中心、3=中年中心、5=幅広い年齢が混在し幅広い案内が必要。' },
+          { label: 'スマホ操作', lowChar: '苦', highChar: '慣', hint: '評価目安：1=スマホ操作が苦手な人が多い、3=平均的、5=スマホ操作に慣れた人が多い。' }
+        ]
+      },
+      {
+        key: 'cat4',
+        title: '④ 店主の運用余力',
+        items: [
+          { label: '営業中の操作', lowChar: '無', highChar: '余', hint: '評価目安：1=営業中はほぼ手が離せない、3=隙間時間に少し触れる、5=画面操作の余裕が十分ある。' },
+          { label: '設定・更新', lowChar: '苦', highChar: '慣', hint: '評価目安：1=設定変更が苦手・時間が取れない、3=手順書があれば対応可能、5=自力で素早く更新できる。' },
+          { label: 'トラブル対応', lowChar: '弱', highChar: '強', hint: '評価目安：1=機器やネットの不調に弱い、3=簡単な再起動対応は可能、5=原因切り分けと代替策を即断できる。' }
+        ]
+      },
+      {
+        key: 'cat5',
+        title: '⑤ 店舗が大事にしたい価値',
+        items: [
+          { label: '会話・接客', lowChar: '重', highChar: '効', hint: '評価目安：1=会話体験を最重視、3=会話と効率の両立を狙う、5=効率重視で会話は補助的。' },
+          { label: '雰囲気', lowChar: '静', highChar: '活', hint: '評価目安：1=静かで落ち着いた空気を重視、3=時間帯で雰囲気が変化、5=活気と回転の良さを重視。' },
+          { label: 'デジタル感', lowChar: '薄', highChar: '濃', hint: '評価目安：1=アナログ感を保ちたい、3=デジタル案内を一部入れたい、5=デジタル表示・操作を前面に出したい。' }
+        ]
+      }
+    ];
+
+    const stagePresets = {
+      1: {
+        name: '段階1：メニュー閲覧のみ（注文は対面）',
+        aim: 'スマホは説明書代わり。注文は対面で、接客価値と雰囲気を守る。',
+        essentials: [
+          'メニュー閲覧ページ（軽量で更新しやすいもの）',
+          '席・卓へのQRコード掲示と案内文',
+          '店内POPや口頭で「注文は対面」と明記',
+          '更新手段の確保（例：簡易CMSや限定公開の編集URL）'
+        ],
+        cautions: [
+          'スマホが苦手なお客さまへの紙メニュー確保',
+          'QR掲示の視認性と導線位置を確認',
+          '更新漏れによる価格差異に注意'
+        ],
+        next: 'おすすめ3本の固定枠を作り、口頭での提案を強める。'
+      },
+      2: {
+        name: '段階2：注文候補送信（確定は対面）',
+        aim: '聞き返しを減らしつつ、確定は対面で空気感を壊さない。',
+        essentials: [
+          '候補追加・削除ができるシンプルな送信UI',
+          '席番号／名前などの識別入力欄',
+          '店主側の受信一覧（時刻・席ID・内容のみの簡易表示）',
+          '候補送信後に「口頭で確定します」と表示'
+        ],
+        cautions: [
+          '通知過多を防ぐ（音量・バイブや表示間隔の調整）',
+          '候補数・メモ欄の上限を設定し、長文化を防ぐ',
+          '確定はあくまで口頭で行う運用を徹底'
+        ],
+        next: '混雑帯のみ一時的に導入して、慣れを確認する。'
+      },
+      3: {
+        name: '段階2＋混雑時のみ段階3',
+        aim: '通常は接客重視、混雑時だけ確定までオンラインで捌きを改善。',
+        essentials: [
+          '段階2の機能一式（候補送信・受信一覧）',
+          '「混雑モード」ON/OFF切替ボタンと表示',
+          '混雑モード時のみ確定ボタンと調理キューを有効化',
+          '席IDとステータス管理（受信→確認→確定）'
+        ],
+        cautions: [
+          '誤注文・取り違え防止の再確認フロー',
+          '混雑モードの適用時間をスタッフ間で明文化',
+          '通常時は対面確定に戻すことを忘れない'
+        ],
+        next: '金・土だけ混雑モードをONにするなど、運用ルールを作る。'
+      },
+      4: {
+        name: '段階3：モバイル注文確定を常用',
+        aim: '効率と回転を重視し、注文確定をオンラインに標準化。',
+        essentials: [
+          '注文確定UIと店主側キュー（確認→調理→提供）',
+          'ステータス管理とリアルタイムの進捗表示',
+          'おすすめ提示・ペアリング提案など接客補完の導線',
+          '取消・誤操作対策（確認ダイアログと履歴）'
+        ],
+        cautions: [
+          '導線がデジタル偏重になりすぎないよう、店内での声かけを補完',
+          'ネットワーク障害時の紙運用リカバリを準備',
+          '価格・在庫更新の即時反映手順を明確化'
+        ],
+        next: '限定メニューや時間限定クーポンからオンライン確定を試す。'
+      }
+    };
+
+    const formArea = document.getElementById('form-area');
+    const resultEl = document.getElementById('result');
+    const stageGuide = document.getElementById('stage-guide');
+    const stageGrid = document.getElementById('stage-grid');
+    const toggleStageGuideBtn = document.getElementById('toggle-stage-guide');
+
+    function renderForm() {
+      const frag = document.createDocumentFragment();
+      categories.forEach((cat, cIdx) => {
+        const catWrap = document.createElement('section');
+        catWrap.className = 'category';
+        const header = document.createElement('div');
+        header.className = 'category-header';
+        const h2 = document.createElement('h2');
+        h2.textContent = cat.title;
+        const badge = document.createElement('span');
+        badge.className = 'badge';
+        badge.id = `${cat.key}-total`;
+        badge.textContent = '小計 0 / 15';
+        header.append(h2, badge);
+        catWrap.appendChild(header);
+
+        const items = document.createElement('div');
+        items.className = 'items';
+        cat.items.forEach((itemDef, idx) => {
+          const id = `q${cIdx * 3 + idx + 1}`;
+          const item = document.createElement('div');
+          item.className = 'item';
+          item.dataset.question = id;
+          const title = document.createElement('div');
+          title.className = 'item-title';
+          title.textContent = `${cIdx * 3 + idx + 1}) ${itemDef.label}`;
+          title.tabIndex = 0;
+          item.appendChild(title);
+
+          const scale = document.createElement('div');
+          scale.className = 'scale';
+
+          const scaleLabels = document.createElement('div');
+          scaleLabels.className = 'scale-labels';
+          const low = document.createElement('span');
+          low.textContent = itemDef.lowChar;
+          const high = document.createElement('span');
+          high.textContent = itemDef.highChar;
+          scaleLabels.append(low, high);
+          scale.appendChild(scaleLabels);
+
+          const radios = document.createElement('div');
+          radios.className = 'radio-group';
+          for (let i = 1; i <= 5; i++) {
+            const radioId = `${id}-${i}`;
+            const labelEl = document.createElement('label');
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = id;
+            input.value = String(i);
+            input.id = radioId;
+            input.addEventListener('change', handleAutoEvaluate);
+            labelEl.appendChild(input);
+            const span = document.createElement('span');
+            span.textContent = i;
+            labelEl.appendChild(span);
+            radios.appendChild(labelEl);
+          }
+          scale.appendChild(radios);
+          item.appendChild(scale);
+
+          const hint = document.createElement('div');
+          hint.className = 'item-hint';
+          hint.textContent = itemDef.hint;
+          item.appendChild(hint);
+
+          title.addEventListener('pointerenter', () => toggleHint(item, true));
+          title.addEventListener('pointerleave', () => toggleHint(item, false));
+          title.addEventListener('pointerdown', () => toggleHint(item, true));
+          title.addEventListener('pointerup', () => toggleHint(item, false));
+          title.addEventListener('pointercancel', () => toggleHint(item, false));
+          title.addEventListener('focus', () => toggleHint(item, true));
+          title.addEventListener('blur', () => toggleHint(item, false));
+
+          items.appendChild(item);
+        });
+        catWrap.appendChild(items);
+        frag.appendChild(catWrap);
+      });
+      formArea.appendChild(frag);
+    }
+
+    function renderStageGuide() {
+      if (!stageGrid) return;
+      stageGrid.innerHTML = '';
+      const frag = document.createDocumentFragment();
+      ['1', '2', '3', '4'].forEach(key => {
+        const preset = stagePresets[key];
+        if (!preset) return;
+        const details = document.createElement('details');
+        const summary = document.createElement('summary');
+        summary.textContent = preset.name;
+        details.appendChild(summary);
+
+        const aimP = document.createElement('p');
+        aimP.style.margin = '6px 0';
+        aimP.textContent = `狙い：${preset.aim}`;
+        details.appendChild(aimP);
+
+        const essWrap = document.createElement('div');
+        const essTitle = document.createElement('strong');
+        essTitle.textContent = '最低限の必要要素';
+        essWrap.appendChild(essTitle);
+        const essUl = document.createElement('ul');
+        preset.essentials.forEach(text => {
+          const li = document.createElement('li');
+          li.textContent = text;
+          essUl.appendChild(li);
+        });
+        essWrap.appendChild(essUl);
+        details.appendChild(essWrap);
+
+        const cautionWrap = document.createElement('div');
+        const cautionTitle = document.createElement('strong');
+        cautionTitle.textContent = '運用上の注意';
+        cautionWrap.appendChild(cautionTitle);
+        const cautionUl = document.createElement('ul');
+        preset.cautions.forEach(text => {
+          const li = document.createElement('li');
+          li.textContent = text;
+          cautionUl.appendChild(li);
+        });
+        cautionWrap.appendChild(cautionUl);
+        details.appendChild(cautionWrap);
+
+        const nextP = document.createElement('p');
+        nextP.style.margin = '6px 0';
+        nextP.textContent = `次の一歩：${preset.next}`;
+        details.appendChild(nextP);
+
+        frag.appendChild(details);
+      });
+      stageGrid.appendChild(frag);
+    }
+
+    function getScores() {
+      const scores = { total: 0, categories: {}, missing: [] };
+      categories.forEach((cat, cIdx) => {
+        let catSum = 0;
+        cat.items.forEach((_, idx) => {
+          const qId = `q${cIdx * 3 + idx + 1}`;
+          const selected = document.querySelector(`input[name="${qId}"]:checked`);
+          if (selected) {
+            const val = Number(selected.value);
+            catSum += val;
+            scores.total += val;
+          } else {
+            scores.missing.push(qId);
+          }
+        });
+        scores.categories[cat.key] = catSum;
+      });
+      return scores;
+    }
+
+    function toggleHint(itemEl, show) {
+      if (show) {
+        itemEl.classList.add('show-hint');
+      } else {
+        itemEl.classList.remove('show-hint');
+      }
+    }
+
+    function updateBadges(catScores) {
+      categories.forEach(cat => {
+        const badge = document.getElementById(`${cat.key}-total`);
+        badge.textContent = `小計 ${catScores[cat.key]} / 15`;
+      });
+    }
+
+    function determineStage(total) {
+      if (total <= 30) return { stage: 1, preset: stagePresets[1] };
+      if (total <= 45) return { stage: 2, preset: stagePresets[2] };
+      if (total <= 60) return { stage: 3, preset: stagePresets[3] };
+      return { stage: 4, preset: stagePresets[4] };
+    }
+
+    function highlightMissing(missing) {
+      document.querySelectorAll('.item').forEach(el => {
+        el.style.borderColor = 'var(--border)';
+      });
+      if (!missing.length) return;
+      missing.forEach(qId => {
+        const el = document.querySelector(`[data-question="${qId}"]`);
+        if (el) el.style.borderColor = '#e07a5f';
+      });
+      const first = document.querySelector(`[data-question="${missing[0]}"]`);
+      if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function renderResult(scores) {
+      const { total, categories: catScores, missing } = scores;
+      const resultParts = [];
+      if (missing.length) {
+        resultParts.push(`<p class="missing">未回答：${missing.length}件（赤枠を確認してください）</p>`);
+      }
+      if (total === 0 || missing.length) {
+        resultParts.push('<p>すべて回答すると結果が表示されます。</p>');
+        resultEl.innerHTML = `<h2>結果</h2>${resultParts.join('')}`;
+        updateBadges(catScores);
+        return;
+      }
+
+      const { preset } = determineStage(total);
+      const catLines = categories.map(cat => `${cat.title}：${catScores[cat.key]}点`).join(' ／ ');
+
+      const essentials = preset.essentials.map(item => `<li>${item}</li>`).join('');
+      const cautions = preset.cautions.map(item => `<li>${item}</li>`).join('');
+
+      resultEl.innerHTML = `
+        <h2>おすすめ構成</h2>
+        <p class="score">合計 ${total} / 75　｜　推奨導線：${preset.name}</p>
+        <p class="totals">カテゴリ別：${catLines}</p>
+        <div class="list-block">
+          <h3>この段階の狙い</h3>
+          <p>${preset.aim}</p>
+        </div>
+        <div class="list-block">
+          <h3>最低限の必要要素</h3>
+          <ul>${essentials}</ul>
+        </div>
+        <div class="list-block">
+          <h3>運用上の注意</h3>
+          <ul>${cautions}</ul>
+        </div>
+        <div class="list-block">
+          <h3>次の一歩</h3>
+          <p>${preset.next}</p>
+        </div>
+      `;
+      updateBadges(catScores);
+    }
+
+    function handleAutoEvaluate() {
+      const scores = getScores();
+      if (!scores.missing.length) {
+        renderResult(scores);
+      } else {
+        updateBadges(scores.categories);
+      }
+    }
+
+    function evaluate(forceScroll = true) {
+      const scores = getScores();
+      if (scores.missing.length) {
+        renderResult(scores);
+        highlightMissing(scores.missing);
+        return;
+      }
+      renderResult(scores);
+      if (forceScroll) {
+        resultEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    function resetForm() {
+      document.querySelectorAll('input[type="radio"]').forEach(input => { input.checked = false; });
+      updateBadges({ cat1: 0, cat2: 0, cat3: 0, cat4: 0, cat5: 0 });
+      resultEl.innerHTML = '<h2>結果</h2><p>チェックを入力すると合計点と推奨導線を表示します。</p>';
+      document.querySelectorAll('.item').forEach(el => el.style.borderColor = 'var(--border)');
+    }
+
+    function copyResult() {
+      const text = resultEl.innerText.trim();
+      if (!text || /結果\s*チェックを入力/.test(text)) {
+        alert('結果がまだありません。全項目を回答してください。');
+        return;
+      }
+      const tryClipboard = async () => {
+        try {
+          await navigator.clipboard.writeText(text);
+          alert('結果をコピーしました。');
+        } catch (err) {
+          fallbackCopy(text);
+        }
+      };
+      function fallbackCopy(content) {
+        const area = document.createElement('textarea');
+        area.value = content;
+        area.style.position = 'fixed';
+        area.style.top = '-1000px';
+        document.body.appendChild(area);
+        area.select();
+        try { document.execCommand('copy'); alert('結果をコピーしました。'); }
+        catch (e) { alert('コピーに失敗しました。手動で選択してください。'); }
+        document.body.removeChild(area);
+      }
+      tryClipboard();
+    }
+
+    function toggleStageGuide() {
+      const isHidden = stageGuide.hasAttribute('hidden');
+      if (isHidden) {
+        stageGuide.removeAttribute('hidden');
+        toggleStageGuideBtn.textContent = '段階の詳細を隠す';
+      } else {
+        stageGuide.setAttribute('hidden', '');
+        toggleStageGuideBtn.textContent = '段階の詳細を表示';
+      }
+    }
+
+    document.getElementById('evaluate').addEventListener('click', () => evaluate(true));
+    document.getElementById('reset').addEventListener('click', resetForm);
+    document.getElementById('copy').addEventListener('click', copyResult);
+    toggleStageGuideBtn.addEventListener('click', toggleStageGuide);
+
+    renderForm();
+    renderStageGuide();
+  </script>
+</body>
+</html>
