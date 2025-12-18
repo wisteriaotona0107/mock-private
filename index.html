@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mock Management UI</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <div class="dot"></div>
+      <div class="titles">
+        <p class="eyebrow">Prototype</p>
+        <h1>Mock Management UI</h1>
+      </div>
+    </div>
+    <p class="subtitle">Offline JSON manager for quick edits and exports.</p>
+  </header>
+
+  <main class="layout">
+    <section class="panel">
+      <div class="panel-header">
+        <h2>Items</h2>
+        <button id="addItem" class="ghost">+ Add</button>
+      </div>
+      <ul id="itemList" class="item-list" aria-label="Items"></ul>
+    </section>
+
+    <section class="panel">
+      <div class="panel-header">
+        <h2>Details</h2>
+        <span id="activeLabel" class="badge">Select an item</span>
+      </div>
+      <form id="itemForm" class="form" autocomplete="off">
+        <label class="field">
+          <span>Identifier</span>
+          <input type="text" name="id" id="itemId" required />
+        </label>
+        <label class="field">
+          <span>Name</span>
+          <input type="text" name="name" id="itemName" placeholder="Enter a name" />
+        </label>
+        <label class="field">
+          <span>Status</span>
+          <input type="text" name="status" id="itemStatus" placeholder="e.g. active" />
+        </label>
+        <label class="field">
+          <span>Owner</span>
+          <input type="text" name="owner" id="itemOwner" placeholder="Owner" />
+        </label>
+        <label class="field">
+          <span>Description</span>
+          <textarea name="description" id="itemDescription" rows="4" placeholder="Short notes"></textarea>
+        </label>
+        <div class="actions">
+          <button type="submit" class="primary">Save changes</button>
+          <button type="button" id="resetForm" class="ghost">Reset</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="panel">
+      <div class="panel-header">
+        <h2>JSON Preview</h2>
+        <div class="controls">
+          <button id="copyJson" class="ghost">Copy</button>
+          <button id="downloadJson" class="primary">Export</button>
+        </div>
+      </div>
+      <textarea id="jsonPreview" class="json-preview" aria-label="JSON preview" readonly></textarea>
+    </section>
+  </main>
+
+  <footer class="footer">Works entirely in your browser. No servers, no external dependencies.</footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
