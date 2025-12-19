@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>日本酒バー HACCP 管理モック</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="logo">Sake HACCP Mock</div>
+    <div class="today" id="todayDate"></div>
+  </header>
+
+  <nav class="tab-nav">
+    <button class="tab-btn active" data-target="H_TOP">ダッシュボード</button>
+    <button class="tab-btn" data-target="H_TEMP">温度記録</button>
+    <button class="tab-btn" data-target="H_SAKE">日本酒管理</button>
+    <button class="tab-btn" data-target="H_CLEAN">清掃チェック</button>
+    <button class="tab-btn" data-target="H_STAFF">従業員衛生</button>
+    <button class="tab-btn" data-target="H_LOG">記録ログ</button>
+  </nav>
+
+  <main>
+    <section id="H_TOP" class="view active">
+      <h1>今日の HACCP 状況</h1>
+      <div class="grid dashboard">
+        <div class="card">
+          <h3>温度管理</h3>
+          <p class="progress" id="tempProgress"></p>
+          <div class="bar"><span id="tempBar"></span></div>
+        </div>
+        <div class="card">
+          <h3>日本酒管理</h3>
+          <p class="progress" id="sakeProgress"></p>
+          <div class="bar"><span id="sakeBar"></span></div>
+        </div>
+        <div class="card">
+          <h3>清掃（日次）</h3>
+          <p class="progress" id="cleanProgress"></p>
+          <div class="bar"><span id="cleanBar"></span></div>
+        </div>
+        <div class="card">
+          <h3>従業員衛生</h3>
+          <p class="progress" id="staffProgress"></p>
+          <div class="bar"><span id="staffBar"></span></div>
+        </div>
+      </div>
+
+      <div class="card recent">
+        <div class="card-header">
+          <h3>最近のログ</h3>
+        </div>
+        <ul id="recentLogs" class="timeline"></ul>
+      </div>
+    </section>
+
+    <section id="H_TEMP" class="view">
+      <div class="section-header">
+        <div>
+          <h2>温度記録</h2>
+          <p>冷蔵庫・ショーケースの温度を入力して保存します。</p>
+        </div>
+      </div>
+      <div class="card">
+        <table class="table" id="tempTable">
+          <thead>
+            <tr>
+              <th>設備</th>
+              <th>基準</th>
+              <th>温度入力（℃）</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="H_SAKE" class="view">
+      <div class="section-header">
+        <div>
+          <h2>日本酒ボトル管理</h2>
+          <p>開栓からの日数と状態を確認します。</p>
+        </div>
+      </div>
+      <div class="card">
+        <table class="table" id="sakeTable">
+          <thead>
+            <tr>
+              <th>酒名</th>
+              <th>種類</th>
+              <th>保存</th>
+              <th>開栓日</th>
+              <th>経過日数</th>
+              <th>推奨</th>
+              <th>状態</th>
+              <th>更新</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="H_CLEAN" class="view">
+      <div class="section-header">
+        <div>
+          <h2>清掃チェック（日次）</h2>
+          <p>完了した項目にチェックを入れて保存します。</p>
+        </div>
+        <div class="inline">
+          <label for="cleanStaff">担当者：</label>
+          <input id="cleanStaff" type="text" placeholder="例：佐藤" />
+        </div>
+      </div>
+      <div class="card">
+        <form id="cleanForm" class="checklist"></form>
+        <div class="actions">
+          <button id="saveClean" class="primary">保存</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="H_STAFF" class="view">
+      <div class="section-header">
+        <div>
+          <h2>従業員衛生チェック</h2>
+          <p>出勤時に衛生状態を確認します。</p>
+        </div>
+      </div>
+      <div class="card">
+        <form id="staffForm" class="staff-form">
+          <label>スタッフ名<input type="text" id="staffName" placeholder="例：田中" required></label>
+          <div class="columns">
+            <div class="group">
+              <h4>手洗い・爪・傷</h4>
+              <label><input type="radio" name="hand" value="良好" checked> 良好</label>
+              <label><input type="radio" name="hand" value="要確認"> 要確認</label>
+            </div>
+            <div class="group">
+              <h4>服装</h4>
+              <label><input type="radio" name="attire" value="清潔" checked> 清潔</label>
+              <label><input type="radio" name="attire" value="改善必要"> 改善必要</label>
+            </div>
+            <div class="group">
+              <h4>体調</h4>
+              <label><input type="radio" name="condition" value="問題なし" checked> 問題なし</label>
+              <label><input type="radio" name="condition" value="要注意"> 要注意</label>
+            </div>
+          </div>
+          <div class="actions">
+            <button type="submit" class="primary">記録</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section id="H_LOG" class="view">
+      <div class="section-header">
+        <div>
+          <h2>記録ログ一覧</h2>
+          <p>温度・清掃・スタッフ・酒の更新履歴を確認します。</p>
+        </div>
+      </div>
+      <div class="card">
+        <ul id="allLogs" class="timeline full"></ul>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>日本酒バー HACCP 管理モック</p>
+  </footer>
+  <script src="app.js"></script>
+</body>
+</html>
