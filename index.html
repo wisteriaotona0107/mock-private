@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>注文・提供管理</title>
+  <style>
+    :root {
+      --bg: #f7f7f9;
+      --card: #ffffff;
+      --accent: #2b7f65;
+      --accent-2: #f0b429;
+      --text: #1f2a44;
+      --muted: #5f6b7a;
+      --border: #dcdfe3;
+      --danger: #c0392b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Helvetica Neue", system-ui, -apple-system, "Noto Sans JP", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    header {
+      background: linear-gradient(120deg, var(--accent), #1f5d4c);
+      color: #fff;
+      padding: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    header h1 { margin: 0; font-size: 1.25rem; }
+    header p { margin: 6px 0 0; font-size: 0.95rem; opacity: 0.9; }
+    .container {
+      padding: 16px;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.03);
+    }
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+    .tab {
+      border: 1px solid var(--border);
+      background: #fff;
+      padding: 8px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      font-weight: 600;
+    }
+    .tab.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+      box-shadow: 0 3px 10px rgba(43,127,101,0.25);
+    }
+    .tab .badge {
+      font-size: 0.8rem;
+      background: rgba(0,0,0,0.08);
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+    .tab.active .badge {
+      background: rgba(255,255,255,0.18);
+      color: #fff;
+    }
+    .btn {
+      border: none;
+      padding: 8px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      transition: transform 0.08s ease, box-shadow 0.2s ease;
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-secondary { background: #fff; color: var(--text); border: 1px solid var(--border); }
+    .btn-ghost { background: transparent; color: var(--muted); border: 1px dashed var(--border); }
+    .btn-danger { background: var(--danger); color: #fff; }
+    .btn-sm { padding: 6px 10px; font-size: 0.9rem; }
+    .flex { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 12px;
+    }
+    label { font-size: 0.95rem; color: var(--muted); }
+    input, select, textarea {
+      width: 100%;
+      padding: 9px 10px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 1rem;
+      background: #fff;
+    }
+    .section-title {
+      margin: 0 0 8px;
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 14px;
+      background: #eef2f6;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+    .item-btn {
+      width: 100%;
+      text-align: left;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px;
+      background: #fff;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .item-btn:hover { border-color: var(--accent); box-shadow: 0 3px 10px rgba(0,0,0,0.05); }
+    .item-name { font-weight: 700; }
+    .item-meta { color: var(--muted); font-size: 0.9rem; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 8px 6px; border-bottom: 1px solid var(--border); font-size: 0.95rem; }
+    th { text-align: left; color: var(--muted); }
+    .status {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+    .status.ordered { background: #e8f7f0; color: var(--accent); }
+    .status.served { background: #fff3d4; color: #a56400; }
+    .footer-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; margin-top: 10px; }
+    .note { color: var(--muted); font-size: 0.9rem; }
+    .chips { display: flex; gap: 6px; flex-wrap: wrap; }
+    .chip {
+      padding: 4px 10px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #fff;
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+    .chip.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 8px;
+      margin: 8px 0 4px;
+    }
+    .summary .card-mini {
+      padding: 10px;
+      background: #f9fbfd;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+    .card-mini .label { color: var(--muted); font-size: 0.85rem; }
+    .card-mini .value { font-weight: 800; font-size: 1.1rem; margin-top: 4px; }
+    .toast {
+      position: fixed;
+      bottom: 18px;
+      right: 16px;
+      background: #1f5d4c;
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 10px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      z-index: 30;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    @media (max-width: 780px) {
+      header h1 { font-size: 1.05rem; }
+      .grid { grid-template-columns: 1fr; }
+      th, td { font-size: 0.92rem; }
+      .tabs { gap: 6px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>注文・提供管理（ローカル専用）</h1>
+    <p>プリセットで素早く入力し、タブで卓ごとに整理。外部通信なしで動作します。</p>
+  </header>
+  <div class="container">
+    <div class="card">
+      <div class="section-title">
+        <span>お客様タブ</span>
+        <div class="flex">
+          <button class="btn btn-secondary btn-sm" id="renameTabBtn">タブ名変更</button>
+          <button class="btn btn-primary btn-sm" id="newTabBtn">+ 追加</button>
+        </div>
+      </div>
+      <div class="tabs" id="tabList"></div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="section-title">
+          <span>プリセット商品</span>
+          <span class="pill">アイテム数 <strong id="itemCount">0</strong></span>
+        </div>
+        <div class="flex" style="margin-bottom:8px;">
+          <input id="itemSearch" placeholder="商品名 / ID / タグを検索" aria-label="商品検索" />
+          <select id="categoryFilter" aria-label="カテゴリ選択">
+            <option value="">すべてのカテゴリ</option>
+          </select>
+          <button class="btn btn-secondary btn-sm" id="resetFilters">リセット</button>
+        </div>
+        <div class="chips" id="tagFilter"></div>
+        <div class="grid" id="itemGrid" style="margin-top:10px;"></div>
+      </div>
+
+      <div class="card">
+        <div class="section-title">
+          <span>注文入力</span>
+          <span class="pill">現在: <strong id="activeTabLabel">-</strong></span>
+        </div>
+        <div class="summary">
+          <div class="card-mini"><div class="label">注文合計</div><div class="value" id="summaryTotal">-</div></div>
+          <div class="card-mini"><div class="label">未提供</div><div class="value" id="summaryOpen">-</div></div>
+          <div class="card-mini"><div class="label">提供済</div><div class="value" id="summaryServed">-</div></div>
+        </div>
+        <div style="margin-top:8px; display:grid; gap:10px;">
+          <div>
+            <label for="qrInput">QR内容貼付（IDやメモをペーストして追加）</label>
+            <div class="flex" style="align-items:flex-end;">
+              <textarea id="qrInput" rows="2" placeholder="例）sku_003 x2 など"></textarea>
+              <button class="btn btn-primary btn-sm" id="qrAddBtn">追加</button>
+            </div>
+            <p class="note">カメラ不要。ペーストした文字列から商品ID/名称を検索し、見つからない場合は自由入力として登録します。</p>
+          </div>
+          <div style="display:grid; gap:8px;">
+            <div class="flex">
+              <div style="flex:1;">
+                <label for="manualId">商品ID</label>
+                <input id="manualId" placeholder="sku_999" />
+              </div>
+              <div style="flex:2;">
+                <label for="manualName">商品名</label>
+                <input id="manualName" placeholder="自由入力" />
+              </div>
+            </div>
+            <div class="flex">
+              <div style="flex:1;">
+                <label for="manualPrice">単価 (円)</label>
+                <input id="manualPrice" type="number" min="0" step="10" placeholder="0" />
+              </div>
+              <div style="width:120px;">
+                <label for="manualQty">数量</label>
+                <input id="manualQty" type="number" min="1" step="1" value="1" />
+              </div>
+            </div>
+            <button class="btn btn-primary" id="manualAddBtn">自由入力で追加</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="grid-column:1/-1;">
+        <div class="section-title">
+          <span>注文一覧</span>
+          <div class="flex">
+            <button class="btn btn-secondary btn-sm" id="serveAllBtn">全て提供済みにする</button>
+            <button class="btn btn-ghost btn-sm" id="clearServedBtn">提供済みを削除</button>
+            <button class="btn btn-danger btn-sm" id="clearAllBtn">タブ内を全消去</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>状態</th>
+                <th>商品</th>
+                <th>ID</th>
+                <th>数量</th>
+                <th>単価</th>
+                <th>小計</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="orderBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (() => {
+      const defaultItems = [
+        { id: "sku_001", name: "獺祭 純米大吟醸", price: 1200, category: "おすすめ", tags: ["fruity"], is_active: true },
+        { id: "sku_002", name: "新政 No.6 R-type", price: 1100, category: "おすすめ", tags: ["fresh"], is_active: true },
+        { id: "sku_003", name: "田酒 特別純米", price: 900, category: "純米", tags: ["rice"], is_active: true },
+        { id: "sku_004", name: "醸し人九平次 純米大吟醸", price: 1300, category: "おすすめ", tags: ["aromatic"], is_active: true },
+        { id: "sku_005", name: "黒龍 いっちょらい", price: 800, category: "吟醸", tags: ["balanced"], is_active: true },
+        { id: "sku_006", name: "而今 純米吟醸", price: 1200, category: "吟醸", tags: ["juicy"], is_active: true },
+        { id: "sku_007", name: "鍋島 純米大吟醸", price: 1250, category: "大吟醸", tags: ["rich"], is_active: true },
+        { id: "sku_008", name: "鳳凰美田 純米吟醸", price: 950, category: "吟醸", tags: ["sweet"], is_active: true },
+        { id: "sku_009", name: "作 雅乃智 中取り", price: 1000, category: "純米", tags: ["clean"], is_active: true },
+        { id: "sku_010", name: "雪の茅舎 山廃純米", price: 850, category: "純米", tags: ["umami"], is_active: true }
+      ];
+
+      const keys = {
+        items: 'sake_items',
+        state: 'sake_state'
+      };
+
+      const el = id => document.getElementById(id);
+      const toastEl = el('toast');
+
+      function showToast(message) {
+        toastEl.textContent = message;
+        toastEl.classList.add('show');
+        setTimeout(() => toastEl.classList.remove('show'), 1700);
+      }
+
+      function ensureItems() {
+        if (!localStorage.getItem(keys.items)) {
+          localStorage.setItem(keys.items, JSON.stringify(defaultItems));
+        }
+      }
+
+      function loadItems() {
+        ensureItems();
+        try {
+          const parsed = JSON.parse(localStorage.getItem(keys.items) || '[]');
+          return Array.isArray(parsed) ? parsed : [];
+        } catch (e) {
+          return [];
+        }
+      }
+
+      function saveState(state) {
+        localStorage.setItem(keys.state, JSON.stringify(state));
+      }
+
+      function loadState() {
+        const base = {
+          tabs: [ { id: crypto.randomUUID(), name: 'テーブル1', orders: [] } ],
+          activeTabId: null
+        };
+        try {
+          const saved = JSON.parse(localStorage.getItem(keys.state) || 'null');
+          return saved && saved.tabs ? saved : base;
+        } catch (e) {
+          return base;
+        }
+      }
+
+      const state = loadState();
+      if (!state.activeTabId && state.tabs.length) {
+        state.activeTabId = state.tabs[0].id;
+      }
+
+      let items = loadItems();
+
+      // UI Rendering
+      function renderTabs() {
+        const tabList = el('tabList');
+        tabList.innerHTML = '';
+        state.tabs.forEach(tab => {
+          const btn = document.createElement('button');
+          btn.className = 'tab' + (tab.id === state.activeTabId ? ' active' : '');
+          btn.innerHTML = `<span>${tab.name}</span><span class="badge">${tab.orders.filter(o => o.status === 'ordered').length}</span>`;
+          btn.onclick = () => { state.activeTabId = tab.id; persist(); renderAll(); };
+          tabList.appendChild(btn);
+        });
+      }
+
+      function collectCategories() {
+        const cats = Array.from(new Set(items.map(i => i.category).filter(Boolean)));
+        return cats;
+      }
+
+      function renderFilters() {
+        const select = el('categoryFilter');
+        const cats = collectCategories();
+        select.innerHTML = '<option value="">すべてのカテゴリ</option>' + cats.map(c => `<option value="${c}">${c}</option>`).join('');
+
+        const tags = Array.from(new Set(items.flatMap(i => i.tags || [])));
+        const tagWrap = el('tagFilter');
+        tagWrap.innerHTML = '';
+        tags.forEach(tag => {
+          const chip = document.createElement('button');
+          chip.className = 'chip';
+          chip.textContent = `#${tag}`;
+          chip.dataset.tag = tag;
+          chip.onclick = () => {
+            const active = chip.classList.toggle('active');
+            if (!active) return renderItems();
+            Array.from(tagWrap.querySelectorAll('.chip')).forEach(c => { if (c !== chip) c.classList.remove('active'); });
+            renderItems();
+          };
+          tagWrap.appendChild(chip);
+        });
+      }
+
+      function renderItems() {
+        const search = el('itemSearch').value.trim().toLowerCase();
+        const cat = el('categoryFilter').value;
+        const tag = (Array.from(el('tagFilter').querySelectorAll('.chip.active'))[0] || {}).dataset?.tag;
+        const grid = el('itemGrid');
+        grid.innerHTML = '';
+        const filtered = items.filter(i => {
+          if (!i.is_active) return false;
+          const matchesSearch = !search || [i.name, i.id, (i.tags||[]).join(' ')].some(v => String(v).toLowerCase().includes(search));
+          const matchesCat = !cat || i.category === cat;
+          const matchesTag = !tag || (i.tags || []).includes(tag);
+          return matchesSearch && matchesCat && matchesTag;
+        });
+        filtered.forEach(item => {
+          const btn = document.createElement('button');
+          btn.className = 'item-btn';
+          btn.innerHTML = `<div class="item-name">${item.name}</div><div class="item-meta">${item.category || '未分類'} ｜ ${item.id} ｜ ￥${item.price}</div>`;
+          btn.onclick = () => addOrderFromItem(item, 1);
+          grid.appendChild(btn);
+        });
+        el('itemCount').textContent = filtered.length;
+      }
+
+      function getActiveTab() {
+        return state.tabs.find(t => t.id === state.activeTabId);
+      }
+
+      function renderOrders() {
+        const tab = getActiveTab();
+        const body = el('orderBody');
+        body.innerHTML = '';
+        if (!tab) return;
+
+        const totals = tab.orders.reduce((acc, o) => {
+          const subtotal = (o.price || 0) * o.qty;
+          if (o.status === 'ordered') acc.open += subtotal;
+          else acc.served += subtotal;
+          acc.total += subtotal;
+          return acc;
+        }, { total:0, open:0, served:0 });
+        el('summaryTotal').textContent = `￥${totals.total.toLocaleString()}`;
+        el('summaryOpen').textContent = `￥${totals.open.toLocaleString()}`;
+        el('summaryServed').textContent = `￥${totals.served.toLocaleString()}`;
+        el('activeTabLabel').textContent = tab.name;
+
+        tab.orders.forEach(order => {
+          const tr = document.createElement('tr');
+          const subtotal = (order.price || 0) * order.qty;
+          tr.innerHTML = `
+            <td><span class="status ${order.status}">${order.status === 'ordered' ? '未提供' : '提供済'}</span></td>
+            <td><div>${order.name}</div><div class="note">${order.note || ''}</div></td>
+            <td>${order.itemId || '-'}</td>
+            <td>
+              <div class="flex" style="gap:4px;">
+                <button class="btn btn-secondary btn-sm" aria-label="減らす">-</button>
+                <span style="min-width:24px; text-align:center;">${order.qty}</span>
+                <button class="btn btn-secondary btn-sm" aria-label="増やす">+</button>
+              </div>
+            </td>
+            <td>￥${(order.price || 0).toLocaleString()}</td>
+            <td>￥${subtotal.toLocaleString()}</td>
+            <td class="flex" style="gap:6px;">
+              <button class="btn btn-primary btn-sm">${order.status === 'ordered' ? '提供済にする' : '戻す'}</button>
+              <button class="btn btn-secondary btn-sm">削除</button>
+            </td>`;
+          const [minusBtn, plusBtn] = tr.querySelectorAll('button.btn-secondary.btn-sm');
+          minusBtn.onclick = () => updateQty(order.uid, Math.max(1, order.qty - 1));
+          plusBtn.onclick = () => updateQty(order.uid, order.qty + 1);
+          const actionButtons = tr.querySelectorAll('td:last-child button');
+          actionButtons[0].onclick = () => toggleStatus(order.uid);
+          actionButtons[1].onclick = () => removeOrder(order.uid);
+          body.appendChild(tr);
+        });
+      }
+
+      function persist() {
+        saveState(state);
+      }
+
+      function addOrderFromItem(item, qty = 1, note = '') {
+        const tab = getActiveTab();
+        if (!tab) return;
+        const existing = tab.orders.find(o => o.itemId === item.id && o.status === 'ordered' && o.note === note);
+        if (existing) {
+          existing.qty += qty;
+        } else {
+          tab.orders.push({
+            uid: crypto.randomUUID(),
+            itemId: item.id,
+            name: item.name,
+            price: item.price,
+            qty,
+            status: 'ordered',
+            note,
+            timestamp: Date.now()
+          });
+        }
+        persist();
+        renderOrders();
+        showToast(`${item.name} を追加しました`);
+      }
+
+      function addManualOrder() {
+        const id = el('manualId').value.trim();
+        const name = el('manualName').value.trim() || '自由入力';
+        const price = Number(el('manualPrice').value) || 0;
+        const qty = Math.max(1, Number(el('manualQty').value) || 1);
+        addOrderFromItem({ id, name, price, category: '自由入力', tags: [], is_active: true }, qty);
+        el('manualName').value = '';
+        el('manualId').value = '';
+        el('manualPrice').value = '';
+        el('manualQty').value = 1;
+      }
+
+      function parseQrInput(text) {
+        const raw = text.trim();
+        if (!raw) return null;
+        const qtyMatch = raw.match(/x(\d+)$/i);
+        const qty = qtyMatch ? Number(qtyMatch[1]) : 1;
+        const cleaned = raw.replace(/x\d+$/i, '').trim();
+        const found = items.find(i => i.id === cleaned || i.name === cleaned);
+        if (found) return { item: found, qty };
+        return { item: { id: cleaned || 'note', name: cleaned || 'QR入力', price: 0, tags: [], category: 'QR' }, qty };
+      }
+
+      function addFromQr() {
+        const text = el('qrInput').value;
+        const result = parseQrInput(text);
+        if (!result) return;
+        addOrderFromItem(result.item, result.qty, 'QR入力');
+        el('qrInput').value = '';
+      }
+
+      function updateQty(uid, newQty) {
+        const tab = getActiveTab();
+        if (!tab) return;
+        const target = tab.orders.find(o => o.uid === uid);
+        if (target) {
+          target.qty = newQty;
+          persist();
+          renderOrders();
+        }
+      }
+
+      function toggleStatus(uid) {
+        const tab = getActiveTab();
+        if (!tab) return;
+        const target = tab.orders.find(o => o.uid === uid);
+        if (target) {
+          target.status = target.status === 'ordered' ? 'served' : 'ordered';
+          persist();
+          renderOrders();
+        }
+      }
+
+      function removeOrder(uid) {
+        const tab = getActiveTab();
+        if (!tab) return;
+        tab.orders = tab.orders.filter(o => o.uid !== uid);
+        persist();
+        renderOrders();
+      }
+
+      function serveAll() {
+        const tab = getActiveTab();
+        if (!tab) return;
+        tab.orders.forEach(o => o.status = 'served');
+        persist();
+        renderOrders();
+      }
+
+      function clearServed() {
+        const tab = getActiveTab();
+        if (!tab) return;
+        tab.orders = tab.orders.filter(o => o.status !== 'served');
+        persist();
+        renderOrders();
+      }
+
+      function clearAll() {
+        const tab = getActiveTab();
+        if (!tab) return;
+        if (!confirm('このタブの注文を全て削除しますか？')) return;
+        tab.orders = [];
+        persist();
+        renderOrders();
+      }
+
+      function newTab() {
+        const name = prompt('タブ名（テーブル名など）', `テーブル${state.tabs.length + 1}`);
+        if (!name) return;
+        const tab = { id: crypto.randomUUID(), name, orders: [] };
+        state.tabs.push(tab);
+        state.activeTabId = tab.id;
+        persist();
+        renderTabs();
+        renderOrders();
+      }
+
+      function renameTab() {
+        const tab = getActiveTab();
+        if (!tab) return;
+        const name = prompt('新しいタブ名を入力', tab.name);
+        if (!name) return;
+        tab.name = name;
+        persist();
+        renderTabs();
+        renderOrders();
+      }
+
+      function addDefaultTabIfEmpty() {
+        if (!state.tabs.length) {
+          state.tabs.push({ id: crypto.randomUUID(), name: 'テーブル1', orders: [] });
+          state.activeTabId = state.tabs[0].id;
+        }
+      }
+
+      // Events
+      el('resetFilters').onclick = () => {
+        el('itemSearch').value = '';
+        el('categoryFilter').value = '';
+        Array.from(el('tagFilter').querySelectorAll('.chip')).forEach(c => c.classList.remove('active'));
+        renderItems();
+      };
+      el('itemSearch').oninput = renderItems;
+      el('categoryFilter').onchange = renderItems;
+      el('manualAddBtn').onclick = addManualOrder;
+      el('qrAddBtn').onclick = addFromQr;
+      el('serveAllBtn').onclick = serveAll;
+      el('clearServedBtn').onclick = clearServed;
+      el('clearAllBtn').onclick = clearAll;
+      el('newTabBtn').onclick = newTab;
+      el('renameTabBtn').onclick = renameTab;
+
+      addDefaultTabIfEmpty();
+      renderTabs();
+      renderFilters();
+      renderItems();
+      renderOrders();
+    })();
+  </script>
+</body>
+</html>
