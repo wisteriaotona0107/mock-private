@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>注文・提供管理</title>
+  <title>注文・提供管理（ローカル/iPad mini最適化）</title>
   <style>
     :root {
-      --bg: #f7f7f9;
+      --bg: #f6f7fb;
       --card: #ffffff;
-      --accent: #2b7f65;
+      --accent: #2a7f65;
       --accent-2: #f0b429;
-      --text: #1f2a44;
-      --muted: #5f6b7a;
-      --border: #dcdfe3;
+      --text: #1f2532;
+      --muted: #5a6575;
+      --border: #dce1e8;
       --danger: #c0392b;
     }
     * { box-sizing: border-box; }
@@ -21,299 +21,286 @@
       font-family: "Helvetica Neue", system-ui, -apple-system, "Noto Sans JP", sans-serif;
       background: var(--bg);
       color: var(--text);
-      line-height: 1.6;
+      line-height: 1.5;
     }
     header {
-      background: linear-gradient(120deg, var(--accent), #1f5d4c);
-      color: #fff;
-      padding: 16px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
       position: sticky;
       top: 0;
-      z-index: 10;
-    }
-    header h1 { margin: 0; font-size: 1.25rem; }
-    header p { margin: 6px 0 0; font-size: 0.95rem; opacity: 0.9; }
-    .container {
-      padding: 16px;
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 12px;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.03);
-    }
-    .tabs {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-    }
-    .tab {
-      border: 1px solid var(--border);
-      background: #fff;
-      padding: 8px 12px;
-      border-radius: 20px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.2s ease;
-      font-weight: 600;
-    }
-    .tab.active {
-      background: var(--accent);
+      z-index: 20;
+      background: linear-gradient(130deg, var(--accent), #1f5b4c);
       color: #fff;
-      border-color: var(--accent);
-      box-shadow: 0 3px 10px rgba(43,127,101,0.25);
-    }
-    .tab .badge {
-      font-size: 0.8rem;
-      background: rgba(0,0,0,0.08);
-      padding: 2px 8px;
-      border-radius: 10px;
-    }
-    .tab.active .badge {
-      background: rgba(255,255,255,0.18);
-      color: #fff;
-    }
-    .btn {
-      border: none;
-      padding: 8px 12px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: 700;
-      letter-spacing: 0.01em;
-      transition: transform 0.08s ease, box-shadow 0.2s ease;
-    }
-    .btn:active { transform: translateY(1px); }
-    .btn-primary { background: var(--accent); color: #fff; }
-    .btn-secondary { background: #fff; color: var(--text); border: 1px solid var(--border); }
-    .btn-ghost { background: transparent; color: var(--muted); border: 1px dashed var(--border); }
-    .btn-danger { background: var(--danger); color: #fff; }
-    .btn-sm { padding: 6px 10px; font-size: 0.9rem; }
-    .flex { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 12px;
-    }
-    label { font-size: 0.95rem; color: var(--muted); }
-    input, select, textarea {
-      width: 100%;
-      padding: 9px 10px;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      font-size: 1rem;
-      background: #fff;
-    }
-    .section-title {
-      margin: 0 0 8px;
-      font-size: 1.05rem;
+      padding: 12px 16px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.12);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
+      gap: 12px;
     }
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 10px;
-      border-radius: 14px;
-      background: #eef2f6;
-      color: var(--muted);
-      font-size: 0.85rem;
-    }
-    .item-btn {
-      width: 100%;
-      text-align: left;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 10px;
-      background: #fff;
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-    .item-btn:hover { border-color: var(--accent); box-shadow: 0 3px 10px rgba(0,0,0,0.05); }
-    .item-name { font-weight: 700; }
-    .item-meta { color: var(--muted); font-size: 0.9rem; }
-    table { width: 100%; border-collapse: collapse; }
-    th, td { padding: 8px 6px; border-bottom: 1px solid var(--border); font-size: 0.95rem; }
-    th { text-align: left; color: var(--muted); }
-    .status {
-      display: inline-block;
-      padding: 3px 8px;
-      border-radius: 10px;
-      font-size: 0.85rem;
-      font-weight: 700;
-    }
-    .status.ordered { background: #e8f7f0; color: var(--accent); }
-    .status.served { background: #fff3d4; color: #a56400; }
-    .footer-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; margin-top: 10px; }
-    .note { color: var(--muted); font-size: 0.9rem; }
-    .chips { display: flex; gap: 6px; flex-wrap: wrap; }
-    .chip {
-      padding: 4px 10px;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      background: #fff;
-      cursor: pointer;
-      font-size: 0.9rem;
-      color: var(--muted);
-    }
-    .chip.active {
-      background: var(--accent);
-      color: #fff;
-      border-color: var(--accent);
-    }
-    .summary {
+    header .title {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 8px;
-      margin: 8px 0 4px;
+      gap: 4px;
     }
-    .summary .card-mini {
-      padding: 10px;
-      background: #f9fbfd;
+    header h1 { margin: 0; font-size: 1.1rem; letter-spacing: 0.02em; }
+    header p { margin: 0; opacity: 0.9; font-size: 0.95rem; }
+    header .actions { display: flex; align-items: center; gap: 10px; }
+    .btn {
+      border: none;
+      border-radius: 12px;
+      padding: 9px 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.08s ease, box-shadow 0.18s ease;
+      background: #fff;
+      color: var(--text);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn-primary { background: var(--accent); color: #fff; box-shadow: 0 4px 12px rgba(42,127,101,0.24); }
+    .btn-secondary { background: #fff; color: var(--text); border: 1px solid var(--border); }
+    .btn-ghost { background: transparent; border: 1px dashed var(--border); color: var(--muted); box-shadow: none; }
+    .btn-danger { background: var(--danger); color: #fff; box-shadow: 0 4px 12px rgba(192,57,43,0.22); }
+    .btn-sm { padding: 6px 9px; font-size: 0.9rem; }
+    .container { padding: 16px; max-width: 1300px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+    .layout { display: grid; grid-template-columns: 1.4fr 1fr; gap: 12px; align-items: start; }
+    .card {
+      background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 14px;
+      padding: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
     }
-    .card-mini .label { color: var(--muted); font-size: 0.85rem; }
-    .card-mini .value { font-weight: 800; font-size: 1.1rem; margin-top: 4px; }
-    .toast {
-      position: fixed;
-      bottom: 18px;
-      right: 16px;
-      background: #1f5d4c;
-      color: #fff;
-      padding: 10px 14px;
-      border-radius: 10px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.2);
-      opacity: 0;
-      transform: translateY(8px);
-      transition: opacity 0.2s ease, transform 0.2s ease;
-      z-index: 30;
+    .section-title { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .section-title h2 { margin: 0; font-size: 1rem; }
+    .pill { background: #eef2f6; color: var(--muted); padding: 4px 10px; border-radius: 12px; font-size: 0.9rem; }
+    .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; }
+    .summary .stat { padding: 10px; border-radius: 12px; background: #f9fbfd; border: 1px solid var(--border); }
+    .stat-label { color: var(--muted); font-size: 0.9rem; }
+    .stat-value { font-weight: 800; font-size: 1.2rem; margin-top: 4px; }
+    .orders-list { display: grid; gap: 8px; }
+    .order-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px;
+      background: #fff;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: center;
     }
+    .order-main { display: grid; gap: 4px; }
+    .order-title { font-weight: 700; }
+    .order-meta { color: var(--muted); font-size: 0.9rem; display: flex; gap: 8px; flex-wrap: wrap; }
+    .order-actions { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+    .status { padding: 4px 8px; border-radius: 12px; font-weight: 700; font-size: 0.85rem; }
+    .status.pending { background: #e8f7f0; color: var(--accent); }
+    .status.served { background: #fff3d4; color: #a56400; }
+    .tabs { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .tab { background: #fff; border: 1px solid var(--border); border-radius: 18px; padding: 8px 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-weight: 700; }
+    .tab.active { background: var(--accent); color: #fff; border-color: var(--accent); box-shadow: 0 4px 12px rgba(42,127,101,0.25); }
+    .badge { background: rgba(0,0,0,0.05); border-radius: 10px; padding: 2px 8px; font-size: 0.85rem; }
+    .tab.active .badge { background: rgba(255,255,255,0.18); color: #fff; }
+    .table-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .chip { border: 1px solid var(--border); padding: 4px 10px; border-radius: 12px; background: #fff; color: var(--muted); cursor: pointer; font-size: 0.9rem; }
+    .chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .divider { height: 1px; background: var(--border); margin: 10px 0; }
+
+    /* Drawer */
+    .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.35); opacity: 0; pointer-events: none; transition: opacity 0.2s ease; z-index: 40; }
+    .drawer { position: fixed; top: 0; right: -360px; width: 320px; height: 100vh; background: #fff; box-shadow: -6px 0 16px rgba(0,0,0,0.1); transition: right 0.25s ease; z-index: 41; display: flex; flex-direction: column; }
+    .drawer.open { right: 0; }
+    .drawer-overlay.show { opacity: 1; pointer-events: auto; }
+    .drawer-header { padding: 14px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .drawer-body { padding: 14px; overflow-y: auto; display: grid; gap: 12px; flex: 1; }
+
+    /* Modal */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.35); display: none; align-items: center; justify-content: center; padding: 14px; z-index: 50; }
+    .modal-overlay.show { display: flex; }
+    .modal { background: #fff; border-radius: 14px; border: 1px solid var(--border); width: min(540px, 100%); max-height: 90vh; overflow: hidden; display: grid; grid-template-rows: auto 1fr auto; }
+    .modal-header { padding: 12px 14px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .modal-body { padding: 12px 14px; overflow-y: auto; display: grid; gap: 10px; }
+    .modal-footer { padding: 12px 14px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 8px; }
+    label { color: var(--muted); font-size: 0.95rem; display: block; margin-bottom: 4px; }
+    input, textarea, select { width: 100%; padding: 9px 10px; border: 1px solid var(--border); border-radius: 10px; font-size: 1rem; background: #fff; }
+    textarea { resize: vertical; min-height: 60px; }
+    .preset-list { display: grid; gap: 6px; max-height: 200px; overflow-y: auto; }
+    .preset-btn { text-align: left; border: 1px solid var(--border); border-radius: 12px; padding: 8px 10px; background: #fff; cursor: pointer; }
+    .preset-btn:hover { border-color: var(--accent); box-shadow: 0 3px 10px rgba(0,0,0,0.05); }
+    .toast { position: fixed; bottom: 16px; right: 14px; background: #1f5d4c; color: #fff; padding: 10px 14px; border-radius: 10px; box-shadow: 0 6px 18px rgba(0,0,0,0.2); opacity: 0; transform: translateY(10px); transition: opacity 0.2s ease, transform 0.2s ease; z-index: 60; }
     .toast.show { opacity: 1; transform: translateY(0); }
-    @media (max-width: 780px) {
-      header h1 { font-size: 1.05rem; }
-      .grid { grid-template-columns: 1fr; }
-      th, td { font-size: 0.92rem; }
-      .tabs { gap: 6px; }
+
+    @media (max-width: 980px) {
+      .layout { grid-template-columns: 1fr; }
+      .drawer { width: 92vw; right: -92vw; }
+      header h1 { font-size: 1rem; }
+    }
+    @media (max-width: 640px) {
+      header { flex-direction: column; align-items: flex-start; }
+      header .actions { width: 100%; justify-content: flex-end; }
+      .tab { width: 100%; justify-content: space-between; }
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>注文・提供管理（ローカル専用）</h1>
-    <p>プリセットで素早く入力し、タブで卓ごとに整理。外部通信なしで動作します。</p>
+    <div class="title">
+      <h1>注文・提供管理（ローカル専用）</h1>
+      <p>提供待ちが中心。iPad mini最適化・外部通信なし。</p>
+    </div>
+    <div class="actions">
+      <button class="btn btn-secondary btn-sm" id="renameTabBtn">タブ名変更</button>
+      <button class="btn btn-primary" id="menuBtn" aria-label="メニュー">☰ メニュー</button>
+    </div>
   </header>
+
   <div class="container">
     <div class="card">
       <div class="section-title">
-        <span>お客様タブ</span>
-        <div class="flex">
-          <button class="btn btn-secondary btn-sm" id="renameTabBtn">タブ名変更</button>
-          <button class="btn btn-primary btn-sm" id="newTabBtn">+ 追加</button>
+        <h2>卓タブ</h2>
+        <div class="table-actions">
+          <button class="btn btn-secondary btn-sm" id="newTabBtn">+ 追加</button>
+          <button class="btn btn-ghost btn-sm" id="resetStateBtn">状態リセット</button>
         </div>
       </div>
       <div class="tabs" id="tabList"></div>
     </div>
 
-    <div class="grid">
+    <div class="summary">
+      <div class="stat">
+        <div class="stat-label">提供待ち数</div>
+        <div class="stat-value" id="summaryPending">-</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">提供済数</div>
+        <div class="stat-value" id="summaryServed">-</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">提供待ち合計</div>
+        <div class="stat-value" id="summaryPendingTotal">-</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">全合計</div>
+        <div class="stat-value" id="summaryTotal">-</div>
+      </div>
+    </div>
+
+    <div class="layout">
       <div class="card">
         <div class="section-title">
-          <span>プリセット商品</span>
-          <span class="pill">アイテム数 <strong id="itemCount">0</strong></span>
+          <h2>提供待ち</h2>
+          <div class="table-actions">
+            <button class="btn btn-primary btn-sm" id="serveAllBtn">全て提供済みに</button>
+            <button class="btn btn-secondary btn-sm" id="openAddFromPending">新規追加</button>
+          </div>
         </div>
-        <div class="flex" style="margin-bottom:8px;">
-          <input id="itemSearch" placeholder="商品名 / ID / タグを検索" aria-label="商品検索" />
-          <select id="categoryFilter" aria-label="カテゴリ選択">
-            <option value="">すべてのカテゴリ</option>
-          </select>
-          <button class="btn btn-secondary btn-sm" id="resetFilters">リセット</button>
-        </div>
-        <div class="chips" id="tagFilter"></div>
-        <div class="grid" id="itemGrid" style="margin-top:10px;"></div>
+        <div class="orders-list" id="pendingList"></div>
+        <p class="pill" style="margin-top:8px;">提供待ちが主画面です。提供後は「提供済」へ移動します。</p>
       </div>
 
       <div class="card">
         <div class="section-title">
-          <span>注文入力</span>
-          <span class="pill">現在: <strong id="activeTabLabel">-</strong></span>
-        </div>
-        <div class="summary">
-          <div class="card-mini"><div class="label">注文合計</div><div class="value" id="summaryTotal">-</div></div>
-          <div class="card-mini"><div class="label">未提供</div><div class="value" id="summaryOpen">-</div></div>
-          <div class="card-mini"><div class="label">提供済</div><div class="value" id="summaryServed">-</div></div>
-        </div>
-        <div style="margin-top:8px; display:grid; gap:10px;">
-          <div>
-            <label for="qrInput">QR内容貼付（IDやメモをペーストして追加）</label>
-            <div class="flex" style="align-items:flex-end;">
-              <textarea id="qrInput" rows="2" placeholder="例）sku_003 x2 など"></textarea>
-              <button class="btn btn-primary btn-sm" id="qrAddBtn">追加</button>
-            </div>
-            <p class="note">カメラ不要。ペーストした文字列から商品ID/名称を検索し、見つからない場合は自由入力として登録します。</p>
+          <h2>提供済</h2>
+          <div class="table-actions">
+            <button class="btn btn-ghost btn-sm" id="clearServedBtn">提供済を削除</button>
           </div>
-          <div style="display:grid; gap:8px;">
-            <div class="flex">
-              <div style="flex:1;">
-                <label for="manualId">商品ID</label>
-                <input id="manualId" placeholder="sku_999" />
-              </div>
-              <div style="flex:2;">
-                <label for="manualName">商品名</label>
-                <input id="manualName" placeholder="自由入力" />
-              </div>
-            </div>
-            <div class="flex">
-              <div style="flex:1;">
-                <label for="manualPrice">単価 (円)</label>
-                <input id="manualPrice" type="number" min="0" step="10" placeholder="0" />
-              </div>
-              <div style="width:120px;">
-                <label for="manualQty">数量</label>
-                <input id="manualQty" type="number" min="1" step="1" value="1" />
-              </div>
-            </div>
-            <button class="btn btn-primary" id="manualAddBtn">自由入力で追加</button>
-          </div>
+        </div>
+        <div class="orders-list" id="servedList"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+  <aside class="drawer" id="drawer">
+    <div class="drawer-header">
+      <strong>メニュー</strong>
+      <button class="btn btn-secondary btn-sm" id="closeDrawer">閉じる</button>
+    </div>
+    <div class="drawer-body">
+      <div>
+        <div class="section-title" style="margin-bottom:4px;">
+          <h2 style="margin:0; font-size:0.95rem;">注文追加</h2>
+        </div>
+        <button class="btn btn-primary" id="openAddModal">+ 注文を追加</button>
+        <p class="pill" style="margin-top:6px;">追加操作はここから行います</p>
+      </div>
+      <div class="divider"></div>
+      <div>
+        <div class="section-title" style="margin-bottom:6px;">
+          <h2 style="margin:0; font-size:0.95rem;">クイック操作</h2>
+        </div>
+        <div class="orders-list" style="grid-template-columns:1fr;">
+          <button class="btn btn-secondary" id="serveAllMenu">全て提供済みにする</button>
+          <button class="btn btn-ghost" id="clearServedMenu">提供済を削除</button>
+          <button class="btn btn-danger" id="clearAllMenu">タブ内を全消去</button>
         </div>
       </div>
+    </div>
+  </aside>
 
-      <div class="card" style="grid-column:1/-1;">
-        <div class="section-title">
-          <span>注文一覧</span>
-          <div class="flex">
-            <button class="btn btn-secondary btn-sm" id="serveAllBtn">全て提供済みにする</button>
-            <button class="btn btn-ghost btn-sm" id="clearServedBtn">提供済みを削除</button>
-            <button class="btn btn-danger btn-sm" id="clearAllBtn">タブ内を全消去</button>
-          </div>
+  <div class="modal-overlay" id="addModal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="addModalTitle">
+      <div class="modal-header">
+        <h3 id="addModalTitle">注文を追加</h3>
+        <button class="btn btn-secondary btn-sm" data-close-add>閉じる</button>
+      </div>
+      <div class="modal-body">
+        <div>
+          <label for="presetSearch">プリセット検索</label>
+          <input id="presetSearch" placeholder="商品名 / ID / タグ" />
+          <div class="chips" id="categoryChips"></div>
+          <div class="preset-list" id="presetList"></div>
         </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>状態</th>
-                <th>商品</th>
-                <th>ID</th>
-                <th>数量</th>
-                <th>単価</th>
-                <th>小計</th>
-                <th>操作</th>
-              </tr>
-            </thead>
-            <tbody id="orderBody"></tbody>
-          </table>
+        <div class="divider"></div>
+        <div class="chips" id="addModeChips">
+          <button class="chip active" data-mode="manual">手入力</button>
+          <button class="chip" data-mode="qr">QR内容貼付</button>
         </div>
+        <div id="manualFields">
+          <label for="manualId">商品ID</label>
+          <input id="manualId" placeholder="sku_999" />
+          <label for="manualName">商品名</label>
+          <input id="manualName" placeholder="日本酒 名称" />
+          <label for="manualPrice">単価 (円)</label>
+          <input id="manualPrice" type="number" min="0" step="10" placeholder="0" />
+          <label for="manualQty">数量</label>
+          <input id="manualQty" type="number" min="1" step="1" value="1" />
+          <label for="manualNote">メモ</label>
+          <textarea id="manualNote" placeholder="温度や量など"></textarea>
+        </div>
+        <div id="qrFields" style="display:none;">
+          <label for="qrInput">QR内容を貼り付け（例: sku_003 x2）</label>
+          <textarea id="qrInput" rows="3"></textarea>
+          <p class="pill">カメラ不要。貼り付けた文字列から商品ID/名称を検索します。</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-close-add>キャンセル</button>
+        <button class="btn btn-primary" id="submitAdd">追加する</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="editModal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="editModalTitle">
+      <div class="modal-header">
+        <h3 id="editModalTitle">注文を編集</h3>
+        <button class="btn btn-secondary btn-sm" data-close-edit>閉じる</button>
+      </div>
+      <div class="modal-body">
+        <label for="editName">商品名</label>
+        <input id="editName" />
+        <label for="editId">商品ID</label>
+        <input id="editId" />
+        <label for="editPrice">単価 (円)</label>
+        <input id="editPrice" type="number" min="0" step="10" />
+        <label for="editQty">数量</label>
+        <input id="editQty" type="number" min="1" step="1" />
+        <label for="editNote">メモ</label>
+        <textarea id="editNote"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-close-edit>キャンセル</button>
+        <button class="btn btn-primary" id="saveEdit">更新</button>
       </div>
     </div>
   </div>
@@ -335,18 +322,14 @@
         { id: "sku_010", name: "雪の茅舎 山廃純米", price: 850, category: "純米", tags: ["umami"], is_active: true }
       ];
 
-      const keys = {
-        items: 'sake_items',
-        state: 'sake_state'
-      };
-
-      const el = id => document.getElementById(id);
+      const keys = { items: 'sake_items', state: 'sake_state' };
+      const el = (id) => document.getElementById(id);
       const toastEl = el('toast');
 
       function showToast(message) {
         toastEl.textContent = message;
         toastEl.classList.add('show');
-        setTimeout(() => toastEl.classList.remove('show'), 1700);
+        setTimeout(() => toastEl.classList.remove('show'), 1600);
       }
 
       function ensureItems() {
@@ -370,10 +353,7 @@
       }
 
       function loadState() {
-        const base = {
-          tabs: [ { id: crypto.randomUUID(), name: 'テーブル1', orders: [] } ],
-          activeTabId: null
-        };
+        const base = { tabs: [{ id: crypto.randomUUID(), name: 'テーブル1', orders: [] }], activeTabId: null };
         try {
           const saved = JSON.parse(localStorage.getItem(keys.state) || 'null');
           return saved && saved.tabs ? saved : base;
@@ -383,153 +363,183 @@
       }
 
       const state = loadState();
-      if (!state.activeTabId && state.tabs.length) {
-        state.activeTabId = state.tabs[0].id;
-      }
-
+      if (!state.activeTabId && state.tabs.length) state.activeTabId = state.tabs[0].id;
       let items = loadItems();
 
-      // UI Rendering
+      const drawer = el('drawer');
+      const drawerOverlay = el('drawerOverlay');
+      function openDrawer() {
+        drawer.classList.add('open');
+        drawerOverlay.classList.add('show');
+      }
+      function closeDrawer() {
+        drawer.classList.remove('open');
+        drawerOverlay.classList.remove('show');
+      }
+
+      const addModal = el('addModal');
+      const editModal = el('editModal');
+      const currentEdit = { uid: null };
+
+      function openAddModal(prefill) {
+        if (prefill) {
+          el('manualId').value = prefill.id || '';
+          el('manualName').value = prefill.name || '';
+          el('manualPrice').value = prefill.price || '';
+          el('manualQty').value = prefill.qty || 1;
+          el('manualNote').value = prefill.note || '';
+          setAddMode('manual');
+        }
+        addModal.classList.add('show');
+      }
+      function closeAddModal() {
+        addModal.classList.remove('show');
+      }
+      function openEditModal(order) {
+        currentEdit.uid = order.uid;
+        el('editName').value = order.name || '';
+        el('editId').value = order.itemId || '';
+        el('editPrice').value = order.price || 0;
+        el('editQty').value = order.qty || 1;
+        el('editNote').value = order.note || '';
+        editModal.classList.add('show');
+      }
+      function closeEditModal() { editModal.classList.remove('show'); currentEdit.uid = null; }
+
+      function getActiveTab() { return state.tabs.find(t => t.id === state.activeTabId); }
+
       function renderTabs() {
-        const tabList = el('tabList');
-        tabList.innerHTML = '';
+        const wrap = el('tabList');
+        wrap.innerHTML = '';
         state.tabs.forEach(tab => {
           const btn = document.createElement('button');
           btn.className = 'tab' + (tab.id === state.activeTabId ? ' active' : '');
-          btn.innerHTML = `<span>${tab.name}</span><span class="badge">${tab.orders.filter(o => o.status === 'ordered').length}</span>`;
+          const pendingCount = tab.orders.filter(o => o.status === 'pending').length;
+          btn.innerHTML = `<span>${tab.name}</span><span class="badge">${pendingCount}</span>`;
           btn.onclick = () => { state.activeTabId = tab.id; persist(); renderAll(); };
-          tabList.appendChild(btn);
+          wrap.appendChild(btn);
         });
       }
 
-      function collectCategories() {
-        const cats = Array.from(new Set(items.map(i => i.category).filter(Boolean)));
-        return cats;
-      }
-
-      function renderFilters() {
-        const select = el('categoryFilter');
-        const cats = collectCategories();
-        select.innerHTML = '<option value="">すべてのカテゴリ</option>' + cats.map(c => `<option value="${c}">${c}</option>`).join('');
-
-        const tags = Array.from(new Set(items.flatMap(i => i.tags || [])));
-        const tagWrap = el('tagFilter');
-        tagWrap.innerHTML = '';
-        tags.forEach(tag => {
-          const chip = document.createElement('button');
-          chip.className = 'chip';
-          chip.textContent = `#${tag}`;
-          chip.dataset.tag = tag;
-          chip.onclick = () => {
-            const active = chip.classList.toggle('active');
-            if (!active) return renderItems();
-            Array.from(tagWrap.querySelectorAll('.chip')).forEach(c => { if (c !== chip) c.classList.remove('active'); });
-            renderItems();
-          };
-          tagWrap.appendChild(chip);
-        });
-      }
-
-      function renderItems() {
-        const search = el('itemSearch').value.trim().toLowerCase();
-        const cat = el('categoryFilter').value;
-        const tag = (Array.from(el('tagFilter').querySelectorAll('.chip.active'))[0] || {}).dataset?.tag;
-        const grid = el('itemGrid');
-        grid.innerHTML = '';
-        const filtered = items.filter(i => {
-          if (!i.is_active) return false;
-          const matchesSearch = !search || [i.name, i.id, (i.tags||[]).join(' ')].some(v => String(v).toLowerCase().includes(search));
-          const matchesCat = !cat || i.category === cat;
-          const matchesTag = !tag || (i.tags || []).includes(tag);
-          return matchesSearch && matchesCat && matchesTag;
-        });
-        filtered.forEach(item => {
-          const btn = document.createElement('button');
-          btn.className = 'item-btn';
-          btn.innerHTML = `<div class="item-name">${item.name}</div><div class="item-meta">${item.category || '未分類'} ｜ ${item.id} ｜ ￥${item.price}</div>`;
-          btn.onclick = () => addOrderFromItem(item, 1);
-          grid.appendChild(btn);
-        });
-        el('itemCount').textContent = filtered.length;
-      }
-
-      function getActiveTab() {
-        return state.tabs.find(t => t.id === state.activeTabId);
+      function renderSummary() {
+        const tab = getActiveTab();
+        if (!tab) return;
+        const totals = tab.orders.reduce((acc, o) => {
+          const sub = (o.price || 0) * o.qty;
+          if (o.status === 'pending') { acc.pending += sub; acc.pendingCount += o.qty; acc.pendingItems += 1; }
+          else { acc.served += sub; acc.servedCount += o.qty; acc.servedItems += 1; }
+          acc.total += sub;
+          return acc;
+        }, { pending:0, served:0, total:0, pendingCount:0, servedCount:0, pendingItems:0, servedItems:0 });
+        el('summaryPending').textContent = `${totals.pendingItems}件 (${totals.pendingCount}杯)`;
+        el('summaryServed').textContent = `${totals.servedItems}件 (${totals.servedCount}杯)`;
+        el('summaryPendingTotal').textContent = `￥${totals.pending.toLocaleString()}`;
+        el('summaryTotal').textContent = `￥${totals.total.toLocaleString()}`;
       }
 
       function renderOrders() {
         const tab = getActiveTab();
-        const body = el('orderBody');
-        body.innerHTML = '';
         if (!tab) return;
+        const pending = tab.orders.filter(o => o.status === 'pending').sort((a,b) => a.timestamp - b.timestamp);
+        const served = tab.orders.filter(o => o.status === 'served').sort((a,b) => b.timestamp - a.timestamp);
+        const pendingWrap = el('pendingList');
+        const servedWrap = el('servedList');
+        pendingWrap.innerHTML = '';
+        servedWrap.innerHTML = '';
 
-        const totals = tab.orders.reduce((acc, o) => {
-          const subtotal = (o.price || 0) * o.qty;
-          if (o.status === 'ordered') acc.open += subtotal;
-          else acc.served += subtotal;
-          acc.total += subtotal;
-          return acc;
-        }, { total:0, open:0, served:0 });
-        el('summaryTotal').textContent = `￥${totals.total.toLocaleString()}`;
-        el('summaryOpen').textContent = `￥${totals.open.toLocaleString()}`;
-        el('summaryServed').textContent = `￥${totals.served.toLocaleString()}`;
-        el('activeTabLabel').textContent = tab.name;
-
-        tab.orders.forEach(order => {
-          const tr = document.createElement('tr');
-          const subtotal = (order.price || 0) * order.qty;
-          tr.innerHTML = `
-            <td><span class="status ${order.status}">${order.status === 'ordered' ? '未提供' : '提供済'}</span></td>
-            <td><div>${order.name}</div><div class="note">${order.note || ''}</div></td>
-            <td>${order.itemId || '-'}</td>
-            <td>
-              <div class="flex" style="gap:4px;">
-                <button class="btn btn-secondary btn-sm" aria-label="減らす">-</button>
-                <span style="min-width:24px; text-align:center;">${order.qty}</span>
-                <button class="btn btn-secondary btn-sm" aria-label="増やす">+</button>
+        const createCard = (order) => {
+          const card = document.createElement('div');
+          card.className = 'order-card';
+          card.innerHTML = `
+            <div class="order-main">
+              <div class="order-title">${order.name}</div>
+              <div class="order-meta">
+                <span>ID: ${order.itemId || '-'}</span>
+                <span>数量: ${order.qty}</span>
+                <span>単価: ￥${(order.price || 0).toLocaleString()}</span>
+                <span>小計: ￥${((order.price || 0) * order.qty).toLocaleString()}</span>
+                <span class="status ${order.status}">${order.status === 'pending' ? '未提供' : '提供済'}</span>
               </div>
-            </td>
-            <td>￥${(order.price || 0).toLocaleString()}</td>
-            <td>￥${subtotal.toLocaleString()}</td>
-            <td class="flex" style="gap:6px;">
-              <button class="btn btn-primary btn-sm">${order.status === 'ordered' ? '提供済にする' : '戻す'}</button>
-              <button class="btn btn-secondary btn-sm">削除</button>
-            </td>`;
-          const [minusBtn, plusBtn] = tr.querySelectorAll('button.btn-secondary.btn-sm');
-          minusBtn.onclick = () => updateQty(order.uid, Math.max(1, order.qty - 1));
-          plusBtn.onclick = () => updateQty(order.uid, order.qty + 1);
-          const actionButtons = tr.querySelectorAll('td:last-child button');
-          actionButtons[0].onclick = () => toggleStatus(order.uid);
-          actionButtons[1].onclick = () => removeOrder(order.uid);
-          body.appendChild(tr);
+              ${order.note ? `<div class="order-meta">メモ: ${order.note}</div>` : ''}
+            </div>
+            <div class="order-actions">
+              <button class="btn btn-secondary btn-sm" data-action="edit">編集</button>
+              <button class="btn btn-primary btn-sm" data-action="toggle">${order.status === 'pending' ? '提供済へ' : '未提供へ'}</button>
+              <button class="btn btn-danger btn-sm" data-action="delete">削除</button>
+            </div>`;
+          const [editBtn, toggleBtn, deleteBtn] = card.querySelectorAll('button');
+          editBtn.onclick = () => openEditModal(order);
+          toggleBtn.onclick = () => toggleStatus(order.uid);
+          deleteBtn.onclick = () => removeOrder(order.uid);
+          return card;
+        };
+
+        pending.forEach(o => pendingWrap.appendChild(createCard(o)));
+        served.forEach(o => servedWrap.appendChild(createCard(o)));
+        if (!pending.length) pendingWrap.innerHTML = '<p class="pill">提供待ちはありません。メニューから追加してください。</p>';
+        if (!served.length) servedWrap.innerHTML = '<p class="pill">提供済はまだありません。</p>';
+      }
+
+      function renderPresetList() {
+        const search = el('presetSearch').value.trim().toLowerCase();
+        const activeCat = (el('categoryChips').querySelector('.chip.active') || {}).dataset?.cat || '';
+        const list = el('presetList');
+        list.innerHTML = '';
+        items.filter(i => i.is_active).filter(i => {
+          const matchesSearch = !search || [i.name, i.id, (i.tags||[]).join(' ')].some(v => String(v).toLowerCase().includes(search));
+          const matchesCat = !activeCat || i.category === activeCat;
+          return matchesSearch && matchesCat;
+        }).forEach(item => {
+          const btn = document.createElement('button');
+          btn.className = 'preset-btn';
+          btn.innerHTML = `<div style="font-weight:700;">${item.name}</div><div class="order-meta">${item.category || '未分類'} ｜ ${item.id} ｜ ￥${item.price}</div>`;
+          btn.onclick = () => openAddModal({ id: item.id, name: item.name, price: item.price, qty: 1 });
+          list.appendChild(btn);
         });
       }
 
-      function persist() {
-        saveState(state);
+      function renderCategoryChips() {
+        const wrap = el('categoryChips');
+        wrap.innerHTML = '';
+        const cats = Array.from(new Set(items.map(i => i.category).filter(Boolean)));
+        const all = document.createElement('button');
+        all.className = 'chip active';
+        all.dataset.cat = '';
+        all.textContent = 'すべて';
+        all.onclick = () => { Array.from(wrap.querySelectorAll('.chip')).forEach(c => c.classList.remove('active')); all.classList.add('active'); renderPresetList(); };
+        wrap.appendChild(all);
+        cats.forEach(cat => {
+          const chip = document.createElement('button');
+          chip.className = 'chip';
+          chip.dataset.cat = cat;
+          chip.textContent = cat;
+          chip.onclick = () => {
+            Array.from(wrap.querySelectorAll('.chip')).forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            renderPresetList();
+          };
+          wrap.appendChild(chip);
+        });
       }
 
-      function addOrderFromItem(item, qty = 1, note = '') {
+      function persist() { saveState(state); }
+
+      function addOrder(orderData) {
         const tab = getActiveTab();
         if (!tab) return;
-        const existing = tab.orders.find(o => o.itemId === item.id && o.status === 'ordered' && o.note === note);
-        if (existing) {
-          existing.qty += qty;
-        } else {
+        const existing = tab.orders.find(o => o.itemId === orderData.itemId && o.status === 'pending' && o.note === orderData.note && o.name === orderData.name);
+        if (existing) { existing.qty += orderData.qty; }
+        else {
           tab.orders.push({
             uid: crypto.randomUUID(),
-            itemId: item.id,
-            name: item.name,
-            price: item.price,
-            qty,
-            status: 'ordered',
-            note,
-            timestamp: Date.now()
+            ...orderData,
+            timestamp: Date.now(),
+            status: 'pending'
           });
         }
         persist();
-        renderOrders();
-        showToast(`${item.name} を追加しました`);
+        renderAll();
+        showToast(`${orderData.name} を追加しました`);
       }
 
       function addManualOrder() {
@@ -537,11 +547,14 @@
         const name = el('manualName').value.trim() || '自由入力';
         const price = Number(el('manualPrice').value) || 0;
         const qty = Math.max(1, Number(el('manualQty').value) || 1);
-        addOrderFromItem({ id, name, price, category: '自由入力', tags: [], is_active: true }, qty);
-        el('manualName').value = '';
+        const note = el('manualNote').value.trim();
+        addOrder({ itemId: id, name, price, qty, note });
         el('manualId').value = '';
+        el('manualName').value = '';
         el('manualPrice').value = '';
         el('manualQty').value = 1;
+        el('manualNote').value = '';
+        closeAddModal();
       }
 
       function parseQrInput(text) {
@@ -552,26 +565,16 @@
         const cleaned = raw.replace(/x\d+$/i, '').trim();
         const found = items.find(i => i.id === cleaned || i.name === cleaned);
         if (found) return { item: found, qty };
-        return { item: { id: cleaned || 'note', name: cleaned || 'QR入力', price: 0, tags: [], category: 'QR' }, qty };
+        return { item: { id: cleaned || 'note', name: cleaned || 'QR入力', price: 0 }, qty };
       }
 
       function addFromQr() {
         const text = el('qrInput').value;
         const result = parseQrInput(text);
         if (!result) return;
-        addOrderFromItem(result.item, result.qty, 'QR入力');
+        addOrder({ itemId: result.item.id, name: result.item.name, price: result.item.price || 0, qty: result.qty, note: 'QR入力' });
         el('qrInput').value = '';
-      }
-
-      function updateQty(uid, newQty) {
-        const tab = getActiveTab();
-        if (!tab) return;
-        const target = tab.orders.find(o => o.uid === uid);
-        if (target) {
-          target.qty = newQty;
-          persist();
-          renderOrders();
-        }
+        closeAddModal();
       }
 
       function toggleStatus(uid) {
@@ -579,9 +582,10 @@
         if (!tab) return;
         const target = tab.orders.find(o => o.uid === uid);
         if (target) {
-          target.status = target.status === 'ordered' ? 'served' : 'ordered';
+          target.status = target.status === 'pending' ? 'served' : 'pending';
+          target.timestamp = Date.now();
           persist();
-          renderOrders();
+          renderAll();
         }
       }
 
@@ -590,15 +594,15 @@
         if (!tab) return;
         tab.orders = tab.orders.filter(o => o.uid !== uid);
         persist();
-        renderOrders();
+        renderAll();
       }
 
       function serveAll() {
         const tab = getActiveTab();
         if (!tab) return;
-        tab.orders.forEach(o => o.status = 'served');
+        tab.orders.forEach(o => { o.status = 'served'; o.timestamp = Date.now(); });
         persist();
-        renderOrders();
+        renderAll();
       }
 
       function clearServed() {
@@ -606,7 +610,7 @@
         if (!tab) return;
         tab.orders = tab.orders.filter(o => o.status !== 'served');
         persist();
-        renderOrders();
+        renderAll();
       }
 
       function clearAll() {
@@ -615,7 +619,7 @@
         if (!confirm('このタブの注文を全て削除しますか？')) return;
         tab.orders = [];
         persist();
-        renderOrders();
+        renderAll();
       }
 
       function newTab() {
@@ -625,8 +629,7 @@
         state.tabs.push(tab);
         state.activeTabId = tab.id;
         persist();
-        renderTabs();
-        renderOrders();
+        renderAll();
       }
 
       function renameTab() {
@@ -636,39 +639,85 @@
         if (!name) return;
         tab.name = name;
         persist();
+        renderAll();
+      }
+
+      function resetState() {
+        if (!confirm('保存された状態を初期化しますか？')) return;
+        localStorage.removeItem(keys.state);
+        state.tabs = [{ id: crypto.randomUUID(), name: 'テーブル1', orders: [] }];
+        state.activeTabId = state.tabs[0].id;
+        persist();
+        renderAll();
+      }
+
+      function saveEdit() {
+        const tab = getActiveTab();
+        if (!tab || !currentEdit.uid) return;
+        const target = tab.orders.find(o => o.uid === currentEdit.uid);
+        if (!target) return;
+        target.name = el('editName').value.trim() || target.name;
+        target.itemId = el('editId').value.trim();
+        target.price = Number(el('editPrice').value) || 0;
+        target.qty = Math.max(1, Number(el('editQty').value) || 1);
+        target.note = el('editNote').value.trim();
+        persist();
+        renderAll();
+        closeEditModal();
+      }
+
+      function setAddMode(mode) {
+        const chips = el('addModeChips').querySelectorAll('.chip');
+        chips.forEach(c => c.classList.toggle('active', c.dataset.mode === mode));
+        el('manualFields').style.display = mode === 'manual' ? '' : 'none';
+        el('qrFields').style.display = mode === 'qr' ? '' : 'none';
+      }
+
+      function bindEvents() {
+        el('menuBtn').onclick = openDrawer;
+        el('closeDrawer').onclick = closeDrawer;
+        drawerOverlay.onclick = closeDrawer;
+        el('openAddModal').onclick = () => { closeDrawer(); openAddModal(); };
+        el('openAddFromPending').onclick = () => openAddModal();
+        el('serveAllBtn').onclick = serveAll;
+        el('serveAllMenu').onclick = () => { serveAll(); closeDrawer(); };
+        el('clearServedBtn').onclick = clearServed;
+        el('clearServedMenu').onclick = () => { clearServed(); closeDrawer(); };
+        el('clearAllMenu').onclick = () => { clearAll(); closeDrawer(); };
+        el('resetStateBtn').onclick = resetState;
+        el('newTabBtn').onclick = newTab;
+        el('renameTabBtn').onclick = renameTab;
+        el('submitAdd').onclick = () => {
+          const mode = (el('addModeChips').querySelector('.chip.active') || {}).dataset?.mode;
+          if (mode === 'qr') return addFromQr();
+          return addManualOrder();
+        };
+        addModal.querySelectorAll('[data-close-add]').forEach(btn => btn.onclick = closeAddModal);
+        editModal.querySelectorAll('[data-close-edit]').forEach(btn => btn.onclick = closeEditModal);
+        el('saveEdit').onclick = saveEdit;
+        el('presetSearch').oninput = renderPresetList;
+        el('qrInput').onkeydown = (e) => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) addFromQr(); };
+        el('addModeChips').querySelectorAll('.chip').forEach(chip => {
+          chip.onclick = () => setAddMode(chip.dataset.mode);
+        });
+      }
+
+      function init() {
         renderTabs();
+        renderSummary();
+        renderOrders();
+        renderCategoryChips();
+        renderPresetList();
+      }
+
+      function renderAll() {
+        renderTabs();
+        renderSummary();
         renderOrders();
       }
 
-      function addDefaultTabIfEmpty() {
-        if (!state.tabs.length) {
-          state.tabs.push({ id: crypto.randomUUID(), name: 'テーブル1', orders: [] });
-          state.activeTabId = state.tabs[0].id;
-        }
-      }
-
-      // Events
-      el('resetFilters').onclick = () => {
-        el('itemSearch').value = '';
-        el('categoryFilter').value = '';
-        Array.from(el('tagFilter').querySelectorAll('.chip')).forEach(c => c.classList.remove('active'));
-        renderItems();
-      };
-      el('itemSearch').oninput = renderItems;
-      el('categoryFilter').onchange = renderItems;
-      el('manualAddBtn').onclick = addManualOrder;
-      el('qrAddBtn').onclick = addFromQr;
-      el('serveAllBtn').onclick = serveAll;
-      el('clearServedBtn').onclick = clearServed;
-      el('clearAllBtn').onclick = clearAll;
-      el('newTabBtn').onclick = newTab;
-      el('renameTabBtn').onclick = renameTab;
-
-      addDefaultTabIfEmpty();
-      renderTabs();
-      renderFilters();
-      renderItems();
-      renderOrders();
+      bindEvents();
+      init();
     })();
   </script>
 </body>
