@@ -64,6 +64,29 @@
         font-size: 1.05rem;
       }
 
+      header .audience {
+        margin-top: 18px;
+        padding: 6px 16px;
+        border-radius: 999px;
+        background: #f7f3ec;
+        border: 1px solid var(--soft);
+        color: var(--accent);
+        font-size: 0.95rem;
+        letter-spacing: 0.04em;
+        display: inline-flex;
+        gap: 8px;
+        align-items: center;
+      }
+
+      header .audience::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #b7c4cd;
+        display: inline-block;
+      }
+
       section {
         margin-top: 56px;
         padding: 40px 48px;
@@ -149,6 +172,12 @@
         letter-spacing: 0.04em;
       }
 
+      .note {
+        margin-top: 10px;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
       .cta:hover {
         background: var(--accent);
         color: #ffffff;
@@ -176,6 +205,7 @@
           <span>作って終わらない</span>
           <span>運用前提の設計</span>
         </div>
+        <div class="audience">小規模飲食店・開業者に合わせた伴走支援</div>
       </header>
 
       <section>
@@ -183,6 +213,7 @@
         <div class="stack">
           <p>内装・仕入れ・人手・手続き…</p>
           <p class="emphasis">WebやITは<br />後回しになりがちです。</p>
+          <p class="note">焦らなくても大丈夫。まずは状況整理から一緒に進めます。</p>
         </div>
       </section>
 
@@ -193,6 +224,7 @@
           <li>高いWebサイトで失敗したくない</li>
           <li>開業後、更新や管理ができるか不安</li>
         </ul>
+        <p class="note">同じ悩みを抱えた小規模飲食店様が多くいらっしゃいます。</p>
       </section>
 
       <section>
@@ -205,11 +237,12 @@
             を最優先にします。
           </p>
         </div>
+        <p class="note">小さな店舗が安心して運用できる規模感に合わせます。</p>
       </section>
 
       <section>
         <h2>提供するサービス</h2>
-        <p>小規模飲食店・開業者向け</p>
+        <p class="emphasis">小規模飲食店・開業者向け</p>
         <div class="cards">
           <article class="card">
             <h3>Webサイト × AI 業務効率化</h3>
@@ -224,6 +257,7 @@
             <p>開業後も安心して相談できる体制</p>
           </article>
         </div>
+        <p class="note">過剰な提案ではなく、必要な分だけをご提案します。</p>
       </section>
 
       <section class="closing">
@@ -234,6 +268,7 @@
           <p class="emphasis">無料相談対応</p>
           <p class="highlight">開業後に<br />「やっておいて良かった」<br />と思える設計を。</p>
         </div>
+        <p class="note">準備の状況に合わせて、無理のない進め方をご案内します。</p>
         <a class="cta" href="#">無料相談の予約</a>
       </section>
     </main>
