@@ -1,0 +1,2002 @@
+[
+  {
+    "id": "card-001",
+    "categoryId": "greeting",
+    "tags": [
+      "greeting"
+    ],
+    "text": {
+      "ja": "こんにちは",
+      "en": "Hello",
+      "zh": "你好",
+      "ko": "안녕하세요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-002",
+    "categoryId": "greeting",
+    "tags": [
+      "greeting"
+    ],
+    "text": {
+      "ja": "おはようございます",
+      "en": "Good morning",
+      "zh": "早上好",
+      "ko": "좋은 아침이에요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-003",
+    "categoryId": "greeting",
+    "tags": [
+      "greeting"
+    ],
+    "text": {
+      "ja": "こんばんは",
+      "en": "Good evening",
+      "zh": "晚上好",
+      "ko": "좋은 저녁이에요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-004",
+    "categoryId": "greeting",
+    "tags": [
+      "greeting"
+    ],
+    "text": {
+      "ja": "はじめまして",
+      "en": "Nice to meet you",
+      "zh": "很高兴认识你",
+      "ko": "처음 뵙겠습니다"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-005",
+    "categoryId": "greeting",
+    "tags": [
+      "greeting"
+    ],
+    "text": {
+      "ja": "さようなら",
+      "en": "Goodbye",
+      "zh": "再见",
+      "ko": "안녕히 가세요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-006",
+    "categoryId": "daily",
+    "tags": [
+      "daily"
+    ],
+    "text": {
+      "ja": "元気ですか",
+      "en": "How are you?",
+      "zh": "你好吗？",
+      "ko": "잘 지내세요?"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-007",
+    "categoryId": "daily",
+    "tags": [
+      "daily"
+    ],
+    "text": {
+      "ja": "はい、元気です",
+      "en": "I am fine",
+      "zh": "我很好",
+      "ko": "네, 잘 지내요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-008",
+    "categoryId": "daily",
+    "tags": [
+      "daily"
+    ],
+    "text": {
+      "ja": "少し疲れました",
+      "en": "I am a bit tired",
+      "zh": "我有点累",
+      "ko": "조금 피곤해요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-009",
+    "categoryId": "daily",
+    "tags": [
+      "daily"
+    ],
+    "text": {
+      "ja": "もう一度言ってください",
+      "en": "Please say it again",
+      "zh": "请再说一遍",
+      "ko": "다시 말씀해 주세요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-010",
+    "categoryId": "daily",
+    "tags": [
+      "daily"
+    ],
+    "text": {
+      "ja": "ゆっくり話してください",
+      "en": "Please speak slowly",
+      "zh": "请慢点说",
+      "ko": "천천히 말해 주세요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-011",
+    "categoryId": "daily",
+    "tags": [
+      "daily"
+    ],
+    "text": {
+      "ja": "大丈夫です",
+      "en": "It is okay",
+      "zh": "没关系",
+      "ko": "괜찮아요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-012",
+    "categoryId": "daily",
+    "tags": [
+      "daily"
+    ],
+    "text": {
+      "ja": "わかりました",
+      "en": "I understand",
+      "zh": "我明白了",
+      "ko": "알겠습니다"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-013",
+    "categoryId": "daily",
+    "tags": [
+      "daily"
+    ],
+    "text": {
+      "ja": "わかりません",
+      "en": "I do not understand",
+      "zh": "我不明白",
+      "ko": "잘 모르겠습니다"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-014",
+    "categoryId": "daily",
+    "tags": [
+      "daily"
+    ],
+    "text": {
+      "ja": "英語は話せますか",
+      "en": "Do you speak English?",
+      "zh": "你会说英语吗？",
+      "ko": "영어를 할 수 있나요?"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-015",
+    "categoryId": "daily",
+    "tags": [
+      "daily"
+    ],
+    "text": {
+      "ja": "日本語が少しできます",
+      "en": "I speak a little Japanese",
+      "zh": "我会一点日语",
+      "ko": "일본어를 조금 할 수 있어요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-016",
+    "categoryId": "thanks",
+    "tags": [
+      "thanks"
+    ],
+    "text": {
+      "ja": "ありがとうございます",
+      "en": "Thank you",
+      "zh": "谢谢",
+      "ko": "감사합니다"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-017",
+    "categoryId": "thanks",
+    "tags": [
+      "thanks"
+    ],
+    "text": {
+      "ja": "助かりました",
+      "en": "That helped a lot",
+      "zh": "帮了大忙",
+      "ko": "큰 도움이 되었어요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-018",
+    "categoryId": "thanks",
+    "tags": [
+      "thanks"
+    ],
+    "text": {
+      "ja": "親切にしてくれてありがとう",
+      "en": "Thank you for your kindness",
+      "zh": "谢谢你的好意",
+      "ko": "친절하게 대해줘서 고마워요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-019",
+    "categoryId": "thanks",
+    "tags": [
+      "thanks"
+    ],
+    "text": {
+      "ja": "すみません、助けてくれて",
+      "en": "Thanks for helping",
+      "zh": "谢谢帮忙",
+      "ko": "도와줘서 고마워요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-020",
+    "categoryId": "apology",
+    "tags": [
+      "apology"
+    ],
+    "text": {
+      "ja": "すみません",
+      "en": "Excuse me",
+      "zh": "不好意思",
+      "ko": "실례합니다"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-021",
+    "categoryId": "apology",
+    "tags": [
+      "apology"
+    ],
+    "text": {
+      "ja": "申し訳ありません",
+      "en": "I am sorry",
+      "zh": "非常抱歉",
+      "ko": "죄송합니다"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-022",
+    "categoryId": "apology",
+    "tags": [
+      "apology"
+    ],
+    "text": {
+      "ja": "遅れてすみません",
+      "en": "Sorry for being late",
+      "zh": "抱歉迟到了",
+      "ko": "늦어서 죄송합니다"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-023",
+    "categoryId": "apology",
+    "tags": [
+      "apology"
+    ],
+    "text": {
+      "ja": "間違えました",
+      "en": "I made a mistake",
+      "zh": "我弄错了",
+      "ko": "제가 잘못했어요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-024",
+    "categoryId": "directions",
+    "tags": [
+      "directions"
+    ],
+    "text": {
+      "ja": "駅はどこですか",
+      "en": "Where is the station?",
+      "zh": "车站在哪里？",
+      "ko": "역이 어디예요?"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-025",
+    "categoryId": "directions",
+    "tags": [
+      "directions"
+    ],
+    "text": {
+      "ja": "この道で合っていますか",
+      "en": "Is this the right way?",
+      "zh": "这条路对吗？",
+      "ko": "이 길이 맞나요?"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-026",
+    "categoryId": "directions",
+    "tags": [
+      "directions"
+    ],
+    "text": {
+      "ja": "まっすぐ行ってください",
+      "en": "Please go straight",
+      "zh": "请直走",
+      "ko": "곧장 가세요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-027",
+    "categoryId": "directions",
+    "tags": [
+      "directions"
+    ],
+    "text": {
+      "ja": "右に曲がってください",
+      "en": "Please turn right",
+      "zh": "请右转",
+      "ko": "오른쪽으로 도세요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-028",
+    "categoryId": "directions",
+    "tags": [
+      "directions"
+    ],
+    "text": {
+      "ja": "左に曲がってください",
+      "en": "Please turn left",
+      "zh": "请左转",
+      "ko": "왼쪽으로 도세요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-029",
+    "categoryId": "directions",
+    "tags": [
+      "directions"
+    ],
+    "text": {
+      "ja": "ここで降ります",
+      "en": "I will get off here",
+      "zh": "我在这里下车",
+      "ko": "여기서 내릴게요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-030",
+    "categoryId": "shopping",
+    "tags": [
+      "shopping"
+    ],
+    "text": {
+      "ja": "これはいくらですか",
+      "en": "How much is this?",
+      "zh": "这个多少钱？",
+      "ko": "이거 얼마예요?"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-031",
+    "categoryId": "shopping",
+    "tags": [
+      "shopping"
+    ],
+    "text": {
+      "ja": "試着できますか",
+      "en": "Can I try it on?",
+      "zh": "可以试穿吗？",
+      "ko": "입어봐도 되나요?"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-032",
+    "categoryId": "shopping",
+    "tags": [
+      "shopping"
+    ],
+    "text": {
+      "ja": "別の色はありますか",
+      "en": "Do you have another color?",
+      "zh": "有别的颜色吗？",
+      "ko": "다른 색 있나요?"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-033",
+    "categoryId": "shopping",
+    "tags": [
+      "shopping"
+    ],
+    "text": {
+      "ja": "小さいサイズはありますか",
+      "en": "Do you have a smaller size?",
+      "zh": "有小号吗？",
+      "ko": "더 작은 사이즈 있나요?"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-034",
+    "categoryId": "shopping",
+    "tags": [
+      "shopping"
+    ],
+    "text": {
+      "ja": "これをください",
+      "en": "I will take this",
+      "zh": "我要这个",
+      "ko": "이걸로 주세요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-035",
+    "categoryId": "shopping",
+    "tags": [
+      "shopping"
+    ],
+    "text": {
+      "ja": "カードで払えますか",
+      "en": "Can I pay by card?",
+      "zh": "可以刷卡吗？",
+      "ko": "카드로 결제할 수 있나요?"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-036",
+    "categoryId": "shopping",
+    "tags": [
+      "shopping"
+    ],
+    "text": {
+      "ja": "免税はできますか",
+      "en": "Is tax-free available?",
+      "zh": "可以免税吗？",
+      "ko": "면세 되나요?"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-037",
+    "categoryId": "dining",
+    "tags": [
+      "dining"
+    ],
+    "text": {
+      "ja": "おすすめはありますか",
+      "en": "Do you have a recommendation?",
+      "zh": "有什么推荐吗？",
+      "ko": "추천이 있나요?"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-038",
+    "categoryId": "dining",
+    "tags": [
+      "dining"
+    ],
+    "text": {
+      "ja": "メニューをください",
+      "en": "Can I have a menu?",
+      "zh": "请给我菜单",
+      "ko": "메뉴 주세요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-039",
+    "categoryId": "dining",
+    "tags": [
+      "dining"
+    ],
+    "text": {
+      "ja": "これを注文します",
+      "en": "I will order this",
+      "zh": "我要点这个",
+      "ko": "이걸 주문할게요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-040",
+    "categoryId": "dining",
+    "tags": [
+      "dining"
+    ],
+    "text": {
+      "ja": "辛くないですか",
+      "en": "Is it not spicy?",
+      "zh": "不辣吗？",
+      "ko": "안 맵나요?"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-041",
+    "categoryId": "dining",
+    "tags": [
+      "dining"
+    ],
+    "text": {
+      "ja": "水をください",
+      "en": "Water, please",
+      "zh": "请给我水",
+      "ko": "물 주세요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-042",
+    "categoryId": "dining",
+    "tags": [
+      "dining"
+    ],
+    "text": {
+      "ja": "お会計お願いします",
+      "en": "Check, please",
+      "zh": "请结账",
+      "ko": "계산 부탁드립니다"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-043",
+    "categoryId": "transport",
+    "tags": [
+      "transport"
+    ],
+    "text": {
+      "ja": "次の電車は何時ですか",
+      "en": "When is the next train?",
+      "zh": "下一班电车几点？",
+      "ko": "다음 열차는 언제예요?"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-044",
+    "categoryId": "transport",
+    "tags": [
+      "transport"
+    ],
+    "text": {
+      "ja": "このバスは空港に行きますか",
+      "en": "Does this bus go to the airport?",
+      "zh": "这辆巴士去机场吗？",
+      "ko": "이 버스는 공항에 가나요?"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-045",
+    "categoryId": "transport",
+    "tags": [
+      "transport"
+    ],
+    "text": {
+      "ja": "切符を買いたいです",
+      "en": "I want to buy a ticket",
+      "zh": "我想买票",
+      "ko": "표를 사고 싶어요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-046",
+    "categoryId": "transport",
+    "tags": [
+      "transport"
+    ],
+    "text": {
+      "ja": "乗り換えはどこですか",
+      "en": "Where do I transfer?",
+      "zh": "在哪里换乘？",
+      "ko": "환승은 어디에서 하나요?"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-047",
+    "categoryId": "transport",
+    "tags": [
+      "transport"
+    ],
+    "text": {
+      "ja": "タクシーを呼んでください",
+      "en": "Please call a taxi",
+      "zh": "请帮我叫出租车",
+      "ko": "택시를 불러 주세요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-048",
+    "categoryId": "hotel",
+    "tags": [
+      "hotel"
+    ],
+    "text": {
+      "ja": "チェックインしたいです",
+      "en": "I would like to check in",
+      "zh": "我想办理入住",
+      "ko": "체크인하고 싶어요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-049",
+    "categoryId": "hotel",
+    "tags": [
+      "hotel"
+    ],
+    "text": {
+      "ja": "チェックアウトは何時ですか",
+      "en": "What time is check-out?",
+      "zh": "退房时间是几点？",
+      "ko": "체크아웃 시간은 언제인가요?"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-050",
+    "categoryId": "hotel",
+    "tags": [
+      "hotel"
+    ],
+    "text": {
+      "ja": "部屋にタオルを追加できますか",
+      "en": "Can I get extra towels?",
+      "zh": "可以多给毛巾吗？",
+      "ko": "수건을 더 받을 수 있나요?"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-051",
+    "categoryId": "hotel",
+    "tags": [
+      "hotel"
+    ],
+    "text": {
+      "ja": "Wi-Fiのパスワードは何ですか",
+      "en": "What is the Wi-Fi password?",
+      "zh": "Wi-Fi密码是什么？",
+      "ko": "와이파이 비밀번호가 뭐예요?"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-052",
+    "categoryId": "hotel",
+    "tags": [
+      "hotel"
+    ],
+    "text": {
+      "ja": "荷物を預けてもいいですか",
+      "en": "Can I leave my luggage?",
+      "zh": "可以寄存行李吗？",
+      "ko": "짐을 맡길 수 있나요?"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-053",
+    "categoryId": "emergency",
+    "tags": [
+      "emergency"
+    ],
+    "text": {
+      "ja": "助けてください",
+      "en": "Please help",
+      "zh": "请帮帮我",
+      "ko": "도와주세요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-054",
+    "categoryId": "emergency",
+    "tags": [
+      "emergency"
+    ],
+    "text": {
+      "ja": "具合が悪いです",
+      "en": "I feel sick",
+      "zh": "我不舒服",
+      "ko": "몸이 안 좋아요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-055",
+    "categoryId": "emergency",
+    "tags": [
+      "emergency"
+    ],
+    "text": {
+      "ja": "病院に行きたいです",
+      "en": "I want to go to a hospital",
+      "zh": "我想去医院",
+      "ko": "병원에 가고 싶어요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-056",
+    "categoryId": "emergency",
+    "tags": [
+      "emergency"
+    ],
+    "text": {
+      "ja": "警察を呼んでください",
+      "en": "Please call the police",
+      "zh": "请报警",
+      "ko": "경찰을 불러 주세요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-057",
+    "categoryId": "emergency",
+    "tags": [
+      "emergency"
+    ],
+    "text": {
+      "ja": "財布をなくしました",
+      "en": "I lost my wallet",
+      "zh": "我丢了钱包",
+      "ko": "지갑을 잃어버렸어요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-058",
+    "categoryId": "daily",
+    "tags": [
+      "daily"
+    ],
+    "text": {
+      "ja": "今日はいい天気ですね",
+      "en": "Nice weather today",
+      "zh": "今天天气很好",
+      "ko": "오늘 날씨가 좋네요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-059",
+    "categoryId": "daily",
+    "tags": [
+      "daily"
+    ],
+    "text": {
+      "ja": "写真を撮ってもらえますか",
+      "en": "Could you take a photo?",
+      "zh": "能帮我拍照吗？",
+      "ko": "사진 좀 찍어 주실래요?"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-060",
+    "categoryId": "daily",
+    "tags": [
+      "daily"
+    ],
+    "text": {
+      "ja": "これはどこで買えますか",
+      "en": "Where can I buy this?",
+      "zh": "这个在哪里买？",
+      "ko": "이건 어디에서 살 수 있나요?"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-061",
+    "categoryId": "daily",
+    "tags": [
+      "daily"
+    ],
+    "text": {
+      "ja": "トイレはどこですか",
+      "en": "Where is the restroom?",
+      "zh": "洗手间在哪里？",
+      "ko": "화장실이 어디예요?"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-062",
+    "categoryId": "daily",
+    "tags": [
+      "daily"
+    ],
+    "text": {
+      "ja": "もう一度お願いします",
+      "en": "One more time, please",
+      "zh": "请再说一次",
+      "ko": "한 번 더 부탁드려요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-063",
+    "categoryId": "daily",
+    "tags": [
+      "daily"
+    ],
+    "text": {
+      "ja": "私は観光客です",
+      "en": "I am a tourist",
+      "zh": "我是游客",
+      "ko": "저는 관광객입니다"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-064",
+    "categoryId": "daily",
+    "tags": [
+      "daily"
+    ],
+    "text": {
+      "ja": "地図がありますか",
+      "en": "Do you have a map?",
+      "zh": "有地图吗？",
+      "ko": "지도 있나요?"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-065",
+    "categoryId": "daily",
+    "tags": [
+      "daily"
+    ],
+    "text": {
+      "ja": "ここで待っていてください",
+      "en": "Please wait here",
+      "zh": "请在这里等",
+      "ko": "여기서 기다려 주세요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-066",
+    "categoryId": "daily",
+    "tags": [
+      "daily"
+    ],
+    "text": {
+      "ja": "今すぐ行きます",
+      "en": "I will go now",
+      "zh": "我马上过去",
+      "ko": "지금 갈게요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-067",
+    "categoryId": "daily",
+    "tags": [
+      "daily"
+    ],
+    "text": {
+      "ja": "少し待ちます",
+      "en": "I will wait a bit",
+      "zh": "我等一下",
+      "ko": "조금 기다릴게요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-068",
+    "categoryId": "dining",
+    "tags": [
+      "dining"
+    ],
+    "text": {
+      "ja": "アレルギーがあります",
+      "en": "I have an allergy",
+      "zh": "我有过敏",
+      "ko": "알레르기가 있습니다"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-069",
+    "categoryId": "dining",
+    "tags": [
+      "dining"
+    ],
+    "text": {
+      "ja": "辛さを控えめにできますか",
+      "en": "Can you make it less spicy?",
+      "zh": "可以少辣吗？",
+      "ko": "덜 맵게 해줄 수 있나요?"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-070",
+    "categoryId": "dining",
+    "tags": [
+      "dining"
+    ],
+    "text": {
+      "ja": "ベジタリアンです",
+      "en": "I am vegetarian",
+      "zh": "我是素食者",
+      "ko": "채식주의자예요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-071",
+    "categoryId": "dining",
+    "tags": [
+      "dining"
+    ],
+    "text": {
+      "ja": "水は有料ですか",
+      "en": "Is water free?",
+      "zh": "水是免费的么？",
+      "ko": "물은 무료인가요?"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-072",
+    "categoryId": "dining",
+    "tags": [
+      "dining"
+    ],
+    "text": {
+      "ja": "お箸をください",
+      "en": "Chopsticks, please",
+      "zh": "请给我筷子",
+      "ko": "젓가락 주세요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-073",
+    "categoryId": "shopping",
+    "tags": [
+      "shopping"
+    ],
+    "text": {
+      "ja": "領収書をください",
+      "en": "Please give me a receipt",
+      "zh": "请给我收据",
+      "ko": "영수증 주세요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-074",
+    "categoryId": "shopping",
+    "tags": [
+      "shopping"
+    ],
+    "text": {
+      "ja": "免税手続きがしたいです",
+      "en": "I want tax-free processing",
+      "zh": "我想办理免税",
+      "ko": "면세 처리하고 싶어요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-075",
+    "categoryId": "shopping",
+    "tags": [
+      "shopping"
+    ],
+    "text": {
+      "ja": "ポイントカードはありますか",
+      "en": "Do you have a point card?",
+      "zh": "有会员卡吗？",
+      "ko": "포인트 카드 있나요?"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-076",
+    "categoryId": "shopping",
+    "tags": [
+      "shopping"
+    ],
+    "text": {
+      "ja": "袋をください",
+      "en": "Can I have a bag?",
+      "zh": "请给我袋子",
+      "ko": "봉투 주세요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-077",
+    "categoryId": "shopping",
+    "tags": [
+      "shopping"
+    ],
+    "text": {
+      "ja": "試着室はどこですか",
+      "en": "Where is the fitting room?",
+      "zh": "试衣间在哪里？",
+      "ko": "피팅룸이 어디예요?"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-078",
+    "categoryId": "transport",
+    "tags": [
+      "transport"
+    ],
+    "text": {
+      "ja": "この電車は快速ですか",
+      "en": "Is this a rapid train?",
+      "zh": "这班是快车吗？",
+      "ko": "이 열차는 쾌속인가요?"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-079",
+    "categoryId": "transport",
+    "tags": [
+      "transport"
+    ],
+    "text": {
+      "ja": "空席はありますか",
+      "en": "Are there any seats?",
+      "zh": "有空位吗？",
+      "ko": "빈 좌석이 있나요?"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-080",
+    "categoryId": "transport",
+    "tags": [
+      "transport"
+    ],
+    "text": {
+      "ja": "定期券は買えますか",
+      "en": "Can I buy a pass?",
+      "zh": "可以买定期票吗？",
+      "ko": "정기권을 살 수 있나요?"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-081",
+    "categoryId": "transport",
+    "tags": [
+      "transport"
+    ],
+    "text": {
+      "ja": "出口はどこですか",
+      "en": "Where is the exit?",
+      "zh": "出口在哪里？",
+      "ko": "출구가 어디예요?"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-082",
+    "categoryId": "transport",
+    "tags": [
+      "transport"
+    ],
+    "text": {
+      "ja": "改札はどこですか",
+      "en": "Where are the ticket gates?",
+      "zh": "检票口在哪里？",
+      "ko": "개찰구가 어디예요?"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-083",
+    "categoryId": "hotel",
+    "tags": [
+      "hotel"
+    ],
+    "text": {
+      "ja": "朝食は何時からですか",
+      "en": "When is breakfast?",
+      "zh": "早餐几点开始？",
+      "ko": "아침식사는 몇 시부터예요?"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-084",
+    "categoryId": "hotel",
+    "tags": [
+      "hotel"
+    ],
+    "text": {
+      "ja": "ルームサービスはありますか",
+      "en": "Is there room service?",
+      "zh": "有客房服务吗？",
+      "ko": "룸서비스가 있나요?"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-085",
+    "categoryId": "hotel",
+    "tags": [
+      "hotel"
+    ],
+    "text": {
+      "ja": "タクシーを予約したいです",
+      "en": "I want to reserve a taxi",
+      "zh": "我想预约出租车",
+      "ko": "택시 예약하고 싶어요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-086",
+    "categoryId": "hotel",
+    "tags": [
+      "hotel"
+    ],
+    "text": {
+      "ja": "部屋が寒いです",
+      "en": "The room is cold",
+      "zh": "房间很冷",
+      "ko": "방이 추워요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-087",
+    "categoryId": "hotel",
+    "tags": [
+      "hotel"
+    ],
+    "text": {
+      "ja": "延泊できますか",
+      "en": "Can I extend my stay?",
+      "zh": "可以延住吗？",
+      "ko": "숙박을 연장할 수 있나요?"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-088",
+    "categoryId": "emergency",
+    "tags": [
+      "emergency"
+    ],
+    "text": {
+      "ja": "火事です",
+      "en": "There is a fire",
+      "zh": "着火了",
+      "ko": "불이 났어요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-089",
+    "categoryId": "emergency",
+    "tags": [
+      "emergency"
+    ],
+    "text": {
+      "ja": "救急車を呼んでください",
+      "en": "Please call an ambulance",
+      "zh": "请叫救护车",
+      "ko": "구급차를 불러 주세요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-090",
+    "categoryId": "emergency",
+    "tags": [
+      "emergency"
+    ],
+    "text": {
+      "ja": "パスポートをなくしました",
+      "en": "I lost my passport",
+      "zh": "我丢了护照",
+      "ko": "여권을 잃어버렸어요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-091",
+    "categoryId": "emergency",
+    "tags": [
+      "emergency"
+    ],
+    "text": {
+      "ja": "道に迷いました",
+      "en": "I am lost",
+      "zh": "我迷路了",
+      "ko": "길을 잃었어요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-092",
+    "categoryId": "emergency",
+    "tags": [
+      "emergency"
+    ],
+    "text": {
+      "ja": "とても痛いです",
+      "en": "It hurts a lot",
+      "zh": "很痛",
+      "ko": "많이 아파요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-093",
+    "categoryId": "directions",
+    "tags": [
+      "directions"
+    ],
+    "text": {
+      "ja": "近くにコンビニはありますか",
+      "en": "Is there a convenience store nearby?",
+      "zh": "附近有便利店吗？",
+      "ko": "근처에 편의점이 있나요?"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-094",
+    "categoryId": "directions",
+    "tags": [
+      "directions"
+    ],
+    "text": {
+      "ja": "次の角を右です",
+      "en": "Turn right at the next corner",
+      "zh": "下一个路口右转",
+      "ko": "다음 모퉁이에서 오른쪽으로 도세요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-095",
+    "categoryId": "directions",
+    "tags": [
+      "directions"
+    ],
+    "text": {
+      "ja": "信号のところで左です",
+      "en": "Turn left at the traffic light",
+      "zh": "红绿灯处左转",
+      "ko": "신호등에서 왼쪽으로 도세요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-096",
+    "categoryId": "directions",
+    "tags": [
+      "directions"
+    ],
+    "text": {
+      "ja": "徒歩で何分ですか",
+      "en": "How many minutes on foot?",
+      "zh": "走路要几分钟？",
+      "ko": "걸어서 몇 분인가요?"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-097",
+    "categoryId": "directions",
+    "tags": [
+      "directions"
+    ],
+    "text": {
+      "ja": "ここから遠いですか",
+      "en": "Is it far from here?",
+      "zh": "离这里远吗？",
+      "ko": "여기서 멀어요?"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-098",
+    "categoryId": "greeting",
+    "tags": [
+      "greeting"
+    ],
+    "text": {
+      "ja": "お久しぶりです",
+      "en": "Long time no see",
+      "zh": "好久不见",
+      "ko": "오랜만이에요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-099",
+    "categoryId": "greeting",
+    "tags": [
+      "greeting"
+    ],
+    "text": {
+      "ja": "ようこそ",
+      "en": "Welcome",
+      "zh": "欢迎",
+      "ko": "환영합니다"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  },
+  {
+    "id": "card-100",
+    "categoryId": "greeting",
+    "tags": [
+      "greeting"
+    ],
+    "text": {
+      "ja": "気をつけて",
+      "en": "Take care",
+      "zh": "请保重",
+      "ko": "조심하세요"
+    },
+    "replyPresets": [
+      "ok",
+      "yes",
+      "no",
+      "wait",
+      "custom"
+    ]
+  }
+]

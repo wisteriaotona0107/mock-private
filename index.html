@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>翻訳カード</title>
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body>
+    <div id="app" class="app">
+      <header class="app-header">
+        <div class="brand">
+          <div class="brand-mark">翻</div>
+          <div>
+            <h1>翻訳カード</h1>
+            <p>Translation Card UI</p>
+          </div>
+        </div>
+        <nav class="nav">
+          <button class="nav-button" data-view="home">ホーム</button>
+          <button class="nav-button" data-view="history">履歴</button>
+        </nav>
+      </header>
+
+      <main class="app-main">
+        <section class="toolbar">
+          <div class="language-selector" id="languageSelector"></div>
+          <div class="search">
+            <input id="searchInput" type="search" placeholder="カードを検索" />
+          </div>
+        </section>
+
+        <section class="category-filter" id="categoryFilter"></section>
+
+        <section id="homeView" class="view view-active">
+          <div id="cardGrid" class="card-grid"></div>
+        </section>
+
+        <section id="detailView" class="view">
+          <button class="back-button" id="backButton">← 戻る</button>
+          <div id="detailCard" class="detail-card"></div>
+        </section>
+
+        <section id="historyView" class="view">
+          <h2>最近の履歴</h2>
+          <div id="historyList" class="history-list"></div>
+        </section>
+      </main>
+    </div>
+
+    <script src="/assets/app.js" type="module"></script>
+  </body>
+</html>

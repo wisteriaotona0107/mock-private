@@ -1,0 +1,62 @@
+[
+  {
+    "id": "greeting",
+    "name_ja": "挨拶",
+    "name_en": "Greetings",
+    "sortOrder": 1
+  },
+  {
+    "id": "daily",
+    "name_ja": "日常会話",
+    "name_en": "Daily",
+    "sortOrder": 2
+  },
+  {
+    "id": "thanks",
+    "name_ja": "感謝",
+    "name_en": "Thanks",
+    "sortOrder": 3
+  },
+  {
+    "id": "apology",
+    "name_ja": "謝罪",
+    "name_en": "Apology",
+    "sortOrder": 4
+  },
+  {
+    "id": "directions",
+    "name_ja": "道案内",
+    "name_en": "Directions",
+    "sortOrder": 5
+  },
+  {
+    "id": "shopping",
+    "name_ja": "買い物",
+    "name_en": "Shopping",
+    "sortOrder": 6
+  },
+  {
+    "id": "dining",
+    "name_ja": "飲食",
+    "name_en": "Dining",
+    "sortOrder": 7
+  },
+  {
+    "id": "transport",
+    "name_ja": "交通",
+    "name_en": "Transport",
+    "sortOrder": 8
+  },
+  {
+    "id": "hotel",
+    "name_ja": "宿泊",
+    "name_en": "Hotel",
+    "sortOrder": 9
+  },
+  {
+    "id": "emergency",
+    "name_ja": "緊急",
+    "name_en": "Emergency",
+    "sortOrder": 10
+  }
+]
