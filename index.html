@@ -259,6 +259,101 @@
       gap: 8px;
     }
 
+    .manage-button {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 10px 14px;
+      min-height: 44px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .badge.custom {
+      background: #f3dfe5;
+    }
+
+    .badge.linked {
+      background: #d6e5f5;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(20, 18, 16, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 20;
+    }
+
+    .modal {
+      background: var(--surface);
+      border-radius: 20px;
+      width: min(720px, 100%);
+      max-height: 85vh;
+      overflow: auto;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      display: grid;
+      gap: 16px;
+    }
+
+    .modal h3 {
+      margin: 0 0 8px;
+    }
+
+    .modal .form-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .modal .form-row {
+      display: grid;
+      gap: 6px;
+    }
+
+    .modal input,
+    .modal select {
+      min-height: 40px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      padding: 8px 10px;
+      font-size: 14px;
+    }
+
+    .modal .list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .modal .list-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--surface-muted);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 14px;
+    }
+
+    .modal .list-item button {
+      border: none;
+      background: #f4d9d1;
+      border-radius: 10px;
+      padding: 6px 10px;
+      cursor: pointer;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
     @media (min-width: 768px) {
       .card-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -317,6 +412,12 @@
       { id: "t6", categoryId: "trouble", tags: ["train"], text: { ja: "電車に乗り遅れました", en: "I missed the train", zh: "我错过了火车", ko: "기차를 놓쳤어요" } }
     ];
 
+    const sakeMaster = [
+      { id: 101, name: "山田錦 純米吟醸" },
+      { id: 102, name: "雪中梅 特別本醸造" },
+      { id: 103, name: "獺祭 純米大吟醸45" }
+    ];
+
     const replyTexts = {
       ok: { ja: "OK", en: "OK", zh: "好的", ko: "확인" },
       yes: { ja: "はい", en: "Yes", zh: "是的", ko: "네" },
@@ -347,7 +448,9 @@
       selectedLang: "tcw_selectedLang",
       cardAnswers: "tcw_cardAnswers",
       history: "tcw_history",
-      cardStats: "tcw_cardStats"
+      cardStats: "tcw_cardStats",
+      customCategories: "tcw_customCategories",
+      customCards: "tcw_customCards"
     };
 
     const state = {
@@ -358,7 +461,12 @@
       activeCardId: null,
       cardAnswers: {},
       history: [],
-      cardStats: {}
+      cardStats: {},
+      customCategories: [],
+      customCards: [],
+      showManage: false,
+      sakeSearch: "",
+      selectedSakeId: ""
     };
 
     const app = document.getElementById("app");
@@ -392,6 +500,22 @@
           state.cardStats = {};
         }
       }
+      const storedCategories = localStorage.getItem(storageKeys.customCategories);
+      if (storedCategories) {
+        try {
+          state.customCategories = JSON.parse(storedCategories) || [];
+        } catch (error) {
+          state.customCategories = [];
+        }
+      }
+      const storedCards = localStorage.getItem(storageKeys.customCards);
+      if (storedCards) {
+        try {
+          state.customCards = JSON.parse(storedCards) || [];
+        } catch (error) {
+          state.customCards = [];
+        }
+      }
     };
 
     const persistState = () => {
@@ -399,6 +523,8 @@
       localStorage.setItem(storageKeys.cardAnswers, JSON.stringify(state.cardAnswers));
       localStorage.setItem(storageKeys.history, JSON.stringify(state.history));
       localStorage.setItem(storageKeys.cardStats, JSON.stringify(state.cardStats));
+      localStorage.setItem(storageKeys.customCategories, JSON.stringify(state.customCategories));
+      localStorage.setItem(storageKeys.customCards, JSON.stringify(state.customCards));
     };
 
     const formatTime = (timestamp) => {
@@ -428,6 +554,17 @@
       );
     };
 
+    const getAllCategories = () => {
+      const base = categories
+        .slice()
+        .sort((a, b) => a.sortOrder - b.sortOrder);
+      return base.concat(state.customCategories);
+    };
+
+    const getAllCards = () => {
+      return cards.concat(state.customCards);
+    };
+
     const renderHeader = () => {
       const langButtons = [
         { code: "en", label: "EN" },
@@ -443,12 +580,10 @@
       const categoryButtons = [
         `<button class="chip ${state.selectedCategoryId === "all" ? "active" : ""}" data-action="set-category" data-category="all">All</button>`,
         `<button class="chip ${state.selectedCategoryId === "frequent" ? "active" : ""}" data-action="set-category" data-category="frequent">よく使う</button>`,
-        ...categories
-          .sort((a, b) => a.sortOrder - b.sortOrder)
-          .map(
-            (category) =>
-              `<button class="chip ${state.selectedCategoryId === category.id ? "active" : ""}" data-action="set-category" data-category="${category.id}">${category.name.ja}</button>`
-          )
+        ...getAllCategories().map(
+          (category) =>
+            `<button class="chip ${state.selectedCategoryId === category.id ? "active" : ""}" data-action="set-category" data-category="${category.id}">${category.name.ja}</button>`
+        )
       ].join("");
 
       const historyTabClass = state.view === "history" ? "tab active" : "tab";
@@ -466,6 +601,7 @@
                 <button class="${homeTabClass}" data-action="go-home">ホーム</button>
                 <button class="${historyTabClass}" data-action="go-history">履歴</button>
               </div>
+              <button class="manage-button" data-action="open-manage">＋管理</button>
             </div>
             <div class="toolbar-row">
               <input type="search" value="${state.searchQuery}" placeholder="検索（外国語 / 日本語）" data-action="search" />
@@ -481,7 +617,8 @@
     };
 
     const renderCards = () => {
-      let filtered = cards.filter((card) => {
+      const allCards = getAllCards();
+      let filtered = allCards.filter((card) => {
         if (state.selectedCategoryId === "frequent") {
           return matchesSearch(card, state.searchQuery);
         }
@@ -517,12 +654,16 @@
               const status = getStatus(card.id);
               const badgeText = statusLabels[status]["ja"];
               const isFrequent = (state.cardStats[card.id]?.useCount || 0) >= 3;
+              const isCustom = card.isCustom;
+              const isLinked = Boolean(card.links?.sake);
               return `
                 <button class="card" data-action="open-card" data-card-id="${card.id}" style="border-color: ${statusColors[status]};">
                   <div class="card-text">${card.text[state.selectedLang]}</div>
                   <div class="card-meta">
                     <span>${card.text.ja}</span>
                     <span style="display: inline-flex; gap: 6px; align-items: center;">
+                      ${isLinked ? `<span class="badge linked">linked</span>` : ""}
+                      ${isCustom ? `<span class="badge custom">CUSTOM</span>` : ""}
                       ${isFrequent ? `<span class="badge" style="background: #efe6b4;">★よく使う</span>` : ""}
                       <span class="badge" style="background: ${statusColors[status]};">${badgeText}</span>
                     </span>
@@ -536,7 +677,7 @@
     };
 
     const renderDetail = () => {
-      const card = cards.find((item) => item.id === state.activeCardId);
+      const card = getAllCards().find((item) => item.id === state.activeCardId);
       if (!card) {
         return `<p>カードが見つかりません。</p>`;
       }
@@ -551,6 +692,8 @@
               <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
                 <h2 class="detail-foreign" style="margin: 0;">${card.text[state.selectedLang]}</h2>
                 <button class="chip" data-action="speak" data-lang="${state.selectedLang}">🔊読み上げ</button>
+                ${card.isCustom ? `<span class="badge custom">CUSTOM</span>` : ""}
+                ${card.links?.sake ? `<span class="badge linked">linked</span>` : ""}
               </div>
               <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 6px;">
                 <p class="detail-ja" style="margin: 0;">${card.text.ja}</p>
@@ -606,7 +749,7 @@
           <div class="history-list">
             ${state.history
               .map((entry) => {
-                const card = cards.find((item) => item.id === entry.cardId);
+                const card = getAllCards().find((item) => item.id === entry.cardId);
                 if (!card) return "";
                 const reply = replyTexts[entry.status];
                 return `
@@ -623,12 +766,114 @@
       `;
     };
 
+    const renderManageModal = () => {
+      if (!state.showManage) return "";
+
+      const categoryOptions = getAllCategories()
+        .map((category) => `<option value="${category.id}">${category.name.ja}</option>`)
+        .join("");
+
+      const sakeMatches = sakeMaster.filter((item) =>
+        item.name.toLowerCase().includes(state.sakeSearch.toLowerCase())
+      );
+      const sakeList = sakeMatches
+        .map(
+          (item) =>
+            `<button class="chip ${state.selectedSakeId === String(item.id) ? "active" : ""}" data-action="select-sake" data-sake-id="${item.id}">${item.name}</button>`
+        )
+        .join("");
+
+      return `
+        <div class="modal-overlay" role="dialog" aria-modal="true">
+          <div class="modal">
+            <h2>カスタム管理</h2>
+            <section>
+              <h3>カスタムカテゴリ作成</h3>
+              <div class="form-grid">
+                <div class="form-row">
+                  <label>カテゴリ名（ja必須）</label>
+                  <input type="text" data-field="custom-category-ja" placeholder="例：観光" />
+                </div>
+                <div class="form-row">
+                  <label>カテゴリ名（en/zh/ko 任意）</label>
+                  <input type="text" data-field="custom-category-en" placeholder="English" />
+                  <input type="text" data-field="custom-category-zh" placeholder="中文" />
+                  <input type="text" data-field="custom-category-ko" placeholder="한국어" />
+                </div>
+                <button class="action primary" data-action="add-category">カテゴリ追加</button>
+              </div>
+            </section>
+            <section>
+              <h3>カスタムカード作成</h3>
+              <div class="form-grid">
+                <div class="form-row">
+                  <label>カテゴリ</label>
+                  <select data-field="custom-card-category">${categoryOptions}</select>
+                </div>
+                <div class="form-row">
+                  <label>テキスト（ja/en/zh/ko）</label>
+                  <input type="text" data-field="custom-card-ja" placeholder="日本語（必須）" />
+                  <input type="text" data-field="custom-card-en" placeholder="English" />
+                  <input type="text" data-field="custom-card-zh" placeholder="中文" />
+                  <input type="text" data-field="custom-card-ko" placeholder="한국어" />
+                </div>
+                <div class="form-row">
+                  <label>タグ（カンマ区切り・任意）</label>
+                  <input type="text" data-field="custom-card-tags" placeholder="例：taxi,hotel" />
+                </div>
+                <div class="form-row">
+                  <label>日本酒マスタに紐付け（任意）</label>
+                  <input type="text" data-field="sake-search" placeholder="日本酒を検索" value="${state.sakeSearch}" />
+                  <div class="chip-group">${sakeList || "<p>該当なし</p>"}</div>
+                </div>
+                <button class="action primary" data-action="add-card">カード追加</button>
+              </div>
+            </section>
+            <section>
+              <h3>カスタムカテゴリ一覧</h3>
+              <div class="list">
+                ${state.customCategories.length ? state.customCategories
+                  .map(
+                    (category) => `
+                      <div class="list-item">
+                        <span>${category.name.ja}</span>
+                        <button data-action="delete-category" data-category-id="${category.id}">削除</button>
+                      </div>
+                    `
+                  )
+                  .join("") : "<p>まだありません。</p>"}
+              </div>
+            </section>
+            <section>
+              <h3>カスタムカード一覧</h3>
+              <div class="list">
+                ${state.customCards.length ? state.customCards
+                  .map(
+                    (card) => `
+                      <div class="list-item">
+                        <span>${card.text.ja}</span>
+                        <button data-action="delete-card" data-card-id="${card.id}">削除</button>
+                      </div>
+                    `
+                  )
+                  .join("") : "<p>まだありません。</p>"}
+              </div>
+            </section>
+            <div class="modal-footer">
+              <button class="action" data-action="close-manage">閉じる</button>
+            </div>
+          </div>
+        </div>
+      `;
+    };
+
     const render = () => {
       app.innerHTML = `
         ${renderHeader()}
         ${state.view === "home" ? `<main>${renderCards()}</main>` : ""}
         ${state.view === "detail" ? renderDetail() : ""}
         ${state.view === "history" ? renderHistory() : ""}
+        ${renderManageModal()}
       `;
     };
 
@@ -657,6 +902,8 @@
       });
       state.history = state.history.slice(0, 20);
     };
+
+    const createId = (prefix) => `${prefix}-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
     const updateStats = (cardId) => {
       const current = state.cardStats[cardId] || { useCount: 0, lastUsedAt: 0 };
@@ -688,6 +935,14 @@
         state.activeCardId = null;
       }
 
+      if (action === "open-manage") {
+        state.showManage = true;
+      }
+
+      if (action === "close-manage") {
+        state.showManage = false;
+      }
+
       if (action === "open-card") {
         state.activeCardId = target.dataset.cardId;
         state.view = "detail";
@@ -706,9 +961,91 @@
         updateStats(state.activeCardId);
       }
 
+      if (action === "add-category") {
+        const jaInput = app.querySelector("[data-field='custom-category-ja']");
+        const enInput = app.querySelector("[data-field='custom-category-en']");
+        const zhInput = app.querySelector("[data-field='custom-category-zh']");
+        const koInput = app.querySelector("[data-field='custom-category-ko']");
+        const jaValue = (jaInput?.value || "").trim();
+        if (!jaValue) {
+          return;
+        }
+        state.customCategories.push({
+          id: createId("custom-category"),
+          name: {
+            ja: jaValue,
+            en: (enInput?.value || "").trim() || jaValue,
+            zh: (zhInput?.value || "").trim() || jaValue,
+            ko: (koInput?.value || "").trim() || jaValue
+          }
+        });
+      }
+
+      if (action === "select-sake") {
+        state.selectedSakeId = target.dataset.sakeId;
+      }
+
+      if (action === "add-card") {
+        const categorySelect = app.querySelector("[data-field='custom-card-category']");
+        const jaInput = app.querySelector("[data-field='custom-card-ja']");
+        const enInput = app.querySelector("[data-field='custom-card-en']");
+        const zhInput = app.querySelector("[data-field='custom-card-zh']");
+        const koInput = app.querySelector("[data-field='custom-card-ko']");
+        const tagsInput = app.querySelector("[data-field='custom-card-tags']");
+        const jaValue = (jaInput?.value || "").trim();
+        if (!jaValue) {
+          return;
+        }
+        const selectedCategory = categorySelect?.value || "all";
+        const tags = (tagsInput?.value || "")
+          .split(",")
+          .map((tag) => tag.trim())
+          .filter(Boolean);
+        const linkedSake = sakeMaster.find((item) => String(item.id) === state.selectedSakeId);
+        const links = linkedSake
+          ? {
+              sake: { id: linkedSake.id, nameSnapshot: linkedSake.name }
+            }
+          : undefined;
+        state.customCards.push({
+          id: createId("custom-card"),
+          categoryId: selectedCategory,
+          tags,
+          text: {
+            ja: jaValue,
+            en: (enInput?.value || "").trim() || jaValue,
+            zh: (zhInput?.value || "").trim() || jaValue,
+            ko: (koInput?.value || "").trim() || jaValue
+          },
+          isCustom: true,
+          links
+        });
+        state.sakeSearch = "";
+        state.selectedSakeId = "";
+      }
+
+      if (action === "delete-category") {
+        const categoryId = target.dataset.categoryId;
+        // カテゴリ削除時は所属するカスタムカードもまとめて削除します。
+        state.customCategories = state.customCategories.filter((category) => category.id !== categoryId);
+        state.customCards = state.customCards.filter((card) => card.categoryId !== categoryId);
+        if (state.selectedCategoryId === categoryId) {
+          state.selectedCategoryId = "all";
+        }
+      }
+
+      if (action === "delete-card") {
+        const cardId = target.dataset.cardId;
+        state.customCards = state.customCards.filter((card) => card.id !== cardId);
+        if (state.activeCardId === cardId) {
+          state.activeCardId = null;
+          state.view = "home";
+        }
+      }
+
       if (action === "speak") {
         const lang = target.dataset.lang;
-        const card = cards.find((item) => item.id === state.activeCardId);
+        const card = getAllCards().find((item) => item.id === state.activeCardId);
         if (!card) return;
         const text = lang === "ja" ? card.text.ja : card.text[state.selectedLang];
         speakText(text, lang);
@@ -729,6 +1066,10 @@
       const target = event.target;
       if (target.matches("[data-action='search']")) {
         state.searchQuery = target.value;
+        render();
+      }
+      if (target.matches("[data-field='sake-search']")) {
+        state.sakeSearch = target.value;
         render();
       }
     });
