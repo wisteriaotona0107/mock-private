@@ -512,8 +512,14 @@
         <main>
           <div class="detail">
             <div class="detail-section" style="border-color: ${statusColors[status]};">
-              <h2 class="detail-foreign">${card.text[state.selectedLang]}</h2>
-              <p class="detail-ja">${card.text.ja}</p>
+              <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <h2 class="detail-foreign" style="margin: 0;">${card.text[state.selectedLang]}</h2>
+                <button class="chip" data-action="speak" data-lang="${state.selectedLang}">🔊読み上げ</button>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 6px;">
+                <p class="detail-ja" style="margin: 0;">${card.text.ja}</p>
+                <button class="chip" data-action="speak" data-lang="ja">🔊読み上げ</button>
+              </div>
               ${
                 reply
                   ? `
@@ -590,6 +596,21 @@
       `;
     };
 
+    const languageVoices = {
+      ja: "ja-JP",
+      en: "en-US",
+      zh: "zh-CN",
+      ko: "ko-KR"
+    };
+
+    const speakText = (text, lang) => {
+      if (!text) return;
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = languageVoices[lang] || "en-US";
+      speechSynthesis.cancel();
+      speechSynthesis.speak(utterance);
+    };
+
     const updateHistory = (cardId, status, memo) => {
       state.history.unshift({
         cardId,
@@ -638,6 +659,15 @@
           updatedAt: Date.now()
         };
         updateHistory(state.activeCardId, status, memo);
+      }
+
+      if (action === "speak") {
+        const lang = target.dataset.lang;
+        const card = cards.find((item) => item.id === state.activeCardId);
+        if (!card) return;
+        const text = lang === "ja" ? card.text.ja : card.text[state.selectedLang];
+        speakText(text, lang);
+        return;
       }
 
       if (action === "reset") {
