@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Markdown / Marp Flow Guide</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="app-header">
+        <div>
+          <p class="eyebrow">Markdown / Marp Flow Guide</p>
+          <h1>用途別スライド制作フロー</h1>
+          <p class="subtitle">
+            Markdown を起点に、用途に合わせた資料作成ルートを可視化します。すべての操作は外部サイトへ遷移します。
+          </p>
+        </div>
+        <nav class="app-nav" aria-label="Primary">
+          <button class="nav-button" data-view="home">Home</button>
+          <button class="nav-button" data-view="detail">Flow Detail</button>
+          <button class="nav-button" data-view="tools">Tools List</button>
+        </nav>
+      </header>
+
+      <main>
+        <section id="home" class="view">
+          <h2 class="section-title">用途別フロー一覧</h2>
+          <p class="section-lead">タップでフロー詳細へ移動します。</p>
+          <div class="flow-grid" id="flow-grid" aria-live="polite"></div>
+        </section>
+
+        <section id="detail" class="view">
+          <div class="detail-header">
+            <div>
+              <h2 id="detail-title"></h2>
+              <p id="detail-summary"></p>
+            </div>
+            <div class="detail-meta">
+              <span id="detail-tags"></span>
+              <p class="notice">※ このサイトで処理は行いません。外部サイトを新しいタブで開きます。</p>
+            </div>
+          </div>
+
+          <div class="flow-nodes" id="flow-nodes"></div>
+
+          <div class="node-detail" id="node-detail">
+            <h3 id="node-title"></h3>
+            <p id="node-description"></p>
+            <ul class="node-info">
+              <li><strong>目的:</strong> <span id="node-purpose"></span></li>
+              <li><strong>入力:</strong> <span id="node-input"></span></li>
+              <li><strong>出力:</strong> <span id="node-output"></span></li>
+              <li><strong>注意点:</strong> <span id="node-caution"></span></li>
+            </ul>
+            <a id="node-link" class="cta" target="_blank" rel="noreferrer">外部サイトを開く</a>
+          </div>
+        </section>
+
+        <section id="tools" class="view">
+          <h2 class="section-title">ツール一覧</h2>
+          <p class="section-lead">用途別フローとツールの関係を把握できます。</p>
+          <div class="tools-grid" id="tools-grid"></div>
+        </section>
+      </main>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>
