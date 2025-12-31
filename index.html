@@ -1,0 +1,1081 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>翻訳カードWebアプリ</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f2ee;
+      --surface: #ffffff;
+      --surface-muted: #f0ece7;
+      --text: #2b2b2b;
+      --text-muted: #6b6b6b;
+      --accent: #2d6a6f;
+      --accent-soft: #dce7e8;
+      --border: #e1d9d0;
+      --shadow: 0 8px 24px rgba(19, 18, 17, 0.08);
+      --radius: 18px;
+      --transition: 200ms ease;
+      --status-none: #e7e1db;
+      --status-ok: #cfe8dc;
+      --status-yes: #d3e7f6;
+      --status-no: #f5d5d0;
+      --status-wait: #f7e7c2;
+      --status-custom: #e6dbf5;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Hiragino Sans", "Noto Sans JP", "SF Pro Text", system-ui, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: var(--bg);
+      padding: 20px 20px 10px;
+    }
+
+    .app-title {
+      font-size: 20px;
+      margin: 0 0 12px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .toolbar {
+      display: grid;
+      gap: 12px;
+    }
+
+    .toolbar-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .chip-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip,
+    .tab {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 8px 14px;
+      min-height: 44px;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 14px;
+    }
+
+    .chip.active,
+    .tab.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: transparent;
+    }
+
+    input[type="search"] {
+      width: min(420px, 100%);
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      font-size: 16px;
+      min-height: 44px;
+      background: var(--surface);
+    }
+
+    main {
+      padding: 0 20px 40px;
+    }
+
+    .card-grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 140px;
+      transition: transform var(--transition), box-shadow var(--transition);
+      border: 1px solid transparent;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(19, 18, 17, 0.12);
+    }
+
+    .card .card-text {
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 1.35;
+    }
+
+    .card .card-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .badge {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .detail {
+      display: grid;
+      gap: 16px;
+    }
+
+    .detail-section {
+      background: var(--surface);
+      padding: 20px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid transparent;
+    }
+
+    .detail-foreign {
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .detail-ja {
+      margin-top: 12px;
+      font-size: 18px;
+      color: var(--text-muted);
+    }
+
+    .reply-block {
+      margin-top: 20px;
+      padding: 16px;
+      border-radius: 14px;
+      background: var(--surface-muted);
+    }
+
+    .reply-foreign {
+      font-size: clamp(26px, 3.6vw, 40px);
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .reply-ja {
+      font-size: 16px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    button.action {
+      flex: 1 1 120px;
+      min-height: 44px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 600;
+      background: var(--surface);
+      box-shadow: inset 0 0 0 1px var(--border);
+      transition: var(--transition);
+    }
+
+    button.action:hover {
+      transform: translateY(-1px);
+    }
+
+    button.primary {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: none;
+    }
+
+    .memo-input {
+      width: 100%;
+      min-height: 70px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      font-size: 14px;
+      margin-top: 10px;
+      background: var(--surface);
+    }
+
+    .history-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .history-item {
+      background: var(--surface);
+      padding: 14px 16px;
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      display: grid;
+      gap: 6px;
+    }
+
+    .history-item .time {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .nav-bar {
+      display: flex;
+      gap: 8px;
+    }
+
+    .manage-button {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 10px 14px;
+      min-height: 44px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .badge.custom {
+      background: #f3dfe5;
+    }
+
+    .badge.linked {
+      background: #d6e5f5;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(20, 18, 16, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 20;
+    }
+
+    .modal {
+      background: var(--surface);
+      border-radius: 20px;
+      width: min(720px, 100%);
+      max-height: 85vh;
+      overflow: auto;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      display: grid;
+      gap: 16px;
+    }
+
+    .modal h3 {
+      margin: 0 0 8px;
+    }
+
+    .modal .form-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .modal .form-row {
+      display: grid;
+      gap: 6px;
+    }
+
+    .modal input,
+    .modal select {
+      min-height: 40px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      padding: 8px 10px;
+      font-size: 14px;
+    }
+
+    .modal .list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .modal .list-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--surface-muted);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 14px;
+    }
+
+    .modal .list-item button {
+      border: none;
+      background: #f4d9d1;
+      border-radius: 10px;
+      padding: 6px 10px;
+      cursor: pointer;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    @media (min-width: 768px) {
+      .card-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .card-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <script>
+    const categories = [
+      { id: "greeting", name: { ja: "挨拶", en: "Greeting", zh: "问候", ko: "인사" }, sortOrder: 1 },
+      { id: "order", name: { ja: "注文", en: "Order", zh: "点餐", ko: "주문" }, sortOrder: 2 },
+      { id: "payment", name: { ja: "支払い", en: "Payment", zh: "支付", ko: "결제" }, sortOrder: 3 },
+      { id: "health", name: { ja: "体調", en: "Health", zh: "身体状况", ko: "건강" }, sortOrder: 4 },
+      { id: "rules", name: { ja: "禁止・注意", en: "Rules", zh: "注意事项", ko: "주의사항" }, sortOrder: 5 },
+      { id: "trouble", name: { ja: "トラブル", en: "Trouble", zh: "问题", ko: "문제" }, sortOrder: 6 }
+    ];
+
+    const cards = [
+      { id: "g1", categoryId: "greeting", tags: ["hello"], text: { ja: "こんにちは", en: "Hello", zh: "你好", ko: "안녕하세요" } },
+      { id: "g2", categoryId: "greeting", tags: ["thanks"], text: { ja: "ありがとうございます", en: "Thank you", zh: "谢谢", ko: "감사합니다" } },
+      { id: "g3", categoryId: "greeting", tags: ["goodbye"], text: { ja: "さようなら", en: "Goodbye", zh: "再见", ko: "안녕히 가세요" } },
+      { id: "g4", categoryId: "greeting", tags: ["help"], text: { ja: "助けてください", en: "Please help", zh: "请帮我", ko: "도와주세요" } },
+      { id: "g5", categoryId: "greeting", tags: ["sorry"], text: { ja: "すみません", en: "Excuse me", zh: "不好意思", ko: "실례합니다" } },
+      { id: "o1", categoryId: "order", tags: ["menu"], text: { ja: "メニューをください", en: "May I see the menu?", zh: "请给我菜单", ko: "메뉴를 주세요" } },
+      { id: "o2", categoryId: "order", tags: ["recommend"], text: { ja: "おすすめは何ですか？", en: "What do you recommend?", zh: "有什么推荐？", ko: "추천 메뉴가 있나요?" } },
+      { id: "o3", categoryId: "order", tags: ["vegetarian"], text: { ja: "ベジタリアンです", en: "I'm vegetarian", zh: "我是素食者", ko: "저는 채식주의자예요" } },
+      { id: "o4", categoryId: "order", tags: ["allergy"], text: { ja: "アレルギーがあります", en: "I have allergies", zh: "我有过敏", ko: "알레르기가 있어요" } },
+      { id: "o5", categoryId: "order", tags: ["no spicy"], text: { ja: "辛くしないでください", en: "Not spicy, please", zh: "请不要辣", ko: "맵지 않게 해주세요" } },
+      { id: "o6", categoryId: "order", tags: ["takeout"], text: { ja: "テイクアウトできますか？", en: "Can I get this to go?", zh: "可以打包吗？", ko: "포장 가능한가요?" } },
+      { id: "p1", categoryId: "payment", tags: ["cash"], text: { ja: "現金で払えますか？", en: "Can I pay in cash?", zh: "可以用现金吗？", ko: "현금으로 결제할 수 있나요?" } },
+      { id: "p2", categoryId: "payment", tags: ["card"], text: { ja: "クレジットカードは使えますか？", en: "Do you take credit cards?", zh: "可以刷卡吗？", ko: "카드 결제 되나요?" } },
+      { id: "p3", categoryId: "payment", tags: ["receipt"], text: { ja: "領収書をください", en: "I need a receipt", zh: "请给我发票", ko: "영수증 주세요" } },
+      { id: "p4", categoryId: "payment", tags: ["split"], text: { ja: "別々に払えますか？", en: "Can we split the bill?", zh: "可以分开结账吗？", ko: "따로 계산할 수 있나요?" } },
+      { id: "h1", categoryId: "health", tags: ["pain"], text: { ja: "気分が悪いです", en: "I feel sick", zh: "我不舒服", ko: "몸이 안 좋아요" } },
+      { id: "h2", categoryId: "health", tags: ["medicine"], text: { ja: "薬局はどこですか？", en: "Where is the pharmacy?", zh: "药店在哪里？", ko: "약국이 어디인가요?" } },
+      { id: "h3", categoryId: "health", tags: ["hospital"], text: { ja: "病院に行きたいです", en: "I want to go to a hospital", zh: "我想去医院", ko: "병원에 가고 싶어요" } },
+      { id: "h4", categoryId: "health", tags: ["water"], text: { ja: "水をください", en: "Water, please", zh: "请给我水", ko: "물 좀 주세요" } },
+      { id: "h5", categoryId: "health", tags: ["rest"], text: { ja: "少し休みたいです", en: "I need a short rest", zh: "我想休息一下", ko: "잠시 쉬고 싶어요" } },
+      { id: "r1", categoryId: "rules", tags: ["no smoke"], text: { ja: "禁煙ですか？", en: "Is this non-smoking?", zh: "这里禁烟吗？", ko: "금연 구역인가요?" } },
+      { id: "r2", categoryId: "rules", tags: ["quiet"], text: { ja: "静かにしてください", en: "Please be quiet", zh: "请保持安静", ko: "조용히 해주세요" } },
+      { id: "r3", categoryId: "rules", tags: ["photo"], text: { ja: "写真は撮れますか？", en: "Can I take photos?", zh: "可以拍照吗？", ko: "사진 찍어도 되나요?" } },
+      { id: "r4", categoryId: "rules", tags: ["entry"], text: { ja: "ここに入ってもいいですか？", en: "May I enter here?", zh: "可以进去吗？", ko: "여기 들어가도 되나요?" } },
+      { id: "t1", categoryId: "trouble", tags: ["lost"], text: { ja: "道に迷いました", en: "I'm lost", zh: "我迷路了", ko: "길을 잃었어요" } },
+      { id: "t2", categoryId: "trouble", tags: ["police"], text: { ja: "警察を呼んでください", en: "Please call the police", zh: "请叫警察", ko: "경찰을 불러 주세요" } },
+      { id: "t3", categoryId: "trouble", tags: ["wallet"], text: { ja: "財布をなくしました", en: "I lost my wallet", zh: "我丢了钱包", ko: "지갑을 잃어버렸어요" } },
+      { id: "t4", categoryId: "trouble", tags: ["phone"], text: { ja: "スマホをなくしました", en: "I lost my phone", zh: "我丢了手机", ko: "휴대폰을 잃어버렸어요" } },
+      { id: "t5", categoryId: "trouble", tags: ["charge"], text: { ja: "充電したいです", en: "I need to charge my phone", zh: "我想充电", ko: "충전하고 싶어요" } },
+      { id: "t6", categoryId: "trouble", tags: ["train"], text: { ja: "電車に乗り遅れました", en: "I missed the train", zh: "我错过了火车", ko: "기차를 놓쳤어요" } }
+    ];
+
+    const sakeMaster = [
+      { id: 101, name: "山田錦 純米吟醸" },
+      { id: 102, name: "雪中梅 特別本醸造" },
+      { id: 103, name: "獺祭 純米大吟醸45" }
+    ];
+
+    const replyTexts = {
+      ok: { ja: "OK", en: "OK", zh: "好的", ko: "확인" },
+      yes: { ja: "はい", en: "Yes", zh: "是的", ko: "네" },
+      no: { ja: "いいえ", en: "No", zh: "不", ko: "아니요" },
+      wait: { ja: "少々お待ちください", en: "Please wait", zh: "请稍等", ko: "잠시만 기다려 주세요" },
+      custom: { ja: "メモあり", en: "With memo", zh: "有备注", ko: "메모 있음" }
+    };
+
+    const statusLabels = {
+      none: { ja: "未回答", en: "Pending", zh: "未答复", ko: "미응답" },
+      ok: { ja: "OK", en: "OK", zh: "好的", ko: "확인" },
+      yes: { ja: "はい", en: "Yes", zh: "是", ko: "네" },
+      no: { ja: "いいえ", en: "No", zh: "否", ko: "아니요" },
+      wait: { ja: "待機", en: "Wait", zh: "等待", ko: "대기" },
+      custom: { ja: "メモ", en: "Custom", zh: "备注", ko: "메모" }
+    };
+
+    const statusColors = {
+      none: "var(--status-none)",
+      ok: "var(--status-ok)",
+      yes: "var(--status-yes)",
+      no: "var(--status-no)",
+      wait: "var(--status-wait)",
+      custom: "var(--status-custom)"
+    };
+
+    const storageKeys = {
+      selectedLang: "tcw_selectedLang",
+      cardAnswers: "tcw_cardAnswers",
+      history: "tcw_history",
+      cardStats: "tcw_cardStats",
+      customCategories: "tcw_customCategories",
+      customCards: "tcw_customCards"
+    };
+
+    const state = {
+      selectedLang: "en",
+      selectedCategoryId: "all",
+      searchQuery: "",
+      view: "home",
+      activeCardId: null,
+      cardAnswers: {},
+      history: [],
+      cardStats: {},
+      customCategories: [],
+      customCards: [],
+      showManage: false,
+      sakeSearch: "",
+      selectedSakeId: ""
+    };
+
+    const app = document.getElementById("app");
+
+    const loadState = () => {
+      const storedLang = localStorage.getItem(storageKeys.selectedLang);
+      const storedAnswers = localStorage.getItem(storageKeys.cardAnswers);
+      const storedHistory = localStorage.getItem(storageKeys.history);
+      if (storedLang) {
+        state.selectedLang = storedLang;
+      }
+      if (storedAnswers) {
+        try {
+          state.cardAnswers = JSON.parse(storedAnswers) || {};
+        } catch (error) {
+          state.cardAnswers = {};
+        }
+      }
+      if (storedHistory) {
+        try {
+          state.history = JSON.parse(storedHistory) || [];
+        } catch (error) {
+          state.history = [];
+        }
+      }
+      const storedStats = localStorage.getItem(storageKeys.cardStats);
+      if (storedStats) {
+        try {
+          state.cardStats = JSON.parse(storedStats) || {};
+        } catch (error) {
+          state.cardStats = {};
+        }
+      }
+      const storedCategories = localStorage.getItem(storageKeys.customCategories);
+      if (storedCategories) {
+        try {
+          state.customCategories = JSON.parse(storedCategories) || [];
+        } catch (error) {
+          state.customCategories = [];
+        }
+      }
+      const storedCards = localStorage.getItem(storageKeys.customCards);
+      if (storedCards) {
+        try {
+          state.customCards = JSON.parse(storedCards) || [];
+        } catch (error) {
+          state.customCards = [];
+        }
+      }
+    };
+
+    const persistState = () => {
+      localStorage.setItem(storageKeys.selectedLang, state.selectedLang);
+      localStorage.setItem(storageKeys.cardAnswers, JSON.stringify(state.cardAnswers));
+      localStorage.setItem(storageKeys.history, JSON.stringify(state.history));
+      localStorage.setItem(storageKeys.cardStats, JSON.stringify(state.cardStats));
+      localStorage.setItem(storageKeys.customCategories, JSON.stringify(state.customCategories));
+      localStorage.setItem(storageKeys.customCards, JSON.stringify(state.customCards));
+    };
+
+    const formatTime = (timestamp) => {
+      const date = new Date(timestamp);
+      return date.toLocaleString("ja-JP", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    };
+
+    const getStatus = (cardId) => {
+      return state.cardAnswers[cardId]?.status || "none";
+    };
+
+    const getMemo = (cardId) => {
+      return state.cardAnswers[cardId]?.memo || "";
+    };
+
+    const matchesSearch = (card, query) => {
+      if (!query) return true;
+      const lower = query.toLowerCase();
+      return [card.text[state.selectedLang], card.text.ja].some((text) =>
+        text.toLowerCase().includes(lower)
+      );
+    };
+
+    const getAllCategories = () => {
+      const base = categories
+        .slice()
+        .sort((a, b) => a.sortOrder - b.sortOrder);
+      return base.concat(state.customCategories);
+    };
+
+    const getAllCards = () => {
+      return cards.concat(state.customCards);
+    };
+
+    const renderHeader = () => {
+      const langButtons = [
+        { code: "en", label: "EN" },
+        { code: "zh", label: "ZH" },
+        { code: "ko", label: "KO" }
+      ]
+        .map(
+          (lang) =>
+            `<button class="chip ${state.selectedLang === lang.code ? "active" : ""}" data-action="set-lang" data-lang="${lang.code}">${lang.label}</button>`
+        )
+        .join("");
+
+      const categoryButtons = [
+        `<button class="chip ${state.selectedCategoryId === "all" ? "active" : ""}" data-action="set-category" data-category="all">All</button>`,
+        `<button class="chip ${state.selectedCategoryId === "frequent" ? "active" : ""}" data-action="set-category" data-category="frequent">よく使う</button>`,
+        ...getAllCategories().map(
+          (category) =>
+            `<button class="chip ${state.selectedCategoryId === category.id ? "active" : ""}" data-action="set-category" data-category="${category.id}">${category.name.ja}</button>`
+        )
+      ].join("");
+
+      const historyTabClass = state.view === "history" ? "tab active" : "tab";
+      const homeTabClass = state.view === "home" ? "tab active" : "tab";
+
+      return `
+        <header>
+          <h1 class="app-title">翻訳カード</h1>
+          <div class="toolbar">
+            <div class="toolbar-row">
+              <div class="chip-group" role="group" aria-label="言語選択">
+                ${langButtons}
+              </div>
+              <div class="nav-bar">
+                <button class="${homeTabClass}" data-action="go-home">ホーム</button>
+                <button class="${historyTabClass}" data-action="go-history">履歴</button>
+              </div>
+              <button class="manage-button" data-action="open-manage">＋管理</button>
+            </div>
+            <div class="toolbar-row">
+              <input type="search" value="${state.searchQuery}" placeholder="検索（外国語 / 日本語）" data-action="search" />
+            </div>
+            <div class="toolbar-row">
+              <div class="chip-group" role="group" aria-label="カテゴリ">
+                ${categoryButtons}
+              </div>
+            </div>
+          </div>
+        </header>
+      `;
+    };
+
+    const renderCards = () => {
+      const allCards = getAllCards();
+      let filtered = allCards.filter((card) => {
+        if (state.selectedCategoryId === "frequent") {
+          return matchesSearch(card, state.searchQuery);
+        }
+        const inCategory = state.selectedCategoryId === "all" || card.categoryId === state.selectedCategoryId;
+        return inCategory && matchesSearch(card, state.searchQuery);
+      });
+
+      if (state.selectedCategoryId === "frequent") {
+        filtered = filtered
+          .map((card) => ({
+            card,
+            stats: state.cardStats[card.id] || { useCount: 0, lastUsedAt: 0 }
+          }))
+          .filter((item) => item.stats.useCount > 0)
+          .sort((a, b) => {
+            if (b.stats.useCount !== a.stats.useCount) {
+              return b.stats.useCount - a.stats.useCount;
+            }
+            return b.stats.lastUsedAt - a.stats.lastUsedAt;
+          })
+          .slice(0, 12)
+          .map((item) => item.card);
+      }
+
+      if (!filtered.length) {
+        return `<p>${state.selectedCategoryId === "frequent" ? "まだありません。" : "該当するカードがありません。"}</p>`;
+      }
+
+      return `
+        <div class="card-grid">
+          ${filtered
+            .map((card) => {
+              const status = getStatus(card.id);
+              const badgeText = statusLabels[status]["ja"];
+              const isFrequent = (state.cardStats[card.id]?.useCount || 0) >= 3;
+              const isCustom = card.isCustom;
+              const isLinked = Boolean(card.links?.sake);
+              return `
+                <button class="card" data-action="open-card" data-card-id="${card.id}" style="border-color: ${statusColors[status]};">
+                  <div class="card-text">${card.text[state.selectedLang]}</div>
+                  <div class="card-meta">
+                    <span>${card.text.ja}</span>
+                    <span style="display: inline-flex; gap: 6px; align-items: center;">
+                      ${isLinked ? `<span class="badge linked">linked</span>` : ""}
+                      ${isCustom ? `<span class="badge custom">CUSTOM</span>` : ""}
+                      ${isFrequent ? `<span class="badge" style="background: #efe6b4;">★よく使う</span>` : ""}
+                      <span class="badge" style="background: ${statusColors[status]};">${badgeText}</span>
+                    </span>
+                  </div>
+                </button>
+              `;
+            })
+            .join("")}
+        </div>
+      `;
+    };
+
+    const renderDetail = () => {
+      const card = getAllCards().find((item) => item.id === state.activeCardId);
+      if (!card) {
+        return `<p>カードが見つかりません。</p>`;
+      }
+      const status = getStatus(card.id);
+      const memo = getMemo(card.id);
+      const reply = status === "none" ? null : replyTexts[status];
+
+      return `
+        <main>
+          <div class="detail">
+            <div class="detail-section" style="border-color: ${statusColors[status]};">
+              <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <h2 class="detail-foreign" style="margin: 0;">${card.text[state.selectedLang]}</h2>
+                <button class="chip" data-action="speak" data-lang="${state.selectedLang}">🔊読み上げ</button>
+                ${card.isCustom ? `<span class="badge custom">CUSTOM</span>` : ""}
+                ${card.links?.sake ? `<span class="badge linked">linked</span>` : ""}
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 6px;">
+                <p class="detail-ja" style="margin: 0;">${card.text.ja}</p>
+                <button class="chip" data-action="speak" data-lang="ja">🔊読み上げ</button>
+              </div>
+              ${
+                reply
+                  ? `
+                    <div class="reply-block" style="background: ${statusColors[status]};">
+                      <div class="reply-foreign">${reply[state.selectedLang]}</div>
+                      <div class="reply-ja">${reply.ja}</div>
+                      ${memo ? `<div class="reply-ja">メモ: ${memo}</div>` : ""}
+                    </div>
+                  `
+                  : ""
+              }
+            </div>
+            <div class="detail-section">
+              <h3>回答する</h3>
+              <div class="button-row">
+                <button class="action" data-action="reply" data-status="ok">OK</button>
+                <button class="action" data-action="reply" data-status="yes">YES</button>
+                <button class="action" data-action="reply" data-status="no">NO</button>
+                <button class="action" data-action="reply" data-status="wait">WAIT</button>
+              </div>
+              <div class="reply-block">
+                <label for="memo" class="reply-ja">CUSTOMメモ</label>
+                <textarea id="memo" class="memo-input" placeholder="自由メモを入力">${memo}</textarea>
+                <div class="button-row" style="margin-top: 10px;">
+                  <button class="action primary" data-action="reply" data-status="custom">CUSTOM保存</button>
+                </div>
+              </div>
+              <div class="button-row" style="margin-top: 12px;">
+                <button class="action" data-action="reset">リセット</button>
+                <button class="action" data-action="go-home">戻る</button>
+              </div>
+            </div>
+          </div>
+        </main>
+      `;
+    };
+
+    const renderHistory = () => {
+      if (!state.history.length) {
+        return `
+          <main>
+            <p>履歴がありません。</p>
+          </main>
+        `;
+      }
+      return `
+        <main>
+          <div class="history-list">
+            ${state.history
+              .map((entry) => {
+                const card = getAllCards().find((item) => item.id === entry.cardId);
+                if (!card) return "";
+                const reply = replyTexts[entry.status];
+                return `
+                  <div class="history-item" style="border-left: 6px solid ${statusColors[entry.status]};">
+                    <div><strong>${card.text[entry.lang]}</strong> / ${card.text.ja}</div>
+                    <div>${reply ? reply[entry.lang] : ""} ${entry.memo ? `- ${entry.memo}` : ""}</div>
+                    <div class="time">${formatTime(entry.timestamp)}</div>
+                  </div>
+                `;
+              })
+              .join("")}
+          </div>
+        </main>
+      `;
+    };
+
+    const renderManageModal = () => {
+      if (!state.showManage) return "";
+
+      const categoryOptions = getAllCategories()
+        .map((category) => `<option value="${category.id}">${category.name.ja}</option>`)
+        .join("");
+
+      const sakeMatches = sakeMaster.filter((item) =>
+        item.name.toLowerCase().includes(state.sakeSearch.toLowerCase())
+      );
+      const sakeList = sakeMatches
+        .map(
+          (item) =>
+            `<button class="chip ${state.selectedSakeId === String(item.id) ? "active" : ""}" data-action="select-sake" data-sake-id="${item.id}">${item.name}</button>`
+        )
+        .join("");
+
+      return `
+        <div class="modal-overlay" role="dialog" aria-modal="true">
+          <div class="modal">
+            <h2>カスタム管理</h2>
+            <section>
+              <h3>カスタムカテゴリ作成</h3>
+              <div class="form-grid">
+                <div class="form-row">
+                  <label>カテゴリ名（ja必須）</label>
+                  <input type="text" data-field="custom-category-ja" placeholder="例：観光" />
+                </div>
+                <div class="form-row">
+                  <label>カテゴリ名（en/zh/ko 任意）</label>
+                  <input type="text" data-field="custom-category-en" placeholder="English" />
+                  <input type="text" data-field="custom-category-zh" placeholder="中文" />
+                  <input type="text" data-field="custom-category-ko" placeholder="한국어" />
+                </div>
+                <button class="action primary" data-action="add-category">カテゴリ追加</button>
+              </div>
+            </section>
+            <section>
+              <h3>カスタムカード作成</h3>
+              <div class="form-grid">
+                <div class="form-row">
+                  <label>カテゴリ</label>
+                  <select data-field="custom-card-category">${categoryOptions}</select>
+                </div>
+                <div class="form-row">
+                  <label>テキスト（ja/en/zh/ko）</label>
+                  <input type="text" data-field="custom-card-ja" placeholder="日本語（必須）" />
+                  <input type="text" data-field="custom-card-en" placeholder="English" />
+                  <input type="text" data-field="custom-card-zh" placeholder="中文" />
+                  <input type="text" data-field="custom-card-ko" placeholder="한국어" />
+                </div>
+                <div class="form-row">
+                  <label>タグ（カンマ区切り・任意）</label>
+                  <input type="text" data-field="custom-card-tags" placeholder="例：taxi,hotel" />
+                </div>
+                <div class="form-row">
+                  <label>日本酒マスタに紐付け（任意）</label>
+                  <input type="text" data-field="sake-search" placeholder="日本酒を検索" value="${state.sakeSearch}" />
+                  <div class="chip-group">${sakeList || "<p>該当なし</p>"}</div>
+                </div>
+                <button class="action primary" data-action="add-card">カード追加</button>
+              </div>
+            </section>
+            <section>
+              <h3>カスタムカテゴリ一覧</h3>
+              <div class="list">
+                ${state.customCategories.length ? state.customCategories
+                  .map(
+                    (category) => `
+                      <div class="list-item">
+                        <span>${category.name.ja}</span>
+                        <button data-action="delete-category" data-category-id="${category.id}">削除</button>
+                      </div>
+                    `
+                  )
+                  .join("") : "<p>まだありません。</p>"}
+              </div>
+            </section>
+            <section>
+              <h3>カスタムカード一覧</h3>
+              <div class="list">
+                ${state.customCards.length ? state.customCards
+                  .map(
+                    (card) => `
+                      <div class="list-item">
+                        <span>${card.text.ja}</span>
+                        <button data-action="delete-card" data-card-id="${card.id}">削除</button>
+                      </div>
+                    `
+                  )
+                  .join("") : "<p>まだありません。</p>"}
+              </div>
+            </section>
+            <div class="modal-footer">
+              <button class="action" data-action="close-manage">閉じる</button>
+            </div>
+          </div>
+        </div>
+      `;
+    };
+
+    const render = () => {
+      app.innerHTML = `
+        ${renderHeader()}
+        ${state.view === "home" ? `<main>${renderCards()}</main>` : ""}
+        ${state.view === "detail" ? renderDetail() : ""}
+        ${state.view === "history" ? renderHistory() : ""}
+        ${renderManageModal()}
+      `;
+    };
+
+    const languageVoices = {
+      ja: "ja-JP",
+      en: "en-US",
+      zh: "zh-CN",
+      ko: "ko-KR"
+    };
+
+    const speakText = (text, lang) => {
+      if (!text) return;
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = languageVoices[lang] || "en-US";
+      speechSynthesis.cancel();
+      speechSynthesis.speak(utterance);
+    };
+
+    const updateHistory = (cardId, status, memo) => {
+      state.history.unshift({
+        cardId,
+        status,
+        memo,
+        lang: state.selectedLang,
+        timestamp: Date.now()
+      });
+      state.history = state.history.slice(0, 20);
+    };
+
+    const createId = (prefix) => `${prefix}-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+
+    const updateStats = (cardId) => {
+      const current = state.cardStats[cardId] || { useCount: 0, lastUsedAt: 0 };
+      state.cardStats[cardId] = {
+        useCount: current.useCount + 1,
+        lastUsedAt: Date.now()
+      };
+    };
+
+    app.addEventListener("click", (event) => {
+      const target = event.target.closest("[data-action]");
+      if (!target) return;
+      const action = target.dataset.action;
+
+      if (action === "set-lang") {
+        state.selectedLang = target.dataset.lang;
+      }
+
+      if (action === "set-category") {
+        state.selectedCategoryId = target.dataset.category;
+      }
+
+      if (action === "go-history") {
+        state.view = "history";
+      }
+
+      if (action === "go-home") {
+        state.view = "home";
+        state.activeCardId = null;
+      }
+
+      if (action === "open-manage") {
+        state.showManage = true;
+      }
+
+      if (action === "close-manage") {
+        state.showManage = false;
+      }
+
+      if (action === "open-card") {
+        state.activeCardId = target.dataset.cardId;
+        state.view = "detail";
+      }
+
+      if (action === "reply") {
+        const status = target.dataset.status;
+        const memoInput = document.getElementById("memo");
+        const memo = status === "custom" ? (memoInput?.value || "").trim() : "";
+        state.cardAnswers[state.activeCardId] = {
+          status,
+          memo,
+          updatedAt: Date.now()
+        };
+        updateHistory(state.activeCardId, status, memo);
+        updateStats(state.activeCardId);
+      }
+
+      if (action === "add-category") {
+        const jaInput = app.querySelector("[data-field='custom-category-ja']");
+        const enInput = app.querySelector("[data-field='custom-category-en']");
+        const zhInput = app.querySelector("[data-field='custom-category-zh']");
+        const koInput = app.querySelector("[data-field='custom-category-ko']");
+        const jaValue = (jaInput?.value || "").trim();
+        if (!jaValue) {
+          return;
+        }
+        state.customCategories.push({
+          id: createId("custom-category"),
+          name: {
+            ja: jaValue,
+            en: (enInput?.value || "").trim() || jaValue,
+            zh: (zhInput?.value || "").trim() || jaValue,
+            ko: (koInput?.value || "").trim() || jaValue
+          }
+        });
+      }
+
+      if (action === "select-sake") {
+        state.selectedSakeId = target.dataset.sakeId;
+      }
+
+      if (action === "add-card") {
+        const categorySelect = app.querySelector("[data-field='custom-card-category']");
+        const jaInput = app.querySelector("[data-field='custom-card-ja']");
+        const enInput = app.querySelector("[data-field='custom-card-en']");
+        const zhInput = app.querySelector("[data-field='custom-card-zh']");
+        const koInput = app.querySelector("[data-field='custom-card-ko']");
+        const tagsInput = app.querySelector("[data-field='custom-card-tags']");
+        const jaValue = (jaInput?.value || "").trim();
+        if (!jaValue) {
+          return;
+        }
+        const selectedCategory = categorySelect?.value || "all";
+        const tags = (tagsInput?.value || "")
+          .split(",")
+          .map((tag) => tag.trim())
+          .filter(Boolean);
+        const linkedSake = sakeMaster.find((item) => String(item.id) === state.selectedSakeId);
+        const links = linkedSake
+          ? {
+              sake: { id: linkedSake.id, nameSnapshot: linkedSake.name }
+            }
+          : undefined;
+        state.customCards.push({
+          id: createId("custom-card"),
+          categoryId: selectedCategory,
+          tags,
+          text: {
+            ja: jaValue,
+            en: (enInput?.value || "").trim() || jaValue,
+            zh: (zhInput?.value || "").trim() || jaValue,
+            ko: (koInput?.value || "").trim() || jaValue
+          },
+          isCustom: true,
+          links
+        });
+        state.sakeSearch = "";
+        state.selectedSakeId = "";
+      }
+
+      if (action === "delete-category") {
+        const categoryId = target.dataset.categoryId;
+        // カテゴリ削除時は所属するカスタムカードもまとめて削除します。
+        state.customCategories = state.customCategories.filter((category) => category.id !== categoryId);
+        state.customCards = state.customCards.filter((card) => card.categoryId !== categoryId);
+        if (state.selectedCategoryId === categoryId) {
+          state.selectedCategoryId = "all";
+        }
+      }
+
+      if (action === "delete-card") {
+        const cardId = target.dataset.cardId;
+        state.customCards = state.customCards.filter((card) => card.id !== cardId);
+        if (state.activeCardId === cardId) {
+          state.activeCardId = null;
+          state.view = "home";
+        }
+      }
+
+      if (action === "speak") {
+        const lang = target.dataset.lang;
+        const card = getAllCards().find((item) => item.id === state.activeCardId);
+        if (!card) return;
+        const text = lang === "ja" ? card.text.ja : card.text[state.selectedLang];
+        speakText(text, lang);
+        return;
+      }
+
+      if (action === "reset") {
+        if (state.activeCardId) {
+          delete state.cardAnswers[state.activeCardId];
+        }
+      }
+
+      persistState();
+      render();
+    });
+
+    app.addEventListener("input", (event) => {
+      const target = event.target;
+      if (target.matches("[data-action='search']")) {
+        state.searchQuery = target.value;
+        render();
+      }
+      if (target.matches("[data-field='sake-search']")) {
+        state.sakeSearch = target.value;
+        render();
+      }
+    });
+
+    loadState();
+    render();
+  </script>
+</body>
+</html>
