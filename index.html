@@ -346,7 +346,8 @@
     const storageKeys = {
       selectedLang: "tcw_selectedLang",
       cardAnswers: "tcw_cardAnswers",
-      history: "tcw_history"
+      history: "tcw_history",
+      cardStats: "tcw_cardStats"
     };
 
     const state = {
@@ -356,7 +357,8 @@
       view: "home",
       activeCardId: null,
       cardAnswers: {},
-      history: []
+      history: [],
+      cardStats: {}
     };
 
     const app = document.getElementById("app");
@@ -382,12 +384,21 @@
           state.history = [];
         }
       }
+      const storedStats = localStorage.getItem(storageKeys.cardStats);
+      if (storedStats) {
+        try {
+          state.cardStats = JSON.parse(storedStats) || {};
+        } catch (error) {
+          state.cardStats = {};
+        }
+      }
     };
 
     const persistState = () => {
       localStorage.setItem(storageKeys.selectedLang, state.selectedLang);
       localStorage.setItem(storageKeys.cardAnswers, JSON.stringify(state.cardAnswers));
       localStorage.setItem(storageKeys.history, JSON.stringify(state.history));
+      localStorage.setItem(storageKeys.cardStats, JSON.stringify(state.cardStats));
     };
 
     const formatTime = (timestamp) => {
@@ -431,6 +442,7 @@
 
       const categoryButtons = [
         `<button class="chip ${state.selectedCategoryId === "all" ? "active" : ""}" data-action="set-category" data-category="all">All</button>`,
+        `<button class="chip ${state.selectedCategoryId === "frequent" ? "active" : ""}" data-action="set-category" data-category="frequent">よく使う</button>`,
         ...categories
           .sort((a, b) => a.sortOrder - b.sortOrder)
           .map(
@@ -469,13 +481,33 @@
     };
 
     const renderCards = () => {
-      const filtered = cards.filter((card) => {
+      let filtered = cards.filter((card) => {
+        if (state.selectedCategoryId === "frequent") {
+          return matchesSearch(card, state.searchQuery);
+        }
         const inCategory = state.selectedCategoryId === "all" || card.categoryId === state.selectedCategoryId;
         return inCategory && matchesSearch(card, state.searchQuery);
       });
 
+      if (state.selectedCategoryId === "frequent") {
+        filtered = filtered
+          .map((card) => ({
+            card,
+            stats: state.cardStats[card.id] || { useCount: 0, lastUsedAt: 0 }
+          }))
+          .filter((item) => item.stats.useCount > 0)
+          .sort((a, b) => {
+            if (b.stats.useCount !== a.stats.useCount) {
+              return b.stats.useCount - a.stats.useCount;
+            }
+            return b.stats.lastUsedAt - a.stats.lastUsedAt;
+          })
+          .slice(0, 12)
+          .map((item) => item.card);
+      }
+
       if (!filtered.length) {
-        return `<p>該当するカードがありません。</p>`;
+        return `<p>${state.selectedCategoryId === "frequent" ? "まだありません。" : "該当するカードがありません。"}</p>`;
       }
 
       return `
@@ -484,12 +516,16 @@
             .map((card) => {
               const status = getStatus(card.id);
               const badgeText = statusLabels[status]["ja"];
+              const isFrequent = (state.cardStats[card.id]?.useCount || 0) >= 3;
               return `
                 <button class="card" data-action="open-card" data-card-id="${card.id}" style="border-color: ${statusColors[status]};">
                   <div class="card-text">${card.text[state.selectedLang]}</div>
                   <div class="card-meta">
                     <span>${card.text.ja}</span>
-                    <span class="badge" style="background: ${statusColors[status]};">${badgeText}</span>
+                    <span style="display: inline-flex; gap: 6px; align-items: center;">
+                      ${isFrequent ? `<span class="badge" style="background: #efe6b4;">★よく使う</span>` : ""}
+                      <span class="badge" style="background: ${statusColors[status]};">${badgeText}</span>
+                    </span>
                   </div>
                 </button>
               `;
@@ -622,6 +658,14 @@
       state.history = state.history.slice(0, 20);
     };
 
+    const updateStats = (cardId) => {
+      const current = state.cardStats[cardId] || { useCount: 0, lastUsedAt: 0 };
+      state.cardStats[cardId] = {
+        useCount: current.useCount + 1,
+        lastUsedAt: Date.now()
+      };
+    };
+
     app.addEventListener("click", (event) => {
       const target = event.target.closest("[data-action]");
       if (!target) return;
@@ -659,6 +703,7 @@
           updatedAt: Date.now()
         };
         updateHistory(state.activeCardId, status, memo);
+        updateStats(state.activeCardId);
       }
 
       if (action === "speak") {
