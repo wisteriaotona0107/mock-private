@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>翻訳カード印刷レイアウト</title>
+  <style>
+    :root {
+      --page-width: 297mm;
+      --page-height: 210mm;
+      --page-margin: 6mm;
+      --grid-gap: 4mm;
+      --card-radius: 4mm;
+      --text-dark: #222222;
+      --text-muted: #8d8d8d;
+      --line-light: rgba(0, 0, 0, 0.2);
+      --paper: #faf8f3;
+      --qr-size: 30mm;
+      --header-height: 6mm;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #f0f0f0;
+      font-family: "Noto Sans JP", "Hiragino Sans", "Yu Gothic", sans-serif;
+      color: var(--text-dark);
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .page {
+      width: var(--page-width);
+      height: var(--page-height);
+      margin: 0 auto;
+      padding: var(--page-margin);
+      background: var(--paper);
+    }
+
+    .grid {
+      display: grid;
+      width: 100%;
+      height: 100%;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(4, 1fr);
+      gap: var(--grid-gap);
+    }
+
+    .card {
+      position: relative;
+      border: 0.35mm dashed var(--line-light);
+      border-radius: var(--card-radius);
+      padding: calc(var(--header-height) + 3mm) calc(var(--qr-size) + 8mm) 8mm 7mm;
+      background: rgba(255, 255, 255, 0.9);
+      display: flex;
+      flex-direction: column;
+      gap: 1.6mm;
+      overflow: hidden;
+    }
+
+    .card-header {
+      position: absolute;
+      top: 2.5mm;
+      left: 3.5mm;
+      height: var(--header-height);
+      display: inline-flex;
+      align-items: center;
+      padding: 0 3mm;
+      border-radius: 3mm;
+      background: var(--category-color, #dfe7f2);
+      color: #1d2b3a;
+      font-size: 2.4mm;
+      letter-spacing: 0.3mm;
+    }
+
+    .card-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1.4mm;
+    }
+
+    .qr-box {
+      position: absolute;
+      top: 5mm;
+      right: 5mm;
+      width: var(--qr-size);
+      height: var(--qr-size);
+      border: 0.4mm solid var(--line-light);
+      border-radius: 2mm;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3mm;
+      color: var(--text-muted);
+      letter-spacing: 0.5mm;
+      text-transform: uppercase;
+    }
+
+    .line {
+      line-height: 1.1;
+    }
+
+    .text-ja {
+      font-size: 5mm;
+      font-weight: 600;
+      font-family: "Noto Sans JP", "Hiragino Sans", "Yu Gothic", sans-serif;
+    }
+
+    .speech-ja {
+      font-size: 2.8mm;
+      color: var(--text-muted);
+    }
+
+    .text-en,
+    .speech-en {
+      font-family: "Inter", "Noto Sans", Arial, sans-serif;
+    }
+
+    .text-en,
+    .text-zh,
+    .text-ko {
+      font-size: 3.5mm;
+      font-weight: 500;
+    }
+
+    .speech-en,
+    .speech-zh,
+    .speech-ko {
+      font-size: 2.6mm;
+      color: var(--text-muted);
+    }
+
+    .text-zh,
+    .speech-zh {
+      font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    .text-ko,
+    .speech-ko {
+      font-family: "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
+    }
+
+    @media screen {
+      body {
+        padding: 20px 0;
+      }
+
+      .page {
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+      }
+    }
+
+    @media print {
+      body {
+        background: var(--paper);
+      }
+
+      .page {
+        margin: 0;
+        box-shadow: none;
+      }
+    }
+
+    @page {
+      size: A4 landscape;
+      margin: var(--page-margin);
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="grid" id="cardGrid"></section>
+  </main>
+
+  <script>
+    const cards = [
+      {
+        id: "C-01",
+        category: { label: "挨拶", color: "#f6d9d5" },
+        text: { ja: "こんにちは", en: "Hello", zh: "你好", ko: "안녕하세요" },
+        speech: { ja: "こんにちは", en: "konnichiwa", zh: "kòng ní qí wā", ko: "콘니치와" }
+      },
+      {
+        id: "C-02",
+        category: { label: "座席", color: "#f2e7c9" },
+        text: { ja: "座っていいですか", en: "May I sit here?", zh: "我可以坐这里吗？", ko: "여기 앉아도 될까요?" },
+        speech: { ja: "すわっていいですか", en: "suwatte ii desu ka", zh: "sū wā tte ī dè sū kā", ko: "스왓테 이이 데스까" }
+      },
+      {
+        id: "C-03",
+        category: { label: "注文", color: "#dfe9f7" },
+        text: { ja: "注文いいですか", en: "May I order?", zh: "我可以点单吗？", ko: "주문해도 될까요?" },
+        speech: { ja: "ちゅうもんいいですか", en: "chuumon ii desu ka", zh: "chū mòng ī dè sū kā", ko: "추-몬 이이 데스까" }
+      },
+      {
+        id: "C-04",
+        category: { label: "飲み物", color: "#d7eef2" },
+        text: { ja: "獺祭下さい", en: "Dassai, please", zh: "请给我獺祭", ko: "닷사이 주세요" },
+        speech: { ja: "だっさい ください", en: "dassai kudasai", zh: "dá sài kù dásài", ko: "닷사이 쿠다사이" }
+      },
+      {
+        id: "C-05",
+        category: { label: "食事", color: "#e2f0d9" },
+        text: { ja: "食事を下さい", en: "Food, please", zh: "请给我餐食", ko: "음식을 주세요" },
+        speech: { ja: "しょくじをください", en: "shokuji o kudasai", zh: "shō kù jī o kù dásài", ko: "쇼쿠지 오 쿠다사이" }
+      },
+      {
+        id: "C-06",
+        category: { label: "会計", color: "#efe0f2" },
+        text: { ja: "お会計して下さい", en: "Check, please", zh: "请结账", ko: "계산해 주세요" },
+        speech: { ja: "おかいけいして ください", en: "okaikei shite kudasai", zh: "o kài kèi shì tte kù dásài", ko: "오카이케이 시테 쿠다사이" }
+      },
+      {
+        id: "C-07",
+        category: { label: "支払い", color: "#f3f0d9" },
+        text: { ja: "カードで支払います", en: "I will pay by card", zh: "我用信用卡支付", ko: "카드로 결제할게요" },
+        speech: { ja: "かーどで しはらいます", en: "kaado de shiharaimasu", zh: "kā dō dè shì hā lā i mǎ sū", ko: "카-도데 시하라이마스" }
+      },
+      {
+        id: "C-08",
+        category: { label: "感謝", color: "#fde6c9" },
+        text: { ja: "ご馳走様でした", en: "Thank you for the meal", zh: "谢谢招待", ko: "잘 먹었습니다" },
+        speech: { ja: "ごちそうさまでした", en: "gochisousama deshita", zh: "gō chì sō ō sà mǎ dè shì tǎ", ko: "고치소-사마 데시타" }
+      }
+    ];
+
+    const grid = document.getElementById("cardGrid");
+
+    cards.forEach((card) => {
+      const article = document.createElement("article");
+      article.className = "card";
+      article.setAttribute("data-id", card.id);
+
+      article.innerHTML = `
+        <div class="card-header" style="--category-color: ${card.category.color}">${card.category.label}</div>
+        <div class="qr-box">QR</div>
+        <div class="card-content">
+          <div class="line text-ja">${card.text.ja}</div>
+          <div class="line speech-ja">${card.speech.ja}</div>
+          <div class="line text-en">${card.text.en}</div>
+          <div class="line speech-en">${card.speech.en}</div>
+          <div class="line text-zh">${card.text.zh}</div>
+          <div class="line speech-zh">${card.speech.zh}</div>
+          <div class="line text-ko">${card.text.ko}</div>
+          <div class="line speech-ko">${card.speech.ko}</div>
+        </div>
+      `;
+
+      grid.appendChild(article);
+    });
+  </script>
+</body>
+</html>
