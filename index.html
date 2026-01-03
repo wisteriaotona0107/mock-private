@@ -1,0 +1,554 @@
+<!--
+  実行手順: このファイルを保存してダブルクリックで開く（file:// で動作します）。
+-->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>UIマイクロコピー集（スマホ前提）</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f7f7f5;
+      --surface: #ffffff;
+      --border: #e2e2dc;
+      --text: #1f1f1b;
+      --muted: #6e6e66;
+      --accent: #3b5bdb;
+      --toast: #1f3a8a;
+      --tone-shortest: #6b7280;
+      --tone-reassuring: #16a34a;
+      --tone-guiding: #2563eb;
+      --tone-empathetic: #db2777;
+      --tone-shortest-bg: #f3f4f6;
+      --tone-reassuring-bg: #ecfdf5;
+      --tone-guiding-bg: #eff6ff;
+      --tone-empathetic-bg: #fdf2f8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    .page {
+      max-width: 420px;
+      margin: 0 auto;
+      padding: 16px 16px 48px;
+    }
+    header {
+      padding: 16px 14px 18px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #ffffff 0%, #f6f7fb 55%, #fef3f7 100%);
+      border: 1px solid var(--border);
+      box-shadow: 0 8px 20px rgba(31, 41, 55, 0.06);
+      margin-bottom: 12px;
+    }
+    h1 {
+      font-size: 20px;
+      margin: 8px 0 6px;
+      letter-spacing: 0.02em;
+    }
+    header p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .tone-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .legend-item {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      background: var(--tone-shortest-bg);
+    }
+    .filters {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background: var(--bg);
+      padding: 12px 0 8px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 8px;
+    }
+    .filters .filter-row span:last-child {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .filters .filter-row span:last-child::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--accent);
+      display: inline-block;
+    }
+    .filter-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .filter-grid input,
+    .filter-grid select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 13px;
+      background: var(--surface);
+      color: var(--text);
+    }
+    .filter-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .list {
+      display: grid;
+      gap: 12px;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      box-shadow: 0 10px 20px rgba(15, 23, 42, 0.04);
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: var(--tone-guiding);
+      opacity: 0.6;
+    }
+    .card[data-tone="shortest"]::before { background: var(--tone-shortest); }
+    .card[data-tone="reassuring"]::before { background: var(--tone-reassuring); }
+    .card[data-tone="guiding"]::before { background: var(--tone-guiding); }
+    .card[data-tone="empathetic"]::before { background: var(--tone-empathetic); }
+    .card .meta {
+      font-size: 11px;
+      color: var(--muted);
+      display: flex;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+    .tag {
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: #f0f0ed;
+    }
+    .tag--tone {
+      font-weight: 600;
+      border: 1px solid transparent;
+    }
+    .tone-shortest {
+      color: var(--tone-shortest);
+      background: var(--tone-shortest-bg);
+      border-color: #e5e7eb;
+    }
+    .tone-reassuring {
+      color: var(--tone-reassuring);
+      background: var(--tone-reassuring-bg);
+      border-color: #bbf7d0;
+    }
+    .tone-guiding {
+      color: var(--tone-guiding);
+      background: var(--tone-guiding-bg);
+      border-color: #bfdbfe;
+    }
+    .tone-empathetic {
+      color: var(--tone-empathetic);
+      background: var(--tone-empathetic-bg);
+      border-color: #fbcfe8;
+    }
+    .tone-chip {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--tone-shortest);
+      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.04);
+    }
+    .card[data-tone="shortest"] .tone-chip {
+      background: var(--tone-shortest);
+    }
+    .card[data-tone="reassuring"] .tone-chip {
+      background: var(--tone-reassuring);
+    }
+    .card[data-tone="guiding"] .tone-chip {
+      background: var(--tone-guiding);
+    }
+    .card[data-tone="empathetic"] .tone-chip {
+      background: var(--tone-empathetic);
+    }
+    .text {
+      font-size: 16px;
+      line-height: 1.5;
+      margin: 0 0 6px;
+      font-weight: 600;
+    }
+    .notes {
+      font-size: 12px;
+      color: var(--muted);
+      margin: 0 0 10px;
+      line-height: 1.5;
+    }
+    .examples {
+      font-size: 12px;
+      color: var(--muted);
+      margin: 0 0 10px;
+      line-height: 1.5;
+    }
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    button.copy {
+      border: none;
+      background: var(--accent);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    button.copy:active {
+      transform: scale(0.98);
+    }
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      background: var(--toast);
+      color: white;
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+    .toast.show {
+      opacity: 0.95;
+    }
+    .rules {
+      margin-top: 24px;
+      padding: 14px;
+      border-radius: 14px;
+      background: #fff7ed;
+      border: 1px solid #f0e5d2;
+    }
+    .rules h2 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+    .rules ul {
+      padding-left: 18px;
+      margin: 0 0 12px;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .rules .pair {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      margin-bottom: 8px;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .rules strong { color: var(--text); }
+    .empty {
+      font-size: 13px;
+      color: var(--muted);
+      text-align: center;
+      padding: 20px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>UIマイクロコピー集</h1>
+      <p>スマホ画面での読みやすさ重視。トーンと用途を選んで、短く迷いにくい文言を探せます。</p>
+      <div class="tone-legend">
+        <span class="legend-item tone-shortest">shortest</span>
+        <span class="legend-item tone-reassuring">reassuring</span>
+        <span class="legend-item tone-guiding">guiding</span>
+        <span class="legend-item tone-empathetic">empathetic</span>
+      </div>
+    </header>
+
+    <section class="filters">
+      <div class="filter-grid">
+        <select id="toneFilter">
+          <option value="">トーン：すべて</option>
+        </select>
+        <select id="contextFilter">
+          <option value="">用途：すべて</option>
+        </select>
+        <input id="searchInput" type="search" placeholder="検索（例：保存/読み込み/ログイン）" />
+      </div>
+      <div class="filter-row">
+        <span id="countLabel">0件</span>
+        <span>タップでコピー</span>
+      </div>
+    </section>
+
+    <section class="list" id="list"></section>
+    <div class="empty" id="emptyMessage" hidden>条件に合う文言がありません。</div>
+
+    <section class="rules">
+      <h2>長文化回避のルール</h2>
+      <ul>
+        <li>主文と補足を分ける（主文は1行で意味が通る）</li>
+        <li>詳細はタップ後へ逃がす</li>
+        <li>今やらせたい行動を1つに絞る</li>
+        <li>否定形は短く、別の行動を提示する</li>
+        <li>迷いそうな箇所だけ、補足を最小限で足す</li>
+      </ul>
+      <div class="pair"><strong>悪い例:</strong> お支払い方法が未登録のため、登録画面に移動してカード情報と請求先住所を入力してください。<br>
+        <strong>良い例:</strong> お支払い方法が必要です。<br>補足: ここでカードを登録できます。
+      </div>
+      <div class="pair"><strong>悪い例:</strong> 通知がオフのためメッセージの見逃しが発生する可能性があります。今すぐ設定を開きますか？<br>
+        <strong>良い例:</strong> 通知をオンにしますか？<br>補足: 重要な更新だけ届きます。
+      </div>
+      <div class="pair"><strong>悪い例:</strong> 入力内容に誤りがある場合、再入力してから再度保存ボタンを押してください。<br>
+        <strong>良い例:</strong> もう一度確認してください。<br>補足: 必須項目が空です。
+      </div>
+    </section>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const TONES = [
+      { value: "shortest", label: "shortest（最短・無機質）" },
+      { value: "reassuring", label: "reassuring（最短・安心補足）" },
+      { value: "guiding", label: "guiding（誘導型）" },
+      { value: "empathetic", label: "empathetic（感情ケア）" }
+    ];
+
+    const CONTEXTS = [
+      { value: "button", label: "button" },
+      { value: "form", label: "form" },
+      { value: "error", label: "error" },
+      { value: "success", label: "success" },
+      { value: "empty", label: "empty" }
+    ];
+
+    const BASE_TEXT = {
+      button: [
+        "保存する", "次へ", "削除する", "更新する", "続ける"
+      ],
+      form: [
+        "メールアドレスを入力", "名前を入力", "電話番号を入力", "住所を入力", "コードを入力"
+      ],
+      error: [
+        "再試行してください", "入力を確認", "接続に失敗", "保存できません", "読み込みに失敗"
+      ],
+      success: [
+        "保存しました", "送信しました", "更新完了", "登録できました", "完了しました"
+      ],
+      empty: [
+        "まだ項目がありません", "データが空です", "履歴がありません", "お気に入りがありません", "通知はありません"
+      ]
+    };
+
+    const VARIANTS = {
+      shortest: [
+        "", "", "", "", ""
+      ],
+      reassuring: [
+        "補足: 数秒で終わります", "補足: 安全に保存されます", "補足: 後で変更できます", "補足: いつでも取り消せます", "補足: 迷ったら戻れます"
+      ],
+      guiding: [
+        "次に進むために実行します", "まずここから始めます", "次の画面へ移動します", "この操作で進めます", "続きの手順を開きます"
+      ],
+      empathetic: [
+        "急がなくても大丈夫です", "落ち着いて進めましょう", "困ったら戻れます", "ゆっくりで大丈夫です", "迷ったら後で決められます"
+      ]
+    };
+
+    const LONG_FORM_EXAMPLES = [
+      {
+        notes: "短文で伝え、詳細は補足へ。",
+        exampleBad: "入力内容に不足があるため、全項目を確認してから再度送信してください。",
+        exampleGood: "入力を確認してください。"
+      },
+      {
+        notes: "主文で要点、補足で理由。",
+        exampleBad: "通知をオンにしないと重要なお知らせが届かない可能性があります。",
+        exampleGood: "通知をオンにしませんか？"
+      },
+      {
+        notes: "今やる行動を1つに絞る。",
+        exampleBad: "設定を開いて、保存して、戻ってきてください。",
+        exampleGood: "設定を開きます。"
+      }
+    ];
+
+    const DATA = [];
+    let id = 1;
+    TONES.forEach((tone) => {
+      CONTEXTS.forEach((context) => {
+        BASE_TEXT[context.value].forEach((baseText, index) => {
+          const variantNote = VARIANTS[tone.value][index] || "";
+          const needsNotes = (index + TONES.indexOf(tone)) % 2 === 0;
+          const longExample = LONG_FORM_EXAMPLES[(index + context.value.length) % LONG_FORM_EXAMPLES.length];
+          DATA.push({
+            id: id++,
+            tone: tone.value,
+            context: context.value,
+            text: tone.value === "shortest" ? baseText : `${baseText}`,
+            notes: needsNotes ? (variantNote || longExample.notes) : "",
+            exampleBad: needsNotes ? longExample.exampleBad : "",
+            exampleGood: needsNotes ? longExample.exampleGood : ""
+          });
+        });
+      });
+    });
+
+    const toneSelect = document.getElementById("toneFilter");
+    const contextSelect = document.getElementById("contextFilter");
+    const searchInput = document.getElementById("searchInput");
+    const list = document.getElementById("list");
+    const countLabel = document.getElementById("countLabel");
+    const emptyMessage = document.getElementById("emptyMessage");
+    const toast = document.getElementById("toast");
+
+    function initFilters() {
+      TONES.forEach((tone) => {
+        const option = document.createElement("option");
+        option.value = tone.value;
+        option.textContent = tone.label;
+        toneSelect.appendChild(option);
+      });
+      CONTEXTS.forEach((context) => {
+        const option = document.createElement("option");
+        option.value = context.value;
+        option.textContent = context.label;
+        contextSelect.appendChild(option);
+      });
+    }
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 2000);
+    }
+
+    function fallbackCopy(text, card) {
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.setAttribute("readonly", "");
+      textarea.style.position = "absolute";
+      textarea.style.left = "-9999px";
+      document.body.appendChild(textarea);
+      textarea.select();
+      let success = false;
+      try {
+        success = document.execCommand("copy");
+      } catch (error) {
+        success = false;
+      }
+      document.body.removeChild(textarea);
+      if (success) {
+        showToast("コピーしました");
+      } else {
+        const range = document.createRange();
+        const textNode = card.querySelector(".text");
+        range.selectNodeContents(textNode);
+        const selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        showToast("手動で選択してコピーしてください");
+      }
+    }
+
+    async function handleCopy(text, card) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        try {
+          await navigator.clipboard.writeText(text);
+          showToast("コピーしました");
+          return;
+        } catch (error) {
+          fallbackCopy(text, card);
+          return;
+        }
+      }
+      fallbackCopy(text, card);
+    }
+
+    function render() {
+      const toneValue = toneSelect.value;
+      const contextValue = contextSelect.value;
+      const keyword = searchInput.value.trim();
+
+      const filtered = DATA.filter((item) => {
+        const toneMatch = !toneValue || item.tone === toneValue;
+        const contextMatch = !contextValue || item.context === contextValue;
+        const keywordMatch = !keyword || [item.text, item.notes, item.context, item.tone].some((field) =>
+          field && field.toLowerCase().includes(keyword.toLowerCase())
+        );
+        return toneMatch && contextMatch && keywordMatch;
+      });
+
+      list.innerHTML = "";
+      filtered.forEach((item) => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.dataset.tone = item.tone;
+        card.innerHTML = `
+          <div class="meta">
+            <span class="tag tag--tone tone-${item.tone}">${item.tone}</span>
+            <span class="tag">${item.context}</span>
+          </div>
+          <span class="tone-chip" aria-hidden="true"></span>
+          <p class="text">${item.text}</p>
+          ${item.notes ? `<p class="notes">${item.notes}</p>` : ""}
+          ${item.exampleBad ? `<p class="examples">悪い例: ${item.exampleBad}<br>良い例: ${item.exampleGood}</p>` : ""}
+          <div class="actions">
+            <button class="copy" type="button">Copy</button>
+          </div>
+        `;
+        const button = card.querySelector("button.copy");
+        button.addEventListener("click", () => handleCopy(item.text, card));
+        list.appendChild(card);
+      });
+
+      countLabel.textContent = `${filtered.length}件`;
+      emptyMessage.hidden = filtered.length !== 0;
+    }
+
+    initFilters();
+    render();
+
+    toneSelect.addEventListener("change", render);
+    contextSelect.addEventListener("change", render);
+    searchInput.addEventListener("input", render);
+  </script>
+</body>
+</html>
