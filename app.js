@@ -113,10 +113,10 @@ async function loadData() {
   };
 
   const [brandsRes, breweriesRes, areasRes, flavorsRes] = await Promise.all([
-    dataProvider.getJson("mock/brands.json", "brands"),
-    dataProvider.getJson("mock/breweries.json", "breweries"),
-    dataProvider.getJson("mock/areas.json", "areas"),
-    dataProvider.getJson("mock/flavor-charts.json", "flavorCharts")
+    dataProvider.getJson("brands.json", "brands"),
+    dataProvider.getJson("breweries.json", "breweries"),
+    dataProvider.getJson("areas.json", "areas"),
+    dataProvider.getJson("flavor-charts.json", "flavorCharts")
   ]);
 
   return {
