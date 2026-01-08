@@ -1,0 +1,15 @@
+{
+  "breweries": [
+    { "id": 1, "name": "雪乃蔵", "areaId": 1 },
+    { "id": 2, "name": "北灯酒造", "areaId": 1 },
+    { "id": 3, "name": "津軽泉酒造", "areaId": 2 },
+    { "id": 4, "name": "南部月花", "areaId": 3 },
+    { "id": 5, "name": "杜乃里醸造", "areaId": 4 },
+    { "id": 6, "name": "秋響酒造", "areaId": 5 },
+    { "id": 7, "name": "羽雲蔵", "areaId": 6 },
+    { "id": 8, "name": "磐梯水源酒造", "areaId": 7 },
+    { "id": 9, "name": "越乃瀧蔵", "areaId": 8 },
+    { "id": 10, "name": "信濃青嶺", "areaId": 9 },
+    { "id": 11, "name": "播磨白鶴", "areaId": 10 }
+  ]
+}
