@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>銘柄検索＋味可視化＋味近似推薦</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <h1>銘柄検索＋味可視化＋味近似推薦</h1>
+    <div class="search-box">
+      <label for="searchInput">銘柄検索</label>
+      <input id="searchInput" type="text" placeholder="銘柄名を入力（例：山霞）" autocomplete="off" />
+      <p class="search-hint">前方一致 → 部分一致 → 2-gramスコアで近い候補を表示します。</p>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="panel panel-list" id="resultPanel">
+      <div class="panel-header">
+        <h2>検索結果</h2>
+        <button id="toggleResults" class="toggle-button" type="button" aria-expanded="true">
+          表示
+        </button>
+      </div>
+      <ul id="results" class="results-list" aria-live="polite"></ul>
+    </section>
+
+    <section class="panel panel-detail">
+      <h2>銘柄詳細</h2>
+      <div id="detail" class="detail-card">
+        <p class="placeholder">銘柄を選択すると詳細が表示されます。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <p>※ モックデータはさけのわAPIのレスポンス構造に準拠した仮値です。</p>
+  </footer>
+
+  <script src="app.js" defer></script>
+</body>
+</html>

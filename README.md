@@ -1,2 +1,15 @@
-# mock-private
-private mockup
+# 銘柄検索＋味可視化＋味近似推薦 モック
+
+ローカルで動作する、さけのわAPIに似せたモックデータを使った検索アプリです。
+
+## 起動方法
+
+### file://
+`index.html` をブラウザで直接開いてください。fetchが失敗した場合は埋め込みデータにフォールバックします。JSONファイルは `index.html` と同じ階層に配置しています。
+
+### 簡易HTTPサーバ
+```
+python -m http.server 8000
+```
+
+`http://localhost:8000` を開いてください。
