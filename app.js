@@ -97,6 +97,8 @@ let appState = {
 const resultsEl = document.getElementById("results");
 const detailEl = document.getElementById("detail");
 const searchInput = document.getElementById("searchInput");
+const resultPanel = document.getElementById("resultPanel");
+const toggleResultsButton = document.getElementById("toggleResults");
 
 async function loadData() {
   const dataProvider = {
@@ -251,6 +253,8 @@ function renderBrandDetail(brandId) {
   if (!brand) return;
 
   appState.activeBrandId = brandId;
+  setResultsCollapsed(true);
+  highlightDetailPanel(true);
   detailEl.innerHTML = "";
 
   const header = document.createElement("div");
@@ -420,10 +424,23 @@ function selectBrand(brandId) {
   renderBrandDetail(brandId);
 }
 
+function setResultsCollapsed(shouldCollapse) {
+  resultPanel.classList.toggle("is-collapsed", shouldCollapse);
+  toggleResultsButton.textContent = shouldCollapse ? "表示" : "閉じる";
+  toggleResultsButton.setAttribute("aria-expanded", String(!shouldCollapse));
+}
+
+function highlightDetailPanel(isPrimary) {
+  const panel = detailEl.closest(".panel-detail");
+  if (!panel) return;
+  panel.classList.toggle("is-primary", isPrimary);
+}
+
 function handleSearch() {
   const query = searchInput.value.trim();
   const results = searchBrands(query);
   renderSearchResults(results);
+  setResultsCollapsed(false);
 }
 
 function handleKeyNavigation(event) {
@@ -447,9 +464,15 @@ async function init() {
   const data = await loadData();
   buildIndex(data);
   renderSearchResults(searchBrands(""));
+  setResultsCollapsed(false);
+  highlightDetailPanel(false);
 }
 
 searchInput.addEventListener("input", handleSearch);
 searchInput.addEventListener("keydown", handleKeyNavigation);
+toggleResultsButton.addEventListener("click", () => {
+  const isCollapsed = resultPanel.classList.contains("is-collapsed");
+  setResultsCollapsed(!isCollapsed);
+});
 
 init();

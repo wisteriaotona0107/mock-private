@@ -17,8 +17,13 @@
   </header>
 
   <main class="layout">
-    <section class="panel panel-list">
-      <h2>検索結果</h2>
+    <section class="panel panel-list" id="resultPanel">
+      <div class="panel-header">
+        <h2>検索結果</h2>
+        <button id="toggleResults" class="toggle-button" type="button" aria-expanded="true">
+          表示
+        </button>
+      </div>
       <ul id="results" class="results-list" aria-live="polite"></ul>
     </section>
 
