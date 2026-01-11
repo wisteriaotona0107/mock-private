@@ -1,0 +1,16 @@
+{
+  "breweries": [
+    { "id": 1, "name": "やましろ酒造", "areaId": 1 },
+    { "id": 2, "name": "あおば蔵", "areaId": 2 },
+    { "id": 3, "name": "しろがね酒蔵", "areaId": 2 },
+    { "id": 4, "name": "かげつ酒造", "areaId": 3 },
+    { "id": 5, "name": "みずさき酒造", "areaId": 3 },
+    { "id": 6, "name": "つばさ酒造", "areaId": 4 },
+    { "id": 7, "name": "やまもと蔵", "areaId": 4 },
+    { "id": 8, "name": "おおさか酒房", "areaId": 5 },
+    { "id": 9, "name": "あかつき蔵", "areaId": 6 },
+    { "id": 10, "name": "しらさぎ酒造", "areaId": 6 },
+    { "id": 11, "name": "ゆうひ酒造", "areaId": 7 },
+    { "id": 12, "name": "あさひ蔵", "areaId": 8 }
+  ]
+}
