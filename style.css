@@ -1,0 +1,494 @@
+/*
+  Dream Cat Pod LP Stylesheet
+  - 黒基調の落ち着いたトーン
+  - 光の呼吸アニメーション
+  - 余白を広めに、行間をゆったり
+*/
+:root {
+  --bg: #0d0f14;
+  --bg-deep: #0b0b0f;
+  --card: #14161d;
+  --text: #f2f2f2;
+  --text-sub: #b8b8c0;
+  --accent: #f5c96a;
+  --glow: rgba(255, 255, 255, 0.08);
+  --border: rgba(255, 255, 255, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Noto Sans JP", "Poppins", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.8;
+  letter-spacing: 0.02em;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+  border-radius: 24px;
+  filter: brightness(0.9);
+}
+
+section {
+  padding: 96px 24px;
+}
+
+.section-header {
+  max-width: 720px;
+  margin: 0 auto 48px;
+  text-align: center;
+}
+
+.section-header h2 {
+  font-family: "Poppins", sans-serif;
+  font-size: clamp(1.6rem, 2.5vw, 2.4rem);
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+.section-header p {
+  color: var(--text-sub);
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  background: rgba(13, 15, 20, 0.8);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+
+.logo {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+}
+
+.header-nav {
+  display: flex;
+  gap: 20px;
+  font-size: 0.85rem;
+  color: var(--text-sub);
+}
+
+.hero {
+  min-height: 100vh;
+  display: grid;
+  gap: 48px;
+  align-items: center;
+  background: radial-gradient(circle at top, #1a1f2a 0%, var(--bg-deep) 55%);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-glow {
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  right: 10%;
+  top: 10%;
+  background: radial-gradient(circle, rgba(245, 201, 106, 0.35), transparent 70%);
+  filter: blur(12px);
+  animation: breathe 6s ease-in-out infinite;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 560px;
+}
+
+.hero-label {
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.4em;
+  color: var(--text-sub);
+  margin-bottom: 12px;
+}
+
+.hero h1 {
+  font-size: clamp(2.2rem, 4vw, 3.6rem);
+  font-weight: 500;
+  margin-bottom: 24px;
+}
+
+.hero-sub {
+  color: var(--text-sub);
+  margin-bottom: 32px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  font-family: "Poppins", sans-serif;
+  padding: 14px 28px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: all 0.4s ease;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #1b1b1f;
+  box-shadow: 0 8px 24px rgba(245, 201, 106, 0.25);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 0 24px rgba(245, 201, 106, 0.6);
+  transform: translateY(-2px);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--border);
+}
+
+.btn-ghost:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 0 20px rgba(245, 201, 106, 0.2);
+}
+
+.hero-visual {
+  position: relative;
+  justify-self: center;
+  max-width: 420px;
+}
+
+.cat-silhouette {
+  position: absolute;
+  inset: -12% -8% auto auto;
+  width: 220px;
+  height: 220px;
+  background: radial-gradient(circle at 50% 40%, rgba(245, 201, 106, 0.25), rgba(13, 15, 20, 0.8));
+  border-radius: 50% 50% 42% 42%;
+  filter: blur(1px);
+  animation: breathe 6s ease-in-out infinite;
+}
+
+.cat-body {
+  position: absolute;
+  bottom: 12%;
+  left: 50%;
+  width: 120px;
+  height: 140px;
+  background: #050505;
+  border-radius: 50% 50% 40% 40%;
+  transform: translateX(-50%);
+  box-shadow: 0 0 32px rgba(0, 0, 0, 0.8);
+}
+
+.cat-ear {
+  position: absolute;
+  top: 18%;
+  width: 24px;
+  height: 24px;
+  background: #050505;
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
+
+.cat-ear.left {
+  left: 42%;
+}
+
+.cat-ear.right {
+  right: 42%;
+}
+
+.cat-tail {
+  position: absolute;
+  bottom: 20%;
+  right: 15%;
+  width: 12px;
+  height: 80px;
+  border-radius: 999px;
+  background: #050505;
+  transform: rotate(12deg);
+  animation: tail-sway 5s ease-in-out infinite;
+}
+
+.concept {
+  background: linear-gradient(180deg, var(--bg) 0%, #11151e 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.concept-keywords {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  list-style: none;
+  color: var(--accent);
+  font-size: 0.95rem;
+}
+
+.concept-particles {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.features {
+  background: var(--bg-deep);
+}
+
+.feature-grid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.feature-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 28px;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.feature-card h3 {
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+.feature-card p {
+  color: var(--text-sub);
+}
+
+.scenes {
+  background: #0f121a;
+}
+
+.scene-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.scene-card {
+  padding: 24px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.scene-card h3 {
+  margin-bottom: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.scene-card p {
+  color: var(--text-sub);
+  font-size: 0.9rem;
+}
+
+.app {
+  display: grid;
+  gap: 48px;
+  align-items: center;
+  background: var(--bg-deep);
+}
+
+.app-content ul {
+  margin-top: 24px;
+  list-style: none;
+  color: var(--accent);
+  display: grid;
+  gap: 8px;
+}
+
+.app-visual {
+  justify-self: center;
+  max-width: 320px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  border-radius: 28px;
+}
+
+.emotion {
+  background: #090a0f;
+  text-align: center;
+}
+
+.emotion-inner {
+  max-width: 640px;
+  margin: 0 auto;
+  font-size: 1rem;
+  color: var(--text-sub);
+  letter-spacing: 0.08em;
+}
+
+.emotion-inner p + p {
+  margin-top: 18px;
+}
+
+.cta {
+  background: radial-gradient(circle, rgba(245, 201, 106, 0.2), transparent 70%);
+  text-align: center;
+}
+
+.cta-inner {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.cta h2 {
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+.cta p {
+  color: var(--text-sub);
+  margin-bottom: 32px;
+}
+
+.site-footer {
+  padding: 48px 24px;
+  background: #08090d;
+  border-top: 1px solid var(--border);
+}
+
+.footer-top {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.footer-nav {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  color: var(--text-sub);
+  font-size: 0.85rem;
+}
+
+.footer-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: var(--text-sub);
+  font-size: 0.8rem;
+}
+
+.socials {
+  display: flex;
+  gap: 12px;
+}
+
+.socials a {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  display: grid;
+  place-items: center;
+  font-size: 0.7rem;
+  transition: 0.3s ease;
+}
+
+.socials a:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* フェードインの演出 */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(0.96);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
+@keyframes tail-sway {
+  0%,
+  100% {
+    transform: rotate(8deg);
+  }
+  50% {
+    transform: rotate(-8deg);
+  }
+}
+
+@media (min-width: 768px) {
+  .hero {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 120px 80px 80px;
+  }
+
+  .app {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 120px 80px;
+  }
+
+  section {
+    padding: 120px 80px;
+  }
+
+  .site-header {
+    padding: 20px 80px;
+  }
+
+  .footer-top {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .footer-bottom {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
