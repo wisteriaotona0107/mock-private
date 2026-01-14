@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>発想支援用モック</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f4f1;
+      --panel: #ffffff;
+      --text: #2b2b2b;
+      --muted: #6b6b6b;
+      --accent: #546a7b;
+      --border: #e1ded8;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Hiragino Sans", "Noto Sans JP", "Yu Gothic", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 48px 20px 64px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    h1 {
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      margin: 0;
+      font-weight: 600;
+    }
+
+    p.lead {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+
+    .card {
+      background: var(--panel);
+      padding: 24px;
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .card h2 {
+      margin: 0;
+      font-size: 1.05rem;
+      color: var(--accent);
+      letter-spacing: 0.04em;
+      font-weight: 600;
+    }
+
+    .card .value {
+      margin: 0;
+      font-size: 1.15rem;
+      font-weight: 500;
+    }
+
+    .note {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    button {
+      appearance: none;
+      border: 1px solid var(--accent);
+      background: transparent;
+      color: var(--accent);
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    }
+
+    button:hover {
+      background: var(--accent);
+      color: #ffffff;
+    }
+
+    @media (max-width: 600px) {
+      main {
+        padding: 36px 18px 48px;
+      }
+
+      .card {
+        padding: 20px;
+      }
+
+      .actions {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>発想支援用モック</h1>
+      <p class="lead">正解探しではなく、ふと目に入った言葉から連想を広げるための軽いヒント集です。</p>
+    </header>
+
+    <section class="card" aria-live="polite">
+      <h2>今日の一言</h2>
+      <p class="value" id="quote"></p>
+      <p class="note">深読みは不要。気になった言葉だけ拾ってください。</p>
+    </section>
+
+    <section class="card" aria-live="polite">
+      <h2>今日の花言葉</h2>
+      <p class="value" id="flower"></p>
+      <p class="note">架空の花言葉も混ぜています。</p>
+    </section>
+
+    <section class="card" aria-live="polite">
+      <h2>今日の記念日</h2>
+      <p class="value" id="anniversary"></p>
+      <p class="note">記念日の設定はダミーです。</p>
+    </section>
+
+    <div class="actions">
+      <button type="button" id="refresh">更新する</button>
+    </div>
+  </main>
+
+  <script>
+    const quotes = [
+      "遠回りの途中でしか拾えない景色がある。",
+      "小さな違和感は、新しい入口になる。",
+      "今日の10分は、明日の1行になる。",
+      "目の前のモノを、別の役割で使ってみる。",
+      "答えより問いが面白い日もある。",
+      "散歩の途中で見つけた色をメモする。",
+      "誰かの視点を借りると、机の上が広がる。"
+    ];
+
+    const flowerMeanings = [
+      "薄紅のランプ：控えめな好奇心",
+      "星影リリー：夜明けの整理",
+      "青霞の花：透明な勇気",
+      "砂時計草：今だけの集中",
+      "雨粒スミレ：穏やかな切り替え",
+      "灯台ユリ：遠くを見る余裕",
+      "風待ち草：タイミングを信じる"
+    ];
+
+    const anniversaries = [
+      "静かな棚の日：整理と再発見を楽しむ日",
+      "寄り道記念日：目的地より風景を味わう日",
+      "手帳更新の日：気になる言葉を集める日",
+      "窓辺の午後の日：光を感じて発想する日",
+      "余白を讃える日：詰め込みすぎない日",
+      "一駅散歩の日：遠回りを遊ぶ日",
+      "ふせん交換の日：思いつきを渡し合う日"
+    ];
+
+    const quoteEl = document.getElementById("quote");
+    const flowerEl = document.getElementById("flower");
+    const anniversaryEl = document.getElementById("anniversary");
+
+    const pickRandom = (list) => list[Math.floor(Math.random() * list.length)];
+
+    const updateContent = () => {
+      quoteEl.textContent = pickRandom(quotes);
+      flowerEl.textContent = pickRandom(flowerMeanings);
+      anniversaryEl.textContent = pickRandom(anniversaries);
+    };
+
+    document.getElementById("refresh").addEventListener("click", updateContent);
+    updateContent();
+  </script>
+</body>
+</html>
