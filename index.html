@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ローカルダイナー | robots.txt活用FAQと事例</title>
+    <meta
+      name="description"
+      content="飲食店サイト向けにrobots.txtの使い方やFAQ、ケーススタディ、AIに優しい文言例をまとめたモックサイト。"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <nav class="nav">
+        <div class="logo">LOCAL DINER</div>
+        <button class="nav-toggle" aria-expanded="false" aria-controls="nav-menu">
+          <span class="sr-only">メニューを開く</span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </button>
+        <div id="nav-menu" class="nav-menu">
+          <a href="#about">店舗紹介</a>
+          <a href="#menu">商品紹介</a>
+          <a href="#robots">robots.txt</a>
+          <a href="#faq">FAQ</a>
+          <a href="#cases">事例</a>
+          <a href="#ai-copy">AI文言例</a>
+        </div>
+      </nav>
+      <div class="hero-content">
+        <p class="eyebrow">スマホベースのレスポンシブ構成</p>
+        <h1>飲食店サイトのための<br />robots.txtガイド</h1>
+        <p>
+          メニューや店舗情報を正しく届けながら、検索クローラーに配慮したサイト運営をサポート。
+          FAQ、ケーススタディ、AIに優しい文言例をまとめました。
+        </p>
+        <div class="hero-actions">
+          <a class="primary" href="#robots">使い方を見る</a>
+          <a class="secondary" href="#ai-copy">AI文言例へ</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section id="about" class="section">
+        <div class="section-header">
+          <h2>店舗紹介</h2>
+          <p>「LOCAL DINER」は季節素材を活かした料理と、街の人が集う心地よい空間が自慢のダイナーです。</p>
+        </div>
+        <div class="cards">
+          <article class="card">
+            <h3>朝食からディナーまで</h3>
+            <p>モーニングは自家製グラノーラ、ランチは日替わりプレート、夜はワインとタパスが人気。</p>
+          </article>
+          <article class="card">
+            <h3>アクセスと営業時間</h3>
+            <p>駅前徒歩3分。平日 8:00-21:00 / 土日祝 9:00-22:00。</p>
+          </article>
+          <article class="card">
+            <h3>デジタルメニュー</h3>
+            <p>オンライン予約・デジタルメニューを整備し、クローラーにも分かりやすい情報設計を採用。</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="menu" class="section alt">
+        <div class="section-header">
+          <h2>商品紹介</h2>
+          <p>写真や価格、アレルゲン情報を整理し、AIと検索エンジンの両方に伝わるメニュー構成を意識。</p>
+        </div>
+        <div class="cards">
+          <article class="card">
+            <h3>シトラスチキンサラダ</h3>
+            <p>ジューシーなチキンと柑橘ドレッシング。1,180円 / たんぱく質20g。</p>
+          </article>
+          <article class="card">
+            <h3>季節野菜のグリルプレート</h3>
+            <p>契約農家の野菜をシンプルにグリル。1,480円 / ヴィーガン対応。</p>
+          </article>
+          <article class="card">
+            <h3>スモークサーモンベネディクト</h3>
+            <p>自家製ソースと半熟ポーチドエッグ。1,680円 / ブランチで人気。</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="robots" class="section">
+        <div class="section-header">
+          <h2>robots.txtとは</h2>
+          <p>
+            robots.txtは検索クローラーに対してアクセスを制御するためのテキストファイルです。
+            食品写真や予約ページなど、公開範囲を明確にするのに役立ちます。
+          </p>
+        </div>
+        <div class="split">
+          <div>
+            <h3>基本構成</h3>
+            <p>サイト直下に設置し、ユーザーエージェントと許可/拒否パスを記述します。</p>
+            <pre><code>User-agent: *
+Disallow: /admin/
+Disallow: /draft-menu/
+Allow: /menu/
+Sitemap: https://localdiner.example.com/sitemap.xml</code></pre>
+          </div>
+          <div>
+            <h3>飲食店サイト向けのポイント</h3>
+            <ul>
+              <li>予約フォームの検証用URLは非公開に設定。</li>
+              <li>写真ギャラリーやメニューは許可し、来店動機につなげる。</li>
+              <li>更新頻度の高いメニューのURLをサイトマップに追加。</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="faq" class="section alt">
+        <div class="section-header">
+          <h2>robots.txt FAQ</h2>
+          <p>よくある質問をスマホで読みやすいカード形式にまとめました。</p>
+        </div>
+        <div class="faq">
+          <button class="faq-item" aria-expanded="false">
+            <span>Q. robot.txt と robots.txt の違いは？</span>
+            <span class="icon">+</span>
+          </button>
+          <div class="faq-panel">
+            <p>
+              正式名称は「robots.txt」です。ファイル名を誤るとクローラーに認識されないため、必ず複数形で作成します。
+            </p>
+          </div>
+
+          <button class="faq-item" aria-expanded="false">
+            <span>Q. メニュー画像をクロールさせたい場合は？</span>
+            <span class="icon">+</span>
+          </button>
+          <div class="faq-panel">
+            <p>
+              画像を置いているディレクトリをDisallowしないようにし、検索に出したい画像は公開パスにまとめます。
+            </p>
+          </div>
+
+          <button class="faq-item" aria-expanded="false">
+            <span>Q. 予約フォームを非公開にする意味は？</span>
+            <span class="icon">+</span>
+          </button>
+          <div class="faq-panel">
+            <p>
+              テスト用フォームや内部管理画面を非公開にすることで、検索結果に意図しないページが表示されるのを防げます。
+            </p>
+          </div>
+
+          <button class="faq-item" aria-expanded="false">
+            <span>Q. AIクローラーにも効く？</span>
+            <span class="icon">+</span>
+          </button>
+          <div class="faq-panel">
+            <p>
+              一部のAIクローラーはrobots.txtを参照します。明示的なAllow/Disallowに加えて、AI向け説明文を併記すると親切です。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="cases" class="section">
+        <div class="section-header">
+          <h2>ケーススタディ</h2>
+          <p>飲食店のサイト運用を想定したロールモデルを紹介します。</p>
+        </div>
+        <div class="cases">
+          <article class="case">
+            <h3>ケース1：限定メニューの先行公開</h3>
+            <p>
+              SNSキャンペーン用の限定メニューは事前公開し、/campaign/ 配下のみAllow。検索結果には表示せず、
+              SNSからの流入に集中。
+            </p>
+            <ul>
+              <li>Disallow: /campaign/preview/</li>
+              <li>Allow: /campaign/</li>
+            </ul>
+          </article>
+          <article class="case">
+            <h3>ケース2：予約管理画面を保護</h3>
+            <p>
+              /booking/manage/ をDisallowし、一般ユーザー用の予約導線だけを検索に表示。FAQページを追加して離脱率を改善。
+            </p>
+            <ul>
+              <li>Disallow: /booking/manage/</li>
+              <li>Allow: /booking/</li>
+            </ul>
+          </article>
+          <article class="case">
+            <h3>ケース3：新店舗オープン告知</h3>
+            <p>
+              新店舗の紹介ページをサイトマップに登録し、店舗一覧ページを更新。AI検索にも伝わる要約文を追加して来店誘導。
+            </p>
+            <ul>
+              <li>Sitemap: /sitemap.xml</li>
+              <li>更新頻度: 週1回</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section id="ai-copy" class="section alt">
+        <div class="section-header">
+          <h2>AIに優しい文言例</h2>
+          <p>AI検索や音声アシスタントにも伝わりやすい、明確で具体的な文言を用意しました。</p>
+        </div>
+        <div class="copy-grid">
+          <article class="copy-card">
+            <h3>店舗概要</h3>
+            <p class="label">例文</p>
+            <p>
+              LOCAL DINERは東京都渋谷区にあるカジュアルダイナーです。朝8時から夜21時まで営業し、
+              朝食・ランチ・ディナーの全時間帯でメニューを提供しています。
+            </p>
+          </article>
+          <article class="copy-card">
+            <h3>メニュー紹介</h3>
+            <p class="label">例文</p>
+            <p>
+              シトラスチキンサラダは、国産鶏むね肉とオレンジドレッシングを合わせたたんぱく質豊富なサラダです。
+              価格は1,180円で、アレルゲンは卵・乳を含みません。
+            </p>
+          </article>
+          <article class="copy-card">
+            <h3>アクセス案内</h3>
+            <p class="label">例文</p>
+            <p>
+              最寄り駅は渋谷駅で、徒歩3分です。ベビーカーでの入店が可能で、テラス席はペット同伴OKです。
+            </p>
+          </article>
+        </div>
+        <div class="note">
+          <h4>robots.txtに添えるAI向け説明例</h4>
+          <pre><code># AIクローラー向けのお願い
+# 当店のメニュー情報は /menu/ に集約しています。
+# 画像や価格情報は /menu/ 配下のページをご参照ください。</code></pre>
+        </div>
+      </section>
+
+      <section class="section cta">
+        <div>
+          <h2>サイト構築の相談はこちら</h2>
+          <p>robots.txtやサイト情報設計の相談、メニュー更新フローの整備までサポートします。</p>
+        </div>
+        <a class="primary" href="mailto:hello@localdiner.example.com">問い合わせる</a>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>© 2024 LOCAL DINER. robots.txt活用ガイド。</p>
+      <div class="footer-links">
+        <a href="#faq">FAQ</a>
+        <a href="#cases">ケーススタディ</a>
+        <a href="#ai-copy">AI文言例</a>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
