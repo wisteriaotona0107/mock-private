@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mock Studies</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f7f7f5;
+      --surface: #ffffff;
+      --text: #111111;
+      --muted: #5a5a5a;
+      --line: #e2e1dd;
+      --accent: #3757c7;
+      --accent-soft: rgba(55, 87, 199, 0.12);
+      --shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+      --radius-lg: 20px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+      --max-width: 1080px;
+      --transition: 180ms ease;
+      font-family: "Hiragino Sans", "Yu Gothic", "Noto Sans JP", "Meiryo", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      font-size: 16px;
+      letter-spacing: 0.01em;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      min-height: 100vh;
+      padding: 32px 20px 56px;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+
+    header p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 640px;
+    }
+
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 8px 0 4px;
+    }
+
+    .search-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .search-wrap label {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .search-input {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      font-size: 1rem;
+      background: var(--surface);
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+
+    .search-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-soft);
+      outline: none;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .filter-btn {
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--muted);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .filter-btn[aria-pressed="true"] {
+      color: var(--accent);
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      cursor: pointer;
+      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+      border-color: rgba(0, 0, 0, 0.08);
+    }
+
+    .card:focus {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      margin: 0;
+      font-weight: 600;
+    }
+
+    .status {
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .card-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .card-meta span {
+      color: var(--text);
+      font-weight: 500;
+      margin-right: 8px;
+    }
+
+    .focus-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag {
+      font-size: 0.75rem;
+      border-radius: 999px;
+      padding: 4px 10px;
+      border: 1px solid var(--line);
+      color: var(--muted);
+    }
+
+    .empty {
+      border: 1px dashed var(--line);
+      padding: 32px 20px;
+      border-radius: var(--radius-md);
+      text-align: center;
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    .drawer {
+      position: fixed;
+      inset: 0;
+      background: rgba(17, 17, 17, 0.35);
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 24px;
+      z-index: 20;
+    }
+
+    .drawer[aria-hidden="false"] {
+      display: flex;
+    }
+
+    .drawer-panel {
+      width: min(720px, 100%);
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-height: 85vh;
+      overflow: auto;
+    }
+
+    .drawer-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .drawer-title {
+      margin: 0;
+      font-size: 1.3rem;
+    }
+
+    .drawer-close {
+      border: 1px solid var(--line);
+      background: transparent;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      color: var(--muted);
+      transition: all var(--transition);
+    }
+
+    .drawer-close:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .drawer-section {
+      display: grid;
+      gap: 8px;
+    }
+
+    .drawer-section h3 {
+      margin: 0;
+      font-size: 0.9rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .drawer-section ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--text);
+    }
+
+    footer {
+      font-size: 0.85rem;
+      color: var(--muted);
+      padding-top: 24px;
+      border-top: 1px solid var(--line);
+    }
+
+    @media (min-width: 720px) {
+      .controls {
+        flex-direction: row;
+        align-items: flex-end;
+        justify-content: space-between;
+      }
+
+      .search-wrap {
+        flex: 1;
+      }
+
+      .filters {
+        justify-content: flex-end;
+      }
+
+      .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .drawer {
+        align-items: center;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .page {
+        padding: 48px 40px 72px;
+      }
+
+      .grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="container">
+      <header>
+        <h1>Mock Studies</h1>
+        <p>
+          実装や提案の前段階として、考え方や切り口を確かめるためのモックをまとめています。<br />
+          ここは検証用の実験置き場であり、完成物ではありません。
+        </p>
+      </header>
+
+      <section class="controls" aria-label="検索とフィルタ">
+        <div class="search-wrap">
+          <label for="search">検索（/ でフォーカス）</label>
+          <input
+            id="search"
+            class="search-input"
+            type="search"
+            placeholder="タイトル・Intent・Focus を検索"
+            autocomplete="off"
+            aria-label="モック検索"
+          />
+        </div>
+        <div class="filters" role="group" aria-label="ステータスフィルタ">
+          <button class="filter-btn" type="button" data-status="All" aria-pressed="true">All</button>
+          <button class="filter-btn" type="button" data-status="Draft" aria-pressed="false">Draft</button>
+          <button class="filter-btn" type="button" data-status="Concept" aria-pressed="false">Concept</button>
+          <button class="filter-btn" type="button" data-status="WIP" aria-pressed="false">WIP</button>
+        </div>
+      </section>
+
+      <main>
+        <div id="grid" class="grid" aria-live="polite"></div>
+        <div id="empty" class="empty" hidden>
+          条件に一致するモックが見つかりませんでした。<br />
+          別のキーワードやステータスで再検索してください。
+        </div>
+      </main>
+    </div>
+
+    <div class="container">
+      <footer>
+        ※ いずれも完成品ではありません。内容は予告なく変更・削除することがあります。
+      </footer>
+    </div>
+  </div>
+
+  <div class="drawer" id="drawer" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="drawer-panel" role="document">
+      <div class="drawer-header">
+        <div>
+          <p id="drawer-status" class="status" aria-live="polite"></p>
+          <h2 id="drawer-title" class="drawer-title"></h2>
+        </div>
+        <button id="drawer-close" class="drawer-close" type="button" aria-label="詳細を閉じる">Close</button>
+      </div>
+      <div class="drawer-section">
+        <h3>Summary</h3>
+        <p id="drawer-summary"></p>
+      </div>
+      <div class="drawer-section">
+        <h3>Use Cases</h3>
+        <ul id="drawer-usecases"></ul>
+      </div>
+      <div class="drawer-section">
+        <h3>UI Elements</h3>
+        <ul id="drawer-elements"></ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const mockData = [
+      {
+        title: "Knowledge Shelf",
+        intent: "情報アーカイブの整理指針を検証",
+        focus: ["一覧性", "階層設計", "密度"],
+        status: "Concept",
+        summary:
+          "蓄積される知見を、読みやすさと見渡しの良さの両立で配置するための試作。視線移動の負荷を抑えることが焦点。",
+        useCases: ["社内ナレッジのカテゴリ設計", "長文ページの見出し構造", "編集画面の情報密度調整"],
+        uiElements: ["サイドナビ", "階層タグ", "メタ情報の配置"]
+      },
+      {
+        title: "Process Ledger",
+        intent: "進行管理を定性的に可視化する",
+        focus: ["状態遷移", "時系列", "注釈"],
+        status: "WIP",
+        summary:
+          "プロジェクトのフェーズ感を硬いガントではなく、軽いメモ感覚で追えるUIを検証。進行の温度を言語で伝えることを狙う。",
+        useCases: ["ステークホルダー共有", "更新頻度の高い案件", "レビュー前の合意形成"],
+        uiElements: ["タイムライン", "状態バッジ", "コメント欄"]
+      },
+      {
+        title: "Quiet Commerce",
+        intent: "静かな購買導線の体験検証",
+        focus: ["余白", "比較", "安心感"],
+        status: "Draft",
+        summary:
+          "情報量の多い比較画面で、強い煽りを排したまま意思決定を助けるためのレイアウト試作。",
+        useCases: ["高単価商品の選定", "BtoB見積もり前の比較", "店舗紹介の構成検討"],
+        uiElements: ["比較テーブル", "補足カード", "レビュー抜粋"]
+      },
+      {
+        title: "Meeting Loom",
+        intent: "議事録の読み返し負荷を軽減",
+        focus: ["要約", "タグ", "検索"] ,
+        status: "Concept",
+        summary:
+          "会議の要点を短いタグと要約で整理し、後からの参照性を高めるためのモック。会話の温度感も残す構成を検討。",
+        useCases: ["議事録共有", "意思決定の履歴化", "リサーチ記録"],
+        uiElements: ["要約カード", "発言者フィルタ", "関連リンク"]
+      },
+      {
+        title: "Studio Grid",
+        intent: "制作案件の粒度設計を試す",
+        focus: ["カード設計", "密度", "視認性"],
+        status: "WIP",
+        summary:
+          "多数の制作案件を俯瞰する際に、カード内でどこまで情報を持たせるべきか検証する。",
+        useCases: ["制作進行の一覧", "担当者別の絞り込み", "優先度の共有"],
+        uiElements: ["カードグリッド", "優先度ラベル", "進行メモ"]
+      },
+      {
+        title: "Field Notes",
+        intent: "現場観察の記録を即時に整形",
+        focus: ["入力体験", "分類", "検索"],
+        status: "Draft",
+        summary:
+          "現地での観察結果をその場で整え、後から整理しやすいフォーマットに落とし込むための軽量UI。",
+        useCases: ["ユーザーリサーチ", "店舗視察", "サービス調査"],
+        uiElements: ["即時入力", "タグ付け", "検索パネル"]
+      }
+    ];
+
+    const state = {
+      query: "",
+      status: "All",
+      selected: null
+    };
+
+    const grid = document.getElementById("grid");
+    const empty = document.getElementById("empty");
+    const searchInput = document.getElementById("search");
+    const drawer = document.getElementById("drawer");
+    const drawerTitle = document.getElementById("drawer-title");
+    const drawerStatus = document.getElementById("drawer-status");
+    const drawerSummary = document.getElementById("drawer-summary");
+    const drawerUseCases = document.getElementById("drawer-usecases");
+    const drawerElements = document.getElementById("drawer-elements");
+    const drawerClose = document.getElementById("drawer-close");
+
+    const normalize = (value) => value.toLowerCase();
+
+    const matchesQuery = (item, query) => {
+      if (!query) return true;
+      const haystack = [item.title, item.intent, item.focus.join(" ")].join(" ");
+      return normalize(haystack).includes(normalize(query));
+    };
+
+    const matchesStatus = (item, status) => status === "All" || item.status === status;
+
+    const renderCards = () => {
+      grid.innerHTML = "";
+      const filtered = mockData.filter(
+        (item) => matchesQuery(item, state.query) && matchesStatus(item, state.status)
+      );
+
+      if (filtered.length === 0) {
+        empty.hidden = false;
+        return;
+      }
+
+      empty.hidden = true;
+
+      filtered.forEach((item, index) => {
+        const card = document.createElement("button");
+        card.type = "button";
+        card.className = "card";
+        card.dataset.index = mockData.indexOf(item);
+        card.setAttribute("aria-label", `${item.title} の詳細を開く`);
+
+        const focusTags = item.focus
+          .map((tag) => `<span class="tag">${tag}</span>`)
+          .join("");
+
+        card.innerHTML = `
+          <div class="card-header">
+            <h2 class="card-title">${item.title}</h2>
+            <span class="status">${item.status}</span>
+          </div>
+          <div class="card-meta"><span>Intent</span>${item.intent}</div>
+          <div class="card-meta"><span>Focus</span></div>
+          <div class="focus-tags">${focusTags}</div>
+        `;
+
+        grid.appendChild(card);
+      });
+    };
+
+    const openDrawer = (index) => {
+      const item = mockData[index];
+      if (!item) return;
+      state.selected = index;
+      drawerTitle.textContent = item.title;
+      drawerStatus.textContent = item.status;
+      drawerSummary.textContent = item.summary;
+      drawerUseCases.innerHTML = item.useCases.map((use) => `<li>${use}</li>`).join("");
+      drawerElements.innerHTML = item.uiElements.map((el) => `<li>${el}</li>`).join("");
+      drawer.setAttribute("aria-hidden", "false");
+      localStorage.setItem("lastMockIndex", String(index));
+      drawerClose.focus();
+    };
+
+    const closeDrawer = () => {
+      drawer.setAttribute("aria-hidden", "true");
+      state.selected = null;
+    };
+
+    const applyFilter = (status) => {
+      state.status = status;
+      document.querySelectorAll(".filter-btn").forEach((btn) => {
+        btn.setAttribute("aria-pressed", btn.dataset.status === status ? "true" : "false");
+      });
+      renderCards();
+    };
+
+    const restoreLast = () => {
+      const stored = localStorage.getItem("lastMockIndex");
+      if (stored !== null) {
+        openDrawer(Number(stored));
+      }
+    };
+
+    searchInput.addEventListener("input", (event) => {
+      state.query = event.target.value.trim();
+      renderCards();
+    });
+
+    document.addEventListener("click", (event) => {
+      const filterBtn = event.target.closest(".filter-btn");
+      if (filterBtn) {
+        applyFilter(filterBtn.dataset.status);
+        return;
+      }
+
+      const card = event.target.closest(".card");
+      if (card) {
+        openDrawer(Number(card.dataset.index));
+        return;
+      }
+
+      if (event.target === drawer) {
+        closeDrawer();
+      }
+    });
+
+    drawerClose.addEventListener("click", closeDrawer);
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "/") {
+        event.preventDefault();
+        searchInput.focus();
+      }
+      if (event.key === "Escape" && drawer.getAttribute("aria-hidden") === "false") {
+        closeDrawer();
+      }
+    });
+
+    renderCards();
+    restoreLast();
+  </script>
+</body>
+</html>
