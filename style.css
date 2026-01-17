@@ -108,6 +108,8 @@ body {
   gap: 8px;
   max-height: 420px;
   overflow: auto;
+  overscroll-behavior: contain;
+  padding-bottom: 16px;
 }
 
 .order-card {
