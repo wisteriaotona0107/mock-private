@@ -108,8 +108,14 @@ body {
   gap: 8px;
   max-height: 420px;
   overflow: auto;
-  overscroll-behavior: contain;
-  padding-bottom: 16px;
+  overscroll-behavior: none;
+  padding-bottom: 24px;
+}
+
+.list::after {
+  content: "";
+  display: block;
+  height: 12px;
 }
 
 .order-card {
