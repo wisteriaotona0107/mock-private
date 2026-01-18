@@ -23,6 +23,11 @@ const state = {
     error: null,
     modalOrderId: null,
     settingsCollapsed: true,
+    scrollPositions: {
+      customers: 0,
+      orders: 0,
+      logs: 0,
+    },
   },
 };
 
@@ -340,6 +345,11 @@ function computeResult() {
 
 function render() {
   const app = document.getElementById("app");
+  const previousScroll = {
+    customers: state.ui.scrollPositions.customers,
+    orders: state.ui.scrollPositions.orders,
+    logs: state.ui.scrollPositions.logs,
+  };
   if (state.screen === "title") {
     app.innerHTML = renderTitle();
   } else if (state.screen === "game") {
@@ -349,6 +359,9 @@ function render() {
   }
   bindEvents();
   renderModal();
+  if (state.screen === "game") {
+    restoreScrollPositions(previousScroll);
+  }
 }
 
 function renderTitle() {
@@ -441,11 +454,11 @@ function renderGame() {
       <div class="layout">
         <div>
           <h3>客一覧</h3>
-          <div class="list">${customerList}</div>
+          <div class="list" id="customer-list">${customerList}</div>
         </div>
         <div>
           <h3>注文キュー</h3>
-          <div class="list">${orders}</div>
+          <div class="list" id="order-list">${orders}</div>
         </div>
         <div>
           <h3>メニュー一覧</h3>
@@ -469,7 +482,7 @@ function renderGame() {
 
       <div class="card" style="margin-top:16px;">
         <h3>イベントログ</h3>
-        <ul class="log">${logs}</ul>
+        <ul class="log" id="event-log">${logs}</ul>
       </div>
     </div>
   `;
@@ -649,6 +662,25 @@ function bindEvents() {
 
   const dismiss = document.getElementById("error-dismiss");
   if (dismiss) dismiss.onclick = clearError;
+
+  const customerList = document.getElementById("customer-list");
+  const orderList = document.getElementById("order-list");
+  const eventLog = document.getElementById("event-log");
+  if (customerList) {
+    customerList.addEventListener("scroll", () => {
+      state.ui.scrollPositions.customers = customerList.scrollTop;
+    });
+  }
+  if (orderList) {
+    orderList.addEventListener("scroll", () => {
+      state.ui.scrollPositions.orders = orderList.scrollTop;
+    });
+  }
+  if (eventLog) {
+    eventLog.addEventListener("scroll", () => {
+      state.ui.scrollPositions.logs = eventLog.scrollTop;
+    });
+  }
 }
 
 function bindSettings() {
@@ -771,6 +803,23 @@ function clearError() {
   const banner = document.getElementById("error-banner");
   if (!banner) return;
   banner.classList.add("hidden");
+}
+
+function restoreScrollPositions(previousScroll) {
+  requestAnimationFrame(() => {
+    const customerList = document.getElementById("customer-list");
+    const orderList = document.getElementById("order-list");
+    const eventLog = document.getElementById("event-log");
+    if (customerList) {
+      customerList.scrollTop = previousScroll.customers ?? 0;
+    }
+    if (orderList) {
+      orderList.scrollTop = previousScroll.orders ?? 0;
+    }
+    if (eventLog) {
+      eventLog.scrollTop = previousScroll.logs ?? 0;
+    }
+  });
 }
 
 render();
