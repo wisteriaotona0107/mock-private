@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>パズルモック</title>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --primary: #2b6ef2;
+      --text: #222;
+      --muted: #6b7280;
+      --card: #fff;
+      --danger: #e11d48;
+      --success: #10b981;
+    }
+    * {
+      box-sizing: border-box;
+      font-family: "Helvetica Neue", "Noto Sans JP", sans-serif;
+    }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: var(--card);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    header h1 {
+      font-size: 16px;
+      margin: 0;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 12px 16px;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      cursor: pointer;
+      background: var(--primary);
+      color: white;
+      min-height: 44px;
+    }
+    .btn.secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+    .btn.ghost {
+      background: transparent;
+      border: 1px solid #d1d5db;
+      color: #111827;
+    }
+    .btn.danger {
+      background: var(--danger);
+      color: white;
+    }
+    .screen {
+      display: none;
+      padding: 16px;
+    }
+    .screen.active {
+      display: block;
+    }
+    .card {
+      background: var(--card);
+      padding: 16px;
+      border-radius: 16px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+      margin-bottom: 16px;
+    }
+    .grid {
+      display: grid;
+      gap: 8px;
+    }
+    .puzzle-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .thumb {
+      width: 64px;
+      height: 64px;
+      border-radius: 8px;
+      background: #e5e7eb;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #e0e7ff;
+      color: #3730a3;
+      font-size: 12px;
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    input[type="text"], select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #d1d5db;
+      font-size: 14px;
+      min-height: 44px;
+    }
+    .game-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .board {
+      background: #fff;
+      padding: 8px;
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .board-grid {
+      display: grid;
+      gap: 4px;
+      width: 100%;
+      aspect-ratio: 1/1;
+    }
+    .slot {
+      background: #f1f5f9;
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+      border: 2px dashed transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+    }
+    .slot.selected {
+      border-color: var(--primary);
+      background: #e0e7ff;
+    }
+    .slot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .hand {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+    .hand-piece {
+      width: 64px;
+      height: 64px;
+      border-radius: 12px;
+      border: 3px solid transparent;
+      flex-shrink: 0;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+    .hand-piece.selected {
+      border-color: var(--primary);
+    }
+    .hand-piece img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .status-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: -320px;
+      width: 280px;
+      height: 100%;
+      background: white;
+      box-shadow: -4px 0 12px rgba(0,0,0,0.2);
+      padding: 16px;
+      transition: right 0.25s ease;
+      z-index: 30;
+    }
+    .drawer.open {
+      right: 0;
+    }
+    .drawer h3 {
+      margin-top: 8px;
+      font-size: 16px;
+    }
+    .drawer .menu-btn {
+      width: 100%;
+      margin-bottom: 12px;
+    }
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+      z-index: 20;
+    }
+    .overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.5);
+      z-index: 40;
+    }
+    .modal.show {
+      display: flex;
+    }
+    .modal-content {
+      background: white;
+      padding: 16px;
+      border-radius: 16px;
+      width: min(90%, 360px);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal img {
+      width: 100%;
+      border-radius: 12px;
+    }
+    .warning {
+      padding: 12px;
+      background: #fef3c7;
+      border-radius: 12px;
+      color: #92400e;
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <button id="hamburgerBtn" class="btn ghost" aria-label="menu">☰</button>
+    <h1>画像パズルモック</h1>
+    <button id="toListBtn" class="btn secondary">一覧</button>
+  </header>
+
+  <main>
+    <section id="listScreen" class="screen active">
+      <div id="storageWarning" class="warning hidden"></div>
+      <div class="card">
+        <h2>パズル一覧</h2>
+        <p class="status-row">作成したパズルを選択してゲームを再開できます。</p>
+        <div id="puzzleList" class="grid"></div>
+      </div>
+      <button id="toCreateBtn" class="btn">新しいパズルを作成</button>
+    </section>
+
+    <section id="createScreen" class="screen">
+      <div class="card">
+        <h2>パズル作成</h2>
+        <div class="field">
+          <label>パズル名</label>
+          <input id="puzzleNameInput" type="text" placeholder="例: 旅行の思い出" />
+        </div>
+        <div class="field">
+          <label>画像アップロード</label>
+          <input id="puzzleImageInput" type="file" accept="image/*" />
+        </div>
+        <div class="field">
+          <label>難易度</label>
+          <select id="gridSizeSelect">
+            <option value="3">3x3</option>
+            <option value="4">4x4</option>
+            <option value="5">5x5</option>
+          </select>
+        </div>
+        <button id="createPuzzleBtn" class="btn">パズルを作成</button>
+      </div>
+      <button id="backToListBtn" class="btn secondary">一覧に戻る</button>
+    </section>
+
+    <section id="gameScreen" class="screen">
+      <div class="game-wrapper">
+        <div class="status-row">
+          <span id="currentPuzzleName"></span>
+          <span>経過: <strong id="elapsedLabel">0</strong> 秒</span>
+        </div>
+        <div class="status-row">
+          <span>ヒント残: <strong id="hintLabel">0</strong></span>
+          <span class="badge" id="gridLabel">3x3</span>
+        </div>
+        <div class="board">
+          <div id="boardGrid" class="board-grid"></div>
+        </div>
+        <div>
+          <h3>手札</h3>
+          <p class="status-row">ピースをタップして選択 → 盤面の空きマスをタップで配置</p>
+          <div id="handList" class="hand"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <aside id="drawer" class="drawer">
+    <h3>メニュー</h3>
+    <button class="btn menu-btn" id="viewImageBtn">完成画像を見る</button>
+    <button class="btn menu-btn" id="switchPuzzleBtn">パズル切替</button>
+    <button class="btn menu-btn" id="hintBtn">ヒント</button>
+    <div class="field">
+      <label>難易度変更</label>
+      <select id="difficultySelect">
+        <option value="3">3x3</option>
+        <option value="4">4x4</option>
+        <option value="5">5x5</option>
+      </select>
+    </div>
+    <button class="btn danger menu-btn" id="resetBtn">リセット</button>
+  </aside>
+  <div id="drawerOverlay" class="overlay"></div>
+
+  <div id="imageModal" class="modal">
+    <div class="modal-content">
+      <h3>完成画像</h3>
+      <img id="fullImage" alt="完成画像" />
+      <button class="btn secondary" data-close>閉じる</button>
+    </div>
+  </div>
+
+  <div id="switchModal" class="modal">
+    <div class="modal-content">
+      <h3>パズル切替</h3>
+      <div id="switchList" class="grid"></div>
+      <button class="btn secondary" data-close>閉じる</button>
+    </div>
+  </div>
+
+  <div id="clearModal" class="modal">
+    <div class="modal-content">
+      <h3>クリア！</h3>
+      <p>おめでとうございます！</p>
+      <p>経過時間: <strong id="clearElapsed"></strong> 秒</p>
+      <button class="btn" data-close>続ける</button>
+    </div>
+  </div>
+
+  <script>
+    /* 保存形式: localStorageにメタ情報と状態(JSON)を保存し、画像はIndexedDBのBlob保存が基本、
+       失敗時はlocalStorageにdataURLでフォールバック。 */
+    const STORAGE_KEYS = {
+      meta: 'puzzle_meta',
+      last: 'puzzle_last',
+      statePrefix: 'puzzle_state_',
+      imageFallbackPrefix: 'puzzle_image_'
+    };
+
+    const SAMPLE_IMAGE = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAACqaXHeAAABbElEQVR4nO2YvUoDQRRFz6Q2D0xq1OQb1BqYJ0ZqQ2JjZ2IoYSElQkFBGwkYl2GmN72cEmV7n3vms9u8QJkF4zX+Fj6gIYhIL0C2lQAr9e6I05Y8wZK0A4KqW5Gk3J8B+6dK0X9Q4W2c7Exm7Q3a0d9i9YTuC6Ck6Wl0Hn8uOrhGx3ibJX3A7Kft52i3s5V8h6xFZrV1a+8F+qzXozG9V7WnqJrj4V0g43tB8pS0G0s+qSWx5v3CbwF45qV7vB4gWnngXJt8nS8T2my3x7I7lEX47XG06D3gU7ipx2YcI2oX7ZKzS2Q8fXwbdZC5pJfP4WURB4dJY1WxGm2a4efyLD3m1Esg6tI6GZPSIH3cBaxMjG4C89GBSIqA1yL2kOei6Y1Lqk3hWm6Lqo5E0L8E6c5y6uSgG9vV7xqHqD5k2dV4gkzZKjE4i8t6YGhlyZ8aZbN+dvYb1zZ9B+f2eI1A/2xk/AGV3cn+XGNsXAAAAAElFTkSuQmCC';
+
+    const state = {
+      puzzles: [],
+      currentPuzzle: null,
+      currentPuzzleState: null,
+      pieces: [],
+      selectedPiece: null,
+      selectedSlot: null,
+      elapsedSec: 0,
+      timer: null,
+      idbAvailable: true
+    };
+
+    const dom = {
+      listScreen: document.getElementById('listScreen'),
+      createScreen: document.getElementById('createScreen'),
+      gameScreen: document.getElementById('gameScreen'),
+      puzzleList: document.getElementById('puzzleList'),
+      switchList: document.getElementById('switchList'),
+      storageWarning: document.getElementById('storageWarning'),
+      puzzleNameInput: document.getElementById('puzzleNameInput'),
+      puzzleImageInput: document.getElementById('puzzleImageInput'),
+      gridSizeSelect: document.getElementById('gridSizeSelect'),
+      createPuzzleBtn: document.getElementById('createPuzzleBtn'),
+      backToListBtn: document.getElementById('backToListBtn'),
+      toCreateBtn: document.getElementById('toCreateBtn'),
+      toListBtn: document.getElementById('toListBtn'),
+      currentPuzzleName: document.getElementById('currentPuzzleName'),
+      elapsedLabel: document.getElementById('elapsedLabel'),
+      hintLabel: document.getElementById('hintLabel'),
+      gridLabel: document.getElementById('gridLabel'),
+      boardGrid: document.getElementById('boardGrid'),
+      handList: document.getElementById('handList'),
+      hamburgerBtn: document.getElementById('hamburgerBtn'),
+      drawer: document.getElementById('drawer'),
+      drawerOverlay: document.getElementById('drawerOverlay'),
+      viewImageBtn: document.getElementById('viewImageBtn'),
+      switchPuzzleBtn: document.getElementById('switchPuzzleBtn'),
+      hintBtn: document.getElementById('hintBtn'),
+      difficultySelect: document.getElementById('difficultySelect'),
+      resetBtn: document.getElementById('resetBtn'),
+      imageModal: document.getElementById('imageModal'),
+      fullImage: document.getElementById('fullImage'),
+      switchModal: document.getElementById('switchModal'),
+      clearModal: document.getElementById('clearModal'),
+      clearElapsed: document.getElementById('clearElapsed')
+    };
+
+    function showScreen(screen) {
+      dom.listScreen.classList.remove('active');
+      dom.createScreen.classList.remove('active');
+      dom.gameScreen.classList.remove('active');
+      screen.classList.add('active');
+    }
+
+    function saveMeta() {
+      localStorage.setItem(STORAGE_KEYS.meta, JSON.stringify(state.puzzles));
+    }
+
+    function loadMeta() {
+      const raw = localStorage.getItem(STORAGE_KEYS.meta);
+      state.puzzles = raw ? JSON.parse(raw) : [];
+    }
+
+    function saveState(puzzleId, data) {
+      localStorage.setItem(`${STORAGE_KEYS.statePrefix}${puzzleId}`, JSON.stringify(data));
+    }
+
+    function loadState(puzzleId) {
+      const raw = localStorage.getItem(`${STORAGE_KEYS.statePrefix}${puzzleId}`);
+      return raw ? JSON.parse(raw) : null;
+    }
+
+    function setLastPuzzle(puzzleId) {
+      localStorage.setItem(STORAGE_KEYS.last, puzzleId);
+    }
+
+    function getLastPuzzle() {
+      return localStorage.getItem(STORAGE_KEYS.last);
+    }
+
+    function showWarning(message) {
+      dom.storageWarning.textContent = message;
+      dom.storageWarning.classList.remove('hidden');
+    }
+
+    function openDrawer() {
+      dom.drawer.classList.add('open');
+      dom.drawerOverlay.classList.add('show');
+    }
+
+    function closeDrawer() {
+      dom.drawer.classList.remove('open');
+      dom.drawerOverlay.classList.remove('show');
+    }
+
+    function openModal(modal) {
+      modal.classList.add('show');
+    }
+
+    function closeModal(modal) {
+      modal.classList.remove('show');
+    }
+
+    /* 主要関数: 画像からピース生成 (canvasで切り出しdataURL化) */
+    async function generatePieces(imageSrc, gridSize) {
+      const img = new Image();
+      img.src = imageSrc;
+      await img.decode();
+      const size = Math.min(img.width, img.height);
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const pieceSize = Math.floor(size / gridSize);
+      canvas.width = pieceSize;
+      canvas.height = pieceSize;
+      const pieces = [];
+      for (let y = 0; y < gridSize; y += 1) {
+        for (let x = 0; x < gridSize; x += 1) {
+          ctx.clearRect(0, 0, pieceSize, pieceSize);
+          ctx.drawImage(
+            img,
+            x * pieceSize,
+            y * pieceSize,
+            pieceSize,
+            pieceSize,
+            0,
+            0,
+            pieceSize,
+            pieceSize
+          );
+          pieces.push(canvas.toDataURL('image/png'));
+        }
+      }
+      return pieces;
+    }
+
+    function shuffleArray(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function initBoardState(gridSize) {
+      const total = gridSize * gridSize;
+      return {
+        boardMap: Array(total).fill(null),
+        handList: shuffleArray([...Array(total).keys()]),
+        hintsUsed: 0,
+        elapsedSec: 0
+      };
+    }
+
+    function getHintLimit(gridSize) {
+      return gridSize;
+    }
+
+    function updateTimer() {
+      dom.elapsedLabel.textContent = state.elapsedSec;
+    }
+
+    function startTimer() {
+      stopTimer();
+      state.timer = setInterval(() => {
+        state.elapsedSec += 1;
+        updateTimer();
+        persistCurrentState();
+      }, 1000);
+    }
+
+    function stopTimer() {
+      if (state.timer) {
+        clearInterval(state.timer);
+        state.timer = null;
+      }
+    }
+
+    function renderList() {
+      dom.puzzleList.innerHTML = '';
+      state.puzzles.forEach((puzzle) => {
+        const card = document.createElement('div');
+        card.className = 'card puzzle-card';
+        const thumb = document.createElement('div');
+        thumb.className = 'thumb';
+        const img = document.createElement('img');
+        img.alt = puzzle.name;
+        resolveImage(puzzle.id).then((src) => {
+          img.src = src;
+        });
+        thumb.appendChild(img);
+        const info = document.createElement('div');
+        info.innerHTML = `<strong>${puzzle.name}</strong><br><span class="badge">${puzzle.gridSize}x${puzzle.gridSize}</span>`;
+        const btn = document.createElement('button');
+        btn.className = 'btn';
+        btn.textContent = '開く';
+        btn.addEventListener('click', () => loadPuzzle(puzzle.id));
+        card.append(thumb, info, btn);
+        dom.puzzleList.appendChild(card);
+      });
+      if (state.puzzles.length === 0) {
+        dom.puzzleList.innerHTML = '<p>まだパズルがありません。</p>';
+      }
+    }
+
+    function renderSwitchList() {
+      dom.switchList.innerHTML = '';
+      state.puzzles.forEach((puzzle) => {
+        const btn = document.createElement('button');
+        btn.className = 'btn secondary';
+        btn.textContent = puzzle.name;
+        btn.addEventListener('click', () => {
+          loadPuzzle(puzzle.id);
+          closeModal(dom.switchModal);
+        });
+        dom.switchList.appendChild(btn);
+      });
+    }
+
+    function renderBoard(gridSize, boardMap) {
+      dom.boardGrid.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
+      dom.boardGrid.innerHTML = '';
+      boardMap.forEach((pieceIndex, idx) => {
+        const slot = document.createElement('div');
+        slot.className = 'slot';
+        slot.dataset.index = idx;
+        if (state.selectedSlot === idx) {
+          slot.classList.add('selected');
+        }
+        if (pieceIndex !== null && state.pieces[pieceIndex]) {
+          const img = document.createElement('img');
+          img.src = state.pieces[pieceIndex];
+          slot.appendChild(img);
+        }
+        slot.addEventListener('click', () => handleSlotClick(idx));
+        dom.boardGrid.appendChild(slot);
+      });
+    }
+
+    function renderHand(handList) {
+      dom.handList.innerHTML = '';
+      handList.forEach((pieceIndex) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'hand-piece';
+        if (state.selectedPiece === pieceIndex) {
+          wrapper.classList.add('selected');
+        }
+        const img = document.createElement('img');
+        img.src = state.pieces[pieceIndex];
+        wrapper.appendChild(img);
+        wrapper.addEventListener('click', () => handlePieceClick(pieceIndex));
+        dom.handList.appendChild(wrapper);
+      });
+      if (handList.length === 0) {
+        dom.handList.innerHTML = '<p>手札が空です。</p>';
+      }
+    }
+
+    function updateStatus() {
+      if (!state.currentPuzzle) return;
+      dom.currentPuzzleName.textContent = state.currentPuzzle.name;
+      dom.gridLabel.textContent = `${state.currentPuzzle.gridSize}x${state.currentPuzzle.gridSize}`;
+      const hintRemaining = getHintLimit(state.currentPuzzle.gridSize) - state.currentPuzzleState.hintsUsed;
+      dom.hintLabel.textContent = hintRemaining;
+      dom.difficultySelect.value = String(state.currentPuzzle.gridSize);
+    }
+
+    function renderGame() {
+      if (!state.currentPuzzle) return;
+      renderBoard(state.currentPuzzle.gridSize, state.currentPuzzleState.boardMap);
+      renderHand(state.currentPuzzleState.handList);
+      updateStatus();
+      updateTimer();
+    }
+
+    function persistCurrentState() {
+      if (!state.currentPuzzle) return;
+      const data = {
+        boardMap: state.currentPuzzleState.boardMap,
+        handList: state.currentPuzzleState.handList,
+        hintsUsed: state.currentPuzzleState.hintsUsed,
+        elapsedSec: state.elapsedSec
+      };
+      saveState(state.currentPuzzle.id, data);
+      setLastPuzzle(state.currentPuzzle.id);
+    }
+
+    function checkClear() {
+      const complete = state.currentPuzzleState.boardMap.every((val, idx) => val === idx);
+      if (complete) {
+        dom.clearElapsed.textContent = state.elapsedSec;
+        openModal(dom.clearModal);
+      }
+    }
+
+    function handlePieceClick(pieceIndex) {
+      state.selectedPiece = pieceIndex;
+      state.selectedSlot = null;
+      renderGame();
+    }
+
+    function handleSlotClick(slotIndex) {
+      const currentValue = state.currentPuzzleState.boardMap[slotIndex];
+      if (currentValue !== null) {
+        state.currentPuzzleState.handList.push(currentValue);
+        state.currentPuzzleState.boardMap[slotIndex] = null;
+        state.selectedPiece = null;
+        state.selectedSlot = slotIndex;
+      } else if (state.selectedPiece !== null) {
+        state.currentPuzzleState.boardMap[slotIndex] = state.selectedPiece;
+        state.currentPuzzleState.handList = state.currentPuzzleState.handList.filter((p) => p !== state.selectedPiece);
+        state.selectedPiece = null;
+        state.selectedSlot = slotIndex;
+      } else {
+        state.selectedSlot = slotIndex;
+      }
+      renderGame();
+      persistCurrentState();
+      checkClear();
+    }
+
+    /* ヒント処理: 空きスロットが選択されている時だけ正解ピースを配置 */
+    function applyHint() {
+      if (state.selectedSlot === null) {
+        alert('空きマスを選択してください。');
+        return;
+      }
+      const slotIndex = state.selectedSlot;
+      if (state.currentPuzzleState.boardMap[slotIndex] !== null) {
+        alert('空きマスを選択してください。');
+        return;
+      }
+      const limit = getHintLimit(state.currentPuzzle.gridSize);
+      if (state.currentPuzzleState.hintsUsed >= limit) {
+        alert('ヒント残回数がありません。');
+        return;
+      }
+      const correctPiece = slotIndex;
+      const handIndex = state.currentPuzzleState.handList.indexOf(correctPiece);
+      if (handIndex === -1) {
+        alert('正解ピースが手札にありません。');
+        return;
+      }
+      state.currentPuzzleState.handList.splice(handIndex, 1);
+      state.currentPuzzleState.boardMap[slotIndex] = correctPiece;
+      state.currentPuzzleState.hintsUsed += 1;
+      state.selectedSlot = null;
+      renderGame();
+      persistCurrentState();
+      checkClear();
+    }
+
+    /* 復元処理: localStorage/IndexedDBから状態と画像を復元 */
+    async function loadPuzzle(puzzleId) {
+      const puzzle = state.puzzles.find((p) => p.id === puzzleId);
+      if (!puzzle) return;
+      const imageSrc = await resolveImage(puzzleId);
+      state.pieces = await generatePieces(imageSrc, puzzle.gridSize);
+      const puzzleState = loadState(puzzleId) || initBoardState(puzzle.gridSize);
+      state.currentPuzzle = puzzle;
+      state.currentPuzzleState = puzzleState;
+      state.selectedPiece = null;
+      state.selectedSlot = null;
+      state.elapsedSec = puzzleState.elapsedSec || 0;
+      startTimer();
+      renderGame();
+      showScreen(dom.gameScreen);
+      setLastPuzzle(puzzleId);
+    }
+
+    function regenerateCurrentPuzzle(gridSize) {
+      if (!state.currentPuzzle) return;
+      state.currentPuzzle.gridSize = gridSize;
+      saveMeta();
+      resetPuzzleState();
+    }
+
+    function resetPuzzleState() {
+      const gridSize = state.currentPuzzle.gridSize;
+      state.currentPuzzleState = initBoardState(gridSize);
+      state.elapsedSec = 0;
+      persistCurrentState();
+      resolveImage(state.currentPuzzle.id).then(async (src) => {
+        state.pieces = await generatePieces(src, gridSize);
+        renderGame();
+      });
+    }
+
+    function createPuzzleMeta(name, gridSize) {
+      return {
+        id: `puzzle_${Date.now()}`,
+        name,
+        gridSize,
+        createdAt: Date.now()
+      };
+    }
+
+    function handleCreatePuzzle(imageSrc) {
+      const name = dom.puzzleNameInput.value.trim() || '新しいパズル';
+      const gridSize = parseInt(dom.gridSizeSelect.value, 10);
+      const puzzle = createPuzzleMeta(name, gridSize);
+      state.puzzles.push(puzzle);
+      saveMeta();
+      saveState(puzzle.id, initBoardState(gridSize));
+      storeImage(puzzle.id, imageSrc).then(() => {
+        loadPuzzle(puzzle.id);
+      });
+    }
+
+    function openDatabase() {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open('puzzle-db', 1);
+        request.onupgradeneeded = (event) => {
+          const db = event.target.result;
+          if (!db.objectStoreNames.contains('images')) {
+            db.createObjectStore('images');
+          }
+        };
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+    }
+
+    async function storeImage(id, dataUrl) {
+      try {
+        const db = await openDatabase();
+        const blob = dataURLToBlob(dataUrl);
+        await new Promise((resolve, reject) => {
+          const tx = db.transaction('images', 'readwrite');
+          tx.objectStore('images').put(blob, id);
+          tx.oncomplete = () => resolve();
+          tx.onerror = () => reject(tx.error);
+        });
+      } catch (error) {
+        state.idbAvailable = false;
+        localStorage.setItem(`${STORAGE_KEYS.imageFallbackPrefix}${id}`, dataUrl);
+        showWarning('IndexedDBが使えないため、画像をlocalStorageに保存しています。容量に注意してください。');
+      }
+    }
+
+    async function resolveImage(id) {
+      if (state.idbAvailable) {
+        try {
+          const db = await openDatabase();
+          return await new Promise((resolve, reject) => {
+            const tx = db.transaction('images', 'readonly');
+            const request = tx.objectStore('images').get(id);
+            request.onsuccess = () => {
+              if (request.result) {
+                resolve(URL.createObjectURL(request.result));
+              } else {
+                const fallback = localStorage.getItem(`${STORAGE_KEYS.imageFallbackPrefix}${id}`);
+                resolve(fallback || SAMPLE_IMAGE);
+              }
+            };
+            request.onerror = () => reject(request.error);
+          });
+        } catch (error) {
+          state.idbAvailable = false;
+        }
+      }
+      return localStorage.getItem(`${STORAGE_KEYS.imageFallbackPrefix}${id}`) || SAMPLE_IMAGE;
+    }
+
+    function dataURLToBlob(dataUrl) {
+      const [header, data] = dataUrl.split(',');
+      const mime = header.match(/:(.*?);/)[1];
+      const binary = atob(data);
+      const array = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i += 1) {
+        array[i] = binary.charCodeAt(i);
+      }
+      return new Blob([array], { type: mime });
+    }
+
+    function ensureSamplePuzzle() {
+      if (state.puzzles.length > 0) return;
+      const puzzle = createPuzzleMeta('サンプルパズル', 3);
+      state.puzzles.push(puzzle);
+      saveMeta();
+      saveState(puzzle.id, initBoardState(3));
+      storeImage(puzzle.id, SAMPLE_IMAGE);
+    }
+
+    dom.hamburgerBtn.addEventListener('click', openDrawer);
+    dom.drawerOverlay.addEventListener('click', closeDrawer);
+    dom.viewImageBtn.addEventListener('click', async () => {
+      const imageSrc = await resolveImage(state.currentPuzzle.id);
+      dom.fullImage.src = imageSrc;
+      openModal(dom.imageModal);
+      closeDrawer();
+    });
+    dom.switchPuzzleBtn.addEventListener('click', () => {
+      renderSwitchList();
+      openModal(dom.switchModal);
+      closeDrawer();
+    });
+    dom.hintBtn.addEventListener('click', () => {
+      applyHint();
+      closeDrawer();
+    });
+    dom.resetBtn.addEventListener('click', () => {
+      resetPuzzleState();
+      closeDrawer();
+    });
+    dom.difficultySelect.addEventListener('change', (event) => {
+      regenerateCurrentPuzzle(parseInt(event.target.value, 10));
+    });
+
+    dom.toCreateBtn.addEventListener('click', () => showScreen(dom.createScreen));
+    dom.backToListBtn.addEventListener('click', () => showScreen(dom.listScreen));
+    dom.toListBtn.addEventListener('click', () => {
+      renderList();
+      showScreen(dom.listScreen);
+    });
+
+    dom.createPuzzleBtn.addEventListener('click', () => {
+      const file = dom.puzzleImageInput.files[0];
+      if (!file) {
+        alert('画像を選択してください。');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => handleCreatePuzzle(reader.result);
+      reader.readAsDataURL(file);
+    });
+
+    document.querySelectorAll('[data-close]').forEach((btn) => {
+      btn.addEventListener('click', (event) => {
+        const modal = event.target.closest('.modal');
+        closeModal(modal);
+      });
+    });
+
+    window.addEventListener('beforeunload', () => {
+      persistCurrentState();
+    });
+
+    function init() {
+      loadMeta();
+      ensureSamplePuzzle();
+      renderList();
+      const last = getLastPuzzle();
+      if (last) {
+        loadPuzzle(last);
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
