@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>横スクロール人混み回避 (モック)</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #0f172a;
+      --panel: #1e293b;
+      --accent: #38bdf8;
+      --danger: #f87171;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+    }
+    * {
+      box-sizing: border-box;
+      touch-action: none;
+      user-select: none;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Segoe UI", "Hiragino Kaku Gothic ProN", sans-serif;
+    }
+    #app {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      background: linear-gradient(180deg, #0b1120 0%, #0f172a 100%);
+    }
+    .overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(15, 23, 42, 0.82);
+      z-index: 3;
+      gap: 16px;
+      text-align: center;
+      padding: 24px;
+    }
+    .card {
+      background: rgba(30, 41, 59, 0.92);
+      padding: 20px 24px;
+      border-radius: 16px;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      width: min(420px, 90vw);
+      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.5);
+    }
+    .title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+    .button-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    button {
+      background: var(--accent);
+      color: #0f172a;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      min-width: 110px;
+      transition: transform 0.1s ease, filter 0.2s ease;
+    }
+    button:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.05);
+    }
+    button.secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+    }
+    .hud {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-weight: 600;
+    }
+    .hud span {
+      background: rgba(15, 23, 42, 0.7);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 13px;
+    }
+    #pause-btn {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 2;
+    }
+    .banner {
+      position: absolute;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.8);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      color: var(--muted);
+      z-index: 2;
+    }
+    .ranking {
+      margin-top: 16px;
+      text-align: left;
+      font-size: 13px;
+      color: var(--muted);
+      max-height: 180px;
+      overflow-y: auto;
+      padding-right: 6px;
+    }
+    .ranking ul {
+      list-style: none;
+      padding: 0;
+      margin: 8px 0 0;
+    }
+    .ranking li {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 0;
+      border-bottom: 1px dashed rgba(148, 163, 184, 0.2);
+    }
+    .ranking li:last-child {
+      border-bottom: none;
+    }
+    @media (max-width: 640px) {
+      .title { font-size: 20px; }
+      button { min-width: 90px; font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <canvas id="game"></canvas>
+    <div class="hud">
+      <span id="distance">距離: 0m</span>
+      <span id="difficulty">難易度: -</span>
+    </div>
+    <button id="pause-btn" class="secondary">一時停止</button>
+    <div id="orientation-banner" class="banner" hidden>横画面推奨です</div>
+
+    <div id="menu" class="overlay">
+      <div class="card">
+        <div class="title">横スクロール人混み回避</div>
+        <div class="subtitle">プレイヤー円の上に指/マウスを乗せている間だけ前進。難易度を選んでスタート！</div>
+        <div class="button-row">
+          <button data-diff="EASY">EASY</button>
+          <button data-diff="NORMAL">NORMAL</button>
+          <button data-diff="HARD">HARD</button>
+        </div>
+        <div class="ranking">
+          <strong>ランキング (ローカル)</strong>
+          <ul id="ranking-list"></ul>
+        </div>
+      </div>
+    </div>
+
+    <div id="result" class="overlay" hidden>
+      <div class="card">
+        <div class="title" id="result-title">結果</div>
+        <div class="subtitle" id="result-distance"></div>
+        <div class="button-row">
+          <button id="retry-btn">リトライ</button>
+          <button id="menu-btn" class="secondary">メニュー</button>
+        </div>
+        <div class="ranking">
+          <strong>ランキング (同難易度)</strong>
+          <ul id="result-ranking"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    class StorageManager {
+      constructor(prefix = "crowd-dodge") {
+        this.prefix = prefix;
+      }
+
+      _key(difficulty, dateKey) {
+        return `${this.prefix}:${difficulty}:${dateKey}`;
+      }
+
+      _todayKey() {
+        const now = new Date();
+        const yyyy = now.getFullYear();
+        const mm = String(now.getMonth() + 1).padStart(2, "0");
+        const dd = String(now.getDate()).padStart(2, "0");
+        return `${yyyy}-${mm}-${dd}`;
+      }
+
+      loadRankings(difficulty) {
+        const key = this._key(difficulty, this._todayKey());
+        const raw = localStorage.getItem(key);
+        if (!raw) return [];
+        try {
+          return JSON.parse(raw);
+        } catch (error) {
+          console.warn("ranking parse failed", error);
+          return [];
+        }
+      }
+
+      saveScore(difficulty, meters) {
+        const dateKey = this._todayKey();
+        const key = this._key(difficulty, dateKey);
+        const list = this.loadRankings(difficulty);
+        list.push({ meters, date: dateKey });
+        list.sort((a, b) => b.meters - a.meters);
+        const trimmed = list.slice(0, 10);
+        localStorage.setItem(key, JSON.stringify(trimmed));
+        return trimmed;
+      }
+    }
+
+    class InputController {
+      constructor(canvas) {
+        this.canvas = canvas;
+        this.pointerActive = false;
+        this.pointerId = null;
+        this.pointerPosition = { x: 0, y: 0 };
+        this._bind();
+      }
+
+      _bind() {
+        const updatePosition = (event) => {
+          const rect = this.canvas.getBoundingClientRect();
+          this.pointerPosition.x = event.clientX - rect.left;
+          this.pointerPosition.y = event.clientY - rect.top;
+        };
+
+        this.canvas.addEventListener("pointerdown", (event) => {
+          this.pointerId = event.pointerId;
+          this.pointerActive = true;
+          updatePosition(event);
+        });
+
+        this.canvas.addEventListener("pointermove", (event) => {
+          if (this.pointerId !== null && event.pointerId !== this.pointerId) return;
+          updatePosition(event);
+        });
+
+        const endPointer = () => {
+          this.pointerActive = false;
+          this.pointerId = null;
+        };
+
+        this.canvas.addEventListener("pointerup", endPointer);
+        this.canvas.addEventListener("pointercancel", endPointer);
+        this.canvas.addEventListener("pointerleave", endPointer);
+        this.canvas.addEventListener("pointerout", endPointer);
+      }
+
+      isPointerActive() {
+        return this.pointerActive;
+      }
+
+      getPointerPosition() {
+        return { ...this.pointerPosition };
+      }
+    }
+
+    class Renderer {
+      constructor(canvas) {
+        this.canvas = canvas;
+        this.ctx = canvas.getContext("2d");
+      }
+
+      resize() {
+        const ratio = window.devicePixelRatio || 1;
+        this.canvas.width = this.canvas.clientWidth * ratio;
+        this.canvas.height = this.canvas.clientHeight * ratio;
+        this.ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      }
+
+      clear() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      }
+
+      draw(game) {
+        const { ctx } = this;
+        const { player, obstacles, width, height } = game;
+        ctx.clearRect(0, 0, width, height);
+
+        ctx.fillStyle = "rgba(255,255,255,0.04)";
+        for (let x = 0; x < width; x += 80) {
+          ctx.fillRect(x, 0, 1, height);
+        }
+
+        obstacles.forEach((obstacle) => {
+          ctx.beginPath();
+          ctx.fillStyle = obstacle.color;
+          ctx.arc(obstacle.x, obstacle.y, obstacle.radius, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        ctx.beginPath();
+        ctx.fillStyle = player.active ? "#38bdf8" : "#64748b";
+        ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = "rgba(255,255,255,0.12)";
+        ctx.strokeRect(8, 8, width - 16, height - 16);
+      }
+    }
+
+    class GameState {
+      constructor(canvas, input, renderer, storage) {
+        this.canvas = canvas;
+        this.input = input;
+        this.renderer = renderer;
+        this.storage = storage;
+        this.difficulty = "EASY";
+        this.speed = 1.0;
+        this.spawnRate = 0.008;
+        this.width = canvas.clientWidth;
+        this.height = canvas.clientHeight;
+        this.running = false;
+        this.paused = false;
+        this.distancePx = 0;
+        this.player = {
+          x: this.width * 0.2,
+          y: this.height * 0.5,
+          radius: 20,
+          active: false,
+        };
+        this.obstacles = [];
+        this.lastTime = 0;
+        this.over = false;
+        this.listener = () => {};
+      }
+
+      onGameOver(callback) {
+        this.listener = callback;
+      }
+
+      setDifficulty(level) {
+        this.difficulty = level;
+        const speedMap = { EASY: 1.0, NORMAL: 1.3, HARD: 1.6 };
+        const spawnMap = { EASY: 0.008, NORMAL: 0.012, HARD: 0.018 };
+        this.speed = speedMap[level] || 1.0;
+        this.spawnRate = spawnMap[level] || 0.008;
+      }
+
+      reset() {
+        this.distancePx = 0;
+        this.obstacles = [];
+        this.over = false;
+        this.paused = false;
+        this.player.x = this.width * 0.2;
+        this.player.y = this.height * 0.5;
+      }
+
+      start() {
+        this.running = true;
+        this.lastTime = performance.now();
+        requestAnimationFrame(this.loop.bind(this));
+      }
+
+      stop() {
+        this.running = false;
+      }
+
+      loop(timestamp) {
+        if (!this.running) return;
+        const delta = Math.min(32, timestamp - this.lastTime);
+        this.lastTime = timestamp;
+        this.update(delta);
+        this.renderer.draw(this);
+        requestAnimationFrame(this.loop.bind(this));
+      }
+
+      update(delta) {
+        this.width = this.canvas.clientWidth;
+        this.height = this.canvas.clientHeight;
+        this.player.x = this.width * 0.2;
+        this.player.radius = Math.max(14, Math.min(28, this.height * 0.04));
+
+        if (this.paused || this.over) {
+          this.player.active = false;
+          return;
+        }
+
+        const pointer = this.input.getPointerPosition();
+        const insidePlayer = this._isInsidePlayer(pointer);
+        const active = this.input.isPointerActive() && insidePlayer;
+        this.player.active = active;
+
+        if (active) {
+          const targetY = Math.max(this.player.radius, Math.min(this.height - this.player.radius, pointer.y));
+          const followSpeed = 0.12;
+          this.player.y += (targetY - this.player.y) * followSpeed;
+        }
+
+        if (active) {
+          const deltaPx = delta * 0.2 * this.speed;
+          this.distancePx += deltaPx;
+          this._spawnObstacles(delta);
+          this._moveObstacles(deltaPx);
+          this._checkCollision();
+        }
+      }
+
+      _isInsidePlayer(point) {
+        const dx = point.x - this.player.x;
+        const dy = point.y - this.player.y;
+        return Math.hypot(dx, dy) <= this.player.radius;
+      }
+
+      _spawnObstacles(delta) {
+        const count = Math.random() < this.spawnRate * delta ? 1 : 0;
+        for (let i = 0; i < count; i += 1) {
+          const radius = 14 + Math.random() * 16;
+          const y = radius + Math.random() * (this.height - radius * 2);
+          const x = this.width + radius + Math.random() * 120;
+          const hue = 20 + Math.floor(Math.random() * 20);
+          this.obstacles.push({
+            x,
+            y,
+            radius,
+            color: `hsl(${hue}, 80%, 70%)`,
+          });
+        }
+      }
+
+      _moveObstacles(deltaPx) {
+        const speedPx = deltaPx * 1.4;
+        this.obstacles.forEach((obstacle) => {
+          obstacle.x -= speedPx;
+        });
+        this.obstacles = this.obstacles.filter((obstacle) => obstacle.x > -obstacle.radius - 40);
+      }
+
+      _checkCollision() {
+        const player = this.player;
+        for (const obstacle of this.obstacles) {
+          const dx = obstacle.x - player.x;
+          const dy = obstacle.y - player.y;
+          const distance = Math.hypot(dx, dy);
+          if (distance < obstacle.radius + player.radius) {
+            this.over = true;
+            this.listener();
+            break;
+          }
+        }
+      }
+
+      getDistanceMeters() {
+        return Math.floor(this.distancePx / 100);
+      }
+    }
+
+    const canvas = document.getElementById("game");
+    const distanceEl = document.getElementById("distance");
+    const difficultyEl = document.getElementById("difficulty");
+    const pauseBtn = document.getElementById("pause-btn");
+    const menuOverlay = document.getElementById("menu");
+    const resultOverlay = document.getElementById("result");
+    const resultDistance = document.getElementById("result-distance");
+    const resultTitle = document.getElementById("result-title");
+    const retryBtn = document.getElementById("retry-btn");
+    const menuBtn = document.getElementById("menu-btn");
+    const rankingList = document.getElementById("ranking-list");
+    const resultRanking = document.getElementById("result-ranking");
+    const banner = document.getElementById("orientation-banner");
+
+    const input = new InputController(canvas);
+    const renderer = new Renderer(canvas);
+    const storage = new StorageManager();
+    const game = new GameState(canvas, input, renderer, storage);
+
+    const difficultyLabels = { EASY: "EASY", NORMAL: "NORMAL", HARD: "HARD" };
+
+    const updateHud = () => {
+      distanceEl.textContent = `距離: ${game.getDistanceMeters()}m`;
+      difficultyEl.textContent = `難易度: ${difficultyLabels[game.difficulty] || "-"}`;
+      pauseBtn.textContent = game.paused ? "再開" : "一時停止";
+    };
+
+    const updateBanner = () => {
+      const isPortrait = window.innerHeight > window.innerWidth;
+      banner.hidden = !isPortrait;
+    };
+
+    const renderRankings = (list, target) => {
+      target.innerHTML = "";
+      if (list.length === 0) {
+        target.innerHTML = "<li>まだ記録がありません</li>";
+        return;
+      }
+      list.forEach((entry, index) => {
+        const item = document.createElement("li");
+        item.innerHTML = `<span>#${index + 1} ${entry.meters}m</span><span>${entry.date}</span>`;
+        target.appendChild(item);
+      });
+    };
+
+    const showMenu = () => {
+      menuOverlay.hidden = false;
+      resultOverlay.hidden = true;
+      game.stop();
+      updateHud();
+      renderRankings(storage.loadRankings(game.difficulty), rankingList);
+    };
+
+    const startGame = (difficulty) => {
+      game.setDifficulty(difficulty);
+      game.reset();
+      menuOverlay.hidden = true;
+      resultOverlay.hidden = true;
+      game.start();
+    };
+
+    const showResult = () => {
+      const meters = game.getDistanceMeters();
+      resultTitle.textContent = "ゲームオーバー";
+      resultDistance.textContent = `距離: ${meters}m`;
+      const rankings = storage.saveScore(game.difficulty, meters);
+      renderRankings(rankings, resultRanking);
+      resultOverlay.hidden = false;
+    };
+
+    game.onGameOver(showResult);
+
+    document.querySelectorAll("#menu button[data-diff]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        startGame(btn.dataset.diff);
+      });
+    });
+
+    retryBtn.addEventListener("click", () => startGame(game.difficulty));
+    menuBtn.addEventListener("click", showMenu);
+
+    pauseBtn.addEventListener("click", () => {
+      if (!game.running || game.over) return;
+      game.paused = !game.paused;
+      updateHud();
+    });
+
+    const loopUi = () => {
+      updateHud();
+      updateBanner();
+      requestAnimationFrame(loopUi);
+    };
+
+    window.addEventListener("resize", () => {
+      renderer.resize();
+      updateBanner();
+    });
+
+    renderer.resize();
+    updateBanner();
+    showMenu();
+    loopUi();
+  </script>
+</body>
+</html>
