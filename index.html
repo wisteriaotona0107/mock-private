@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>交感神経昂り確認メーター（セルフチェック支援ツール：医療診断ではない）</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f7fb;
+      --text: #1f2430;
+      --muted: #5b6475;
+      --card: #ffffff;
+      --border: #d7dbe6;
+      --main: #2b7de9;
+      --main-weak: #e6f0ff;
+      --danger: #d64545;
+      --shadow: 0 10px 25px rgba(27, 34, 51, 0.08);
+      --score-hue: 210;
+      --score-color: hsl(var(--score-hue) 75% 45%);
+      --score-glow: hsl(var(--score-hue) 80% 92%);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Hiragino Sans", "Noto Sans JP", "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 96px;
+    }
+
+    header {
+      padding: 20px 16px 8px;
+      position: sticky;
+      top: 0;
+      background: rgba(246, 247, 251, 0.95);
+      backdrop-filter: blur(8px);
+      z-index: 5;
+      border-bottom: 1px solid var(--border);
+    }
+
+    header h1 {
+      font-size: 18px;
+      margin: 0 0 4px;
+    }
+
+    header p {
+      margin: 0;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    main {
+      flex: 1;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--main);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .button.secondary {
+      background: white;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .button.ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px dashed var(--border);
+    }
+
+    .button:focus-visible {
+      outline: 3px solid #1a73e8;
+      outline-offset: 2px;
+    }
+
+    .button:active {
+      transform: scale(0.98);
+    }
+
+    .grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    label {
+      font-weight: 600;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--main);
+    }
+
+    .range-value {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .radio-group {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .radio-group label {
+      background: var(--main-weak);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 14px;
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+
+    .radio-group input {
+      margin-right: 4px;
+    }
+
+    .radio-group input:focus-visible + span {
+      outline: 2px solid #1a73e8;
+      outline-offset: 2px;
+    }
+
+    .error {
+      color: var(--danger);
+      font-size: 13px;
+    }
+
+    .error-banner {
+      border: 1px solid var(--danger);
+      background: #fff0f0;
+      color: var(--danger);
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 14px;
+    }
+
+    .meter {
+      display: grid;
+      place-items: center;
+      padding: 24px 0;
+    }
+
+    .meter-circle {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: conic-gradient(var(--score-color) calc(var(--score) * 1%), #e4e7f1 0);
+      display: grid;
+      place-items: center;
+      position: relative;
+      box-shadow: 0 0 0 10px var(--score-glow);
+    }
+
+    .meter-circle::after {
+      content: "";
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      background: white;
+      position: absolute;
+    }
+
+    .meter-content {
+      position: relative;
+      text-align: center;
+    }
+
+    .meter-value {
+      font-size: 36px;
+      font-weight: 700;
+    }
+
+    .meter-label {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .level {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      background: repeating-linear-gradient(45deg, var(--score-glow), var(--score-glow) 6px, white 6px, white 12px);
+    }
+
+    .level .icon {
+      font-size: 18px;
+    }
+
+    .actions-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    details {
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #fefefe;
+    }
+
+    details summary {
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      font-size: 12px;
+      border-radius: 999px;
+      background: var(--main-weak);
+      color: var(--text);
+      margin-right: 8px;
+    }
+
+    .footer-note {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #1f2430;
+      color: white;
+      padding: 12px 16px;
+      font-size: 13px;
+      text-align: center;
+      z-index: 10;
+    }
+
+    .two-col {
+      display: grid;
+      gap: 16px;
+    }
+
+    .history-item {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      display: grid;
+      gap: 6px;
+      cursor: pointer;
+      background: #fff;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(17, 24, 39, 0.5);
+      display: grid;
+      place-items: center;
+      z-index: 20;
+      padding: 16px;
+    }
+
+    .modal {
+      background: white;
+      border-radius: 16px;
+      padding: 16px;
+      max-width: 560px;
+      width: 100%;
+      box-shadow: var(--shadow);
+    }
+
+    .modal h3 {
+      margin-top: 0;
+    }
+
+    .modal .close {
+      float: right;
+      border: none;
+      background: transparent;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    @media (min-width: 768px) {
+      header {
+        padding: 24px 32px 12px;
+      }
+
+      main {
+        padding: 24px 32px 32px;
+      }
+
+      .two-col {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .meter-circle {
+        width: 220px;
+        height: 220px;
+      }
+
+      .meter-circle::after {
+        width: 160px;
+        height: 160px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app" id="app"></div>
+  <div class="footer-note">本ツールはセルフチェック支援であり、医療診断ではありません。強い不調が続く場合は専門機関へご相談ください。</div>
+  <script>
+    const checklistQuestions = [
+      "呼吸が浅い/速い",
+      "肩や首に力が入っている",
+      "胸がざわざわする",
+      "手足が冷たい/汗ばむ",
+      "些細な音や刺激が気になる",
+      "イライラしやすい",
+      "休んでいても落ち着かない",
+      "集中が続かない",
+      "思考が急いでいる感じがする",
+      "顎を噛みしめている",
+      "胃腸の違和感がある",
+      "心拍が速い気がする"
+    ];
+
+    const actionsMaster = [
+      {
+        id: "breath-4-6",
+        title: "4秒吸って6秒吐く",
+        category: "呼吸",
+        durationMin: 3,
+        steps: [
+          "背筋を軽く伸ばして座る",
+          "4秒かけて鼻から吸う",
+          "6秒かけて口から吐く",
+          "これを5セット繰り返す"
+        ],
+        effectPoint: 8
+      },
+      {
+        id: "breath-box",
+        title: "ボックス呼吸",
+        category: "呼吸",
+        durationMin: 4,
+        steps: [
+          "4秒吸う",
+          "4秒止める",
+          "4秒吐く",
+          "4秒止める"
+        ],
+        effectPoint: 7
+      },
+      {
+        id: "posture-shoulder",
+        title: "肩の力を抜く",
+        category: "姿勢",
+        durationMin: 2,
+        steps: [
+          "肩をすくめて3秒キープ",
+          "ストンと力を抜く",
+          "首をゆっくり左右に倒す"
+        ],
+        effectPoint: 5
+      },
+      {
+        id: "posture-back",
+        title: "背中を伸ばす",
+        category: "姿勢",
+        durationMin: 3,
+        steps: [
+          "背もたれから少し離れて座る",
+          "骨盤を立てて背筋を伸ばす",
+          "肩甲骨を軽く寄せる"
+        ],
+        effectPoint: 4
+      },
+      {
+        id: "sensory-cool",
+        title: "冷たい水で手首を冷やす",
+        category: "感覚",
+        durationMin: 2,
+        steps: [
+          "手首に冷たい水をかける",
+          "10秒ずつ左右を交互に",
+          "深呼吸しながら感覚に集中"
+        ],
+        effectPoint: 6
+      },
+      {
+        id: "sensory-sound",
+        title: "環境音に意識を向ける",
+        category: "感覚",
+        durationMin: 3,
+        steps: [
+          "周囲の小さな音を3つ探す",
+          "音の高さや距離を感じる",
+          "呼吸をゆっくり整える"
+        ],
+        effectPoint: 4
+      },
+      {
+        id: "thought-name",
+        title: "思考を言葉にする",
+        category: "思考",
+        durationMin: 4,
+        steps: [
+          "いま気になっていることを書き出す",
+          "一言で気持ちを表現する",
+          "優先順位をつける"
+        ],
+        effectPoint: 5
+      },
+      {
+        id: "thought-affirm",
+        title: "安心フレーズを唱える",
+        category: "思考",
+        durationMin: 2,
+        steps: [
+          "「大丈夫、今は休める」と声に出す",
+          "3回繰り返す",
+          "息を長く吐く"
+        ],
+        effectPoint: 3
+      },
+      {
+        id: "environment-light",
+        title: "照明を柔らかくする",
+        category: "環境",
+        durationMin: 1,
+        steps: [
+          "照明を少し落とす",
+          "画面の明るさを調整",
+          "視線を遠くに向ける"
+        ],
+        effectPoint: 4
+      },
+      {
+        id: "environment-tea",
+        title: "温かい飲み物を用意",
+        category: "環境",
+        durationMin: 5,
+        steps: [
+          "温かい飲み物をゆっくり飲む",
+          "湯気を感じながら深呼吸",
+          "体温の変化に意識を向ける"
+        ],
+        effectPoint: 6
+      },
+      {
+        id: "environment-break",
+        title: "短い休憩を宣言",
+        category: "環境",
+        durationMin: 3,
+        steps: [
+          "周囲に短い休憩を伝える",
+          "姿勢を変えて視線を変える",
+          "ゆっくり立ち上がる"
+        ],
+        effectPoint: 4
+      }
+    ];
+
+    const store = {
+      inputs: {
+        sleepQuality: 5,
+        fatigue: 5,
+        tension: 5
+      },
+      checklistAnswers: Array(12).fill(null),
+      currentScore: null,
+      level: null,
+      recommendedActionIds: [],
+      doneActionIds: [],
+      deltaApplied: 0,
+      errors: [],
+      modalEntry: null
+    };
+
+    const storageKey = "sns_meter_history_v1";
+
+    const routes = ["#home", "#check", "#result", "#do", "#history"];
+
+    const levelMeta = {
+      low: {
+        label: "低：落ち着き",
+        icon: "🟦",
+        message: "落ち着いた状態です。今のペースを保つことが大切です。"
+      },
+      mid: {
+        label: "中：やや昂り",
+        icon: "🟨",
+        message: "少し昂りが出ています。短いケアで切り替えましょう。"
+      },
+      high: {
+        label: "高：昂り",
+        icon: "🟥",
+        message: "昂りが高い状態です。深呼吸と休息を優先しましょう。"
+      }
+    };
+
+    const categoryPriority = {
+      high: ["呼吸", "感覚", "姿勢", "環境", "思考"],
+      mid: ["姿勢", "呼吸", "環境", "感覚", "思考"],
+      low: ["環境", "姿勢", "思考", "呼吸", "感覚"]
+    };
+
+    const levelRanges = {
+      low: [0, 33],
+      mid: [34, 66],
+      high: [67, 100]
+    };
+
+    const app = document.getElementById("app");
+
+    const scoreToHue = (score) => {
+      const clamped = Math.min(100, Math.max(0, score));
+      return Math.round(210 - (210 * clamped) / 100);
+    };
+
+    const getLevel = (score) => {
+      if (score >= levelRanges.high[0]) return "high";
+      if (score >= levelRanges.mid[0]) return "mid";
+      return "low";
+    };
+
+    const computeScore = () => {
+      const sleepScore = (10 - store.inputs.sleepQuality) * 1.0;
+      const fatigueScore = store.inputs.fatigue * 1.0;
+      const tensionScore = store.inputs.tension * 1.0;
+      const physical = Math.round(Math.min(30, Math.max(0, sleepScore + fatigueScore + tensionScore)));
+
+      const answered = store.checklistAnswers.filter((value) => value !== null);
+      const sumChecklist = answered.reduce((acc, value) => acc + value, 0);
+      const checklistScore = Math.round(Math.min(70, Math.max(0, (sumChecklist / 24) * 70)));
+
+      const total = Math.min(100, Math.max(0, physical + checklistScore));
+      return { physical, checklistScore, total };
+    };
+
+    const recommendActions = (level) => {
+      const target = level === "high" ? 5 : level === "mid" ? 4 : 3;
+      const priority = categoryPriority[level];
+      const selected = [];
+      const categoryCount = {};
+
+      priority.forEach((category) => {
+        actionsMaster
+          .filter((action) => action.category === category)
+          .forEach((action) => {
+            if (selected.length >= target) return;
+            if ((categoryCount[category] || 0) >= 2) return;
+            selected.push(action.id);
+            categoryCount[category] = (categoryCount[category] || 0) + 1;
+          });
+      });
+
+      return selected.slice(0, target);
+    };
+
+    const ensureRoute = () => {
+      if (!routes.includes(location.hash)) {
+        location.hash = "#home";
+      }
+    };
+
+    const updateMainColor = () => {
+      const score = store.currentScore ?? 0;
+      const hue = scoreToHue(score);
+      document.documentElement.style.setProperty("--score-hue", hue);
+      document.documentElement.style.setProperty("--main", `hsl(${hue} 70% 45%)`);
+      document.documentElement.style.setProperty("--main-weak", `hsl(${hue} 75% 95%)`);
+    };
+
+    const setErrors = (errors) => {
+      store.errors = errors;
+    };
+
+    const clearErrors = () => {
+      store.errors = [];
+    };
+
+    const saveHistory = () => {
+      const history = loadHistory();
+      const entry = {
+        id: crypto.randomUUID(),
+        savedAt: new Date().toISOString(),
+        score: store.currentScore ?? 0,
+        level: store.level,
+        inputs: { ...store.inputs },
+        checklistAnswers: [...store.checklistAnswers],
+        recommendedActionIds: [...store.recommendedActionIds],
+        doneActionIds: [...store.doneActionIds],
+        deltaApplied: store.deltaApplied
+      };
+      history.unshift(entry);
+      localStorage.setItem(storageKey, JSON.stringify(history));
+    };
+
+    const loadHistory = () => {
+      const raw = localStorage.getItem(storageKey);
+      if (!raw) return [];
+      try {
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (error) {
+        return [];
+      }
+    };
+
+    const formatDateTime = (iso) => {
+      const date = new Date(iso);
+      return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} ${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
+    };
+
+    const answerLabel = (value) => {
+      if (value === 0) return "ない";
+      if (value === 1) return "少しある";
+      if (value === 2) return "強くある";
+      return "未回答";
+    };
+
+    const renderHome = () => {
+      return `
+        <header>
+          <h1>交感神経昂り確認メーター</h1>
+          <p>セルフチェック支援ツール（医療診断ではありません）</p>
+        </header>
+        <main>
+          <section class="card">
+            <h2>アプリ概要</h2>
+            <p>体調とチェックリストから現在の昂り度合いを0〜100で可視化します。色・ラベル・アイコンの3要素で状態を示し、落ち着きを取り戻すアクションを提案します。</p>
+            <ul>
+              <li>メーターで昂りを可視化</li>
+              <li>おすすめアクションで切り替え</li>
+              <li>履歴を保存して変化を確認</li>
+            </ul>
+          </section>
+          <section class="card grid">
+            <button class="button" id="start-check" aria-label="チェックを始める">チェックを始める</button>
+            <button class="button secondary" id="view-history" aria-label="履歴を見る">履歴を見る</button>
+          </section>
+        </main>
+      `;
+    };
+
+    const renderErrors = () => {
+      if (store.errors.length === 0) return "";
+      const items = store.errors.map((error) => `<li>${error}</li>`).join("");
+      return `<div class="error-banner" role="alert"><strong>入力に不備があります。</strong><ul>${items}</ul></div>`;
+    };
+
+    const renderCheck = () => {
+      const errors = store.errors;
+      const errorMap = new Map();
+      errors.forEach((error) => {
+        if (error.includes("チェックリスト")) {
+          errorMap.set("checklist", error);
+        }
+      });
+
+      return `
+        <header>
+          <h1>チェック入力</h1>
+          <p>体調とチェックリストの両方を入力してください。</p>
+        </header>
+        <main>
+          ${renderErrors()}
+          <section class="card">
+            <h2>入力A：体調</h2>
+            <div class="grid">
+              ${renderRangeField("sleepQuality", "睡眠の質", store.inputs.sleepQuality, "0=最悪, 10=最高")}
+              ${renderRangeField("fatigue", "疲労感", store.inputs.fatigue, "0=なし, 10=強い")}
+              ${renderRangeField("tension", "緊張感", store.inputs.tension, "0=なし, 10=強い")}
+            </div>
+          </section>
+          <section class="card">
+            <h2>入力B：チェックリスト（全12問）</h2>
+            <p class="range-value">0: ない / 1: 少しある / 2: 強くある</p>
+            <div class="grid">
+              ${checklistQuestions
+                .map((question, index) => {
+                  const value = store.checklistAnswers[index];
+                  return `
+                    <div class="field">
+                      <label>${index + 1}. ${question}</label>
+                      <div class="radio-group" role="radiogroup" aria-label="${question}">
+                        ${[0, 1, 2]
+                          .map(
+                            (option) => `
+                              <label>
+                                <input type="radio" name="q${index}" value="${option}" ${value === option ? "checked" : ""} aria-label="${question} ${answerLabel(option)}">
+                                <span>${answerLabel(option)}</span>
+                              </label>
+                            `
+                          )
+                          .join("")}
+                      </div>
+                    </div>
+                  `;
+                })
+                .join("")}
+            </div>
+            ${errorMap.has("checklist") ? `<p class="error">${errorMap.get("checklist")}</p>` : ""}
+          </section>
+          <section class="card grid">
+            <button class="button" id="view-result" aria-label="結果を見る">結果を見る</button>
+            <button class="button secondary" id="back-home" aria-label="戻る">戻る</button>
+          </section>
+        </main>
+      `;
+    };
+
+    const renderRangeField = (key, label, value, helper) => {
+      return `
+        <div class="field">
+          <label for="${key}">${label}</label>
+          <input type="range" id="${key}" min="0" max="10" step="1" value="${value}" aria-label="${label}">
+          <div class="range-value">${helper} / 現在値: <strong>${value}</strong></div>
+        </div>
+      `;
+    };
+
+    const renderResult = () => {
+      if (store.currentScore === null) {
+        return `
+          <header>
+            <h1>結果</h1>
+            <p>まだチェックが完了していません。</p>
+          </header>
+          <main>
+            <section class="card grid">
+              <button class="button" id="go-check" aria-label="チェックに戻る">チェックに戻る</button>
+            </section>
+          </main>
+        `;
+      }
+
+      const meta = levelMeta[store.level];
+      const actions = store.recommendedActionIds.map((id) => actionsMaster.find((action) => action.id === id));
+      const deltaInfo = store.deltaApplied > 0 ? `<p><strong>実施反映:</strong> スコアが <strong>-${store.deltaApplied}</strong> 下がりました。</p>` : "";
+
+      return `
+        <header>
+          <h1>結果</h1>
+          <p>現在の昂り度合いを表示しています。</p>
+        </header>
+        <main>
+          <section class="card two-col">
+            <div class="meter">
+              <div class="meter-circle" style="--score: ${store.currentScore};">
+                <div class="meter-content">
+                  <div class="meter-value">${store.currentScore}</div>
+                  <div class="meter-label">0〜100</div>
+                </div>
+              </div>
+            </div>
+            <div class="grid">
+              <div class="level">
+                <span class="icon">${meta.icon}</span>
+                <span>${meta.label}</span>
+              </div>
+              <p>${meta.message}</p>
+              ${deltaInfo}
+              <div>
+                <p><strong>体調スコア:</strong> ${computeScore().physical} / 30</p>
+                <p><strong>チェックリスト:</strong> ${computeScore().checklistScore} / 70</p>
+              </div>
+            </div>
+          </section>
+          <section class="card">
+            <h2>推奨アクション</h2>
+            <div class="actions-list">
+              ${actions
+                .map(
+                  (action) => `
+                    <div>
+                      <span class="tag">${action.category}</span>
+                      <strong>${action.title}</strong>
+                      <div class="range-value">目安 ${action.durationMin}分 / 効果点 ${action.effectPoint}</div>
+                    </div>
+                  `
+                )
+                .join("")}
+            </div>
+          </section>
+          <section class="card grid">
+            <button class="button" id="go-do" aria-label="アクションを実施する">アクションを実施する</button>
+            <button class="button secondary" id="redo-check" aria-label="もう一度チェック">もう一度チェック</button>
+            <button class="button ghost" id="save-home" aria-label="保存してホームへ">保存してホームへ</button>
+          </section>
+        </main>
+      `;
+    };
+
+    const renderDo = () => {
+      if (store.currentScore === null) {
+        return `
+          <header>
+            <h1>実施</h1>
+            <p>推奨アクションがありません。</p>
+          </header>
+          <main>
+            <section class="card grid">
+              <button class="button" id="go-result" aria-label="結果に戻る">結果に戻る</button>
+            </section>
+          </main>
+        `;
+      }
+
+      const actions = store.recommendedActionIds.map((id) => actionsMaster.find((action) => action.id === id));
+      return `
+        <header>
+          <h1>実施</h1>
+          <p>実施したアクションをチェックしてください。</p>
+        </header>
+        <main>
+          <section class="card">
+            <div class="actions-list">
+              ${actions
+                .map(
+                  (action) => `
+                    <details>
+                      <summary>
+                        <label>
+                          <input type="checkbox" value="${action.id}" ${store.doneActionIds.includes(action.id) ? "checked" : ""} aria-label="${action.title}を実施">
+                          <span class="tag">${action.category}</span>
+                          <strong>${action.title}</strong>
+                          <span class="range-value">(${action.durationMin}分)</span>
+                        </label>
+                      </summary>
+                      <ul>
+                        ${action.steps.map((step) => `<li>${step}</li>`).join("")}
+                      </ul>
+                    </details>
+                  `
+                )
+                .join("")}
+            </div>
+          </section>
+          <section class="card grid">
+            <button class="button" id="apply-actions" aria-label="実施を反映">実施を反映</button>
+            <button class="button secondary" id="cancel-actions" aria-label="キャンセル">キャンセル</button>
+          </section>
+        </main>
+      `;
+    };
+
+    const renderHistory = () => {
+      const history = loadHistory();
+      return `
+        <header>
+          <h1>履歴</h1>
+          <p>保存された結果を確認できます。</p>
+        </header>
+        <main>
+          <section class="card">
+            <div class="grid">
+              ${
+                history.length === 0
+                  ? "<p>履歴はまだありません。</p>"
+                  : history
+                      .map(
+                        (entry) => `
+                          <div class="history-item" data-id="${entry.id}">
+                            <strong>${formatDateTime(entry.savedAt)}</strong>
+                            <span>スコア: ${entry.score} / レベル: ${levelMeta[entry.level].label}</span>
+                            <span>実施アクション数: ${entry.doneActionIds.length}</span>
+                          </div>
+                        `
+                      )
+                      .join("")
+              }
+            </div>
+          </section>
+          <section class="card grid">
+            <button class="button" id="clear-history" aria-label="全削除">全削除</button>
+            <button class="button secondary" id="back-home" aria-label="戻る">戻る</button>
+          </section>
+        </main>
+      `;
+    };
+
+    const renderModal = () => {
+      if (!store.modalEntry) return "";
+      const entry = store.modalEntry;
+      const recommended = entry.recommendedActionIds.map((id) => actionsMaster.find((action) => action.id === id));
+      const done = entry.doneActionIds.map((id) => actionsMaster.find((action) => action.id === id));
+      return `
+        <div class="modal-backdrop" role="dialog" aria-modal="true">
+          <div class="modal">
+            <button class="close" id="close-modal" aria-label="閉じる">×</button>
+            <h3>履歴詳細</h3>
+            <p><strong>日時:</strong> ${formatDateTime(entry.savedAt)}</p>
+            <p><strong>スコア:</strong> ${entry.score} / ${levelMeta[entry.level].label}</p>
+            <p><strong>実施反映:</strong> -${entry.deltaApplied}</p>
+            <h4>入力A（体調）</h4>
+            <ul>
+              <li>睡眠の質: ${entry.inputs.sleepQuality}</li>
+              <li>疲労感: ${entry.inputs.fatigue}</li>
+              <li>緊張感: ${entry.inputs.tension}</li>
+            </ul>
+            <h4>入力B（チェックリスト）</h4>
+            <ul>
+              ${entry.checklistAnswers
+                .map((value, index) => `<li>${index + 1}. ${checklistQuestions[index]}：${answerLabel(value)}</li>`)
+                .join("")}
+            </ul>
+            <h4>推奨アクション</h4>
+            <ul>
+              ${recommended.map((action) => `<li>${action.title} (${action.category})</li>`).join("")}
+            </ul>
+            <h4>実施アクション</h4>
+            <ul>
+              ${done.length === 0 ? "<li>なし</li>" : done.map((action) => `<li>${action.title}</li>`).join("")}
+            </ul>
+          </div>
+        </div>
+      `;
+    };
+
+    const render = () => {
+      updateMainColor();
+      ensureRoute();
+      const route = location.hash;
+      let content = "";
+      if (route === "#check") content = renderCheck();
+      if (route === "#result") content = renderResult();
+      if (route === "#do") content = renderDo();
+      if (route === "#history") content = renderHistory();
+      if (route === "#home") content = renderHome();
+      app.innerHTML = content + renderModal();
+      bindEvents();
+    };
+
+    const bindEvents = () => {
+      const startCheck = document.getElementById("start-check");
+      if (startCheck) {
+        startCheck.addEventListener("click", () => {
+          clearErrors();
+          location.hash = "#check";
+        });
+      }
+
+      const viewHistory = document.getElementById("view-history");
+      if (viewHistory) {
+        viewHistory.addEventListener("click", () => {
+          location.hash = "#history";
+        });
+      }
+
+      document.querySelectorAll("input[type=range]").forEach((range) => {
+        range.addEventListener("input", (event) => {
+          const key = event.target.id;
+          store.inputs[key] = Number(event.target.value);
+          render();
+        });
+      });
+
+      document.querySelectorAll("input[type=radio]").forEach((radio) => {
+        radio.addEventListener("change", (event) => {
+          const name = event.target.name;
+          const index = Number(name.replace("q", ""));
+          store.checklistAnswers[index] = Number(event.target.value);
+          render();
+        });
+      });
+
+      const viewResult = document.getElementById("view-result");
+      if (viewResult) {
+        viewResult.addEventListener("click", () => {
+          const unanswered = store.checklistAnswers.some((value) => value === null);
+          if (unanswered) {
+            setErrors(["チェックリストは12問すべて回答してください。"]);
+            render();
+            return;
+          }
+          clearErrors();
+          const score = computeScore();
+          store.currentScore = score.total;
+          store.level = getLevel(score.total);
+          store.recommendedActionIds = recommendActions(store.level);
+          store.doneActionIds = [];
+          store.deltaApplied = 0;
+          location.hash = "#result";
+        });
+      }
+
+      document.querySelectorAll("#back-home, #go-check").forEach((button) => {
+        if (!button) return;
+        button.addEventListener("click", () => {
+          location.hash = "#home";
+        });
+      });
+
+      const redoCheck = document.getElementById("redo-check");
+      if (redoCheck) {
+        redoCheck.addEventListener("click", () => {
+          location.hash = "#check";
+        });
+      }
+
+      const goDo = document.getElementById("go-do");
+      if (goDo) {
+        goDo.addEventListener("click", () => {
+          location.hash = "#do";
+        });
+      }
+
+      const saveHome = document.getElementById("save-home");
+      if (saveHome) {
+        saveHome.addEventListener("click", () => {
+          saveHistory();
+          location.hash = "#home";
+        });
+      }
+
+      const goResult = document.getElementById("go-result");
+      if (goResult) {
+        goResult.addEventListener("click", () => {
+          location.hash = "#result";
+        });
+      }
+
+      const cancelActions = document.getElementById("cancel-actions");
+      if (cancelActions) {
+        cancelActions.addEventListener("click", () => {
+          location.hash = "#result";
+        });
+      }
+
+      const applyActions = document.getElementById("apply-actions");
+      if (applyActions) {
+        applyActions.addEventListener("click", () => {
+          const checked = Array.from(document.querySelectorAll("input[type=checkbox]:checked")).map((input) => input.value);
+          const base = checked
+            .map((id) => actionsMaster.find((action) => action.id === id))
+            .reduce((acc, action) => acc + (action?.effectPoint || 0), 0);
+          const delta = Math.min(Math.round(base * 1.0), 25);
+          store.currentScore = Math.max(0, (store.currentScore || 0) - delta);
+          store.deltaApplied = delta;
+          store.doneActionIds = checked;
+          store.level = getLevel(store.currentScore);
+          location.hash = "#result";
+        });
+      }
+
+      document.querySelectorAll(".history-item").forEach((item) => {
+        item.addEventListener("click", () => {
+          const history = loadHistory();
+          const entry = history.find((record) => record.id === item.dataset.id);
+          store.modalEntry = entry || null;
+          render();
+        });
+      });
+
+      const closeModal = document.getElementById("close-modal");
+      if (closeModal) {
+        closeModal.addEventListener("click", () => {
+          store.modalEntry = null;
+          render();
+        });
+      }
+
+      const modalBackdrop = document.querySelector(".modal-backdrop");
+      if (modalBackdrop) {
+        modalBackdrop.addEventListener("click", (event) => {
+          if (event.target === modalBackdrop) {
+            store.modalEntry = null;
+            render();
+          }
+        });
+      }
+
+      const clearHistory = document.getElementById("clear-history");
+      if (clearHistory) {
+        clearHistory.addEventListener("click", () => {
+          if (confirm("履歴を全削除しますか？")) {
+            localStorage.removeItem(storageKey);
+            render();
+          }
+        });
+      }
+    };
+
+    window.addEventListener("hashchange", () => {
+      clearErrors();
+      render();
+    });
+
+    ensureRoute();
+    render();
+  </script>
+</body>
+</html>
