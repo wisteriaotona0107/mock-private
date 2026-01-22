@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Modern Studio — Motion Mock</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" />
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #0b0d10;
+        --surface: #12161c;
+        --surface-2: #181f28;
+        --text: #e8eef7;
+        --muted: #a1aec2;
+        --accent: #7dd3fc;
+        --accent-2: #c4b5fd;
+        --dur-fast: 120ms;
+        --dur-med: 240ms;
+        --dur-slow: 420ms;
+        --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+        --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+        --ease-io: cubic-bezier(0.4, 0, 0.2, 1);
+        --shadow-soft: 0 24px 60px rgba(6, 12, 20, 0.35);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Inter", system-ui, -apple-system, sans-serif;
+        background: radial-gradient(circle at top, #161b22 0%, #0b0d10 60%);
+        color: var(--text);
+        min-height: 100vh;
+        line-height: 1.6;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      img {
+        max-width: 100%;
+        display: block;
+      }
+
+      header {
+        padding: 24px clamp(20px, 4vw, 64px);
+        position: sticky;
+        top: 0;
+        backdrop-filter: blur(16px);
+        background: rgba(11, 13, 16, 0.7);
+        z-index: 10;
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+      }
+
+      .brand-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        box-shadow: 0 0 16px rgba(125, 211, 252, 0.6);
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 18px;
+        font-size: 14px;
+        color: var(--muted);
+      }
+
+      .nav-links a {
+        position: relative;
+        padding-bottom: 4px;
+        transition: color var(--dur-fast) var(--ease-out);
+      }
+
+      .nav-links a::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg, var(--accent), var(--accent-2));
+        transition: width var(--dur-fast) var(--ease-out);
+      }
+
+      .nav-links a:hover::after,
+      .nav-links a:focus-visible::after {
+        width: 100%;
+      }
+
+      .cta {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        padding: 10px 18px;
+        border-radius: 999px;
+        font-size: 14px;
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--text);
+        transition: transform var(--dur-fast) var(--ease-out),
+          box-shadow var(--dur-fast) var(--ease-out);
+      }
+
+      .cta:hover,
+      .cta:focus-visible {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+      }
+
+      main {
+        padding: 40px clamp(20px, 4vw, 64px) 80px;
+      }
+
+      .hero {
+        display: grid;
+        gap: 32px;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        align-items: center;
+      }
+
+      .hero h1 {
+        font-size: clamp(32px, 4vw, 56px);
+        margin: 0 0 12px;
+        line-height: 1.1;
+        background: linear-gradient(90deg, #ffffff 0%, #c6ddff 40%, #ffffff 100%);
+        -webkit-background-clip: text;
+        color: transparent;
+        background-size: 200% 100%;
+        animation: headline-sweep 1.2s var(--ease-io) forwards;
+      }
+
+      .hero p {
+        color: var(--muted);
+        margin: 0 0 24px;
+        max-width: 520px;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .ghost {
+        border: 1px solid rgba(125, 211, 252, 0.4);
+        color: var(--accent);
+        background: transparent;
+        padding: 10px 18px;
+        border-radius: 999px;
+      }
+
+      .hero-card {
+        background: linear-gradient(160deg, rgba(125, 211, 252, 0.12), rgba(196, 181, 253, 0.08));
+        border-radius: 24px;
+        padding: 24px;
+        box-shadow: var(--shadow-soft);
+      }
+
+      .hero-card ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 12px;
+      }
+
+      .hero-card li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: var(--muted);
+      }
+
+      .metrics {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        margin-top: 32px;
+      }
+
+      .metric {
+        background: var(--surface);
+        padding: 16px;
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.04);
+      }
+
+      .metric h3 {
+        margin: 0;
+        font-size: 20px;
+      }
+
+      .metric span {
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .section {
+        margin-top: 80px;
+      }
+
+      .section-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .section-title h2 {
+        font-size: clamp(24px, 3vw, 36px);
+        margin: 0;
+      }
+
+      .section-title p {
+        color: var(--muted);
+        max-width: 480px;
+        margin: 0;
+      }
+
+      .feature-grid {
+        display: grid;
+        gap: 20px;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        margin-top: 28px;
+      }
+
+      .feature-card {
+        background: var(--surface);
+        padding: 20px;
+        border-radius: 18px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        transition: transform var(--dur-fast) var(--ease-out);
+      }
+
+      .feature-card:hover,
+      .feature-card:focus-within {
+        transform: translateY(-4px);
+      }
+
+      .feature-card h3 {
+        margin: 12px 0 8px;
+      }
+
+      .feature-card p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .gallery {
+        display: grid;
+        gap: 20px;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        margin-top: 24px;
+      }
+
+      .gallery figure {
+        margin: 0;
+        border-radius: 20px;
+        overflow: hidden;
+        background: var(--surface-2);
+      }
+
+      .gallery img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        transition: transform var(--dur-med) var(--ease-out);
+      }
+
+      .gallery figure:hover img {
+        transform: scale(1.04);
+      }
+
+      .gallery figcaption {
+        padding: 14px 16px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .timeline {
+        margin-top: 24px;
+        border-left: 1px solid rgba(255, 255, 255, 0.1);
+        padding-left: 24px;
+        display: grid;
+        gap: 20px;
+      }
+
+      .timeline-item {
+        position: relative;
+        padding-left: 12px;
+      }
+
+      .timeline-item::before {
+        content: "";
+        position: absolute;
+        left: -31px;
+        top: 6px;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--accent);
+        box-shadow: 0 0 16px rgba(125, 211, 252, 0.6);
+      }
+
+      .pricing {
+        margin-top: 32px;
+        display: grid;
+        gap: 20px;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      }
+
+      .price-card {
+        background: var(--surface);
+        border-radius: 20px;
+        padding: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        display: grid;
+        gap: 12px;
+      }
+
+      .price-card strong {
+        font-size: 32px;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(125, 211, 252, 0.12);
+        color: var(--accent);
+      }
+
+      footer {
+        margin-top: 80px;
+        padding-top: 32px;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        display: grid;
+        gap: 16px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      [data-animate] {
+        opacity: 0;
+        transform: translateY(12px);
+        transition: opacity var(--dur-med) var(--ease-out),
+          transform var(--dur-med) var(--ease-out);
+      }
+
+      [data-animate].is-visible {
+        opacity: 1;
+        transform: none;
+      }
+
+      @keyframes headline-sweep {
+        from {
+          background-position: 100% 0;
+        }
+        to {
+          background-position: 0 0;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 1ms !important;
+          transition-duration: 1ms !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav class="nav">
+        <div class="brand">
+          <span class="brand-dot"></span>
+          Modern Studio
+        </div>
+        <div class="nav-links">
+          <a href="#features">Work</a>
+          <a href="#gallery">Gallery</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#insights">Insights</a>
+        </div>
+        <a class="cta" href="#contact">Start a Project</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" data-animate>
+        <div>
+          <h1>Motion-first digital experiences for premium brands.</h1>
+          <p>
+            A stylish web mock that highlights modern animation patterns, gentle
+            micro-interactions, and polished transitions that feel fast,
+            accessible, and premium.
+          </p>
+          <div class="hero-actions">
+            <button class="cta">View Case Studies</button>
+            <button class="ghost">Download Deck</button>
+          </div>
+          <div class="metrics">
+            <div class="metric">
+              <h3>98%</h3>
+              <span>Client satisfaction</span>
+            </div>
+            <div class="metric">
+              <h3>2.3x</h3>
+              <span>Conversion lift</span>
+            </div>
+            <div class="metric">
+              <h3>14 days</h3>
+              <span>Average launch</span>
+            </div>
+          </div>
+        </div>
+        <aside class="hero-card" aria-label="Project metrics">
+          <h3>Live Project Tracker</h3>
+          <ul>
+            <li><span>Discovery complete</span> <strong>100%</strong></li>
+            <li><span>Design direction</span> <strong>82%</strong></li>
+            <li><span>Motion system</span> <strong>64%</strong></li>
+            <li><span>Build sprint</span> <strong>35%</strong></li>
+          </ul>
+        </aside>
+      </section>
+
+      <section id="features" class="section" data-animate>
+        <div class="section-title">
+          <h2>Signature motion system</h2>
+          <p>
+            A set of purposeful interactions that guide attention without being
+            distracting, tuned for performance and accessible defaults.
+          </p>
+        </div>
+        <div class="feature-grid">
+          <article class="feature-card" data-animate>
+            <span class="pill">In-view reveal</span>
+            <h3>Soft fade + lift</h3>
+            <p>Components enter with subtle vertical motion and opacity.</p>
+          </article>
+          <article class="feature-card" data-animate>
+            <span class="pill">Hover</span>
+            <h3>Depth cues</h3>
+            <p>Buttons lift by 2px with a soft shadow for tactile feedback.</p>
+          </article>
+          <article class="feature-card" data-animate>
+            <span class="pill">Typography</span>
+            <h3>Gradient sweep</h3>
+            <p>Headlines highlight with a controlled gradient movement.</p>
+          </article>
+          <article class="feature-card" data-animate>
+            <span class="pill">Navigation</span>
+            <h3>Menu easing</h3>
+            <p>Transitions use cubic-bezier tokens for consistent feel.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="gallery" class="section" data-animate>
+        <div class="section-title">
+          <h2>Visual gallery</h2>
+          <p>High-end imagery paired with gentle zoom-on-hover behavior.</p>
+        </div>
+        <div class="gallery">
+          <figure data-animate>
+            <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=80" alt="Product work" />
+            <figcaption>Product suite redesign</figcaption>
+          </figure>
+          <figure data-animate>
+            <img src="https://images.unsplash.com/photo-1487014679447-9f8336841d58?auto=format&fit=crop&w=800&q=80" alt="Design system" />
+            <figcaption>Design system rollout</figcaption>
+          </figure>
+          <figure data-animate>
+            <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80" alt="Analytics" />
+            <figcaption>Analytics dashboard</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section id="insights" class="section" data-animate>
+        <div class="section-title">
+          <h2>Launch timeline</h2>
+          <p>Each phase is supported with motion patterns tuned for clarity.</p>
+        </div>
+        <div class="timeline">
+          <div class="timeline-item" data-animate>
+            <strong>Week 01</strong>
+            <p>Discovery + motion audit</p>
+          </div>
+          <div class="timeline-item" data-animate>
+            <strong>Week 02</strong>
+            <p>Visual system + prototype</p>
+          </div>
+          <div class="timeline-item" data-animate>
+            <strong>Week 03</strong>
+            <p>Motion build + QA</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="pricing" class="section" data-animate>
+        <div class="section-title">
+          <h2>Pricing tiers</h2>
+          <p>Clear tiers for fast launches and premium full-service builds.</p>
+        </div>
+        <div class="pricing">
+          <div class="price-card" data-animate>
+            <span class="pill">Starter</span>
+            <strong>$12k</strong>
+            <p>One-week sprint, core motion system, 2 key templates.</p>
+            <button class="cta">Choose starter</button>
+          </div>
+          <div class="price-card" data-animate>
+            <span class="pill">Studio</span>
+            <strong>$28k</strong>
+            <p>End-to-end website with animation direction + QA.</p>
+            <button class="cta">Choose studio</button>
+          </div>
+          <div class="price-card" data-animate>
+            <span class="pill">Enterprise</span>
+            <strong>Custom</strong>
+            <p>Multi-page system, CMS integration, and motion governance.</p>
+            <button class="cta">Talk to us</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" class="section" data-animate>
+        <div class="section-title">
+          <h2>Ready to build?</h2>
+          <p>Let’s craft a motion-forward experience tailored to your brand.</p>
+        </div>
+        <div class="hero-actions">
+          <button class="cta">Book a call</button>
+          <button class="ghost">Email us</button>
+        </div>
+      </section>
+
+      <footer>
+        <span>Modern Studio — Motion mock site</span>
+        <span>Contact: hello@modern.studio</span>
+      </footer>
+    </main>
+
+    <script src="mock.js"></script>
+  </body>
+</html>
