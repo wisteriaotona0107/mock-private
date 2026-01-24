@@ -1,0 +1,82 @@
+[
+  {
+    "doc_id": "doc-001",
+    "title": "純米吟醸 山田錦",
+    "content": "山田錦由来の上品な甘味と果実香が広がり、後口はすっきりとキレる。冷やして白身魚と好相性。",
+    "source": "brewery-notes-2024",
+    "tags": ["junmai", "ginjo", "yamada"],
+    "sweet": 4,
+    "fruity": 4,
+    "crisp": 3
+  },
+  {
+    "doc_id": "doc-002",
+    "title": "特別純米 辛口",
+    "content": "米の旨味は残しつつ辛口でキレが良い。温度帯を選ばず、揚げ物や塩焼きに合わせやすい。",
+    "source": "tasting-guide-2023",
+    "tags": ["junmai", "dry"],
+    "sweet": 2,
+    "fruity": 2,
+    "crisp": 5
+  },
+  {
+    "doc_id": "doc-003",
+    "title": "大吟醸 華やか",
+    "content": "華やかな香りと透明感のある甘味が特徴。食前酒や軽い前菜に合わせやすい。",
+    "source": "sake-magazine-vol5",
+    "tags": ["daiginjo", "aromatic"],
+    "sweet": 5,
+    "fruity": 5,
+    "crisp": 2
+  },
+  {
+    "doc_id": "doc-004",
+    "title": "山廃仕込み 旨味系",
+    "content": "乳酸由来のコクと旨味があり、燗にすると旨味が増す。濃い味付けの料理におすすめ。",
+    "source": "brewery-notes-2022",
+    "tags": ["yamahai", "rich"],
+    "sweet": 3,
+    "fruity": 1,
+    "crisp": 2
+  },
+  {
+    "doc_id": "doc-005",
+    "title": "生酒 フレッシュ",
+    "content": "生酒ならではのフレッシュ感と爽やかな香り。野菜料理やサラダに合う軽快さ。",
+    "source": "sake-handbook-2021",
+    "tags": ["nama", "fresh"],
+    "sweet": 3,
+    "fruity": 3,
+    "crisp": 4
+  },
+  {
+    "doc_id": "doc-006",
+    "title": "低アルコール爽快タイプ",
+    "content": "アルコール度数が低めで飲み口が軽い。柑橘系の香りと軽い甘味が特徴。",
+    "source": "trend-report-2024",
+    "tags": ["low-alcohol", "citrus"],
+    "sweet": 3,
+    "fruity": 4,
+    "crisp": 4
+  },
+  {
+    "doc_id": "doc-007",
+    "title": "熟成古酒",
+    "content": "熟成によるナッツ香と深い甘味があり、デザートやチーズに合わせやすい。",
+    "source": "aging-study-2020",
+    "tags": ["koshu", "aged"],
+    "sweet": 4,
+    "fruity": 1,
+    "crisp": 1
+  },
+  {
+    "doc_id": "doc-008",
+    "title": "スパークリング日本酒",
+    "content": "微炭酸の爽やかさと軽い甘味。乾杯シーンやフルーツと好相性。",
+    "source": "sparkling-guide-2022",
+    "tags": ["sparkling", "light"],
+    "sweet": 4,
+    "fruity": 4,
+    "crisp": 4
+  }
+]
