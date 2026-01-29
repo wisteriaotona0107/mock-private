@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>電子コミック横断検索モック</title>
+  <style>
+    :root {
+      --bg: #f5f6f8;
+      --surface: #ffffff;
+      --text: #2b2f33;
+      --subtext: #5f6b76;
+      --accent: #3c6dd6;
+      --border: #d7dde3;
+      --muted: #eef1f4;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 32px 16px;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    .hero {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin: 0;
+    }
+
+    .lead {
+      color: var(--subtext);
+      margin: 0;
+    }
+
+    .search-bar {
+      margin-top: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .search-bar input {
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 16px;
+      background: #fff;
+    }
+
+    main {
+      padding: 32px 0 56px;
+    }
+
+    .result-meta {
+      color: var(--subtext);
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(32, 42, 54, 0.06);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .card h2 {
+      font-size: 18px;
+      margin: 0;
+    }
+
+    .volume {
+      font-size: 14px;
+      color: var(--subtext);
+    }
+
+    .author {
+      font-size: 14px;
+      color: var(--subtext);
+      margin: 6px 0 12px;
+    }
+
+    .stores {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 12px;
+    }
+
+    .store {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      background: var(--muted);
+    }
+
+    .store-name {
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .store-meta {
+      font-size: 14px;
+      color: var(--subtext);
+      margin-bottom: 10px;
+    }
+
+    .store a {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 6px;
+      text-decoration: none;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-size: 14px;
+      background: #fff;
+    }
+
+    .note {
+      font-size: 12px;
+      color: var(--subtext);
+      margin-top: 6px;
+    }
+
+    footer {
+      padding: 24px 16px 40px;
+      text-align: center;
+      color: var(--subtext);
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <!-- ヘッダーと検索エリア -->
+  <header>
+    <div class="container hero">
+      <h1>電子コミック横断検索</h1>
+      <p class="lead">ストアの販売有無をまとめて確認し、移動の手間を減らすためのモックです。</p>
+      <div class="search-bar">
+        <label for="search">作品名 / 著者名</label>
+        <input id="search" type="text" placeholder="例：宇宙旅行、山田太郎" />
+      </div>
+    </div>
+  </header>
+
+  <!-- 検索結果 -->
+  <main>
+    <div class="container">
+      <div id="resultMeta" class="result-meta"></div>
+      <div id="results"></div>
+    </div>
+  </main>
+
+  <footer>
+    ※ 本ページは比較・誘導の体験確認を目的としたモックです。実際の価格・在庫情報は各ストアでご確認ください。
+  </footer>
+
+  <script>
+    // ダミーデータ（API通信・スクレイピングなし）
+    const mockComics = [
+      {
+        id: 1,
+        title: "星降る街のコンパス",
+        author: "久遠ミナ",
+        volume: "1巻",
+        stores: [
+          {
+            name: "楽天Kobo",
+            type: "api",
+            price: "¥660",
+            searchUrl: "https://books.rakuten.co.jp/search?g=001&word=%E6%98%9F%E9%99%8D%E3%82%8B"
+          },
+          {
+            name: "Amazon Kindle",
+            type: "api",
+            price: "¥682",
+            searchUrl: "https://www.amazon.co.jp/s?k=%E6%98%9F%E9%99%8D%E3%82%8B"
+          },
+          {
+            name: "コミックシーモア",
+            type: "link",
+            price: null,
+            searchUrl: "https://www.cmoa.jp/search/?keyword=%E6%98%9F%E9%99%8D%E3%82%8B"
+          },
+          {
+            name: "BookLive",
+            type: "link",
+            price: null,
+            searchUrl: "https://booklive.jp/search/keyword/?keyword=%E6%98%9F%E9%99%8D%E3%82%8B"
+          },
+          {
+            name: "DMMブックス",
+            type: "link",
+            price: null,
+            searchUrl: "https://book.dmm.com/search/?keyword=%E6%98%9F%E9%99%8D%E3%82%8B"
+          }
+        ]
+      },
+      {
+        id: 2,
+        title: "夜明けのレシピ",
+        author: "桜井ゆず",
+        volume: "3巻",
+        stores: [
+          {
+            name: "楽天Kobo",
+            type: "api",
+            price: "¥710",
+            searchUrl: "https://books.rakuten.co.jp/search?g=001&word=%E5%A4%9C%E6%98%8E%E3%81%91"
+          },
+          {
+            name: "Amazon Kindle",
+            type: "api",
+            price: "¥726",
+            searchUrl: "https://www.amazon.co.jp/s?k=%E5%A4%9C%E6%98%8E%E3%81%91"
+          },
+          {
+            name: "コミックシーモア",
+            type: "link",
+            price: null,
+            searchUrl: "https://www.cmoa.jp/search/?keyword=%E5%A4%9C%E6%98%8E%E3%81%91"
+          },
+          {
+            name: "BookLive",
+            type: "link",
+            price: null,
+            searchUrl: "https://booklive.jp/search/keyword/?keyword=%E5%A4%9C%E6%98%8E%E3%81%91"
+          },
+          {
+            name: "DMMブックス",
+            type: "link",
+            price: null,
+            searchUrl: "https://book.dmm.com/search/?keyword=%E5%A4%9C%E6%98%8E%E3%81%91"
+          }
+        ]
+      },
+      {
+        id: 3,
+        title: "風待ちの工房",
+        author: "長谷川 梢",
+        volume: "2巻",
+        stores: [
+          {
+            name: "楽天Kobo",
+            type: "api",
+            price: "¥640",
+            searchUrl: "https://books.rakuten.co.jp/search?g=001&word=%E9%A2%A8%E5%BE%85%E3%81%A1"
+          },
+          {
+            name: "Amazon Kindle",
+            type: "api",
+            price: "¥648",
+            searchUrl: "https://www.amazon.co.jp/s?k=%E9%A2%A8%E5%BE%85%E3%81%A1"
+          },
+          {
+            name: "コミックシーモア",
+            type: "link",
+            price: null,
+            searchUrl: "https://www.cmoa.jp/search/?keyword=%E9%A2%A8%E5%BE%85%E3%81%A1"
+          },
+          {
+            name: "BookLive",
+            type: "link",
+            price: null,
+            searchUrl: "https://booklive.jp/search/keyword/?keyword=%E9%A2%A8%E5%BE%85%E3%81%A1"
+          },
+          {
+            name: "DMMブックス",
+            type: "link",
+            price: null,
+            searchUrl: "https://book.dmm.com/search/?keyword=%E9%A2%A8%E5%BE%85%E3%81%A1"
+          }
+        ]
+      }
+    ];
+
+    const searchInput = document.getElementById("search");
+    const results = document.getElementById("results");
+    const resultMeta = document.getElementById("resultMeta");
+
+    const normalize = (value) => value.toLowerCase().replace(/\s+/g, "");
+
+    const renderResults = (list, keyword = "") => {
+      results.innerHTML = "";
+      resultMeta.textContent = keyword
+        ? `「${keyword}」の検索結果：${list.length}件`
+        : `全${list.length}件の作品を表示中`;
+
+      list.forEach((comic) => {
+        const card = document.createElement("div");
+        card.className = "card";
+
+        const storeCards = comic.stores
+          .map((store) => {
+            if (store.type === "api") {
+              return `
+                <div class="store">
+                  <div class="store-name">${store.name}</div>
+                  <div class="store-meta">ダミー価格：${store.price}</div>
+                  <a href="${store.searchUrl}" target="_blank" rel="noopener noreferrer">販売ページを開く</a>
+                </div>
+              `;
+            }
+
+            return `
+              <div class="store">
+                <div class="store-name">${store.name}</div>
+                <div class="store-meta">価格情報なし</div>
+                <a href="${store.searchUrl}" target="_blank" rel="noopener noreferrer">販売ページを開く</a>
+                <div class="note">価格は各ストアで確認してください</div>
+              </div>
+            `;
+          })
+          .join("");
+
+        card.innerHTML = `
+          <div class="card-header">
+            <h2>${comic.title}</h2>
+            <span class="volume">${comic.volume}</span>
+          </div>
+          <div class="author">著者：${comic.author}</div>
+          <div class="stores">${storeCards}</div>
+        `;
+
+        results.appendChild(card);
+      });
+    };
+
+    const handleSearch = () => {
+      const keyword = searchInput.value.trim();
+      const normalized = normalize(keyword);
+
+      if (!normalized) {
+        renderResults(mockComics);
+        return;
+      }
+
+      const filtered = mockComics.filter((comic) => {
+        const target = normalize(`${comic.title}${comic.author}`);
+        return target.includes(normalized);
+      });
+
+      renderResults(filtered, keyword);
+    };
+
+    // 初期表示
+    renderResults(mockComics);
+
+    // 入力に応じてリアルタイム検索
+    searchInput.addEventListener("input", handleSearch);
+  </script>
+</body>
+</html>
