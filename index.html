@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ポートフォリオ | 山田 太郎</title>
+    <meta
+      name="description"
+      content="フロントエンドエンジニア 山田 太郎のポートフォリオ。Web UI/UX、アクセシビリティ、パフォーマンス最適化に強みがあります。"
+    />
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f9fafb;
+        --surface: #ffffff;
+        --text: #111827;
+        --muted: #4b5563;
+        --accent: #2563eb;
+        --accent-dark: #1d4ed8;
+        --border: #e5e7eb;
+        --shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+        --radius: 16px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.7;
+      }
+
+      img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      a:focus-visible,
+      button:focus-visible {
+        outline: 3px solid var(--accent);
+        outline-offset: 4px;
+      }
+
+      .skip-link {
+        position: absolute;
+        top: 0.5rem;
+        left: 0.5rem;
+        background: var(--text);
+        color: #ffffff;
+        padding: 0.5rem 1rem;
+        border-radius: 999px;
+        transform: translateY(-150%);
+        transition: transform 0.2s ease;
+        z-index: 999;
+      }
+
+      .skip-link:focus-visible {
+        transform: translateY(0);
+      }
+
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: rgba(249, 250, 251, 0.95);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .container {
+        width: min(1120px, 92vw);
+        margin: 0 auto;
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 0;
+        gap: 1rem;
+      }
+
+      .logo {
+        font-weight: 700;
+        font-size: 1.1rem;
+      }
+
+      .nav ul {
+        list-style: none;
+        display: flex;
+        gap: 1rem;
+        padding: 0;
+        margin: 0;
+      }
+
+      .nav a {
+        padding: 0.5rem 0.75rem;
+        border-radius: 999px;
+        transition: background 0.2s ease, color 0.2s ease;
+      }
+
+      .nav a:hover {
+        background: var(--accent);
+        color: #ffffff;
+      }
+
+      main {
+        padding: 3rem 0 5rem;
+      }
+
+      section {
+        padding: 4rem 0;
+      }
+
+      .hero {
+        display: grid;
+        gap: 2.5rem;
+        align-items: center;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      }
+
+      .hero h1 {
+        font-size: clamp(2rem, 3vw, 3rem);
+        margin-bottom: 0.5rem;
+      }
+
+      .hero p {
+        color: var(--muted);
+        margin: 0.5rem 0 1.5rem;
+      }
+
+      .cta {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.8rem 1.5rem;
+        border-radius: 999px;
+        background: var(--accent);
+        color: #ffffff;
+        font-weight: 600;
+        min-height: 44px;
+        transition: background 0.2s ease;
+      }
+
+      .cta:hover {
+        background: var(--accent-dark);
+      }
+
+      .hero-card {
+        background: var(--surface);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 2rem;
+        border: 1px solid var(--border);
+      }
+
+      .avatar {
+        width: 96px;
+        height: 96px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid var(--surface);
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.2);
+        margin-bottom: 1rem;
+      }
+
+      .section-title {
+        font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+        margin-bottom: 1rem;
+      }
+
+      .section-lead {
+        color: var(--muted);
+        max-width: 70ch;
+      }
+
+      .skill-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-top: 2rem;
+      }
+
+      .skill {
+        padding: 0.5rem 1rem;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        font-size: 0.95rem;
+      }
+
+      .works-grid {
+        display: grid;
+        gap: 1.5rem;
+        margin-top: 2rem;
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+      }
+
+      .work-card {
+        background: var(--surface);
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+      }
+
+      .work-image {
+        aspect-ratio: 16 / 9;
+        background: #e2e8f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .work-body {
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        flex: 1;
+      }
+
+      .work-body h3 {
+        margin: 0;
+        font-size: 1.2rem;
+      }
+
+      .work-body p {
+        margin: 0;
+        color: var(--muted);
+        flex: 1;
+      }
+
+      .work-body a {
+        color: var(--accent);
+        font-weight: 600;
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+      }
+
+      .contact-grid {
+        display: grid;
+        gap: 1.5rem;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        margin-top: 2rem;
+      }
+
+      .contact-card {
+        background: var(--surface);
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        padding: 1.5rem;
+        box-shadow: var(--shadow);
+      }
+
+      footer {
+        padding: 2rem 0 3rem;
+        color: var(--muted);
+        text-align: center;
+        border-top: 1px solid var(--border);
+      }
+
+      @media (min-width: 768px) {
+        .works-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (min-width: 1024px) {
+        .works-grid {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          scroll-behavior: auto !important;
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">本文へスキップ</a>
+    <header>
+      <div class="container nav">
+        <div class="logo">Portfolio</div>
+        <nav aria-label="主要ナビゲーション">
+          <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#works">Works</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <main id="main">
+      <section class="container hero" id="hero">
+        <div>
+          <p class="section-lead">フロントエンドエンジニア</p>
+          <h1>山田 太郎</h1>
+          <p>
+            UI/UXとアクセシビリティを重視し、プロダクトの価値を最短距離で届ける
+            体験設計を行います。パフォーマンス改善とデザインシステムの整備が得意です。
+          </p>
+          <a class="cta" href="#works">制作物を見る</a>
+        </div>
+        <div class="hero-card">
+          <img
+            src="assets/avatar.webp"
+            alt="山田 太郎のプロフィール写真"
+            class="avatar"
+            width="96"
+            height="96"
+          />
+          <h2>一言プロフィール</h2>
+          <p>
+            5年以上のWeb開発経験。モダンフロントエンドとバックエンド連携、
+            チーム開発の推進を得意としています。
+          </p>
+        </div>
+      </section>
+
+      <section class="container" id="about">
+        <h2 class="section-title">About</h2>
+        <p class="section-lead">
+          デザインとエンジニアリングの橋渡しをしながら、ユーザーが迷わない体験設計を
+          心がけています。情報設計、アクセシビリティ、パフォーマンスの観点から
+          継続的な改善を支援。プロダクトの成長を支えるUI構築が強みです。
+        </p>
+      </section>
+
+      <section class="container" id="skills">
+        <h2 class="section-title">Skills</h2>
+        <p class="section-lead">得意領域や日々使っている技術スタックです。</p>
+        <div class="skill-grid" role="list">
+          <span class="skill" role="listitem">HTML / CSS</span>
+          <span class="skill" role="listitem">JavaScript / TypeScript</span>
+          <span class="skill" role="listitem">React</span>
+          <span class="skill" role="listitem">Vue</span>
+          <span class="skill" role="listitem">C#</span>
+          <span class="skill" role="listitem">RDB / SQL</span>
+          <span class="skill" role="listitem">AWS</span>
+          <span class="skill" role="listitem">Accessibility</span>
+          <span class="skill" role="listitem">Design Systems</span>
+        </div>
+      </section>
+
+      <section class="container" id="works">
+        <h2 class="section-title">Works</h2>
+        <p class="section-lead">オフライン配布向けのダミーデータです。</p>
+        <div class="works-grid" id="worksGrid"></div>
+      </section>
+
+      <section class="container" id="contact">
+        <h2 class="section-title">Contact</h2>
+        <p class="section-lead">
+          お仕事のご相談やカジュアル面談のご依頼はメールでご連絡ください。
+        </p>
+        <div class="contact-grid">
+          <div class="contact-card">
+            <h3>Email</h3>
+            <p><a href="mailto:hello@example.com">hello@example.com</a></p>
+          </div>
+          <div class="contact-card">
+            <h3>Social</h3>
+            <p>
+              <a href="https://example.com" target="_blank" rel="noopener">LinkedIn</a><br />
+              <a href="https://example.com" target="_blank" rel="noopener">GitHub</a>
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <div class="container">© 2024 山田 太郎 / 最終更新: 2024-04-01</div>
+    </footer>
+
+    <script>
+      const works = [
+        {
+          title: "多言語対応プロダクトLP",
+          summary:
+            "多言語向けのマーケティングページを構築。アクセシビリティと読み込み速度を改善。",
+          image: "assets/works/project1.webp",
+          url: "https://example.com/project-1",
+        },
+        {
+          title: "SaaSダッシュボード刷新",
+          summary:
+            "データ可視化と情報設計を見直し、オンボーディング完了率を向上させました。",
+          image: "assets/works/project2.webp",
+          url: "https://example.com/project-2",
+        },
+        {
+          title: "ECサイトUI改善",
+          summary:
+            "購入フローの改善とUI統一により、CVRが15%向上した施策を担当。",
+          image: "assets/works/project3.webp",
+          url: "https://example.com/project-3",
+        },
+        {
+          title: "社内デザインシステム",
+          summary:
+            "コンポーネントライブラリの構築で開発速度を向上。Figma連携も整備。",
+          image: "assets/works/project4.webp",
+          url: "https://example.com/project-4",
+        },
+      ];
+
+      const worksGrid = document.getElementById("worksGrid");
+
+      works.forEach((work) => {
+        const card = document.createElement("article");
+        card.className = "work-card";
+
+        const figure = document.createElement("div");
+        figure.className = "work-image";
+
+        const img = document.createElement("img");
+        img.src = work.image;
+        img.alt = `${work.title} のスクリーンショット`;
+        img.loading = "lazy";
+
+        figure.appendChild(img);
+
+        const body = document.createElement("div");
+        body.className = "work-body";
+
+        const title = document.createElement("h3");
+        title.textContent = work.title;
+
+        const summary = document.createElement("p");
+        summary.textContent = work.summary;
+
+        const link = document.createElement("a");
+        link.href = work.url;
+        link.target = "_blank";
+        link.rel = "noopener";
+        link.textContent = "詳細を見る →";
+
+        body.append(title, summary, link);
+        card.append(figure, body);
+        worksGrid.appendChild(card);
+      });
+
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+      if (!reduceMotion.matches) {
+        document.documentElement.style.scrollBehavior = "smooth";
+      }
+    </script>
+  </body>
+</html>
