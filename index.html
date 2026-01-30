@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Coffee Break Diagnoser</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b111a;
+      --bg-deep: #0a0f16;
+      --card: rgba(255, 255, 255, 0.06);
+      --card-strong: rgba(255, 255, 255, 0.12);
+      --text: #f5f0e6;
+      --muted: #a9a4a0;
+      --accent: #d9a56b;
+      --accent-strong: #f3c27c;
+      --line: rgba(255, 255, 255, 0.15);
+      --focus: #f8d49a;
+      --shadow: 0 18px 40px rgba(5, 7, 10, 0.45);
+      --radius: 20px;
+      --radius-sm: 14px;
+      --transition: 280ms cubic-bezier(0.22, 0.61, 0.36, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: "Hiragino Sans", "Noto Sans JP", "Yu Gothic", "Meiryo", system-ui, -apple-system, sans-serif;
+      background: radial-gradient(120% 120% at 20% 0%, rgba(30, 38, 57, 0.55), transparent 60%),
+        radial-gradient(140% 140% at 90% 20%, rgba(52, 42, 36, 0.6), transparent 65%),
+        linear-gradient(160deg, var(--bg), var(--bg-deep));
+      color: var(--text);
+      min-height: 100%;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    body::before {
+      background-image: radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.04) 0, rgba(255, 255, 255, 0) 55%),
+        radial-gradient(circle at 80% 40%, rgba(255, 255, 255, 0.035) 0, rgba(255, 255, 255, 0) 55%);
+      animation: glow 12s ease-in-out infinite;
+    }
+
+    body::after {
+      background-image: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.02) 0px, rgba(255, 255, 255, 0.02) 1px, transparent 1px, transparent 3px);
+      mix-blend-mode: soft-light;
+      opacity: 0.6;
+    }
+
+    @keyframes glow {
+      0%, 100% {
+        opacity: 0.7;
+      }
+      50% {
+        opacity: 1;
+      }
+    }
+
+    .page {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 32px 20px 56px;
+    }
+
+    header {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .title {
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      letter-spacing: 0.04em;
+      font-weight: 600;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 0.98rem;
+    }
+
+    .steam {
+      position: relative;
+      width: 130px;
+      height: 80px;
+      margin-top: 10px;
+    }
+
+    .steam span {
+      position: absolute;
+      bottom: 0;
+      width: 18px;
+      height: 60px;
+      border-radius: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      filter: blur(0.2px);
+      opacity: 0.6;
+      animation: steam 4s ease-in-out infinite;
+    }
+
+    .steam span:nth-child(1) {
+      left: 10px;
+      animation-delay: 0s;
+    }
+
+    .steam span:nth-child(2) {
+      left: 45px;
+      height: 70px;
+      animation-delay: 1.2s;
+    }
+
+    .steam span:nth-child(3) {
+      left: 80px;
+      height: 55px;
+      animation-delay: 2s;
+    }
+
+    @keyframes steam {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 0;
+      }
+      40% {
+        opacity: 0.55;
+      }
+      100% {
+        transform: translateY(-18px) scale(0.96);
+        opacity: 0;
+      }
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+    }
+
+    .section {
+      display: grid;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .section-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .chips,
+    .segment,
+    .fatigue-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .chips {
+      grid-template-columns: repeat(auto-fit, minmax(44px, 1fr));
+    }
+
+    .chip {
+      padding: 10px 0;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid transparent;
+      color: var(--text);
+      text-align: center;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: transform var(--transition), border-color var(--transition), background var(--transition);
+    }
+
+    .chip[aria-pressed="true"] {
+      border-color: var(--accent-strong);
+      background: rgba(217, 165, 107, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .fatigue-grid {
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    }
+
+    .fatigue-card {
+      display: grid;
+      gap: 8px;
+      padding: 16px;
+      border-radius: var(--radius-sm);
+      border: 1px solid transparent;
+      background: rgba(255, 255, 255, 0.03);
+      transition: transform var(--transition), border-color var(--transition), background var(--transition);
+      cursor: pointer;
+    }
+
+    .fatigue-card[aria-pressed="true"] {
+      border-color: var(--accent-strong);
+      background: rgba(243, 194, 124, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .fatigue-icon {
+      font-size: 1.4rem;
+    }
+
+    .segment {
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    }
+
+    .segment button {
+      padding: 12px 10px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: transform var(--transition), border-color var(--transition), background var(--transition);
+    }
+
+    .segment button[aria-pressed="true"] {
+      border-color: var(--accent-strong);
+      background: rgba(217, 165, 107, 0.18);
+      transform: translateY(-2px);
+    }
+
+    .cta {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .cta button {
+      padding: 14px 20px;
+      border-radius: 999px;
+      border: none;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #1a1209;
+      background: linear-gradient(120deg, var(--accent), var(--accent-strong));
+      cursor: pointer;
+      transition: transform var(--transition), box-shadow var(--transition), opacity var(--transition);
+      box-shadow: 0 10px 24px rgba(217, 165, 107, 0.25);
+    }
+
+    .cta button:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+      box-shadow: none;
+    }
+
+    .toggle {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .toggle input {
+      appearance: none;
+      width: 44px;
+      height: 24px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 999px;
+      position: relative;
+      cursor: pointer;
+      outline: none;
+      transition: background var(--transition);
+    }
+
+    .toggle input::after {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--text);
+      transition: transform var(--transition);
+    }
+
+    .toggle input:checked {
+      background: rgba(217, 165, 107, 0.6);
+    }
+
+    .toggle input:checked::after {
+      transform: translateX(20px);
+    }
+
+    .result {
+      margin-top: 32px;
+      display: grid;
+      gap: 16px;
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity var(--transition), transform var(--transition);
+    }
+
+    .result.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .result-head {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .result-type {
+      font-size: 1.1rem;
+      color: var(--accent-strong);
+      font-weight: 600;
+    }
+
+    .result-main {
+      font-size: clamp(1.4rem, 3vw, 1.9rem);
+      font-weight: 600;
+    }
+
+    .result-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .result-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .ghost {
+      padding: 12px 18px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      color: var(--text);
+      background: transparent;
+      cursor: pointer;
+      transition: border-color var(--transition), background var(--transition);
+    }
+
+    .ghost:hover,
+    .ghost:focus-visible {
+      border-color: var(--accent-strong);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .assist {
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .food-label {
+      color: var(--accent-strong);
+    }
+
+    .status {
+      min-height: 20px;
+      font-size: 0.9rem;
+      color: var(--accent-strong);
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 3px;
+    }
+
+    @media (min-width: 720px) {
+      .page {
+        padding: 40px 40px 70px;
+      }
+
+      .section-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+      }
+
+      .cta {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="card">
+      <div class="title">Coffee Break Diagnoser</div>
+      <div class="subtitle">
+        曜日と疲れ、飲み物気分から「一杯＋ひとくち」を提案します。静かな余白と呼吸で、今のあなたへ最適なブレイクを。
+      </div>
+      <div class="steam" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </header>
+
+    <section class="card section" aria-labelledby="input-title">
+      <div>
+        <div class="section-title" id="input-title">3ステップで診断</div>
+        <p class="assist">すべての項目を選ぶと「診断する」が有効になります。</p>
+      </div>
+
+      <div class="section-grid">
+        <div class="section" data-section="weekday">
+          <div class="section-title">曜日</div>
+          <div class="chips" role="group" aria-label="曜日を選択" data-group="weekday">
+            <button class="chip" data-value="mon" aria-pressed="false">月</button>
+            <button class="chip" data-value="tue" aria-pressed="false">火</button>
+            <button class="chip" data-value="wed" aria-pressed="false">水</button>
+            <button class="chip" data-value="thu" aria-pressed="false">木</button>
+            <button class="chip" data-value="fri" aria-pressed="false">金</button>
+            <button class="chip" data-value="sat" aria-pressed="false">土</button>
+            <button class="chip" data-value="sun" aria-pressed="false">日</button>
+          </div>
+        </div>
+
+        <div class="section" data-section="fatigue">
+          <div class="section-title">疲れタイプ</div>
+          <div class="fatigue-grid" role="group" aria-label="疲れタイプを選択" data-group="fatigue">
+            <button class="fatigue-card" data-value="mind" aria-pressed="false">
+              <span class="fatigue-icon" aria-hidden="true">🧠</span>
+              <span>頭の疲れ</span>
+              <span class="assist">情報量で脳が熱い</span>
+            </button>
+            <button class="fatigue-card" data-value="body" aria-pressed="false">
+              <span class="fatigue-icon" aria-hidden="true">🧘</span>
+              <span>体の疲れ</span>
+              <span class="assist">肩・背中がこわばる</span>
+            </button>
+            <button class="fatigue-card" data-value="heart" aria-pressed="false">
+              <span class="fatigue-icon" aria-hidden="true">🌙</span>
+              <span>気持ちの疲れ</span>
+              <span class="assist">気分が曇りがち</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="section" data-section="drink">
+        <div class="section-title">飲み物の気分</div>
+        <div class="segment" role="group" aria-label="飲み物の気分を選択" data-group="drink">
+          <button data-value="black" aria-pressed="false">ブラック</button>
+          <button data-value="latte" aria-pressed="false">ラテ</button>
+          <button data-value="tea" aria-pressed="false">お茶</button>
+          <button data-value="sweet" aria-pressed="false">甘い飲み物</button>
+        </div>
+      </div>
+
+      <div class="cta">
+        <button type="button" data-action="diagnose" disabled>診断する</button>
+        <label class="toggle">
+          <input type="checkbox" data-action="remember" checked />
+          前回の選択を保存
+        </label>
+      </div>
+      <div class="status" role="status" aria-live="polite" data-status></div>
+    </section>
+
+    <section class="card result" aria-live="polite" aria-labelledby="result-title" data-result>
+      <div class="result-head">
+        <div class="result-type" data-result-type>今日のタイプ</div>
+        <div class="result-main" id="result-title" data-result-main>---</div>
+        <div class="badge" data-result-label>常温 / 冷蔵</div>
+      </div>
+
+      <div class="result-grid">
+        <div>
+          <div class="section-title">一口アドバイス</div>
+          <p class="assist" data-result-advice>---</p>
+        </div>
+        <div>
+          <div class="section-title">解消アクション（30秒〜3分）</div>
+          <ul class="assist" data-result-action></ul>
+        </div>
+      </div>
+
+      <div class="result-actions">
+        <button class="ghost" type="button" data-action="copy">結果をコピー</button>
+        <button class="ghost" type="button" data-action="retry">もう一回</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const state = {
+      weekday: null,
+      fatigue: null,
+      drink: null,
+      remember: true,
+    };
+
+    const DATA = {
+      weekday: {
+        mon: { label: "月", mood: "リスタート" },
+        tue: { label: "火", mood: "安定" },
+        wed: { label: "水", mood: "中だるみ" },
+        thu: { label: "木", mood: "集中" },
+        fri: { label: "金", mood: "解放" },
+        sat: { label: "土", mood: "ほぐし" },
+        sun: { label: "日", mood: "整え" },
+      },
+      fatigue: {
+        mind: { label: "頭の疲れ", tone: "クリア" },
+        body: { label: "体の疲れ", tone: "ほぐし" },
+        heart: { label: "気持ちの疲れ", tone: "やさしさ" },
+      },
+      drink: {
+        black: {
+          label: "ブラック",
+          foods: ["フィナンシェ", "カヌレ", "ブラウニー", "どら焼き", "羊羹"],
+          temps: ["常温", "冷蔵"],
+        },
+        latte: {
+          label: "ラテ",
+          foods: ["バウム", "クッキー", "シナモンロール", "シナモンビスケット"],
+          temps: ["温かい", "冷蔵"],
+        },
+        tea: {
+          label: "お茶",
+          foods: ["最中", "羊羹", "カステラ", "抹茶クッキー"],
+          temps: ["常温", "冷蔵"],
+        },
+        sweet: {
+          label: "甘い飲み物",
+          foods: ["プレッツェル", "ミックスナッツ", "ソルトクッキー", "チーズクラッカー"],
+          temps: ["冷蔵", "常温"],
+        },
+      },
+      advice: {
+        mind: [
+          "視線を遠くに置いて、脳のピントをゆるめて。",
+          "目を閉じて深呼吸、思考の渦をほどく。",
+          "肩をすくめて落とす動きを3回。",
+        ],
+        body: [
+          "飲み物を両手で包んで、体温を戻していく。",
+          "背中を丸めて伸ばし、呼吸を長く。",
+          "つま先を上下して血流を起こして。",
+        ],
+        heart: [
+          "胸に手を当てて、呼吸のリズムを整える。",
+          "小さな音を消して、静かな3呼吸。",
+          "安心できる言葉を一つ、心の中で唱える。",
+        ],
+      },
+      actions: {
+        mind: [
+          "画面から30秒目を外して遠くを見る",
+          "首を左右にゆっくり回す",
+          "飲み物をひと口、舌の温度に集中",
+        ],
+        body: [
+          "肩甲骨を寄せて3秒キープ",
+          "手首を回して力を抜く",
+          "足首を回し血流を促す",
+        ],
+        heart: [
+          "胸の前で手をこすって温める",
+          "目を閉じて5秒吸って7秒吐く",
+          "飲み物の香りをゆっくり感じる",
+        ],
+      },
+    };
+
+    const selectors = {
+      groups: document.querySelectorAll("[data-group]"),
+      diagnose: document.querySelector('[data-action="diagnose"]'),
+      status: document.querySelector("[data-status]"),
+      result: document.querySelector("[data-result]"),
+      resultType: document.querySelector("[data-result-type]"),
+      resultMain: document.querySelector("[data-result-main]"),
+      resultLabel: document.querySelector("[data-result-label]"),
+      resultAdvice: document.querySelector("[data-result-advice]"),
+      resultAction: document.querySelector("[data-result-action]"),
+      copy: document.querySelector('[data-action="copy"]'),
+      retry: document.querySelector('[data-action="retry"]'),
+      remember: document.querySelector('[data-action="remember"]'),
+    };
+
+    const STORAGE_KEY = "coffee-break-diagnoser";
+
+    const setStatus = (message) => {
+      selectors.status.textContent = message;
+    };
+
+    const updateButtonState = () => {
+      const ready = state.weekday && state.fatigue && state.drink;
+      selectors.diagnose.disabled = !ready;
+      setStatus(ready ? "準備完了。診断できます。" : "3項目すべて選択してください。");
+    };
+
+    const selectButton = (group, value) => {
+      const buttons = group.querySelectorAll("button");
+      buttons.forEach((btn) => {
+        const isActive = btn.dataset.value === value;
+        btn.setAttribute("aria-pressed", isActive);
+      });
+    };
+
+    const handleGroupClick = (event) => {
+      const button = event.target.closest("button");
+      if (!button) return;
+      const group = event.currentTarget;
+      const value = button.dataset.value;
+      const groupName = group.dataset.group;
+      state[groupName] = value;
+      selectButton(group, value);
+      updateButtonState();
+      if (state.remember) saveState();
+    };
+
+    const saveState = () => {
+      const payload = {
+        weekday: state.weekday,
+        fatigue: state.fatigue,
+        drink: state.drink,
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+    };
+
+    const loadState = () => {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (!saved) return;
+      try {
+        const payload = JSON.parse(saved);
+        ["weekday", "fatigue", "drink"].forEach((key) => {
+          if (payload[key]) {
+            state[key] = payload[key];
+            const group = document.querySelector(`[data-group="${key}"]`);
+            if (group) selectButton(group, payload[key]);
+          }
+        });
+      } catch (error) {
+        localStorage.removeItem(STORAGE_KEY);
+      }
+    };
+
+    const computeScore = () => {
+      const weekdayIndex = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"].indexOf(state.weekday);
+      const fatigueIndex = ["mind", "body", "heart"].indexOf(state.fatigue);
+      const drinkIndex = ["black", "latte", "tea", "sweet"].indexOf(state.drink);
+      return weekdayIndex * 11 + fatigueIndex * 7 + drinkIndex * 5;
+    };
+
+    const pickFrom = (array, score) => array[score % array.length];
+
+    const buildResult = () => {
+      const score = computeScore();
+      const day = DATA.weekday[state.weekday];
+      const fatigue = DATA.fatigue[state.fatigue];
+      const drink = DATA.drink[state.drink];
+      const food = pickFrom(drink.foods, score);
+      const temp = pickFrom(drink.temps, score + 2);
+      const advice = pickFrom(DATA.advice[state.fatigue], score + 3);
+      const actions = DATA.actions[state.fatigue];
+
+      return {
+        type: `${day.label}の${fatigue.tone}タイプ` ,
+        main: `${drink.label} ＋ ${food}`,
+        temp: `${temp} / コンビニ想定`,
+        advice,
+        actions,
+      };
+    };
+
+    const renderResult = (result) => {
+      selectors.resultType.textContent = result.type;
+      selectors.resultMain.textContent = result.main;
+      selectors.resultLabel.textContent = result.temp;
+      selectors.resultAdvice.textContent = result.advice;
+      selectors.resultAction.innerHTML = "";
+      result.actions.forEach((action) => {
+        const li = document.createElement("li");
+        li.textContent = action;
+        selectors.resultAction.appendChild(li);
+      });
+      selectors.result.classList.add("is-visible");
+      selectors.result.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+
+    const handleDiagnose = () => {
+      if (!state.weekday || !state.fatigue || !state.drink) {
+        setStatus("すべて選択してください。");
+        return;
+      }
+      const result = buildResult();
+      renderResult(result);
+      if (state.remember) saveState();
+    };
+
+    const handleCopy = async () => {
+      const result = buildResult();
+      const text = [
+        "Coffee Break Diagnoser",
+        `タイプ: ${result.type}`,
+        `おすすめ: ${result.main}（${result.temp}）`,
+        `アドバイス: ${result.advice}`,
+        `アクション: ${result.actions.join(" / ")}`,
+      ].join("\n");
+      try {
+        await navigator.clipboard.writeText(text);
+        setStatus("結果をコピーしました。");
+      } catch (error) {
+        setStatus("コピーに失敗しました。手動で選択してください。");
+      }
+    };
+
+    const handleRetry = () => {
+      selectors.result.classList.remove("is-visible");
+      setStatus("もう一度診断できます。");
+      selectors.diagnose.focus();
+    };
+
+    selectors.groups.forEach((group) => {
+      group.addEventListener("click", handleGroupClick);
+    });
+
+    selectors.diagnose.addEventListener("click", handleDiagnose);
+    selectors.copy.addEventListener("click", handleCopy);
+    selectors.retry.addEventListener("click", handleRetry);
+
+    selectors.remember.addEventListener("change", (event) => {
+      state.remember = event.target.checked;
+      if (!state.remember) {
+        localStorage.removeItem(STORAGE_KEY);
+      } else {
+        saveState();
+      }
+    });
+
+    loadState();
+    updateButtonState();
+  </script>
+</body>
+</html>
