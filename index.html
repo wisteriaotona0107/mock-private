@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Race Lane Mock</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0f1a0f;
+      --panel: #152515;
+      --panel-2: #1d2f1d;
+      --accent: #7ddc7a;
+      --accent-2: #f2c94c;
+      --danger: #f2994a;
+      --text: #f4f4f4;
+      --muted: #b5c1b2;
+      --lane: rgba(255, 255, 255, 0.08);
+      --grass: linear-gradient(135deg, #0c3d18, #0f4c1f 40%, #115c25 100%);
+      --dirt: linear-gradient(135deg, #5a3c1f, #6b4a28 40%, #7a552d 100%);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Hiragino Kaku Gothic ProN", sans-serif;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    header {
+      padding: 16px 20px;
+      background: #0c140c;
+      border-bottom: 1px solid #233723;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.2rem;
+      flex: 1;
+    }
+
+    .filters {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .filters label {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    select, input[type="date"], input[type="text"], textarea {
+      background: #101c10;
+      border: 1px solid #2b3f2b;
+      color: var(--text);
+      padding: 6px 8px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+
+    main {
+      padding: 16px 20px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      background: #142114;
+      color: var(--text);
+      border: 1px solid #2b3f2b;
+      padding: 6px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+
+    .tab-btn.active {
+      background: var(--accent);
+      color: #0e1a0e;
+      border-color: transparent;
+      font-weight: 600;
+    }
+
+    .view {
+      display: none;
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    .race-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    .race-card {
+      background: var(--panel);
+      border: 1px solid #2b3f2b;
+      padding: 14px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .race-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent);
+    }
+
+    .race-card h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+    }
+
+    .race-meta {
+      font-size: 0.85rem;
+      color: var(--muted);
+      display: grid;
+      gap: 4px;
+    }
+
+    .detail-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .detail-header button {
+      background: #182918;
+      color: var(--text);
+      border: 1px solid #2b3f2b;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .toggle-group {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .toggle-group label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .race-scene {
+      position: relative;
+      background: var(--grass);
+      border-radius: 16px;
+      border: 1px solid #2b3f2b;
+      padding: 16px 0;
+      overflow: hidden;
+    }
+
+    .race-scene.dirt {
+      background: var(--dirt);
+    }
+
+    .lanes-scroll {
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      display: flex;
+      gap: 16px;
+      padding: 12px 16px 30px;
+    }
+
+    .lane {
+      min-width: 240px;
+      background: rgba(15, 25, 15, 0.7);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 12px;
+      position: relative;
+      scroll-snap-align: start;
+    }
+
+    .lane::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-top: 1px dashed var(--lane);
+      border-bottom: 1px dashed var(--lane);
+      pointer-events: none;
+    }
+
+    .lane.highlight {
+      animation: flash 1s infinite;
+    }
+
+    @keyframes flash {
+      0%, 100% { background-color: rgba(255, 255, 255, 0.06); }
+      50% { background-color: rgba(242, 201, 76, 0.2); }
+    }
+
+    .horse-icon {
+      font-size: 2rem;
+      display: inline-block;
+      transition: transform 0.3s ease;
+    }
+
+    .horse-labels {
+      margin-top: 8px;
+      display: grid;
+      gap: 4px;
+      font-size: 0.8rem;
+    }
+
+    .horse-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .horse-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .horse-meta {
+      color: var(--muted);
+      font-size: 0.75rem;
+    }
+
+    .lane-track {
+      position: relative;
+      height: 60px;
+      margin-top: 12px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .lane-track::before {
+      content: "START";
+      position: absolute;
+      left: 6px;
+      top: 4px;
+      font-size: 0.6rem;
+      color: var(--muted);
+    }
+
+    .lane-track::after {
+      content: "GOAL";
+      position: absolute;
+      right: 8px;
+      top: 4px;
+      font-size: 0.6rem;
+      color: var(--muted);
+    }
+
+    .runner {
+      position: absolute;
+      left: 10px;
+      top: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      animation: run linear infinite;
+      transform-origin: left center;
+    }
+
+    .runner.front {
+      animation-duration: 5s;
+    }
+
+    .runner.stalker {
+      animation-duration: 6.5s;
+    }
+
+    .runner.closer {
+      animation: run-closer 7s linear infinite;
+    }
+
+    @keyframes run {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(160px); }
+    }
+
+    @keyframes run-closer {
+      0% { transform: translateX(0); }
+      60% { transform: translateX(60px); }
+      100% { transform: translateX(160px); }
+    }
+
+    .minimap {
+      position: absolute;
+      right: 16px;
+      top: 12px;
+      background: rgba(12, 20, 12, 0.8);
+      border: 1px solid #2b3f2b;
+      padding: 8px;
+      border-radius: 10px;
+      width: 140px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .minimap-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .minimap-track {
+      position: relative;
+      flex: 1;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+    }
+
+    .minimap-dot {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: var(--accent);
+      border-radius: 50%;
+      top: -2px;
+    }
+
+    .minimap-viewport {
+      position: absolute;
+      height: 6px;
+      border: 1px solid var(--accent-2);
+      border-radius: 999px;
+      top: 0;
+      opacity: 0.8;
+    }
+
+    .detail-pane {
+      background: var(--panel-2);
+      border: 1px solid #2b3f2b;
+      border-radius: 14px;
+      padding: 16px;
+      min-width: 240px;
+    }
+
+    .detail-layout {
+      display: grid;
+      grid-template-columns: 1fr 260px;
+      gap: 16px;
+    }
+
+    .detail-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .detail-actions button {
+      flex: 1;
+      background: #1a2b1a;
+      border: 1px solid #2b3f2b;
+      color: var(--text);
+      padding: 6px 8px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .revision-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .revision-item {
+      background: var(--panel);
+      border: 1px solid #2b3f2b;
+      border-radius: 10px;
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    th, td {
+      padding: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      text-align: left;
+    }
+
+    .admin-form {
+      display: grid;
+      gap: 12px;
+      max-width: 640px;
+    }
+
+    .admin-form button {
+      background: var(--accent);
+      color: #0e1a0e;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .message {
+      font-size: 0.85rem;
+      color: var(--accent-2);
+    }
+
+    .error {
+      color: #ff7b7b;
+    }
+
+    @media (max-width: 900px) {
+      .detail-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .minimap {
+        position: static;
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin-bottom: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>競馬レースゲーム風ダッシュボード</h1>
+    <div class="filters">
+      <label>開催日 <input type="date" id="dateFilter" /></label>
+      <label>Track <select id="trackFilter">
+        <option value="">All</option>
+        <option value="TOKYO">TOKYO</option>
+        <option value="NAKAYAMA">NAKAYAMA</option>
+        <option value="HANSIN">HANSIN</option>
+        <option value="KYOTO">KYOTO</option>
+        <option value="CHUKYO">CHUKYO</option>
+      </select></label>
+    </div>
+  </header>
+  <main>
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="races">レース一覧</button>
+      <button class="tab-btn" data-tab="history">更新履歴</button>
+      <button class="tab-btn" data-tab="admin">Admin</button>
+    </div>
+
+    <section id="view-races" class="view active">
+      <div class="race-list" id="raceList"></div>
+      <div id="raceDetail" style="display:none;">
+        <div class="detail-header">
+          <button id="backToList">← 戻る</button>
+          <div id="raceTitle"></div>
+          <div class="toggle-group">
+            <label><input type="checkbox" id="toggleOdds" checked />オッズ</label>
+            <label><input type="checkbox" id="toggleRating" checked />評価</label>
+            <label><input type="checkbox" id="toggleStyle" checked />脚質</label>
+            <label><input type="checkbox" id="toggleWeight" checked />体重</label>
+            <label><input type="checkbox" id="toggleJockey" checked />騎手</label>
+            <label><input type="checkbox" id="toggleHighlight" checked />変動ハイライト</label>
+          </div>
+        </div>
+        <div class="detail-layout">
+          <div>
+            <div class="race-scene" id="raceScene">
+              <div class="minimap" id="minimap"></div>
+              <div class="lanes-scroll" id="lanesScroll"></div>
+            </div>
+          </div>
+          <aside class="detail-pane" id="horseDetail">
+            <div>🏇 をクリックして詳細を見る</div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section id="view-history" class="view">
+      <div class="revision-list" id="revisionList"></div>
+      <div>
+        <button id="compareLatest">最新と比較</button>
+        <table id="revisionTable">
+          <thead>
+            <tr>
+              <th>馬番</th>
+              <th>単勝オッズ</th>
+              <th>評価</th>
+              <th>人気</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="view-admin" class="view">
+      <form class="admin-form" id="adminForm">
+        <label>Token <input type="text" id="adminToken" value="mock-admin-token" /></label>
+        <label>JSON</label>
+        <textarea id="jsonInput" rows="10" placeholder='{"schema_version":"1.0","source_type":"manual","race":{...}}'></textarea>
+        <button type="submit">投入</button>
+        <div id="adminMessage" class="message"></div>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    const STORAGE_KEYS = {
+      index: "races_index",
+      revisions: (raceKey) => `race_${raceKey}_revisions`
+    };
+
+    const initialData = [
+      {
+        schema_version: "1.0",
+        source_type: "seed",
+        race: {
+          race_key: "2024-10-05_TOKYO_11",
+          race_date: "2024-10-05",
+          track_code: "TOKYO",
+          race_no: 11,
+          race_name: "東京メイン芝1600m",
+          start_time: "15:30",
+          field_size: 12
+        },
+        entries: Array.from({ length: 12 }, (_, i) => {
+          const horseNo = i + 1;
+          return {
+            horse_no: horseNo,
+            horse_name: `サンプルホース${horseNo}`,
+            odds_win: (Math.random() * 15 + 1).toFixed(1),
+            rating_score: Math.floor(Math.random() * 40 + 60),
+            popularity: horseNo,
+            running_style: ["front", "stalker", "closer"][i % 3],
+            weight_kg: 430 + i * 8,
+            weight_diff: i % 2 === 0 ? +2 : -3,
+            jockey: ["武", "横山", "川田", "戸崎", "松山"][i % 5]
+          };
+        })
+      },
+      {
+        schema_version: "1.0",
+        source_type: "seed",
+        race: {
+          race_key: "2024-10-05_KYOTO_9",
+          race_date: "2024-10-05",
+          track_code: "KYOTO",
+          race_no: 9,
+          race_name: "京都ダート1800m",
+          start_time: "14:20",
+          field_size: 12
+        },
+        entries: Array.from({ length: 12 }, (_, i) => {
+          const horseNo = i + 1;
+          return {
+            horse_no: horseNo,
+            horse_name: `関西ホース${horseNo}`,
+            odds_win: (Math.random() * 20 + 1).toFixed(1),
+            rating_score: Math.floor(Math.random() * 35 + 55),
+            popularity: (i + 1),
+            running_style: ["front", "stalker", "closer"][2 - (i % 3)],
+            weight_kg: 420 + i * 10,
+            weight_diff: i % 3 === 0 ? +4 : -2,
+            jockey: ["福永", "岩田", "坂井", "団野", "西村"][i % 5]
+          };
+        })
+      }
+    ];
+
+    const state = {
+      races: [],
+      selectedRace: null,
+      selectedRevision: null,
+      selectedHorseIndex: 0,
+      highlightDiffs: [],
+      viewTab: "races"
+    };
+
+    const elements = {
+      raceList: document.getElementById("raceList"),
+      raceDetail: document.getElementById("raceDetail"),
+      raceTitle: document.getElementById("raceTitle"),
+      backToList: document.getElementById("backToList"),
+      lanesScroll: document.getElementById("lanesScroll"),
+      raceScene: document.getElementById("raceScene"),
+      minimap: document.getElementById("minimap"),
+      horseDetail: document.getElementById("horseDetail"),
+      dateFilter: document.getElementById("dateFilter"),
+      trackFilter: document.getElementById("trackFilter"),
+      revisionList: document.getElementById("revisionList"),
+      revisionTable: document.querySelector("#revisionTable tbody"),
+      compareLatest: document.getElementById("compareLatest"),
+      adminForm: document.getElementById("adminForm"),
+      adminToken: document.getElementById("adminToken"),
+      jsonInput: document.getElementById("jsonInput"),
+      adminMessage: document.getElementById("adminMessage"),
+      toggles: {
+        odds: document.getElementById("toggleOdds"),
+        rating: document.getElementById("toggleRating"),
+        style: document.getElementById("toggleStyle"),
+        weight: document.getElementById("toggleWeight"),
+        jockey: document.getElementById("toggleJockey"),
+        highlight: document.getElementById("toggleHighlight")
+      }
+    };
+
+    function seedData() {
+      if (localStorage.getItem(STORAGE_KEYS.index)) {
+        return;
+      }
+      const raceKeys = [];
+      initialData.forEach((item) => {
+        raceKeys.push(item.race.race_key);
+        const revisions = [{
+          revision_no: 1,
+          ingested_at: new Date().toISOString(),
+          payload: item
+        }];
+        localStorage.setItem(STORAGE_KEYS.revisions(item.race.race_key), JSON.stringify(revisions));
+      });
+      localStorage.setItem(STORAGE_KEYS.index, JSON.stringify(raceKeys));
+    }
+
+    function loadRaces() {
+      const raceKeys = JSON.parse(localStorage.getItem(STORAGE_KEYS.index) || "[]");
+      state.races = raceKeys.map((key) => {
+        const revisions = JSON.parse(localStorage.getItem(STORAGE_KEYS.revisions(key)) || "[]");
+        const latest = revisions[revisions.length - 1];
+        return {
+          race_key: key,
+          latest,
+          revisions
+        };
+      });
+      renderRaceList();
+      renderRevisionList();
+    }
+
+    function renderRaceList() {
+      const dateFilter = elements.dateFilter.value;
+      const trackFilter = elements.trackFilter.value;
+      elements.raceList.innerHTML = "";
+      const filtered = state.races.filter((race) => {
+        const raceDate = race.latest.payload.race.race_date;
+        const track = race.latest.payload.race.track_code;
+        return (!dateFilter || raceDate === dateFilter) && (!trackFilter || track === trackFilter);
+      });
+      filtered.forEach((race) => {
+        const { race: raceInfo } = race.latest.payload;
+        const card = document.createElement("div");
+        card.className = "race-card";
+        card.innerHTML = `
+          <h3>${raceInfo.race_key}</h3>
+          <div class="race-meta">
+            <div>${raceInfo.race_name}</div>
+            <div>Start: ${raceInfo.start_time} / Field: ${raceInfo.field_size}</div>
+            <div>Updated: ${formatDate(race.latest.ingested_at)}</div>
+          </div>
+        `;
+        card.addEventListener("click", () => openRaceDetail(race));
+        elements.raceList.appendChild(card);
+      });
+    }
+
+    function openRaceDetail(race) {
+      state.selectedRace = race;
+      state.selectedRevision = race.latest;
+      state.highlightDiffs = calculateDiffs(race);
+      elements.raceDetail.style.display = "block";
+      elements.raceList.style.display = "none";
+      elements.raceTitle.textContent = `${race.latest.payload.race.race_name} (${race.latest.payload.race.track_code})`;
+      elements.raceScene.classList.toggle("dirt", race.latest.payload.race.race_name.includes("ダート"));
+      renderLanes();
+      renderHorseDetail(state.selectedRevision.payload.entries[0]);
+    }
+
+    function renderLanes() {
+      const entries = state.selectedRevision.payload.entries;
+      elements.lanesScroll.innerHTML = "";
+      elements.minimap.innerHTML = "";
+      const total = entries.length;
+      entries.forEach((entry, index) => {
+        const lane = document.createElement("div");
+        lane.className = "lane";
+        if (elements.toggles.highlight.checked && state.highlightDiffs.includes(entry.horse_no)) {
+          lane.classList.add("highlight");
+        }
+        lane.innerHTML = `
+          <div class="horse-header">
+            <div class="horse-name">${entry.horse_no}. ${entry.horse_name}</div>
+            <div class="horse-meta">人気 ${entry.popularity}</div>
+          </div>
+          <div class="lane-track">
+            <div class="runner ${entry.running_style}" data-horse="${entry.horse_no}">
+              <span class="horse-icon">🏇</span>
+              <span class="horse-meta">${entry.running_style}</span>
+            </div>
+          </div>
+          <div class="horse-labels"></div>
+        `;
+        const labels = lane.querySelector(".horse-labels");
+        updateLaneLabels(labels, entry);
+        const runner = lane.querySelector(".runner");
+        const scale = normalizeWeight(entry.weight_kg);
+        runner.querySelector(".horse-icon").style.transform = `scale(${scale})`;
+        runner.addEventListener("click", () => {
+          state.selectedHorseIndex = index;
+          renderHorseDetail(entry);
+        });
+        elements.lanesScroll.appendChild(lane);
+
+        const miniRow = document.createElement("div");
+        miniRow.className = "minimap-row";
+        miniRow.innerHTML = `
+          <span style="font-size:0.65rem;">${entry.horse_no}</span>
+          <div class="minimap-track">
+            <div class="minimap-dot" style="left:${(entry.popularity / total) * 80 + 5}%"></div>
+          </div>
+        `;
+        elements.minimap.appendChild(miniRow);
+      });
+      updateMinimapViewport();
+    }
+
+    function updateLaneLabels(labels, entry) {
+      labels.innerHTML = "";
+      if (elements.toggles.odds.checked) {
+        labels.innerHTML += `<div>単勝: ${entry.odds_win}</div>`;
+      }
+      if (elements.toggles.rating.checked) {
+        labels.innerHTML += `<div>評価: ${entry.rating_score}</div>`;
+      }
+      if (elements.toggles.style.checked) {
+        labels.innerHTML += `<div>脚質: ${entry.running_style}</div>`;
+      }
+      if (elements.toggles.weight.checked) {
+        labels.innerHTML += `<div>体重: ${entry.weight_kg}kg (${entry.weight_diff >= 0 ? "+" : ""}${entry.weight_diff})</div>`;
+      }
+      if (elements.toggles.jockey.checked) {
+        labels.innerHTML += `<div>騎手: ${entry.jockey}</div>`;
+      }
+    }
+
+    function renderHorseDetail(entry) {
+      elements.horseDetail.innerHTML = `
+        <h3>🏇 ${entry.horse_no}. ${entry.horse_name}</h3>
+        <div class="horse-labels">
+          <div>脚質: ${entry.running_style}</div>
+          <div>体重: ${entry.weight_kg}kg (${entry.weight_diff >= 0 ? "+" : ""}${entry.weight_diff})</div>
+          <div>騎手: ${entry.jockey}</div>
+          <div>人気: ${entry.popularity}</div>
+          <div>単勝オッズ: ${entry.odds_win}</div>
+          <div>評価: ${entry.rating_score}</div>
+        </div>
+        <div class="detail-actions">
+          <button id="prevHorse">← 前</button>
+          <button id="nextHorse">次 →</button>
+        </div>
+      `;
+      document.getElementById("prevHorse").addEventListener("click", () => shiftHorse(-1));
+      document.getElementById("nextHorse").addEventListener("click", () => shiftHorse(1));
+    }
+
+    function shiftHorse(delta) {
+      const entries = state.selectedRevision.payload.entries;
+      state.selectedHorseIndex = (state.selectedHorseIndex + delta + entries.length) % entries.length;
+      renderHorseDetail(entries[state.selectedHorseIndex]);
+    }
+
+    function renderRevisionList() {
+      elements.revisionList.innerHTML = "";
+      state.races.forEach((race) => {
+        race.revisions.forEach((revision) => {
+          const item = document.createElement("div");
+          item.className = "revision-item";
+          item.innerHTML = `
+            <div>${race.latest.payload.race.race_key}</div>
+            <div>rev ${revision.revision_no} / ${formatDate(revision.ingested_at)}</div>
+          `;
+          item.addEventListener("click", () => {
+            state.selectedRevision = revision;
+            renderRevisionTable(revision.payload.entries);
+          });
+          elements.revisionList.appendChild(item);
+        });
+      });
+      if (state.races[0]) {
+        const latestRevision = state.races[0].latest;
+        state.selectedRevision = latestRevision;
+        renderRevisionTable(latestRevision.payload.entries);
+      }
+    }
+
+    function renderRevisionTable(entries) {
+      elements.revisionTable.innerHTML = "";
+      entries.forEach((entry) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${entry.horse_no}</td>
+          <td>${entry.odds_win}</td>
+          <td>${entry.rating_score}</td>
+          <td>${entry.popularity}</td>
+        `;
+        elements.revisionTable.appendChild(row);
+      });
+    }
+
+    function calculateDiffs(race) {
+      if (race.revisions.length < 2) return [];
+      const latest = race.revisions[race.revisions.length - 1];
+      const prev = race.revisions[race.revisions.length - 2];
+      const diffs = [];
+      latest.payload.entries.forEach((entry, idx) => {
+        const prevEntry = prev.payload.entries[idx];
+        if (!prevEntry) return;
+        if (entry.odds_win !== prevEntry.odds_win || entry.rating_score !== prevEntry.rating_score) {
+          diffs.push(entry.horse_no);
+        }
+      });
+      return diffs;
+    }
+
+    function compareLatest() {
+      if (!state.selectedRace || state.selectedRace.revisions.length < 2) return;
+      state.highlightDiffs = calculateDiffs(state.selectedRace);
+      renderLanes();
+    }
+
+    function handleAdminSubmit(event) {
+      event.preventDefault();
+      elements.adminMessage.textContent = "";
+      elements.adminMessage.classList.remove("error");
+      if (elements.adminToken.value.trim() !== "mock-admin-token") {
+        showAdminMessage("トークンが違います", true);
+        return;
+      }
+      let payload;
+      try {
+        payload = JSON.parse(elements.jsonInput.value);
+      } catch (error) {
+        showAdminMessage("JSONが正しくありません", true);
+        return;
+      }
+      const errorMessage = validatePayload(payload);
+      if (errorMessage) {
+        showAdminMessage(errorMessage, true);
+        return;
+      }
+      const raceKey = payload.race.race_key;
+      const revisions = JSON.parse(localStorage.getItem(STORAGE_KEYS.revisions(raceKey)) || "[]");
+      const revisionNo = revisions.length ? revisions[revisions.length - 1].revision_no + 1 : 1;
+      const newRevision = {
+        revision_no: revisionNo,
+        ingested_at: new Date().toISOString(),
+        payload
+      };
+      revisions.push(newRevision);
+      localStorage.setItem(STORAGE_KEYS.revisions(raceKey), JSON.stringify(revisions));
+
+      const raceKeys = JSON.parse(localStorage.getItem(STORAGE_KEYS.index) || "[]");
+      if (!raceKeys.includes(raceKey)) {
+        raceKeys.push(raceKey);
+        localStorage.setItem(STORAGE_KEYS.index, JSON.stringify(raceKeys));
+      }
+      showAdminMessage(`投入成功: <a href="#" id="jumpRace">${raceKey}へ移動</a>`);
+      loadRaces();
+      elements.jsonInput.value = "";
+      const link = document.getElementById("jumpRace");
+      if (link) {
+        link.addEventListener("click", (evt) => {
+          evt.preventDefault();
+          const race = state.races.find((r) => r.race_key === raceKey);
+          if (race) {
+            switchTab("races");
+            openRaceDetail(race);
+          }
+        });
+      }
+    }
+
+    function validatePayload(payload) {
+      if (!payload.schema_version) return "schema_version がありません";
+      if (!payload.source_type) return "source_type がありません";
+      if (!payload.race) return "race がありません";
+      if (!payload.race.race_key) return "race.race_key がありません";
+      if (!payload.race.race_date) return "race.race_date がありません";
+      if (!payload.race.track_code) return "race.track_code がありません";
+      if (!payload.race.race_no) return "race.race_no がありません";
+      if (!Array.isArray(payload.entries)) return "entries がありません";
+      const missing = payload.entries.findIndex((entry) => !entry.horse_no);
+      if (missing !== -1) return `entries[${missing}].horse_no がありません`;
+      return "";
+    }
+
+    function showAdminMessage(message, isError = false) {
+      elements.adminMessage.innerHTML = message;
+      if (isError) {
+        elements.adminMessage.classList.add("error");
+      } else {
+        elements.adminMessage.classList.remove("error");
+      }
+    }
+
+    function updateMinimapViewport() {
+      const scroll = elements.lanesScroll;
+      const max = scroll.scrollWidth - scroll.clientWidth;
+      const ratio = max > 0 ? scroll.scrollLeft / max : 0;
+      document.querySelectorAll(".minimap-track").forEach((track) => {
+        track.querySelectorAll(".minimap-viewport").forEach((el) => el.remove());
+        const viewport = document.createElement("div");
+        viewport.className = "minimap-viewport";
+        const width = Math.max(20, (scroll.clientWidth / scroll.scrollWidth) * 100);
+        viewport.style.width = `${width}%`;
+        viewport.style.left = `${ratio * (100 - width)}%`;
+        track.appendChild(viewport);
+      });
+    }
+
+    function formatDate(dateStr) {
+      const date = new Date(dateStr);
+      return date.toLocaleString();
+    }
+
+    function normalizeWeight(weight) {
+      const min = 420;
+      const max = 560;
+      const clamped = Math.min(Math.max(weight, min), max);
+      return 0.9 + ((clamped - min) / (max - min)) * 0.2;
+    }
+
+    function switchTab(tab) {
+      state.viewTab = tab;
+      document.querySelectorAll(".tab-btn").forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.tab === tab);
+      });
+      document.querySelectorAll(".view").forEach((view) => {
+        view.classList.toggle("active", view.id === `view-${tab}`);
+      });
+    }
+
+    function bindEvents() {
+      elements.backToList.addEventListener("click", () => {
+        elements.raceDetail.style.display = "none";
+        elements.raceList.style.display = "grid";
+      });
+      elements.dateFilter.addEventListener("change", renderRaceList);
+      elements.trackFilter.addEventListener("change", renderRaceList);
+      Object.values(elements.toggles).forEach((toggle) => {
+        toggle.addEventListener("change", () => {
+          renderLanes();
+        });
+      });
+      elements.compareLatest.addEventListener("click", compareLatest);
+      elements.adminForm.addEventListener("submit", handleAdminSubmit);
+      elements.lanesScroll.addEventListener("scroll", updateMinimapViewport);
+      document.querySelectorAll(".tab-btn").forEach((btn) => {
+        btn.addEventListener("click", () => switchTab(btn.dataset.tab));
+      });
+    }
+
+    seedData();
+    loadRaces();
+    bindEvents();
+  </script>
+</body>
+</html>
