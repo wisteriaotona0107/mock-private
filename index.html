@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>レース表示モック</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #030909;
+      --panel: #071515;
+      --neon-green: #6bff8a;
+      --neon-cyan: #42f2f7;
+      --neon-pink: #ff5ef7;
+      --text: #e7fff5;
+      --muted: #89a9a3;
+      --border: #164c48;
+      --focus: #f1ff7a;
+      --danger: #ff7b7b;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      position: relative;
+      letter-spacing: 0.02em;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(
+          rgba(10, 32, 32, 0.55),
+          rgba(10, 32, 32, 0.55)
+        ),
+        repeating-linear-gradient(
+          0deg,
+          rgba(0, 0, 0, 0.2) 0px,
+          rgba(0, 0, 0, 0.2) 1px,
+          rgba(0, 0, 0, 0) 2px,
+          rgba(0, 0, 0, 0) 4px
+        );
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+
+    header {
+      padding: 24px 32px 16px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(5, 15, 15, 0.8);
+      backdrop-filter: blur(4px);
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+
+    header h1 {
+      margin: 0 0 8px;
+      font-size: 24px;
+      color: var(--neon-cyan);
+      text-shadow: 0 0 12px rgba(66, 242, 247, 0.6);
+    }
+
+    header .race-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 24px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .container {
+      padding: 24px 32px 64px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tab-button {
+      padding: 10px 18px;
+      border: 1px solid transparent;
+      border-bottom: none;
+      background: transparent;
+      color: var(--muted);
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 8px 8px 0 0;
+    }
+
+    .tab-button[aria-selected="true"] {
+      color: var(--neon-green);
+      border-color: var(--border);
+      background: rgba(9, 34, 34, 0.85);
+      box-shadow: 0 0 14px rgba(107, 255, 138, 0.25);
+    }
+
+    .tab-button:focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    .panel {
+      background: rgba(6, 20, 20, 0.85);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .panel[hidden] {
+      display: none;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 16px;
+      margin-bottom: 16px;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    select,
+    input,
+    textarea,
+    button {
+      font: inherit;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: #041313;
+      color: var(--text);
+      padding: 8px 10px;
+    }
+
+    select:focus-visible,
+    input:focus-visible,
+    textarea:focus-visible,
+    button:focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    button {
+      cursor: pointer;
+      transition: transform 0.1s ease, box-shadow 0.2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 12px rgba(66, 242, 247, 0.35);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 600px;
+      font-size: 14px;
+    }
+
+    thead {
+      background: rgba(5, 25, 25, 0.8);
+    }
+
+    th,
+    td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid rgba(21, 76, 72, 0.6);
+    }
+
+    th {
+      color: var(--neon-cyan);
+      font-weight: 600;
+    }
+
+    tbody tr:hover {
+      background: rgba(11, 35, 35, 0.7);
+    }
+
+    .waku-chip {
+      width: 10px;
+      height: 100%;
+      border-radius: 6px;
+      display: inline-block;
+      margin-right: 8px;
+    }
+
+    .waku-cell {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .blink {
+      position: relative;
+    }
+
+    .blink::after {
+      content: "";
+      position: absolute;
+      inset: 2px;
+      border: 2px solid var(--neon-pink);
+      border-radius: 8px;
+      animation: blink 1.2s infinite;
+      pointer-events: none;
+      box-shadow: 0 0 12px rgba(255, 94, 247, 0.6);
+    }
+
+    @keyframes blink {
+      0%,
+      100% {
+        opacity: 0.3;
+      }
+      50% {
+        opacity: 1;
+      }
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 6, 0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+    }
+
+    .modal[aria-hidden="false"] {
+      display: flex;
+    }
+
+    .modal-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      min-width: 280px;
+      max-width: 400px;
+      box-shadow: 0 0 24px rgba(66, 242, 247, 0.35);
+    }
+
+    .modal-card h3 {
+      margin-top: 0;
+      color: var(--neon-cyan);
+    }
+
+    .modal-card button {
+      margin-top: 16px;
+    }
+
+    .graph-controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+    }
+
+    canvas {
+      width: 100%;
+      max-width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #020909;
+    }
+
+    .admin-layout {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 16px;
+    }
+
+    .error-list {
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 123, 123, 0.4);
+      background: rgba(80, 10, 10, 0.3);
+      color: var(--danger);
+      min-height: 120px;
+      font-size: 13px;
+    }
+
+    .success {
+      color: var(--neon-green);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(66, 242, 247, 0.15);
+      color: var(--neon-cyan);
+      font-size: 12px;
+      margin-left: 6px;
+    }
+
+    @media (max-width: 900px) {
+      .admin-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>レース表示モック <span class="badge" id="race-grade">GIII</span></h1>
+    <div class="race-meta" id="race-meta"></div>
+  </header>
+
+  <main class="container">
+    <div class="tabs" role="tablist" aria-label="表示切替">
+      <button class="tab-button" role="tab" id="tab-race" aria-controls="panel-race" aria-selected="true">レース表示</button>
+      <button class="tab-button" role="tab" id="tab-graph" aria-controls="panel-graph" aria-selected="false">グラフ表示</button>
+      <button class="tab-button" role="tab" id="tab-admin" aria-controls="panel-admin" aria-selected="false">管理(JSON入力)</button>
+    </div>
+
+    <section class="panel" id="panel-race" role="tabpanel" aria-labelledby="tab-race">
+      <div class="controls">
+        <div class="control-group">
+          <label for="sort-select">ソート</label>
+          <select id="sort-select">
+            <option value="ninki">人気順</option>
+            <option value="umaban">馬番順</option>
+            <option value="odds-asc">オッズ昇順</option>
+            <option value="odds-desc">オッズ降順</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label for="waku-filter">枠フィルタ</label>
+          <select id="waku-filter">
+            <option value="all">すべて</option>
+            <option value="1">1枠</option>
+            <option value="2">2枠</option>
+            <option value="3">3枠</option>
+            <option value="4">4枠</option>
+            <option value="5">5枠</option>
+            <option value="6">6枠</option>
+            <option value="7">7枠</option>
+            <option value="8">8枠</option>
+          </select>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table aria-label="出馬表">
+          <thead>
+            <tr>
+              <th>枠</th>
+              <th>馬番</th>
+              <th>馬名</th>
+              <th>騎手</th>
+              <th>人気</th>
+              <th>オッズ</th>
+            </tr>
+          </thead>
+          <tbody id="race-table-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-graph" role="tabpanel" aria-labelledby="tab-graph" hidden>
+      <div class="controls graph-controls">
+        <div class="control-group">
+          <label for="top-filter">人気上位</label>
+          <select id="top-filter">
+            <option value="1">1位のみ</option>
+            <option value="3">3位まで</option>
+            <option value="5">5位まで</option>
+            <option value="10">10位まで</option>
+            <option value="all" selected>全頭</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label for="scale-toggle">スケール</label>
+          <select id="scale-toggle">
+            <option value="linear">線形</option>
+            <option value="log">対数</option>
+          </select>
+        </div>
+      </div>
+      <canvas id="odds-chart" width="900" height="520" aria-label="オッズグラフ" role="img"></canvas>
+    </section>
+
+    <section class="panel" id="panel-admin" role="tabpanel" aria-labelledby="tab-admin" hidden>
+      <div class="admin-layout">
+        <div>
+          <label for="json-input">JSON入力</label>
+          <textarea id="json-input" rows="20"></textarea>
+          <div class="controls" style="margin-top: 12px;">
+            <button id="validate-btn">検証</button>
+            <button id="apply-btn">反映</button>
+          </div>
+        </div>
+        <div>
+          <h3 style="margin-top: 0; color: var(--neon-cyan);">検証結果</h3>
+          <div class="error-list" id="error-list">ここにエラーが表示されます。</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal" id="horse-modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-card" role="document">
+      <h3 id="modal-title">馬情報</h3>
+      <div id="modal-body"></div>
+      <button id="modal-close">閉じる</button>
+    </div>
+  </div>
+
+  <script>
+    const SAMPLE_JSON = {
+      "race": {
+        "date": "2026-02-01",
+        "track": "京都",
+        "race_no": 11,
+        "name": "シルクロードS",
+        "grade": "GIII",
+        "surface": "芝",
+        "distance_m": 1200,
+        "odds_timestamp": "13:44"
+      },
+      "horses": [
+        { "waku": 1, "umaban": 1, "name": "アブキールベイ", "odds": 25.1, "ninki": 10, "jockey": "吉村誠之助" },
+        { "waku": 1, "umaban": 2, "name": "ダノンマッキンリー", "odds": 14.4, "ninki": 9, "jockey": "高杉吏麒" },
+        { "waku": 2, "umaban": 3, "name": "アルテヴェローチェ", "odds": 71.9, "ninki": 15, "jockey": "国分優作" },
+        { "waku": 2, "umaban": 4, "name": "カルブスペルシュ", "odds": 5.1, "ninki": 2, "jockey": "横山武史" },
+        { "waku": 3, "umaban": 5, "name": "ウインアイオライト", "odds": 45.7, "ninki": 12, "jockey": "高倉稜" },
+        { "waku": 3, "umaban": 6, "name": "ヤマニンアルリフラ", "odds": 13.5, "ninki": 7, "jockey": "団野大成" },
+        { "waku": 4, "umaban": 7, "name": "オタルエバー", "odds": 73.9, "ninki": 16, "jockey": "幸英明" },
+        { "waku": 4, "umaban": 8, "name": "イコサン", "odds": 36.9, "ninki": 11, "jockey": "斎藤新" },
+        { "waku": 5, "umaban": 9, "name": "ビッグシーザー", "odds": 14.1, "ninki": 8, "jockey": "北村友一" },
+        { "waku": 5, "umaban": 10, "name": "ナムラアトム", "odds": 60.6, "ninki": 13, "jockey": "菱田裕二" },
+        { "waku": 6, "umaban": 11, "name": "ヤブサメ", "odds": 6.2, "ninki": 3, "jockey": "武豊" },
+        { "waku": 6, "umaban": 12, "name": "エーティーマクフィ", "odds": 10.7, "ninki": 4, "jockey": "富田暁" },
+        { "waku": 7, "umaban": 13, "name": "エイシンフェンサー", "odds": 12.4, "ninki": 6, "jockey": "川又賢治" },
+        { "waku": 7, "umaban": 14, "name": "フィオライア", "odds": 77.8, "ninki": 17, "jockey": "太宰啓介" },
+        { "waku": 7, "umaban": 15, "name": "カリボール", "odds": 107.7, "ninki": 18, "jockey": "酒井学" },
+        { "waku": 8, "umaban": 16, "name": "ロードフォアエース", "odds": 3.9, "ninki": 1, "jockey": "岩田望来" },
+        { "waku": 8, "umaban": 17, "name": "レイピア", "odds": 11.4, "ninki": 5, "jockey": "佐々木大輔" },
+        { "waku": 8, "umaban": 18, "name": "エコロレジーナ", "odds": 64.3, "ninki": 14, "jockey": "池添謙一" }
+      ]
+    };
+
+    const STORAGE_KEY = "race_mock_data";
+    const wakuColors = {
+      1: "#ffffff",
+      2: "#222222",
+      3: "#ff4b4b",
+      4: "#4b8bff",
+      5: "#f1d34c",
+      6: "#3fd07f",
+      7: "#f08cff",
+      8: "#ff7a24"
+    };
+
+    const state = {
+      data: SAMPLE_JSON,
+      sort: "ninki",
+      wakuFilter: "all",
+      topFilter: "all",
+      scale: "linear"
+    };
+
+    const tabs = Array.from(document.querySelectorAll(".tab-button"));
+    const panels = Array.from(document.querySelectorAll(".panel"));
+    const tableBody = document.getElementById("race-table-body");
+    const raceMeta = document.getElementById("race-meta");
+    const raceGrade = document.getElementById("race-grade");
+    const jsonInput = document.getElementById("json-input");
+    const errorList = document.getElementById("error-list");
+    const modal = document.getElementById("horse-modal");
+    const modalTitle = document.getElementById("modal-title");
+    const modalBody = document.getElementById("modal-body");
+    const modalClose = document.getElementById("modal-close");
+    const canvas = document.getElementById("odds-chart");
+    const ctx = canvas.getContext("2d");
+
+    function loadStoredData() {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored);
+          const result = validateData(parsed);
+          if (result.valid) {
+            state.data = parsed;
+            return;
+          }
+        } catch (err) {
+          console.warn("Stored data invalid:", err);
+        }
+      }
+      state.data = SAMPLE_JSON;
+    }
+
+    function validateData(data) {
+      const errors = [];
+      if (!data || typeof data !== "object") {
+        errors.push("root: JSONはオブジェクトである必要があります。");
+        return { valid: false, errors };
+      }
+      if (!data.race || typeof data.race !== "object") {
+        errors.push("race: レース情報が欠落しています。");
+      }
+      if (!Array.isArray(data.horses)) {
+        errors.push("horses: 配列が必要です。");
+      }
+
+      if (data.race) {
+        const race = data.race;
+        const requiredRaceKeys = [
+          "date",
+          "track",
+          "race_no",
+          "name",
+          "grade",
+          "surface",
+          "distance_m",
+          "odds_timestamp"
+        ];
+        requiredRaceKeys.forEach((key) => {
+          if (!(key in race)) {
+            errors.push(`race.${key}: 必須キーがありません。`);
+          }
+        });
+
+        if ("race_no" in race && (!Number.isInteger(race.race_no) || race.race_no < 1 || race.race_no > 12)) {
+          errors.push("race.race_no: 1〜12の整数である必要があります。");
+        }
+        if ("distance_m" in race && (typeof race.distance_m !== "number" || race.distance_m < 800 || race.distance_m > 4000)) {
+          errors.push("race.distance_m: 800〜4000の数値である必要があります。");
+        }
+      }
+
+      if (Array.isArray(data.horses)) {
+        data.horses.forEach((horse, index) => {
+          if (!horse || typeof horse !== "object") {
+            errors.push(`horses[${index}]: オブジェクトが必要です。`);
+            return;
+          }
+          const requiredHorseKeys = ["waku", "umaban", "name", "odds", "ninki", "jockey"];
+          requiredHorseKeys.forEach((key) => {
+            if (!(key in horse)) {
+              errors.push(`horses[${index}].${key}: 必須キーがありません。`);
+            }
+          });
+          if ("waku" in horse && (!Number.isInteger(horse.waku) || horse.waku < 1 || horse.waku > 8)) {
+            errors.push(`horses[${index}].waku: 1〜8の整数である必要があります。`);
+          }
+          if ("umaban" in horse && (!Number.isInteger(horse.umaban) || horse.umaban < 1 || horse.umaban > 18)) {
+            errors.push(`horses[${index}].umaban: 1〜18の整数である必要があります。`);
+          }
+          if ("ninki" in horse && (!Number.isInteger(horse.ninki) || horse.ninki < 1 || horse.ninki > 18)) {
+            errors.push(`horses[${index}].ninki: 1〜18の整数である必要があります。`);
+          }
+          if ("odds" in horse && (typeof horse.odds !== "number" || horse.odds <= 0)) {
+            errors.push(`horses[${index}].odds: 0より大きい数値である必要があります。`);
+          }
+        });
+      }
+
+      return { valid: errors.length === 0, errors };
+    }
+
+    function renderRaceMeta() {
+      const race = state.data.race;
+      raceGrade.textContent = race.grade || "";
+      raceMeta.innerHTML = `
+        <span>${race.date || ""}</span>
+        <span>${race.track || ""}</span>
+        <span>${race.race_no || ""}R</span>
+        <span>${race.name || ""}</span>
+        <span>${race.surface || ""}${race.distance_m || ""}m</span>
+        <span>オッズ更新 ${race.odds_timestamp || ""}</span>
+      `;
+    }
+
+    function getFilteredHorses() {
+      let horses = [...state.data.horses];
+      if (state.wakuFilter !== "all") {
+        horses = horses.filter((horse) => horse.waku === Number(state.wakuFilter));
+      }
+      switch (state.sort) {
+        case "umaban":
+          horses.sort((a, b) => a.umaban - b.umaban);
+          break;
+        case "odds-asc":
+          horses.sort((a, b) => a.odds - b.odds);
+          break;
+        case "odds-desc":
+          horses.sort((a, b) => b.odds - a.odds);
+          break;
+        default:
+          horses.sort((a, b) => a.ninki - b.ninki);
+      }
+      return horses;
+    }
+
+    function renderTable() {
+      tableBody.innerHTML = "";
+      const horses = getFilteredHorses();
+      horses.forEach((horse) => {
+        const row = document.createElement("tr");
+        if (horse.ninki === 1) {
+          row.classList.add("blink");
+        }
+        row.innerHTML = `
+          <td>
+            <div class="waku-cell">
+              <span class="waku-chip" style="background:${wakuColors[horse.waku] || "#fff"}"></span>
+              ${horse.waku}
+            </div>
+          </td>
+          <td>${horse.umaban}</td>
+          <td>${horse.name}</td>
+          <td>${horse.jockey}</td>
+          <td>${horse.ninki}</td>
+          <td>${horse.odds.toFixed(1)}</td>
+        `;
+        row.addEventListener("click", () => openModal(horse));
+        row.tabIndex = 0;
+        row.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            openModal(horse);
+          }
+        });
+        tableBody.appendChild(row);
+      });
+    }
+
+    function openModal(horse) {
+      modalTitle.textContent = horse.name;
+      modalBody.innerHTML = `
+        <p>騎手: ${horse.jockey}</p>
+        <p>人気: ${horse.ninki}位</p>
+        <p>オッズ: ${horse.odds.toFixed(1)}</p>
+        <p>枠/馬番: ${horse.waku}-${horse.umaban}</p>
+      `;
+      modal.setAttribute("aria-hidden", "false");
+      modalClose.focus();
+    }
+
+    function closeModal() {
+      modal.setAttribute("aria-hidden", "true");
+    }
+
+    function renderGraph() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const horses = [...state.data.horses].sort((a, b) => a.ninki - b.ninki);
+      const topValue = state.topFilter === "all" ? horses.length : Number(state.topFilter);
+      const filtered = horses.slice(0, topValue);
+      const oddsValues = filtered.map((horse) => horse.odds);
+      const maxOdds = Math.max(...oddsValues, 1);
+
+      const padding = { top: 40, left: 120, right: 40, bottom: 40 };
+      const barHeight = (canvas.height - padding.top - padding.bottom) / Math.max(filtered.length, 1) - 6;
+
+      ctx.fillStyle = "#0a1f1f";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.strokeStyle = "rgba(66, 242, 247, 0.3)";
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 5; i++) {
+        const x = padding.left + ((canvas.width - padding.left - padding.right) / 5) * i;
+        ctx.beginPath();
+        ctx.moveTo(x, padding.top - 10);
+        ctx.lineTo(x, canvas.height - padding.bottom);
+        ctx.stroke();
+      }
+
+      ctx.font = "13px 'Segoe UI'";
+      ctx.fillStyle = "#8df7f7";
+      ctx.fillText("オッズ", padding.left, 24);
+
+      filtered.forEach((horse, index) => {
+        const baseY = padding.top + index * (barHeight + 6);
+        const barWidth = calculateBarWidth(horse.odds, maxOdds, padding);
+        ctx.fillStyle = wakuColors[horse.waku] || "#42f2f7";
+        ctx.fillRect(padding.left, baseY, barWidth, barHeight);
+        ctx.fillStyle = "#e7fff5";
+        ctx.fillText(`${horse.ninki}位 ${horse.name}`, 16, baseY + barHeight * 0.7);
+        ctx.fillText(horse.odds.toFixed(1), padding.left + barWidth + 8, baseY + barHeight * 0.7);
+      });
+    }
+
+    function calculateBarWidth(odds, maxOdds, padding) {
+      const available = canvas.width - padding.left - padding.right;
+      if (state.scale === "log") {
+        const logMax = Math.log10(maxOdds + 1);
+        return (Math.log10(odds + 1) / logMax) * available;
+      }
+      return (odds / maxOdds) * available;
+    }
+
+    function setActiveTab(tabId) {
+      tabs.forEach((tab) => {
+        const selected = tab.id === tabId;
+        tab.setAttribute("aria-selected", String(selected));
+      });
+      panels.forEach((panel) => {
+        panel.hidden = panel.getAttribute("aria-labelledby") !== tabId;
+      });
+    }
+
+    function renderAll() {
+      renderRaceMeta();
+      renderTable();
+      renderGraph();
+      jsonInput.value = JSON.stringify(state.data, null, 2);
+    }
+
+    function showErrors(messages, successMessage) {
+      if (messages.length === 0) {
+        errorList.innerHTML = `<span class="success">${successMessage}</span>`;
+        return;
+      }
+      const list = messages.map((msg) => `<li>${msg}</li>`).join("");
+      errorList.innerHTML = `<ul>${list}</ul>`;
+    }
+
+    document.getElementById("sort-select").addEventListener("change", (event) => {
+      state.sort = event.target.value;
+      renderTable();
+    });
+
+    document.getElementById("waku-filter").addEventListener("change", (event) => {
+      state.wakuFilter = event.target.value;
+      renderTable();
+    });
+
+    document.getElementById("top-filter").addEventListener("change", (event) => {
+      state.topFilter = event.target.value;
+      renderGraph();
+    });
+
+    document.getElementById("scale-toggle").addEventListener("change", (event) => {
+      state.scale = event.target.value;
+      renderGraph();
+    });
+
+    document.getElementById("validate-btn").addEventListener("click", () => {
+      try {
+        const parsed = JSON.parse(jsonInput.value);
+        const result = validateData(parsed);
+        showErrors(result.errors, "検証OK: 問題ありません。");
+      } catch (err) {
+        showErrors(["JSON.parse: 無効なJSONです。"], "");
+      }
+    });
+
+    document.getElementById("apply-btn").addEventListener("click", () => {
+      try {
+        const parsed = JSON.parse(jsonInput.value);
+        const result = validateData(parsed);
+        if (result.valid) {
+          state.data = parsed;
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
+          renderAll();
+          showErrors([], "反映しました。");
+        } else {
+          showErrors(result.errors, "");
+        }
+      } catch (err) {
+        showErrors(["JSON.parse: 無効なJSONです。"], "");
+      }
+    });
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => setActiveTab(tab.id));
+      tab.addEventListener("keydown", (event) => {
+        if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
+          const currentIndex = tabs.indexOf(tab);
+          const delta = event.key === "ArrowRight" ? 1 : -1;
+          const nextIndex = (currentIndex + delta + tabs.length) % tabs.length;
+          tabs[nextIndex].focus();
+          setActiveTab(tabs[nextIndex].id);
+        }
+      });
+    });
+
+    modalClose.addEventListener("click", closeModal);
+    modal.addEventListener("click", (event) => {
+      if (event.target === modal) {
+        closeModal();
+      }
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && modal.getAttribute("aria-hidden") === "false") {
+        closeModal();
+      }
+    });
+
+    loadStoredData();
+    renderAll();
+  </script>
+</body>
+</html>
