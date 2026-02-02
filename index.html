@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sequence Evidence Mock</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f7fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --accent: #2563eb;
+      --border: #e5e7eb;
+      --danger: #dc2626;
+      --warning: #f59e0b;
+      --success: #16a34a;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    header h1 {
+      font-size: 20px;
+      margin: 0;
+    }
+    main {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 16px;
+      padding: 16px 24px 32px;
+    }
+    .card {
+      background: var(--card);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .card h2 {
+      font-size: 16px;
+      margin: 0 0 12px;
+    }
+    .muted {
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    label {
+      font-size: 12px;
+      font-weight: 600;
+      display: block;
+      margin-bottom: 4px;
+    }
+    input, select, textarea, button {
+      font: inherit;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #fff;
+    }
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+    button {
+      border: none;
+      border-radius: 8px;
+      padding: 8px 12px;
+      cursor: pointer;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 600;
+    }
+    button.secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+    button.danger {
+      background: var(--danger);
+    }
+    button:disabled {
+      background: #9ca3af;
+      cursor: not-allowed;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    th, td {
+      border-bottom: 1px solid var(--border);
+      padding: 8px 6px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: #f8fafc;
+      font-size: 12px;
+    }
+    .badge {
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      display: inline-block;
+    }
+    .badge.locked { background: #fee2e2; color: #b91c1c; }
+    .badge.unlocked { background: #dcfce7; color: #15803d; }
+    .badge.ok { background: #dcfce7; color: #15803d; }
+    .badge.ng { background: #fee2e2; color: #b91c1c; }
+    .badge.pending { background: #fef3c7; color: #92400e; }
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .list-item {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      background: #fff;
+    }
+    .list-item.active {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+    }
+    .list-item h3 {
+      margin: 0 0 6px;
+      font-size: 14px;
+    }
+    .error {
+      color: var(--danger);
+      font-size: 12px;
+    }
+    .success {
+      color: var(--success);
+      font-size: 12px;
+    }
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .tabs button {
+      background: #e5e7eb;
+      color: #111827;
+    }
+    .tabs button.active {
+      background: var(--accent);
+      color: #fff;
+    }
+    .evidence-table td {
+      font-size: 12px;
+    }
+    .link-like {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Sequence Evidence Mock</h1>
+    <div>
+      <label for="userSelect">ユーザー切替</label>
+      <select id="userSelect"></select>
+    </div>
+  </header>
+  <main>
+    <section>
+      <div class="card">
+        <h2>図一覧</h2>
+        <div class="list" id="diagramList"></div>
+      </div>
+      <div class="card">
+        <h2>新規作成</h2>
+        <label for="newDiagramName">図名</label>
+        <input id="newDiagramName" placeholder="図名を入力" />
+        <div class="row" style="margin-top:8px;">
+          <button id="createDiagramBtn">新規作成</button>
+        </div>
+        <p class="muted">作成後、右側でMermaidテキストを登録してください。</p>
+      </div>
+    </section>
+    <section>
+      <div class="card">
+        <div class="section-title">
+          <h2>図作成 / 更新</h2>
+          <span id="lockBadge" class="badge unlocked">Unlocked</span>
+        </div>
+        <div class="split">
+          <div>
+            <label for="diagramName">図名</label>
+            <input id="diagramName" disabled />
+          </div>
+          <div>
+            <label for="versionMemo">versionメモ</label>
+            <input id="versionMemo" placeholder="変更内容や理由" />
+          </div>
+        </div>
+        <label for="mermaidInput" style="margin-top:12px;">Mermaidテキスト</label>
+        <textarea id="mermaidInput" placeholder="sequenceDiagram..."></textarea>
+        <div class="row" style="margin-top:8px;">
+          <button id="saveVersionBtn">保存（新version作成）</button>
+          <button id="lockToggleBtn" class="secondary">ロック/解除</button>
+        </div>
+        <p id="versionMessage" class="error"></p>
+      </div>
+      <div class="card">
+        <div class="section-title">
+          <h2>図詳細</h2>
+          <select id="statusFilter">
+            <option value="all">判定ステータス: 全て</option>
+            <option value="OK">OK</option>
+            <option value="NG">NG</option>
+            <option value="保留">保留</option>
+          </select>
+        </div>
+        <p class="muted" id="mermaidDisplay"></p>
+        <table>
+          <thead>
+            <tr>
+              <th>stepNo</th>
+              <th>sender</th>
+              <th>receiver</th>
+              <th>message</th>
+              <th>judgmentStatus</th>
+              <th>evidenceCounts</th>
+            </tr>
+          </thead>
+          <tbody id="stepTableBody"></tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="tabs">
+          <button data-tab="step" class="active">ステップ詳細</button>
+          <button data-tab="audit">監査ログ</button>
+        </div>
+        <div id="tab-step">
+          <div id="stepDetail"></div>
+        </div>
+        <div id="tab-audit" style="display:none;">
+          <div id="auditLog"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script>
+    const STORAGE_KEY = "seq_evidence_mock_v1";
+    const users = [
+      { email: "admin@example.com", role: "ADMIN" },
+      { email: "tester@example.com", role: "TESTER" }
+    ];
+
+    let state = {
+      currentUser: users[0],
+      diagrams: [],
+      auditLogs: [],
+      selectedDiagramId: null,
+      selectedStepId: null,
+      statusFilter: "all"
+    };
+
+    const elements = {
+      userSelect: document.getElementById("userSelect"),
+      diagramList: document.getElementById("diagramList"),
+      newDiagramName: document.getElementById("newDiagramName"),
+      createDiagramBtn: document.getElementById("createDiagramBtn"),
+      diagramName: document.getElementById("diagramName"),
+      versionMemo: document.getElementById("versionMemo"),
+      mermaidInput: document.getElementById("mermaidInput"),
+      saveVersionBtn: document.getElementById("saveVersionBtn"),
+      lockToggleBtn: document.getElementById("lockToggleBtn"),
+      lockBadge: document.getElementById("lockBadge"),
+      versionMessage: document.getElementById("versionMessage"),
+      mermaidDisplay: document.getElementById("mermaidDisplay"),
+      stepTableBody: document.getElementById("stepTableBody"),
+      stepDetail: document.getElementById("stepDetail"),
+      statusFilter: document.getElementById("statusFilter"),
+      auditLog: document.getElementById("auditLog")
+    };
+
+    function generateId(prefix) {
+      return `${prefix}_${Math.random().toString(36).slice(2, 10)}`;
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        diagrams: state.diagrams,
+        auditLogs: state.auditLogs
+      }));
+    }
+
+    function loadState() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        state.diagrams = parsed.diagrams || [];
+        state.auditLogs = parsed.auditLogs || [];
+      } else {
+        seedTestData();
+      }
+      if (state.diagrams.length > 0) {
+        state.selectedDiagramId = state.diagrams[0].id;
+        const version = getCurrentVersion();
+        state.selectedStepId = version?.steps[0]?.id || null;
+      }
+    }
+
+    function seedTestData() {
+      const diagramId = generateId("diagram");
+      const versionId = generateId("version");
+      const mermaidText = `sequenceDiagram\nparticipant Client\nparticipant API\nparticipant DB\nClient->>API: POST /orders\nAPI->>DB: INSERT order\nDB-->>API: OK\nAPI-->>Client: 201 Created`;
+      const steps = extractSteps(mermaidText);
+      steps[0].inputEvidences.push({
+        id: generateId("evidence"),
+        name: "注文リクエスト",
+        relativePath: "requests/order.json",
+        memo: "初期テストデータ"
+      });
+      steps[1].judgment = { status: "保留", comment: "" };
+      steps[3].outputEvidences.push({
+        id: generateId("evidence"),
+        name: "レスポンス",
+        relativePath: "responses/201.json",
+        memo: "初期テストデータ"
+      });
+      state.diagrams = [{
+        id: diagramId,
+        name: "サンプルAPI連携",
+        versions: [{
+          id: versionId,
+          versionNo: 1,
+          memo: "初期版",
+          mermaidText,
+          locked: false,
+          createdAt: new Date().toISOString(),
+          createdBy: "admin@example.com",
+          steps
+        }],
+        currentVersionId: versionId
+      }];
+      state.auditLogs = [];
+      saveState();
+    }
+
+    function extractSteps(text) {
+      const lines = text.split(/\n/);
+      const steps = [];
+      lines.forEach((line, index) => {
+        const match = line.match(/^(.*?)\s*(?:-->>|->>)\s*(.*?)\s*:\s*(.*)$/);
+        if (match) {
+          steps.push({
+            id: generateId("step"),
+            stepNo: steps.length + 1,
+            sender: match[1].trim(),
+            receiver: match[2].trim(),
+            message: match[3].trim(),
+            rawLine: line,
+            sourceLineNo: index + 1,
+            inputEvidences: [],
+            outputEvidences: [],
+            judgment: { status: "", comment: "" }
+          });
+        }
+      });
+      return steps;
+    }
+
+    function getSelectedDiagram() {
+      return state.diagrams.find(diagram => diagram.id === state.selectedDiagramId);
+    }
+
+    function getCurrentVersion() {
+      const diagram = getSelectedDiagram();
+      if (!diagram) return null;
+      return diagram.versions.find(version => version.id === diagram.currentVersionId) || null;
+    }
+
+    function addAuditLog(action, targetType, targetId, diff) {
+      state.auditLogs.unshift({
+        id: generateId("audit"),
+        action,
+        targetType,
+        targetId,
+        user: state.currentUser.email,
+        timestamp: new Date().toISOString(),
+        diff
+      });
+      saveState();
+    }
+
+    function setMessage(text, isError = true) {
+      elements.versionMessage.textContent = text;
+      elements.versionMessage.className = isError ? "error" : "success";
+    }
+
+    function isLocked() {
+      const version = getCurrentVersion();
+      return version?.locked;
+    }
+
+    function ensureUnlocked() {
+      if (isLocked()) {
+        setMessage("ロック中のため編集できません。", true);
+        return false;
+      }
+      return true;
+    }
+
+    function ensureAdmin() {
+      return state.currentUser.role === "ADMIN";
+    }
+
+    function renderUserSelect() {
+      elements.userSelect.innerHTML = "";
+      users.forEach(user => {
+        const option = document.createElement("option");
+        option.value = user.email;
+        option.textContent = `${user.email} (${user.role})`;
+        if (user.email === state.currentUser.email) option.selected = true;
+        elements.userSelect.appendChild(option);
+      });
+    }
+
+    function renderDiagramList() {
+      elements.diagramList.innerHTML = "";
+      state.diagrams.forEach(diagram => {
+        const version = diagram.versions.find(v => v.id === diagram.currentVersionId);
+        const wrapper = document.createElement("div");
+        wrapper.className = "list-item" + (diagram.id === state.selectedDiagramId ? " active" : "");
+        const lockBadge = version?.locked ? "<span class=\"badge locked\">Locked</span>" : "<span class=\"badge unlocked\">Unlocked</span>";
+        wrapper.innerHTML = `
+          <h3>${diagram.name}</h3>
+          <p class="muted">最新版: v${version?.versionNo || 0} ${lockBadge}</p>
+          <div class="row">
+            <button class="secondary" data-action="open" data-id="${diagram.id}">開く</button>
+          </div>
+        `;
+        elements.diagramList.appendChild(wrapper);
+      });
+    }
+
+    function renderDiagramDetail() {
+      const diagram = getSelectedDiagram();
+      const version = getCurrentVersion();
+      if (!diagram) {
+        elements.diagramName.value = "";
+        elements.mermaidInput.value = "";
+        elements.mermaidDisplay.textContent = "";
+        elements.stepTableBody.innerHTML = "";
+        elements.stepDetail.innerHTML = "図を選択してください。";
+        return;
+      }
+      elements.diagramName.value = diagram.name;
+      if (!version) {
+        elements.mermaidInput.value = "";
+        elements.mermaidDisplay.textContent = "";
+        elements.stepTableBody.innerHTML = "";
+        elements.stepDetail.innerHTML = "最初のversionを作成してください。";
+        elements.lockBadge.textContent = "Unlocked";
+        elements.lockBadge.className = "badge unlocked";
+        elements.saveVersionBtn.disabled = false;
+        elements.mermaidInput.disabled = false;
+        elements.versionMemo.disabled = false;
+        elements.lockToggleBtn.disabled = true;
+        renderAuditLog();
+        return;
+      }
+      elements.mermaidInput.value = version.mermaidText;
+      elements.mermaidDisplay.textContent = version.mermaidText;
+      const locked = version.locked;
+      elements.lockBadge.textContent = locked ? "Locked" : "Unlocked";
+      elements.lockBadge.className = locked ? "badge locked" : "badge unlocked";
+      elements.saveVersionBtn.disabled = locked;
+      elements.mermaidInput.disabled = locked;
+      elements.versionMemo.disabled = locked;
+      elements.lockToggleBtn.disabled = !ensureAdmin();
+      renderStepTable();
+      renderStepDetail();
+      renderAuditLog();
+    }
+
+    function renderStepTable() {
+      const version = getCurrentVersion();
+      if (!version) return;
+      const rows = version.steps.filter(step => {
+        if (state.statusFilter === "all") return true;
+        return step.judgment.status === state.statusFilter;
+      });
+      elements.stepTableBody.innerHTML = "";
+      rows.forEach(step => {
+        const row = document.createElement("tr");
+        const status = step.judgment.status || "-";
+        row.innerHTML = `
+          <td>${step.stepNo}</td>
+          <td>${step.sender}</td>
+          <td>${step.receiver}</td>
+          <td>${step.message}</td>
+          <td>${renderStatusBadge(status)}</td>
+          <td>IN:${step.inputEvidences.length} / OUT:${step.outputEvidences.length}</td>
+        `;
+        row.addEventListener("click", () => {
+          state.selectedStepId = step.id;
+          renderStepDetail();
+        });
+        elements.stepTableBody.appendChild(row);
+      });
+    }
+
+    function renderStatusBadge(status) {
+      if (status === "OK") return '<span class="badge ok">OK</span>';
+      if (status === "NG") return '<span class="badge ng">NG</span>';
+      if (status === "保留") return '<span class="badge pending">保留</span>';
+      return '<span class="badge">-</span>';
+    }
+
+    function renderStepDetail() {
+      const version = getCurrentVersion();
+      if (!version) return;
+      const step = version.steps.find(s => s.id === state.selectedStepId) || version.steps[0];
+      if (!step) {
+        elements.stepDetail.innerHTML = "ステップがありません。";
+        return;
+      }
+      state.selectedStepId = step.id;
+      const locked = version.locked;
+      const evidenceInputRows = step.inputEvidences.map(ev => renderEvidenceRow(ev, step.id, "input")).join("");
+      const evidenceOutputRows = step.outputEvidences.map(ev => renderEvidenceRow(ev, step.id, "output")).join("");
+      elements.stepDetail.innerHTML = `
+        <div class="card" style="box-shadow:none;border:none;padding:0;">
+          <h3>ステップ情報</h3>
+          <p><strong>Step ${step.stepNo}</strong> (${step.sender} → ${step.receiver})</p>
+          <p>Message: ${step.message}</p>
+          <p class="muted">rawLine: ${step.rawLine}</p>
+          <p class="muted">sourceLineNo: ${step.sourceLineNo}</p>
+          <div class="split">
+            <div>
+              <h4>インプット証跡</h4>
+              <table class="evidence-table">
+                <thead>
+                  <tr><th>名称</th><th>相対パス</th><th>メモ</th><th></th></tr>
+                </thead>
+                <tbody>${evidenceInputRows || "<tr><td colspan=\"4\" class=\"muted\">なし</td></tr>"}</tbody>
+              </table>
+              <div class="row" style="margin-top:8px;">
+                <input placeholder="名称" data-field="name" data-type="input" />
+                <input placeholder="相対パス" data-field="relativePath" data-type="input" />
+                <input placeholder="メモ" data-field="memo" data-type="input" />
+                <button data-action="add-evidence" data-type="input">追加</button>
+              </div>
+            </div>
+            <div>
+              <h4>アウトプット証跡</h4>
+              <table class="evidence-table">
+                <thead>
+                  <tr><th>名称</th><th>相対パス</th><th>メモ</th><th></th></tr>
+                </thead>
+                <tbody>${evidenceOutputRows || "<tr><td colspan=\"4\" class=\"muted\">なし</td></tr>"}</tbody>
+              </table>
+              <div class="row" style="margin-top:8px;">
+                <input placeholder="名称" data-field="name" data-type="output" />
+                <input placeholder="相対パス" data-field="relativePath" data-type="output" />
+                <input placeholder="メモ" data-field="memo" data-type="output" />
+                <button data-action="add-evidence" data-type="output">追加</button>
+              </div>
+            </div>
+          </div>
+          <h4 style="margin-top:12px;">判定フォーム</h4>
+          <div class="row">
+            <select id="judgmentStatus">
+              <option value="">未設定</option>
+              <option value="OK" ${step.judgment.status === "OK" ? "selected" : ""}>OK</option>
+              <option value="NG" ${step.judgment.status === "NG" ? "selected" : ""}>NG</option>
+              <option value="保留" ${step.judgment.status === "保留" ? "selected" : ""}>保留</option>
+            </select>
+            <input id="judgmentComment" placeholder="コメント" value="${step.judgment.comment || ""}" />
+            <button id="saveJudgmentBtn">保存</button>
+          </div>
+          <p class="muted">ロック状態: ${locked ? "ON" : "OFF"}</p>
+        </div>
+      `;
+      if (locked) {
+        elements.stepDetail.querySelectorAll("button, input, select").forEach(el => {
+          if (el.dataset?.action === "open") return;
+          if (el.id === "judgmentStatus" || el.id === "judgmentComment" || el.id === "saveJudgmentBtn") {
+            el.disabled = true;
+            return;
+          }
+          if (el.tagName === "BUTTON" || el.tagName === "INPUT" || el.tagName === "SELECT") {
+            el.disabled = true;
+          }
+        });
+      }
+    }
+
+    function renderEvidenceRow(evidence, stepId, type) {
+      return `
+        <tr>
+          <td>${evidence.name}</td>
+          <td><a class="link-like" href="${evidence.relativePath}" target="_blank">${evidence.relativePath}</a></td>
+          <td>${evidence.memo || ""}</td>
+          <td>
+            <button class="secondary" data-action="edit-evidence" data-id="${evidence.id}" data-step="${stepId}" data-type="${type}">編集</button>
+            <button class="danger" data-action="delete-evidence" data-id="${evidence.id}" data-step="${stepId}" data-type="${type}">削除</button>
+          </td>
+        </tr>
+      `;
+    }
+
+    function renderAuditLog() {
+      const isAdmin = ensureAdmin();
+      if (!isAdmin) {
+        elements.auditLog.innerHTML = "<p class=\"muted\">ADMINのみ閲覧可能です。</p>";
+        return;
+      }
+      if (state.auditLogs.length === 0) {
+        elements.auditLog.innerHTML = "<p class=\"muted\">監査ログはありません。</p>";
+        return;
+      }
+      elements.auditLog.innerHTML = state.auditLogs.map(log => `
+        <div class="list-item">
+          <p><strong>${log.action}</strong> ${log.targetType} (${log.targetId})</p>
+          <p class="muted">${log.user} / ${new Date(log.timestamp).toLocaleString()}</p>
+          <pre class="muted">${JSON.stringify(log.diff, null, 2)}</pre>
+        </div>
+      `).join("");
+    }
+
+    function handleCreateDiagram() {
+      const name = elements.newDiagramName.value.trim();
+      if (!name) return;
+      const diagramId = generateId("diagram");
+      state.diagrams.push({
+        id: diagramId,
+        name,
+        versions: [],
+        currentVersionId: null
+      });
+      state.selectedDiagramId = diagramId;
+      state.selectedStepId = null;
+      elements.newDiagramName.value = "";
+      addAuditLog("CREATE", "diagram", diagramId, { name });
+      saveState();
+      renderAll();
+    }
+
+    function handleSaveVersion() {
+      setMessage("", true);
+      const diagram = getSelectedDiagram();
+      if (!diagram) return;
+      if (!ensureUnlocked()) return;
+      const mermaidText = elements.mermaidInput.value.trim();
+      if (!mermaidText.trimStart().startsWith("sequenceDiagram")) {
+        setMessage("Mermaidの先頭に sequenceDiagram が必要です。", true);
+        return;
+      }
+      const steps = extractSteps(mermaidText);
+      const versionNo = diagram.versions.length + 1;
+      const versionId = generateId("version");
+      const memo = elements.versionMemo.value.trim();
+      const newVersion = {
+        id: versionId,
+        versionNo,
+        memo,
+        mermaidText,
+        locked: false,
+        createdAt: new Date().toISOString(),
+        createdBy: state.currentUser.email,
+        steps
+      };
+      diagram.versions.push(newVersion);
+      diagram.currentVersionId = versionId;
+      state.selectedStepId = steps[0]?.id || null;
+      addAuditLog("CREATE", "version", versionId, { diagramId: diagram.id, versionNo, memo });
+      saveState();
+      setMessage("保存しました。", false);
+      renderAll();
+    }
+
+    function handleLockToggle() {
+      const diagram = getSelectedDiagram();
+      const version = getCurrentVersion();
+      if (!diagram || !version) return;
+      if (!ensureAdmin()) return;
+      version.locked = !version.locked;
+      addAuditLog(version.locked ? "LOCK" : "UNLOCK", "version", version.id, { locked: version.locked });
+      saveState();
+      renderAll();
+    }
+
+    function validateEvidence(payload) {
+      if (!payload.name || !payload.relativePath) {
+        setMessage("証跡の名称と相対パスは必須です。", true);
+        return false;
+      }
+      if (payload.relativePath.includes("://")) {
+        setMessage("相対パスに :// は使用できません。", true);
+        return false;
+      }
+      return true;
+    }
+
+    function handleAddEvidence(type) {
+      setMessage("", true);
+      if (!ensureUnlocked()) return;
+      const version = getCurrentVersion();
+      if (!version) return;
+      const step = version.steps.find(s => s.id === state.selectedStepId);
+      if (!step) return;
+      const inputs = Array.from(elements.stepDetail.querySelectorAll(`input[data-type="${type}"]`));
+      const payload = {
+        name: inputs.find(input => input.dataset.field === "name").value.trim(),
+        relativePath: inputs.find(input => input.dataset.field === "relativePath").value.trim(),
+        memo: inputs.find(input => input.dataset.field === "memo").value.trim()
+      };
+      if (!validateEvidence(payload)) return;
+      const evidence = { id: generateId("evidence"), ...payload };
+      if (type === "input") {
+        step.inputEvidences.push(evidence);
+      } else {
+        step.outputEvidences.push(evidence);
+      }
+      inputs.forEach(input => { input.value = ""; });
+      addAuditLog("CREATE", "evidence", evidence.id, { stepId: step.id, type, payload });
+      saveState();
+      renderAll();
+    }
+
+    function handleEditEvidence(evidenceId, stepId, type) {
+      if (!ensureUnlocked()) return;
+      const version = getCurrentVersion();
+      if (!version) return;
+      const step = version.steps.find(s => s.id === stepId);
+      if (!step) return;
+      const list = type === "input" ? step.inputEvidences : step.outputEvidences;
+      const evidence = list.find(ev => ev.id === evidenceId);
+      if (!evidence) return;
+      const name = prompt("名称", evidence.name) || "";
+      const relativePath = prompt("相対パス", evidence.relativePath) || "";
+      const memo = prompt("メモ", evidence.memo || "") || "";
+      const payload = { name: name.trim(), relativePath: relativePath.trim(), memo: memo.trim() };
+      if (!validateEvidence(payload)) return;
+      Object.assign(evidence, payload);
+      addAuditLog("UPDATE", "evidence", evidence.id, { stepId, type, payload });
+      saveState();
+      renderAll();
+    }
+
+    function handleDeleteEvidence(evidenceId, stepId, type) {
+      if (!ensureUnlocked()) return;
+      const version = getCurrentVersion();
+      if (!version) return;
+      const step = version.steps.find(s => s.id === stepId);
+      if (!step) return;
+      const list = type === "input" ? step.inputEvidences : step.outputEvidences;
+      const idx = list.findIndex(ev => ev.id === evidenceId);
+      if (idx === -1) return;
+      const removed = list.splice(idx, 1)[0];
+      addAuditLog("DELETE", "evidence", evidenceId, { stepId, type, removed });
+      saveState();
+      renderAll();
+    }
+
+    function handleSaveJudgment() {
+      setMessage("", true);
+      if (!ensureUnlocked()) return;
+      const version = getCurrentVersion();
+      if (!version) return;
+      const step = version.steps.find(s => s.id === state.selectedStepId);
+      if (!step) return;
+      const status = elements.stepDetail.querySelector("#judgmentStatus").value;
+      const comment = elements.stepDetail.querySelector("#judgmentComment").value.trim();
+      if (status === "NG" && !comment) {
+        setMessage("NGの場合コメントが必須です。", true);
+        return;
+      }
+      step.judgment = { status, comment };
+      addAuditLog("UPDATE", "judgment", step.id, { status, comment });
+      saveState();
+      renderAll();
+    }
+
+    function bindEvents() {
+      elements.userSelect.addEventListener("change", (event) => {
+        const selected = users.find(user => user.email === event.target.value);
+        if (selected) {
+          state.currentUser = selected;
+          renderAll();
+        }
+      });
+      elements.createDiagramBtn.addEventListener("click", handleCreateDiagram);
+      elements.diagramList.addEventListener("click", (event) => {
+        const button = event.target.closest("button[data-action='open']");
+        if (!button) return;
+        state.selectedDiagramId = button.dataset.id;
+        const version = getCurrentVersion();
+        state.selectedStepId = version?.steps[0]?.id || null;
+        renderAll();
+      });
+      elements.saveVersionBtn.addEventListener("click", handleSaveVersion);
+      elements.lockToggleBtn.addEventListener("click", handleLockToggle);
+      elements.statusFilter.addEventListener("change", (event) => {
+        state.statusFilter = event.target.value;
+        renderStepTable();
+      });
+      document.addEventListener("click", (event) => {
+        const addEvidence = event.target.closest("button[data-action='add-evidence']");
+        if (addEvidence) {
+          handleAddEvidence(addEvidence.dataset.type);
+        }
+        const editEvidence = event.target.closest("button[data-action='edit-evidence']");
+        if (editEvidence) {
+          handleEditEvidence(editEvidence.dataset.id, editEvidence.dataset.step, editEvidence.dataset.type);
+        }
+        const deleteEvidence = event.target.closest("button[data-action='delete-evidence']");
+        if (deleteEvidence) {
+          handleDeleteEvidence(deleteEvidence.dataset.id, deleteEvidence.dataset.step, deleteEvidence.dataset.type);
+        }
+      });
+      document.addEventListener("click", (event) => {
+        if (event.target.id === "saveJudgmentBtn") {
+          handleSaveJudgment();
+        }
+        if (event.target.matches(".tabs button")) {
+          const tab = event.target.dataset.tab;
+          document.querySelectorAll(".tabs button").forEach(btn => btn.classList.toggle("active", btn.dataset.tab === tab));
+          document.getElementById("tab-step").style.display = tab === "step" ? "block" : "none";
+          document.getElementById("tab-audit").style.display = tab === "audit" ? "block" : "none";
+          renderAuditLog();
+        }
+      });
+    }
+
+    function renderAll() {
+      renderUserSelect();
+      renderDiagramList();
+      renderDiagramDetail();
+    }
+
+    loadState();
+    bindEvents();
+    renderAll();
+  </script>
+</body>
+</html>
