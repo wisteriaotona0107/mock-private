@@ -16,31 +16,36 @@ struct StockLotFormView: View {
     @State private var errorMessage: String?
 
     var body: some View {
-        Form {
-            Section("銘柄") {
-                if sakes.isEmpty {
-                    Text("先に銘柄を作成してください。")
-                } else {
-                    Picker("銘柄", selection: $selectedSake) {
-                        Text("選択してください").tag(Optional<Sake>.none)
-                        ForEach(sakes) { sake in
-                            Text(sake.name).tag(Optional(sake))
+        ZStack {
+            WashiBackground()
+
+            Form {
+                Section("銘柄") {
+                    if sakes.isEmpty {
+                        Text("先に銘柄を作成してください。")
+                    } else {
+                        Picker("銘柄", selection: $selectedSake) {
+                            Text("選択してください").tag(Optional<Sake>.none)
+                            ForEach(sakes) { sake in
+                                Text(sake.name).tag(Optional(sake))
+                            }
                         }
                     }
+                    Button("銘柄を新規作成") {
+                        showCreateSake = true
+                    }
                 }
-                Button("銘柄を新規作成") {
-                    showCreateSake = true
-                }
-            }
 
-            Section("在庫情報") {
-                TextField("容量(ml)", text: $bottleSizeMl)
-                    .keyboardType(.numberPad)
-                TextField("保管場所", text: $location)
-                Toggle("開栓済み", isOn: $opened)
-                TextField("残量(ml)", text: $remainingMl)
-                    .keyboardType(.numberPad)
+                Section("在庫情報") {
+                    TextField("容量(ml)", text: $bottleSizeMl)
+                        .keyboardType(.numberPad)
+                    TextField("保管場所", text: $location)
+                    Toggle("開栓済み", isOn: $opened)
+                    TextField("残量(ml)", text: $remainingMl)
+                        .keyboardType(.numberPad)
+                }
             }
+            .scrollContentBackground(.hidden)
         }
         .navigationTitle("在庫追加")
         .toolbar {

@@ -10,7 +10,9 @@ struct InventoryListView: View {
     }
 
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Query private var lots: [StockLot]
+    @Namespace private var cardNamespace
 
     @State private var searchText = ""
     @State private var selectedOpened: Bool?
@@ -50,54 +52,74 @@ struct InventoryListView: View {
     }
 
     var body: some View {
-        List {
-            Section {
-                Picker("開栓", selection: $selectedOpened) {
-                    Text("すべて").tag(Optional<Bool>.none)
-                    Text("未開栓").tag(Optional(false))
-                    Text("開栓済み").tag(Optional(true))
-                }
-                .pickerStyle(.segmented)
+        ZStack {
+            WashiBackground()
 
-                Picker("保管場所", selection: $selectedLocation) {
-                    ForEach(locations, id: \.self) { location in
-                        Text(location).tag(location)
+            List {
+                Section {
+                    Picker("開栓", selection: $selectedOpened) {
+                        Text("すべて").tag(Optional<Bool>.none)
+                        Text("未開栓").tag(Optional(false))
+                        Text("開栓済み").tag(Optional(true))
                     }
-                }
+                    .pickerStyle(.segmented)
 
-                Picker("並び順", selection: $sortMode) {
-                    ForEach(SortMode.allCases) { mode in
-                        Text(mode.rawValue).tag(mode)
-                    }
-                }
-                .pickerStyle(.segmented)
-            }
-
-            if filteredLots.isEmpty {
-                ContentUnavailableView(
-                    "在庫がありません",
-                    systemImage: "shippingbox",
-                    description: Text("右上の追加ボタンから在庫を作成してください。")
-                )
-            } else {
-                ForEach(filteredLots) { lot in
-                    NavigationLink {
-                        StockLotDetailView(lot: lot)
-                    } label: {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(lot.sake.name)
-                                .font(.headline)
-                            Text("場所: \(lot.location ?? "未設定")")
-                            Text("残量: \(lot.remainingMl) / \(lot.bottleSizeMl) ml")
-                            Text(lot.opened ? "開栓済み" : "未開栓")
-                            Text("更新: \(AppFormatters.dateTime.string(from: lot.updatedAt))")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
+                    Picker("保管場所", selection: $selectedLocation) {
+                        ForEach(locations, id: \.self) { location in
+                            Text(location).tag(location)
                         }
                     }
+
+                    Picker("並び順", selection: $sortMode) {
+                        ForEach(SortMode.allCases) { mode in
+                            Text(mode.rawValue).tag(mode)
+                        }
+                    }
+                    .pickerStyle(.segmented)
                 }
-                .onDelete(perform: deleteLots)
+
+                if filteredLots.isEmpty {
+                    EmptyStateView(
+                        title: "在庫がありません",
+                        message: "右上の追加ボタンから在庫を作成してください。",
+                        systemImage: "shippingbox",
+                        actionTitle: "在庫を追加",
+                        action: { showLotForm = true }
+                    )
+                    .listRowSeparator(.hidden)
+                } else {
+                    ForEach(filteredLots) { lot in
+                        NavigationLink {
+                            StockLotDetailView(lot: lot, namespace: cardNamespace)
+                        } label: {
+                            CardContainer {
+                                VStack(alignment: .leading, spacing: Theme.Spacing.xs) {
+                                    Text(lot.sake.name)
+                                        .font(Theme.Typography.headline)
+                                        .foregroundStyle(Theme.Colors.ink)
+                                        .matchedGeometryEffect(id: "title-\(lot.id)", in: cardNamespace)
+                                    Text("場所: \(lot.location ?? "未設定")")
+                                        .font(Theme.Typography.body)
+                                    Text("残量: \(lot.remainingMl) / \(lot.bottleSizeMl) ml")
+                                        .font(Theme.Typography.body)
+                                    Text(lot.opened ? "開栓済み" : "未開栓")
+                                        .font(Theme.Typography.body)
+                                        .foregroundStyle(.secondary)
+                                    Text("更新: \(AppFormatters.dateTime.string(from: lot.updatedAt))")
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
+                        }
+                        .listRowSeparator(.hidden)
+                        .listRowBackground(Color.clear)
+                        .transition(Motion.fadeScale(reduceMotion: reduceMotion).combined(with: .move(edge: .bottom)))
+                    }
+                    .onDelete(perform: deleteLots)
+                }
             }
+            .listStyle(.plain)
+            .scrollContentBackground(.hidden)
         }
         .navigationTitle("日本酒棚卸")
         .searchable(text: $searchText, prompt: "銘柄・蔵元・場所で検索")
@@ -110,6 +132,7 @@ struct InventoryListView: View {
                 }
             }
         }
+        .animation(Motion.emphasizedSpring(reduceMotion: reduceMotion), value: filteredLots)
         .sheet(isPresented: $showLotForm) {
             NavigationStack {
                 StockLotFormView()

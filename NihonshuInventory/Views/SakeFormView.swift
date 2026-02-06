@@ -23,14 +23,19 @@ struct SakeFormView: View {
     }
 
     var body: some View {
-        Form {
-            Section("基本情報") {
-                TextField("銘柄名（必須）", text: $name)
-                TextField("蔵元", text: $brewery)
-                TextField("タイプ", text: $type)
-                TextField("メモ", text: $memo, axis: .vertical)
-                    .lineLimit(3...6)
+        ZStack {
+            WashiBackground()
+
+            Form {
+                Section("基本情報") {
+                    TextField("銘柄名（必須）", text: $name)
+                    TextField("蔵元", text: $brewery)
+                    TextField("タイプ", text: $type)
+                    TextField("メモ", text: $memo, axis: .vertical)
+                        .lineLimit(3...6)
+                }
             }
+            .scrollContentBackground(.hidden)
         }
         .navigationTitle(sake == nil ? "銘柄追加" : "銘柄編集")
         .toolbar {

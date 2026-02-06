@@ -3,6 +3,7 @@ import SwiftData
 
 struct SakeManagementView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Query(sort: \Sake.updatedAt, order: .reverse) private var sakes: [Sake]
 
     @State private var showCreate = false
@@ -10,32 +11,47 @@ struct SakeManagementView: View {
     @State private var errorMessage: String?
 
     var body: some View {
-        List {
-            if sakes.isEmpty {
-                ContentUnavailableView(
-                    "銘柄がありません",
-                    systemImage: "wineglass",
-                    description: Text("右上の追加ボタンから銘柄を登録してください。")
-                )
-            } else {
-                ForEach(sakes) { sake in
-                    Button {
-                        editingSake = sake
-                    } label: {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(sake.name)
-                                .font(.headline)
-                                .foregroundStyle(.primary)
-                            Text("蔵元: \(sake.brewery ?? "未設定")")
-                                .foregroundStyle(.secondary)
-                            Text("更新: \(AppFormatters.dateTime.string(from: sake.updatedAt))")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
+        ZStack {
+            WashiBackground()
+
+            List {
+                if sakes.isEmpty {
+                    EmptyStateView(
+                        title: "銘柄がありません",
+                        message: "右上の追加ボタンから銘柄を登録してください。",
+                        systemImage: "wineglass",
+                        actionTitle: "銘柄を追加",
+                        action: { showCreate = true }
+                    )
+                    .listRowSeparator(.hidden)
+                } else {
+                    ForEach(sakes) { sake in
+                        Button {
+                            editingSake = sake
+                        } label: {
+                            CardContainer {
+                                VStack(alignment: .leading, spacing: Theme.Spacing.xs) {
+                                    Text(sake.name)
+                                        .font(Theme.Typography.headline)
+                                        .foregroundStyle(Theme.Colors.ink)
+                                    Text("蔵元: \(sake.brewery ?? "未設定")")
+                                        .font(Theme.Typography.body)
+                                        .foregroundStyle(.secondary)
+                                    Text("更新: \(AppFormatters.dateTime.string(from: sake.updatedAt))")
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
                         }
+                        .listRowSeparator(.hidden)
+                        .listRowBackground(Color.clear)
+                        .transition(Motion.fadeScale(reduceMotion: reduceMotion).combined(with: .move(edge: .bottom)))
                     }
+                    .onDelete(perform: deleteSake)
                 }
-                .onDelete(perform: deleteSake)
             }
+            .listStyle(.plain)
+            .scrollContentBackground(.hidden)
         }
         .navigationTitle("銘柄管理")
         .toolbar {
@@ -47,6 +63,7 @@ struct SakeManagementView: View {
                 }
             }
         }
+        .animation(Motion.emphasizedSpring(reduceMotion: reduceMotion), value: sakes.count)
         .sheet(isPresented: $showCreate) {
             NavigationStack {
                 SakeFormView()

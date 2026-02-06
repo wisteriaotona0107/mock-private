@@ -17,5 +17,6 @@ struct RootTabView: View {
                 Label("銘柄", systemImage: "wineglass")
             }
         }
+        .tint(Theme.Colors.accent)
     }
 }
