@@ -1,0 +1,46 @@
+{
+  "project": "Embedded Traceability Mock",
+  "updatedAt": "2026-02-07T13:30:00+09:00",
+  "steps": [
+    {
+      "id": "step-01",
+      "title": "UART通信 Failケース",
+      "description": "UARTの送受信でtimeoutとRETRYが発生したケース",
+      "designDetail": "UART RX/TX制御とACK待ち",
+      "evidences": [
+        {
+          "id": "ev-tt-01",
+          "name": "TeraTerm UARTログ",
+          "type": "log",
+          "format": "teraterm",
+          "tool": "TeraTerm",
+          "contentMode": "inline",
+          "relativePath": "logs/uart_fail.log",
+          "createdAt": "2026-02-07T13:21:02+09:00",
+          "extractionHint": "grep -E 'UART|ERROR|RETRY|timeout'",
+          "inlineText": "[2026-02-07 13:21:01.123] UART RX: 0x02 0x10 0x00 0x01\n[2026-02-07 13:21:01.125] UART TX: ACK\n[2026-02-07 13:21:01.450] UART RX: 0x02 0x10 0x00 0x02\n[2026-02-07 13:21:01.998] WARN: frame gap exceeded\n[2026-02-07 13:21:02.004] ERROR: timeout waiting response\n[2026-02-07 13:21:02.110] RETRY: count=1\n[2026-02-07 13:21:02.312] UART TX: 0x06 0x01 0x00 0x01\n[2026-02-07 13:21:02.789] ERROR: CRC mismatch\n[2026-02-07 13:21:03.102] RETRY: count=2\n[2026-02-07 13:21:03.450] UART RX: 0x02 0x10 0x00 0x01\n[2026-02-07 13:21:03.980] UART TX: ACK\n[2026-02-07 13:21:04.201] INFO: session recovered"
+        }
+      ]
+    },
+    {
+      "id": "step-02",
+      "title": "UDP通信 受信確認",
+      "description": "tcpdump -x のhexのみダンプでUDP payloadを確認",
+      "designDetail": "UDP通信とペイロード検証",
+      "evidences": [
+        {
+          "id": "ev-tcp-01",
+          "name": "tcpdump -x ダンプ",
+          "type": "log",
+          "format": "tcpdump_x",
+          "tool": "tcpdump",
+          "contentMode": "inline",
+          "relativePath": "logs/udp_dump.log",
+          "createdAt": "2026-02-07T14:32:02+09:00",
+          "extractionHint": "tcpdump -i eth0 -x udp port 502",
+          "inlineText": "14:32:01.123456 IP 192.168.0.10.5000 > 192.168.0.20.502: UDP, length 32\n        0x0000:  4500 003c 1c46 4000 4011 b861 c0a8 000a\n        0x0010:  c0a8 0014 1388 01f6 0028 0000 0210 0001\n        0x0020:  0000 0000 0000 0000\n14:32:02.004321 IP 192.168.0.10.5000 > 192.168.0.20.502: UDP, length 32\n        0x0000:  4500 003c 1c47 4000 4011 b860 c0a8 000a\n        0x0010:  c0a8 0014 1388 01f6 0028 0000 0210 0002\n        0x0020:  0000 0000 0000 0000"
+        }
+      ]
+    }
+  ]
+}

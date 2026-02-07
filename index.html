@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>組み込み向けトレーサビリティWebモック</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div>
+      <h1>組み込み向けトレーサビリティWebモック</h1>
+      <p class="subtitle">オフライン / localStorage 対応</p>
+    </div>
+    <div class="header-actions">
+      <button id="exportJson">JSONエクスポート</button>
+      <label class="file-button">
+        JSONインポート
+        <input type="file" id="importJson" accept="application/json" />
+      </label>
+      <button id="resetSample">サンプル読込</button>
+    </div>
+  </header>
+
+  <section class="status-bar">
+    <span id="storageStatus">localStorage: 未保存</span>
+    <span id="storageWarning" class="warning hidden">inlineText が大きいため localStorage へ保存できない可能性があります。</span>
+  </section>
+
+  <main class="layout">
+    <aside class="steps-panel">
+      <h2>Design詳細</h2>
+      <ul id="stepsList" class="steps-list"></ul>
+    </aside>
+
+    <section class="details-panel">
+      <div class="details-header">
+        <h2 id="stepTitle">Step</h2>
+        <p id="stepDescription" class="muted">Stepを選択してください。</p>
+      </div>
+      <div class="evidence-panel">
+        <h3>証跡</h3>
+        <ul id="evidenceList" class="evidence-list"></ul>
+      </div>
+    </section>
+
+    <section class="viewer-panel">
+      <div class="viewer-header">
+        <h2>ログビュー</h2>
+        <div class="viewer-meta" id="viewerMeta"></div>
+      </div>
+      <div class="viewer-toolbar">
+        <input type="text" id="searchInput" placeholder="検索 (部分一致)" />
+        <label class="toggle">
+          <input type="checkbox" id="searchOnly" />
+          該当行のみ表示
+        </label>
+        <button id="abnormalExtract">異常ワード抽出</button>
+        <button id="toggleAllLines">全文表示</button>
+      </div>
+      <div id="tcpdumpHeader" class="tcpdump-header hidden"></div>
+      <div class="log-container" id="logContainer"></div>
+      <div class="viewer-footer" id="viewerFooter"></div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
