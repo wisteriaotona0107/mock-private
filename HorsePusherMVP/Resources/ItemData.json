@@ -1,0 +1,5 @@
+[
+  { "id": 1, "name": "Boost", "effectValue": 0.2, "description": "Temporary multiplier boost." },
+  { "id": 2, "name": "Lucky", "effectValue": 0.1, "description": "Raises expected payout (MVP placeholder)." },
+  { "id": 3, "name": "Insurance", "effectValue": 0.3, "description": "Returns part of bet on loss (MVP placeholder)." }
+]

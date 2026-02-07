@@ -1,0 +1,6 @@
+{
+  "multiplierMax": 3.0,
+  "betPresets": [100, 500, 1000],
+  "baseCoins": 5000,
+  "boostAmount": 0.2
+}
