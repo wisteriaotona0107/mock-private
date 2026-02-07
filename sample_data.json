@@ -1,0 +1,368 @@
+{
+  "requirements": [
+    {
+      "id": "REQ-UART-001",
+      "title": "UART連続ログ出力の欠落防止",
+      "description": "921600bpsで連続送信してもRingBufferあふれで欠落しないこと",
+      "priority": "High",
+      "status": "InProgress",
+      "category": "UART",
+      "environment": "Board Rev.B / FW v1.3.2 / Baudrate 921600 / FreeRTOS",
+      "tags": ["ISR", "RingBuffer"]
+    },
+    {
+      "id": "REQ-UART-002",
+      "title": "UARTタイムアウト再送",
+      "description": "タイムアウト時に最大3回まで再送する",
+      "priority": "High",
+      "status": "Fail",
+      "category": "UART",
+      "environment": "Board Rev.B / FW v1.3.2 / Baudrate 115200 / FreeRTOS",
+      "tags": ["Timeout", "Retry"]
+    },
+    {
+      "id": "REQ-CAN-010",
+      "title": "CAN IDフィルタリング",
+      "description": "対象IDのみを受信し、それ以外は破棄",
+      "priority": "Medium",
+      "status": "Pass",
+      "category": "CAN",
+      "environment": "Board Rev.A / FW v1.3.1 / 500kbps",
+      "tags": ["Filter"]
+    },
+    {
+      "id": "REQ-ETH-005",
+      "title": "UDPパケットロス率1%未満",
+      "description": "負荷試験時もUDPロス率1%未満",
+      "priority": "High",
+      "status": "Fail",
+      "category": "ETH",
+      "environment": "Board Rev.B / FW v1.3.2 / 100Base-T",
+      "tags": ["UDP", "Perf"]
+    },
+    {
+      "id": "REQ-RTOS-003",
+      "title": "タスク遅延監視",
+      "description": "周期タスクの遅延を5ms以内に収める",
+      "priority": "Medium",
+      "status": "InProgress",
+      "category": "RTOS",
+      "environment": "FreeRTOS / Tick 1ms",
+      "tags": ["Scheduler"]
+    },
+    {
+      "id": "REQ-BOOT-001",
+      "title": "起動時間2秒以内",
+      "description": "Power OnからApp起動まで2秒以内",
+      "priority": "Low",
+      "status": "Pass",
+      "category": "Boot",
+      "environment": "Board Rev.A / FW v1.3.1",
+      "tags": ["Boot"]
+    },
+    {
+      "id": "REQ-MEM-002",
+      "title": "DMAバッファオーバーラン防止",
+      "description": "DMA転送でバッファオーバーランを検出",
+      "priority": "High",
+      "status": "InProgress",
+      "category": "Memory",
+      "environment": "Board Rev.B / FW v1.3.2",
+      "tags": ["DMA", "Overflow"]
+    },
+    {
+      "id": "REQ-POWER-004",
+      "title": "低電圧検知",
+      "description": "電圧降下時に安全停止",
+      "priority": "Medium",
+      "status": "NotRun",
+      "category": "Power",
+      "environment": "Board Rev.A / FW v1.3.1",
+      "tags": ["Safety"]
+    }
+  ],
+  "designs": [
+    {
+      "id": "DES-UART-01",
+      "name": "UART RX RingBuffer",
+      "notes": "RX ISRでRingBuffer pushしTaskで処理",
+      "mermaidText": "sequenceDiagram\nUART->>ISR: RX interrupt\nISR->>RingBuffer: push\nTask->>RingBuffer: pop",
+      "linkedRequirementIds": ["REQ-UART-001", "REQ-UART-002"],
+      "steps": [
+        {
+          "stepId": "S-010",
+          "label": "UART RX割り込み→RingBuffer push",
+          "kind": "ISR",
+          "lineRange": "12-18"
+        },
+        {
+          "stepId": "S-020",
+          "label": "ConsoleTaskで解析→ログ出力",
+          "kind": "Task",
+          "lineRange": "34-55"
+        }
+      ]
+    },
+    {
+      "id": "DES-ETH-02",
+      "name": "UDP Rx監視",
+      "notes": "lwIP受信コールバックで統計",
+      "mermaidText": "sequenceDiagram\nETH->>lwIP: RX\nlwIP->>StatsTask: enqueue\nStatsTask->>Logger: update",
+      "linkedRequirementIds": ["REQ-ETH-005"],
+      "steps": [
+        {
+          "stepId": "S-110",
+          "label": "lwIP RXコールバック",
+          "kind": "Driver",
+          "lineRange": "88-95"
+        },
+        {
+          "stepId": "S-120",
+          "label": "StatsTaskでロス率計算",
+          "kind": "Task",
+          "lineRange": "120-150"
+        }
+      ]
+    },
+    {
+      "id": "DES-CAN-01",
+      "name": "CAN ID Filter",
+      "notes": "Filter設定と受信割り込み",
+      "mermaidText": "sequenceDiagram\nCAN->>Driver: Rx\nDriver->>App: Accept Only IDs",
+      "linkedRequirementIds": ["REQ-CAN-010"],
+      "steps": [
+        {
+          "stepId": "S-210",
+          "label": "CANフィルタ設定",
+          "kind": "Driver",
+          "lineRange": "20-32"
+        }
+      ]
+    }
+  ],
+  "testcases": [
+    {
+      "id": "TC-UART-010",
+      "title": "UART連続出力耐性",
+      "preconditions": "TeraTermで連続出力。バッファサイズ 4KB",
+      "stepsText": "1. 5分間連続送信\n2. 欠落率を計測",
+      "expected": "欠落率0%",
+      "status": "Fail",
+      "metricsFocus": "ドロップ率%、バッファ使用率%",
+      "linkedRequirementIds": ["REQ-UART-001"],
+      "linkedDesignRefs": [{ "designId": "DES-UART-01", "stepId": "S-010" }]
+    },
+    {
+      "id": "TC-UART-020",
+      "title": "UARTタイムアウト再送",
+      "preconditions": "相手機器の応答遅延を300msに設定",
+      "stepsText": "1. コマンド送信\n2. 応答がない場合に再送回数を確認",
+      "expected": "最大3回再送",
+      "status": "Fail",
+      "metricsFocus": "再送回数、タイムアウトms",
+      "linkedRequirementIds": ["REQ-UART-002"],
+      "linkedDesignRefs": [{ "designId": "DES-UART-01", "stepId": "S-020" }]
+    },
+    {
+      "id": "TC-CAN-010",
+      "title": "CANフィルタ確認",
+      "preconditions": "対象ID:0x120/0x121",
+      "stepsText": "1. 0x120と0x200を送信\n2. 0x200が破棄されること",
+      "expected": "非対象IDは破棄",
+      "status": "Pass",
+      "metricsFocus": "受信ID比率",
+      "linkedRequirementIds": ["REQ-CAN-010"],
+      "linkedDesignRefs": [{ "designId": "DES-CAN-01", "stepId": "S-210" }]
+    },
+    {
+      "id": "TC-ETH-005",
+      "title": "UDPロス率",
+      "preconditions": "iperf + 独自ツールで1万pkt送信",
+      "stepsText": "1. UDP送信\n2. ロス率算出",
+      "expected": "ロス率1%未満",
+      "status": "Fail",
+      "metricsFocus": "ロス率%、遅延ms",
+      "linkedRequirementIds": ["REQ-ETH-005"],
+      "linkedDesignRefs": [{ "designId": "DES-ETH-02", "stepId": "S-120" }]
+    },
+    {
+      "id": "TC-RTOS-003",
+      "title": "タスク遅延監視",
+      "preconditions": "CPU負荷70%",
+      "stepsText": "1. 1分監視\n2. 5ms超をカウント",
+      "expected": "5ms超は0件",
+      "status": "NotRun",
+      "metricsFocus": "遅延ms",
+      "linkedRequirementIds": ["REQ-RTOS-003"],
+      "linkedDesignRefs": []
+    },
+    {
+      "id": "TC-BOOT-001",
+      "title": "起動時間計測",
+      "preconditions": "電源OFFから起動",
+      "stepsText": "1. 電源ON\n2. ロゴ表示まで計測",
+      "expected": "2秒以内",
+      "status": "Pass",
+      "metricsFocus": "起動時間ms",
+      "linkedRequirementIds": ["REQ-BOOT-001"],
+      "linkedDesignRefs": []
+    },
+    {
+      "id": "TC-MEM-002",
+      "title": "DMAバッファ監視",
+      "preconditions": "DMA転送負荷最大",
+      "stepsText": "1. DMA連続転送\n2. エラー検知確認",
+      "expected": "オーバーラン検知",
+      "status": "NotRun",
+      "metricsFocus": "バッファ使用率%",
+      "linkedRequirementIds": ["REQ-MEM-002"],
+      "linkedDesignRefs": []
+    },
+    {
+      "id": "TC-POWER-004",
+      "title": "低電圧検知",
+      "preconditions": "電源電圧を低下",
+      "stepsText": "1. 3.0Vに低下\n2. 安全停止を確認",
+      "expected": "安全停止ログ出力",
+      "status": "NotRun",
+      "metricsFocus": "電圧V",
+      "linkedRequirementIds": ["REQ-POWER-004"],
+      "linkedDesignRefs": []
+    }
+  ],
+  "evidences": [
+    {
+      "id": "EV-20260207-001",
+      "type": "serial_log",
+      "description": "UART連続出力ログ（欠落あり）",
+      "relativePath": "./evidence/uart/2026-02-07/teraterm.log",
+      "createdAt": "2026-02-07",
+      "tool": "TeraTerm",
+      "extractionHint": "grep -n \"DROP\"",
+      "linkedTestcaseIds": ["TC-UART-010"],
+      "linkedDesignRefs": [{ "designId": "DES-UART-01", "stepId": "S-010" }]
+    },
+    {
+      "id": "EV-20260207-002",
+      "type": "waveform",
+      "description": "UART RX FIFOオーバーラン波形",
+      "relativePath": "./evidence/uart/2026-02-07/uart_fifo.png",
+      "createdAt": "2026-02-07",
+      "tool": "Logic Analyzer",
+      "extractionHint": "Trigger: RX overflow",
+      "linkedTestcaseIds": ["TC-UART-010"],
+      "linkedDesignRefs": [{ "designId": "DES-UART-01", "stepId": "S-010" }]
+    },
+    {
+      "id": "EV-20260208-001",
+      "type": "serial_log",
+      "description": "UART再送ログ（再送4回発生）",
+      "relativePath": "./evidence/uart/2026-02-08/retry.log",
+      "createdAt": "2026-02-08",
+      "tool": "TeraTerm",
+      "extractionHint": "grep -n \"retry\"",
+      "linkedTestcaseIds": ["TC-UART-020"],
+      "linkedDesignRefs": [{ "designId": "DES-UART-01", "stepId": "S-020" }]
+    },
+    {
+      "id": "EV-20260208-002",
+      "type": "csv",
+      "description": "UART再送回数集計",
+      "relativePath": "./evidence/uart/2026-02-08/retry_count.csv",
+      "createdAt": "2026-02-08",
+      "tool": "Python script",
+      "extractionHint": "awk -F,",
+      "linkedTestcaseIds": ["TC-UART-020"],
+      "linkedDesignRefs": []
+    },
+    {
+      "id": "EV-20260206-003",
+      "type": "pcap",
+      "description": "UDPロス試験pcap",
+      "relativePath": "./evidence/eth/2026-02-06/udp_loss.pcap",
+      "createdAt": "2026-02-06",
+      "tool": "Wireshark",
+      "extractionHint": "tshark -Y \"udp\"",
+      "linkedTestcaseIds": ["TC-ETH-005"],
+      "linkedDesignRefs": [{ "designId": "DES-ETH-02", "stepId": "S-120" }]
+    },
+    {
+      "id": "EV-20260206-004",
+      "type": "csv",
+      "description": "UDPロス率集計",
+      "relativePath": "./evidence/eth/2026-02-06/udp_loss.csv",
+      "createdAt": "2026-02-06",
+      "tool": "Wireshark + Excel",
+      "extractionHint": "tshark -T fields",
+      "linkedTestcaseIds": ["TC-ETH-005"],
+      "linkedDesignRefs": []
+    },
+    {
+      "id": "EV-20260205-001",
+      "type": "serial_log",
+      "description": "CANフィルタ受信ログ",
+      "relativePath": "./evidence/can/2026-02-05/can.log",
+      "createdAt": "2026-02-05",
+      "tool": "CANoe",
+      "extractionHint": "filter ID=0x200",
+      "linkedTestcaseIds": ["TC-CAN-010"],
+      "linkedDesignRefs": [{ "designId": "DES-CAN-01", "stepId": "S-210" }]
+    },
+    {
+      "id": "EV-20260205-002",
+      "type": "screenshot",
+      "description": "CAN filter GUI画面",
+      "relativePath": "./evidence/can/2026-02-05/filter.png",
+      "createdAt": "2026-02-05",
+      "tool": "CANoe",
+      "extractionHint": "",
+      "linkedTestcaseIds": ["TC-CAN-010"],
+      "linkedDesignRefs": []
+    },
+    {
+      "id": "EV-20260204-001",
+      "type": "serial_log",
+      "description": "Bootログ",
+      "relativePath": "./evidence/boot/2026-02-04/boot.log",
+      "createdAt": "2026-02-04",
+      "tool": "UART Logger",
+      "extractionHint": "grep -n \"BOOT\"",
+      "linkedTestcaseIds": ["TC-BOOT-001"],
+      "linkedDesignRefs": []
+    },
+    {
+      "id": "EV-20260203-001",
+      "type": "serial_log",
+      "description": "RTOSタスク遅延ログ（未解析）",
+      "relativePath": "./evidence/rtos/2026-02-03/task_delay.log",
+      "createdAt": "2026-02-03",
+      "tool": "Tracealyzer",
+      "extractionHint": "",
+      "linkedTestcaseIds": [],
+      "linkedDesignRefs": []
+    },
+    {
+      "id": "EV-20260202-001",
+      "type": "waveform",
+      "description": "DMAバッファ波形",
+      "relativePath": "./evidence/mem/2026-02-02/dma_wave.png",
+      "createdAt": "2026-02-02",
+      "tool": "oscilloscope",
+      "extractionHint": "",
+      "linkedTestcaseIds": [],
+      "linkedDesignRefs": []
+    },
+    {
+      "id": "EV-20260201-001",
+      "type": "link",
+      "description": "外部チケット: ETHドロップ解析",
+      "relativePath": "https://example.com/ticket/ETH-99",
+      "createdAt": "2026-02-01",
+      "tool": "JIRA",
+      "extractionHint": "",
+      "linkedTestcaseIds": ["TC-ETH-005"],
+      "linkedDesignRefs": []
+    }
+  ],
+  "history": []
+}

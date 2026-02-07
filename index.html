@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Traceability Studio - Embedded QA</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div>
+      <h1>Traceability Studio</h1>
+      <p>組み込み開発向け：要件/設計/試験/証跡トレーサビリティ管理</p>
+    </div>
+    <div class="header-actions">
+      <button id="export-btn" class="secondary">JSON Export</button>
+      <button id="import-btn" class="secondary">JSON Import</button>
+      <button id="sample-btn">サンプル投入</button>
+      <button id="reset-btn" class="danger">リセット</button>
+      <input id="import-file" type="file" accept="application/json" hidden />
+    </div>
+  </header>
+
+  <nav class="app-nav">
+    <button data-view="dashboard" class="nav-btn active">Dashboard</button>
+    <button data-view="requirements" class="nav-btn">Requirements</button>
+    <button data-view="designs" class="nav-btn">Design</button>
+    <button data-view="testcases" class="nav-btn">Testcases</button>
+    <button data-view="evidences" class="nav-btn">Evidences</button>
+    <button data-view="trace" class="nav-btn">Traceability</button>
+  </nav>
+
+  <main class="app-main">
+    <section id="view-dashboard" class="view"></section>
+    <section id="view-requirements" class="view hidden"></section>
+    <section id="view-designs" class="view hidden"></section>
+    <section id="view-testcases" class="view hidden"></section>
+    <section id="view-evidences" class="view hidden"></section>
+    <section id="view-trace" class="view hidden"></section>
+  </main>
+
+  <footer class="app-footer">
+    <small>Offline Ready / localStorage & JSON import/export</small>
+  </footer>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
