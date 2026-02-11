@@ -1,0 +1,9 @@
+{
+  "poses": [
+    { "id": "A", "name": "Front Double Biceps", "basePoint": 100, "lane": "A", "asset": { "type": "imageSequence", "name": "poseA" } },
+    { "id": "B", "name": "Side Chest",          "basePoint": 120, "lane": "B", "asset": { "type": "imageSequence", "name": "poseB" } },
+    { "id": "C", "name": "Back Double Biceps",  "basePoint": 150, "lane": "C", "asset": { "type": "videoClip",     "name": "poseC_clip" } },
+    { "id": "D", "name": "Most Muscular",       "basePoint": 200, "lane": "D", "asset": { "type": "imageSequence", "name": "poseD" } },
+    { "id": "S", "name": "Finish Pose",         "basePoint": 260, "lane": "S", "asset": { "type": "videoClip",     "name": "poseS_clip" } }
+  ]
+}
