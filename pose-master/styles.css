@@ -1,0 +1,194 @@
+:root {
+  color-scheme: dark;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #23274f, #0a0b16 58%);
+  color: #f6f6f8;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.game-shell {
+  width: min(980px, 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  background: rgba(10, 12, 26, 0.84);
+  backdrop-filter: blur(8px);
+  padding: 18px;
+  display: grid;
+  gap: 14px;
+  box-shadow: 0 0 calc(12px + var(--fx-level) * 8px) rgba(122, 85, 255, 0.3);
+}
+
+.hud {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: start;
+}
+
+.hud h1 {
+  margin: 0;
+}
+
+.hud h1 span {
+  font-size: 0.8rem;
+  color: #b9b7ff;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 4px 14px;
+}
+
+.stats p {
+  margin: 0;
+  font-size: 0.92rem;
+}
+
+.playfield {
+  display: grid;
+  gap: 6px;
+}
+
+.lane-labels {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  color: #b9c4ff;
+  letter-spacing: 0.08em;
+}
+
+.lane-track {
+  position: relative;
+  height: 280px;
+  background: linear-gradient(180deg, rgba(30, 35, 67, 0.8), rgba(12, 14, 28, 0.9));
+  border-radius: 12px;
+  border: 1px solid rgba(153, 167, 255, 0.35);
+  overflow: hidden;
+}
+
+.lane-track::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+      rgba(255, 255, 255, 0.08) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 100% 20%, 20% 100%;
+}
+
+.hit-line {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  transform: translateX(-50%);
+  background: linear-gradient(#fff, #8ec5ff, #fff);
+  box-shadow: 0 0 14px rgba(94, 168, 255, 0.85);
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #ddf0ff;
+}
+
+.notes {
+  position: absolute;
+  inset: 0;
+}
+
+.note {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  color: #f4f7ff;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  box-shadow: 0 0 calc(8px + var(--fx-level) * 3px) rgba(130, 200, 255, 0.6);
+}
+
+.lane-A { background: #5a72ff; }
+.lane-B { background: #b570ff; }
+.lane-C { background: #00a9d6; }
+.lane-D { background: #ff6f90; }
+.lane-S { background: #ffba35; color: #111; }
+
+.feedback {
+  text-align: center;
+}
+
+.feedback h2 {
+  margin: 0;
+  font-size: 2rem;
+  letter-spacing: 0.12em;
+}
+
+.feedback h2.pulse {
+  animation: pulse 170ms ease-out;
+}
+
+@keyframes pulse {
+  from { transform: scale(1.12); filter: brightness(1.8); }
+  to { transform: scale(1); filter: brightness(1); }
+}
+
+.controls {
+  display: grid;
+  gap: 10px;
+}
+
+button {
+  border: 0;
+  border-radius: 10px;
+  background: #2f3466;
+  color: #fff;
+  padding: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.start {
+  background: linear-gradient(135deg, #22b3ff, #6b66ff);
+}
+
+.pose-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+.pose-grid button {
+  min-height: 76px;
+}
+
+.pose-grid small {
+  opacity: 0.9;
+  font-weight: 500;
+}
+
+.hint,
+.status {
+  margin: 0;
+  color: #c4c8ef;
+  font-size: 0.9rem;
+}
+
+.is-running .lane-track {
+  box-shadow: inset 0 0 calc(12px + var(--fx-level) * 9px) rgba(126, 179, 255, 0.45);
+}

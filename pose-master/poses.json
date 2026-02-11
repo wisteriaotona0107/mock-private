@@ -1,0 +1,9 @@
+{
+  "poses": [
+    { "id": "A", "name": "Front Double Biceps", "basePoint": 100, "lane": "A" },
+    { "id": "B", "name": "Side Chest", "basePoint": 120, "lane": "B" },
+    { "id": "C", "name": "Back Double Biceps", "basePoint": 150, "lane": "C" },
+    { "id": "D", "name": "Most Muscular", "basePoint": 200, "lane": "D" },
+    { "id": "S", "name": "Finish Pose", "basePoint": 260, "lane": "S" }
+  ]
+}

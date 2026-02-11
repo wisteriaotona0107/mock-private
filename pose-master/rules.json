@@ -1,0 +1,38 @@
+{
+  "duration": 60,
+  "noteCount": 80,
+  "timing": {
+    "perfectMs": 60,
+    "greatMs": 110,
+    "goodMs": 170,
+    "labels": {
+      "perfect": "PERFECT",
+      "great": "GREAT",
+      "good": "GOOD",
+      "miss": "MISS"
+    },
+    "multipliers": {
+      "perfect": 1.2,
+      "great": 1,
+      "good": 0.75,
+      "miss": 0
+    }
+  },
+  "comboTiers": [
+    { "minCombo": 0, "multiplier": 1, "fxLevel": 0 },
+    { "minCombo": 5, "multiplier": 1.05, "fxLevel": 1 },
+    { "minCombo": 10, "multiplier": 1.1, "fxLevel": 2 },
+    { "minCombo": 20, "multiplier": 1.2, "fxLevel": 3 },
+    { "minCombo": 35, "multiplier": 1.35, "fxLevel": 4 }
+  ],
+  "sequenceBonuses": [
+    { "pattern": ["A", "B", "C"], "bonus": 300, "name": "Classic Flow" },
+    { "pattern": ["D", "D", "S"], "bonus": 500, "name": "Power Finish" },
+    { "pattern": ["A", "C", "D", "S"], "bonus": 700, "name": "Showstopper" }
+  ],
+  "finishBonus": {
+    "lastSec": 8,
+    "poseId": "S",
+    "bonus": 1000
+  }
+}
