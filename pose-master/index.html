@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pose Master Prototype v0.1</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main id="app" class="game-shell" style="--fx-level:0">
+      <header class="hud">
+        <h1>Pose Master <span>v0.1</span></h1>
+        <div class="stats">
+          <p>Time: <strong data-role="timer">60.0s</strong></p>
+          <p>Score: <strong data-role="score">0</strong></p>
+          <p>Combo: <strong data-role="combo">0</strong></p>
+          <p>Max Combo: <strong data-role="max-combo">0</strong></p>
+          <p><strong data-role="fx-level">FX 0 • READY</strong></p>
+        </div>
+      </header>
+
+      <section class="playfield">
+        <div class="lane-labels">
+          <span>A</span><span>B</span><span>C</span><span>D</span><span>S</span>
+        </div>
+        <div class="lane-track" data-role="lane-track">
+          <div class="hit-line">HIT</div>
+          <div class="notes" data-role="notes"></div>
+        </div>
+      </section>
+
+      <section class="feedback">
+        <h2 data-role="judge">READY</h2>
+        <p data-role="summary">Press START to begin.</p>
+      </section>
+
+      <section class="controls">
+        <button data-role="start" class="start">START</button>
+        <div class="pose-grid">
+          <button data-pose-id="A">A<br /><small>Front Double Biceps</small></button>
+          <button data-pose-id="B">B<br /><small>Side Chest</small></button>
+          <button data-pose-id="C">C<br /><small>Back Double Biceps</small></button>
+          <button data-pose-id="D">D<br /><small>Most Muscular</small></button>
+          <button data-pose-id="S">S<br /><small>Finish Pose</small></button>
+        </div>
+        <p class="hint">Keys: A / S / D / F / Space</p>
+      </section>
+      <p class="status" data-role="status">Booting...</p>
+    </main>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>
