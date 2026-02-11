@@ -1,0 +1,35 @@
+sequenceDiagram
+  autonumber
+  actor User as ユーザー
+  participant UI as UI(HTML/CSS)
+  participant App as app.js
+  participant Store as localStorage
+  participant Canvas as Canvas
+
+  User->>UI: JSONボタンをタップ
+  UI->>App: ボトムシート開く
+  User->>UI: サンプル/貼付/ファイル選択
+  UI->>App: JSON文字列またはオブジェクト入力
+  App->>App: パース + 正規化(単体→配列)
+  App->>App: バリデーション + flavor補完
+  App->>Store: dataset保存
+  App->>App: flavor→2D座標へ変換
+  App->>Canvas: マップ再描画(点アニメ)
+
+  User->>Canvas: 点をタップ
+  Canvas->>App: hitTest結果(brand)
+  App->>Canvas: パルスアニメ
+  App->>UI: 詳細カード表示
+
+  User->>UI: タグ/★お気に入りのみを変更
+  UI->>App: フィルタ状態更新
+  App->>Store: filters保存
+  App->>Canvas: 再描画
+
+  User->>UI: カードの★をトグル
+  UI->>App: favorite更新
+  App->>Store: favorites保存
+  App->>Canvas: 再描画(色反映)
+
+  App->>Store: 起動時にdataset/favorites/filters復元
+  App->>Canvas: 復元状態で即描画

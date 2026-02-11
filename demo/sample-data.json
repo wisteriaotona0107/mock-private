@@ -1,0 +1,62 @@
+[
+  {
+    "brandId": 101,
+    "brandName": "瑞霞 純米吟醸",
+    "breweryId": 1,
+    "breweryName": "瑞霞酒造",
+    "areaId": 13,
+    "areaName": "東京都",
+    "flavor": { "f1": 0.84, "f2": 0.35, "f3": 0.52, "f4": 0.61, "f5": 0.22, "f6": 0.58 },
+    "tags": ["フルーティ", "吟醸香", "やや甘口"]
+  },
+  {
+    "brandId": 102,
+    "brandName": "雪灯り 特別純米",
+    "breweryId": 2,
+    "breweryName": "雪灯り醸造",
+    "areaId": 15,
+    "areaName": "新潟県",
+    "flavor": { "f1": 0.28, "f2": 0.55, "f3": 0.73, "f4": 0.36, "f5": 0.41, "f6": 0.21 },
+    "tags": ["辛口", "淡麗", "食中酒"]
+  },
+  {
+    "brandId": 103,
+    "brandName": "月影 山廃純米",
+    "breweryId": 3,
+    "breweryName": "月影本家",
+    "areaId": 17,
+    "areaName": "石川県",
+    "flavor": { "f1": 0.33, "f2": 0.49, "f3": 0.64, "f4": 0.88, "f5": 0.58, "f6": 0.78 },
+    "tags": ["濃醇", "旨味", "燗向き"]
+  },
+  {
+    "brandId": 104,
+    "brandName": "青風 生酛",
+    "breweryId": 4,
+    "breweryName": "青風蔵",
+    "areaId": 27,
+    "areaName": "大阪府",
+    "flavor": { "f1": 0.17, "f2": 0.42, "f3": 0.81, "f4": 0.74, "f5": 0.66, "f6": 0.62 },
+    "tags": ["辛口", "濃醇", "クラシック"]
+  },
+  {
+    "brandId": 105,
+    "brandName": "花つむぎ 純米大吟醸",
+    "breweryId": 5,
+    "breweryName": "花つむぎ醸造",
+    "areaId": 26,
+    "areaName": "京都府",
+    "flavor": { "f1": 0.91, "f2": 0.31, "f3": 0.37, "f4": 0.42, "f5": 0.17, "f6": 0.33 },
+    "tags": ["フルーティ", "華やか", "甘口"]
+  },
+  {
+    "brandId": 106,
+    "brandName": "岩清水 本醸造",
+    "breweryId": 6,
+    "breweryName": "岩清水酒造",
+    "areaId": 20,
+    "areaName": "長野県",
+    "flavor": { "f1": 0.22, "f2": 0.44, "f3": 0.76, "f4": 0.29, "f5": 0.47, "f6": 0.18 },
+    "tags": ["辛口", "淡麗", "キレ"]
+  }
+]

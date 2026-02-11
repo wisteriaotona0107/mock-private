@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#f5f6fb" />
+    <title>日本酒フレーバーマップ</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main class="app" aria-label="日本酒フレーバーマップデモ">
+      <header class="top-header">
+        <h1>日本酒フレーバーマップ</h1>
+        <p id="dataCount">0銘柄</p>
+      </header>
+
+      <section class="map-wrap" aria-label="フレーバーマップ">
+        <canvas id="mapCanvas" aria-label="銘柄分布マップ"></canvas>
+        <div class="axis-label x-left">フルーティ</div>
+        <div class="axis-label x-right">辛口</div>
+        <div class="axis-label y-top">濃醇</div>
+        <div class="axis-label y-bottom">淡麗</div>
+        <div class="quadrant q1">フルーティ×濃醇</div>
+        <div class="quadrant q2">辛口×濃醇</div>
+        <div class="quadrant q3">フルーティ×淡麗</div>
+        <div class="quadrant q4">辛口×淡麗</div>
+      </section>
+
+      <section id="detailCard" class="detail-card" aria-live="polite">
+        <div class="card-handle"></div>
+        <div class="card-content">
+          <div class="card-head">
+            <div>
+              <h2 id="cardBrand">銘柄を選択</h2>
+              <p id="cardMeta">点をタップすると詳細を表示します</p>
+            </div>
+            <button id="favoriteBtn" class="favorite-btn" type="button" aria-label="お気に入り">☆</button>
+          </div>
+          <div id="cardTags" class="chip-row"></div>
+          <div id="bars" class="bars"></div>
+        </div>
+      </section>
+
+      <section class="bottom-bar" aria-label="フィルタと操作">
+        <div class="filter-row">
+          <button id="favFilterBtn" class="chip" type="button">★ お気に入りのみ</button>
+          <div id="tagFilters" class="tag-scroll"></div>
+        </div>
+        <div class="actions-row">
+          <button id="openSheetBtn" class="primary-btn" type="button">JSON</button>
+        </div>
+      </section>
+    </main>
+
+    <section id="sheet" class="sheet" aria-hidden="true">
+      <div id="sheetBackdrop" class="sheet-backdrop"></div>
+      <div class="sheet-panel">
+        <div class="sheet-handle"></div>
+        <h3>データ入力</h3>
+        <div class="sheet-actions">
+          <button id="loadSampleBtn" class="chip" type="button">サンプル投入</button>
+          <label class="chip file-chip">
+            ファイル選択
+            <input id="fileInput" type="file" accept="application/json,.json" />
+          </label>
+        </div>
+        <textarea id="jsonInput" placeholder="ここにJSONを貼り付け"></textarea>
+        <div class="sheet-actions">
+          <button id="loadJsonBtn" class="primary-btn" type="button">読み込み</button>
+          <button id="closeSheetBtn" class="chip" type="button">閉じる</button>
+        </div>
+      </div>
+    </section>
+
+    <div id="toast" class="toast" role="status" aria-live="assertive"></div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
