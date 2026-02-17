@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>串カウントダーツおみくじ</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="app" class="app">
+      <header class="top-bar">
+        <button id="adminTrigger" class="logo-btn" aria-label="管理画面を開く">🎯 KUSHI LUCK</button>
+        <div class="sound-wrap">
+          <label class="toggle">
+            <input id="soundToggle" type="checkbox" />
+            <span>音を有効化</span>
+          </label>
+        </div>
+      </header>
+
+      <main>
+        <section id="counterScreen" class="screen active">
+          <h1>串本数カウント</h1>
+          <p class="rule">プレイ回数: <strong id="shotRuleText"></strong></p>
+          <div class="counter-box">
+            <button id="minusBtn" class="big-btn" type="button">−</button>
+            <div class="count-display"><span id="kushiCount">0</span>本</div>
+            <button id="plusBtn" class="big-btn" type="button">+</button>
+          </div>
+          <div class="shot-display">遊べる回数: <span id="shotCount">0</span>回</div>
+          <button id="startGameBtn" class="primary-btn" type="button">ゲーム開始</button>
+        </section>
+
+        <section id="gameScreen" class="screen">
+          <div class="hud">
+            <div>残り <strong id="remainShots">0</strong> 回</div>
+            <div>串 <strong id="hudKushi">0</strong> 本</div>
+          </div>
+          <div class="board-wrap">
+            <canvas id="gameCanvas" width="900" height="580"></canvas>
+            <div id="powerMeter" class="power-meter"><span></span></div>
+            <div id="gameMessage" class="game-msg">ドラッグして狙い、離して発射！</div>
+          </div>
+        </section>
+
+        <section id="resultScreen" class="screen">
+          <div class="result-bg-glow"></div>
+          <article class="result-card">
+            <h2 id="fortuneText">大吉</h2>
+            <p id="prizeText">ドリンク無料</p>
+          </article>
+          <div class="result-actions">
+            <button id="nextPlayBtn" class="primary-btn" type="button">次のプレイ</button>
+            <button id="finishBtn" class="sub-btn" type="button">終了してカウンターへ</button>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="adminDialog">
+      <form id="adminForm" method="dialog">
+        <h3>管理設定</h3>
+        <p>JSONを編集して保存できます。</p>
+        <textarea id="adminJson" spellcheck="false"></textarea>
+        <div class="admin-actions">
+          <button id="resetAdminBtn" type="button" class="sub-btn">初期値へリセット</button>
+          <button id="closeAdminBtn" type="submit" class="sub-btn">閉じる</button>
+          <button id="saveAdminBtn" type="button" class="primary-btn">保存</button>
+        </div>
+      </form>
+    </dialog>
+
+    <script src="app.js"></script>
+  </body>
+</html>
