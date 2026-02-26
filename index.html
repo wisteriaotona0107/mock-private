@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="地元密着の建築工事会社。無料現地調査・概算見積を30秒で。雨漏り、外壁、屋根、水回り、内装、増改築まで迅速対応。" />
+    <title>無料現地調査・概算見積 | 地元密着の建築工事会社</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#estimate">概算フォームへスキップ</a>
+
+    <header class="site-header" aria-label="ページ上部">
+      <div class="container header-inner">
+        <p class="brand">まちの建築工事サポート</p>
+        <a class="header-phone" href="tel:0312345678" aria-label="電話で相談 03-1234-5678">📞 03-1234-5678</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="container hero-grid">
+          <div>
+            <p class="pill">地域密着・最短2日で訪問</p>
+            <h1 id="hero-title">無料現地調査で、<br />失敗しない工事計画を。</h1>
+            <p class="hero-lead">
+              雨漏り修繕から増改築まで。現地確認のうえ、わかりやすい概算見積をご案内します。
+              しつこい営業は一切なし。
+            </p>
+            <div class="hero-cta" role="group" aria-label="お問い合わせ方法">
+              <a class="btn btn-primary" href="#estimate">無料現地調査を申し込む</a>
+              <a class="btn btn-line" href="#final-cta">LINEで相談する</a>
+            </div>
+            <ul class="hero-points" aria-label="訴求ポイント">
+              <li>見積の内訳を明確提示</li>
+              <li>近隣への配慮を徹底</li>
+              <li>工事後の保証付き</li>
+            </ul>
+          </div>
+          <aside class="hero-card" aria-label="初回相談の案内">
+            <h2>初回相談は0円</h2>
+            <p>最短2日で現地訪問。現況確認から概算まで当日中に目安提示します。</p>
+            <a class="btn btn-secondary" href="tel:0312345678">今すぐ電話相談</a>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="problems-title">
+        <div class="container">
+          <h2 id="problems-title">こんなお悩みありませんか？</h2>
+          <div class="card-grid">
+            <article class="problem-card">
+              <h3>雨漏りが止まらない</h3>
+              <p>天井や壁のシミ、カビが気になる。早急に原因を特定して直したい。</p>
+            </article>
+            <article class="problem-card">
+              <h3>外壁のひび割れ・色あせ</h3>
+              <p>見た目の劣化だけでなく、防水性能の低下も心配。</p>
+            </article>
+            <article class="problem-card">
+              <h3>間取りを変えて暮らしやすく</h3>
+              <p>家族構成の変化に合わせて、内装・動線を見直したい。</p>
+            </article>
+            <article class="problem-card">
+              <h3>耐震面が不安</h3>
+              <p>築年数が経ち、地震への備えを具体的に進めたい。</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="estimate" class="section section-alt" aria-labelledby="estimate-title">
+        <div class="container">
+          <h2 id="estimate-title">30秒かんたん概算見積</h2>
+          <p class="section-lead">3ステップ入力で、目安費用レンジをすぐ確認できます。</p>
+
+          <div class="progress-wrap" aria-label="フォーム進行状況">
+            <div class="progress-track" aria-hidden="true">
+              <div id="progressBar" class="progress-bar"></div>
+            </div>
+            <p id="progressText" class="progress-text" aria-live="polite">Step 1 / 3</p>
+          </div>
+
+          <form id="estimateForm" novalidate>
+            <fieldset class="step is-active" data-step="1" aria-labelledby="step1-title">
+              <legend id="step1-title">Step1 工事タイプ</legend>
+              <label for="workType">工事タイプを選択</label>
+              <select id="workType" name="workType" required>
+                <option value="">選択してください</option>
+                <option value="外壁">外壁</option>
+                <option value="屋根">屋根</option>
+                <option value="水回り">水回り</option>
+                <option value="内装">内装</option>
+                <option value="増改築">増改築</option>
+              </select>
+              <p class="error" id="errorStep1" aria-live="polite"></p>
+            </fieldset>
+
+            <fieldset class="step" data-step="2" aria-labelledby="step2-title" hidden>
+              <legend id="step2-title">Step2 規模と築年数</legend>
+              <label for="scale">工事規模</label>
+              <select id="scale" name="scale" required>
+                <option value="">選択してください</option>
+                <option value="小">小規模</option>
+                <option value="中">中規模</option>
+                <option value="大">大規模</option>
+              </select>
+
+              <label for="buildingAge">築年数（年）</label>
+              <input id="buildingAge" name="buildingAge" type="number" min="0" max="120" inputmode="numeric" required placeholder="例: 18" />
+              <p class="error" id="errorStep2" aria-live="polite"></p>
+            </fieldset>
+
+            <fieldset class="step" data-step="3" aria-labelledby="step3-title" hidden>
+              <legend id="step3-title">Step3 希望時期と連絡先</legend>
+              <label for="timing">希望時期</label>
+              <select id="timing" name="timing" required>
+                <option value="">選択してください</option>
+                <option value="急ぎ">急ぎ</option>
+                <option value="1ヶ月以内">1ヶ月以内</option>
+                <option value="未定">未定</option>
+              </select>
+
+              <label for="contact">連絡先（電話番号 or メール）</label>
+              <input id="contact" name="contact" type="text" required placeholder="09012345678 または sample@example.com" />
+              <p class="error" id="errorStep3" aria-live="polite"></p>
+            </fieldset>
+
+            <div class="form-nav">
+              <button type="button" id="prevBtn" class="btn btn-ghost" disabled>戻る</button>
+              <button type="button" id="nextBtn" class="btn btn-primary">次へ</button>
+              <button type="submit" id="submitBtn" class="btn btn-primary" hidden>概算を表示</button>
+            </div>
+          </form>
+
+          <section id="result" class="result" aria-live="polite" hidden>
+            <h3>あなたの概算レンジ</h3>
+            <p id="estimateRange" class="estimate-range"></p>
+            <p id="estimateSummary"></p>
+            <div class="result-cta">
+              <a href="#final-cta" class="btn btn-accent">この内容で無料現地調査を依頼する</a>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="cases-title">
+        <div class="container">
+          <h2 id="cases-title">施工事例（ダミー）</h2>
+          <div class="case-grid">
+            <article class="case-card">
+              <h3>外壁補修・塗装</h3>
+              <p><strong>Before:</strong> ひび割れ、色褪せが目立つ状態</p>
+              <p><strong>After:</strong> 高耐候塗料で美観・防水性能を回復</p>
+            </article>
+            <article class="case-card">
+              <h3>キッチン改修</h3>
+              <p><strong>Before:</strong> 動線が悪く収納不足</p>
+              <p><strong>After:</strong> 家事効率を高めるレイアウトへ刷新</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-alt" aria-labelledby="reasons-title">
+        <div class="container">
+          <h2 id="reasons-title">選ばれる3つの理由</h2>
+          <div class="reason-grid">
+            <article>
+              <h3>料金が透明</h3>
+              <p>工事項目ごとに費用を明示。追加費用の条件も事前に説明します。</p>
+            </article>
+            <article>
+              <h3>近隣配慮を徹底</h3>
+              <p>着工前のご挨拶や騒音時間の管理など、トラブル予防を重視。</p>
+            </article>
+            <article>
+              <h3>保証で施工後も安心</h3>
+              <p>工事内容に応じた保証制度を用意。アフターフォローも迅速です。</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="faq-title">
+        <div class="container">
+          <h2 id="faq-title">よくある質問</h2>
+          <div class="faq-list">
+            <details>
+              <summary>現地調査は本当に無料ですか？</summary>
+              <p>はい。調査・ご相談・概算見積の提示まで無料で対応しています。</p>
+            </details>
+            <details>
+              <summary>相見積もりでも相談できますか？</summary>
+              <p>もちろん可能です。比較しやすい形式で見積内訳をご案内します。</p>
+            </details>
+            <details>
+              <summary>小さな修繕でも依頼できますか？</summary>
+              <p>はい。小規模修繕から増改築まで幅広く対応可能です。</p>
+            </details>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <section id="final-cta" class="final-cta" aria-labelledby="final-cta-title">
+      <div class="container final-cta-inner">
+        <h2 id="final-cta-title">まずは無料で、現地調査と概算見積を。</h2>
+        <div class="cta-buttons">
+          <a class="btn btn-secondary" href="tel:0312345678">📞 電話で相談する</a>
+          <a class="btn btn-primary" href="#estimate">フォームから申し込む</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="sticky-cta" role="region" aria-label="固定お問い合わせ">
+      <a href="tel:0312345678" class="sticky-btn phone">電話する</a>
+      <a href="#estimate" class="sticky-btn form">無料見積</a>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
