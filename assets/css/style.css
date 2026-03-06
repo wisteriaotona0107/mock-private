@@ -380,6 +380,10 @@ fieldset {
   padding: 16px;
 }
 
+.modal[hidden] {
+  display: none !important;
+}
+
 .modal-content {
   width: min(520px, 100%);
   background: #fff;
