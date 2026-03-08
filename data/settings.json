@@ -1,0 +1,9 @@
+{
+  "theme": "soft-warm",
+  "cardSize": "large",
+  "speechRate": 1.0,
+  "speechEnabled": true,
+  "highContrast": false,
+  "showLabels": true,
+  "locale": "ja-JP"
+}

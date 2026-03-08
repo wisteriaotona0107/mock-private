@@ -1,0 +1,25 @@
+:root {
+  --bg: #f5efe2;
+  --panel: #fffaf1;
+  --text: #2f2a22;
+  --muted: #6b6258;
+  --accent: #7a3e2b;
+  --accent-2: #2f5b44;
+  --danger: #9f2b2b;
+  --border: #dccfb8;
+  --chip: #efe4cf;
+  --shadow: 0 6px 20px rgba(58, 39, 19, 0.12);
+}
+
+body[data-theme="high-contrast"] {
+  --bg: #111;
+  --panel: #000;
+  --text: #fff;
+  --muted: #ddd;
+  --accent: #ffea00;
+  --accent-2: #00ffff;
+  --danger: #ff4d4d;
+  --border: #fff;
+  --chip: #222;
+  --shadow: none;
+}

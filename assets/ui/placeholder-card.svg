@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="160" viewBox="0 0 240 160" role="img" aria-label="placeholder card">
+  <rect width="240" height="160" fill="#efe4cf"/>
+  <rect x="16" y="16" width="208" height="128" rx="12" fill="#d4c4a7"/>
+  <circle cx="85" cy="75" r="24" fill="#fffaf1"/>
+  <rect x="118" y="58" width="70" height="12" rx="6" fill="#fffaf1"/>
+  <rect x="118" y="80" width="54" height="12" rx="6" fill="#fffaf1"/>
+</svg>
