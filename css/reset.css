@@ -1,0 +1,7 @@
+/* Minimal reset */
+* { box-sizing: border-box; }
+html, body, h1, h2, h3, p, ul, ol, li, figure, form, fieldset, button, input, select { margin: 0; padding: 0; }
+ul, ol { list-style: none; }
+img { max-width: 100%; display: block; }
+button, input, select { font: inherit; }
+body { min-height: 100vh; line-height: 1.4; }

@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>飲食店向け絵カード注文支援</title>
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/themes.css" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body data-theme="soft-warm">
+    <a class="skip-link" href="#main-content">メインコンテンツへ移動</a>
+    <header class="app-header">
+      <div>
+        <h1>飲食店向け絵カード注文支援</h1>
+        <p class="subtitle">絵カード式コミュニケーション支援 / AACコミュニケーションカード</p>
+      </div>
+      <div class="header-actions">
+        <label class="search-box" for="search-input">
+          <span>さがす</span>
+          <input id="search-input" type="search" placeholder="カード名・タグで検索" aria-label="カードを検索" />
+        </label>
+        <button id="settings-toggle" class="btn" aria-label="設定を開く">せってい</button>
+      </div>
+    </header>
+
+    <p id="error-banner" class="error-banner" role="alert" hidden></p>
+
+    <main id="main-content" class="layout">
+      <aside class="panel categories-panel" aria-labelledby="categories-title">
+        <h2 id="categories-title">カテゴリ</h2>
+        <nav id="category-nav" class="category-nav" aria-label="カテゴリ一覧"></nav>
+        <section class="sub-panel" aria-labelledby="favorites-title">
+          <h3 id="favorites-title">お気に入り</h3>
+          <div id="favorites-list" class="small-card-list"></div>
+        </section>
+        <section class="sub-panel" aria-labelledby="recent-title">
+          <h3 id="recent-title">最近使った</h3>
+          <div id="recent-list" class="small-card-list"></div>
+        </section>
+      </aside>
+
+      <section class="panel cards-panel" aria-labelledby="cards-title">
+        <h2 id="cards-title">カード一覧</h2>
+        <div id="active-filter" class="active-filter">すべて表示</div>
+        <div id="cards-grid" class="cards-grid" aria-live="polite"></div>
+      </section>
+
+      <aside class="panel sentence-panel" aria-labelledby="sentence-title">
+        <h2 id="sentence-title">文づくり</h2>
+        <div id="sentence-cards" class="sentence-cards" aria-live="polite"></div>
+        <p id="sentence-text" class="sentence-text">ここに文が表示されます。</p>
+        <div class="sentence-actions">
+          <button id="speak-sentence" class="btn primary" aria-label="文を読み上げる">よみあげ</button>
+          <button id="clear-sentence" class="btn danger" aria-label="文をすべて消去する">ぜんぶけす</button>
+        </div>
+      </aside>
+    </main>
+
+    <footer class="app-footer">
+      <p>飲食店で使いやすい、やさしい絵カード式コミュニケーション支援アプリ</p>
+    </footer>
+
+    <dialog id="settings-dialog" class="settings-dialog" aria-labelledby="settings-title">
+      <form method="dialog" class="settings-form">
+        <header>
+          <h2 id="settings-title">利用者設定</h2>
+        </header>
+
+        <label>カードサイズ
+          <select id="setting-card-size" aria-label="カードサイズを変更">
+            <option value="small">small</option>
+            <option value="medium">medium</option>
+            <option value="large">large</option>
+          </select>
+        </label>
+
+        <label>テーマ
+          <select id="setting-theme" aria-label="テーマを変更">
+            <option value="soft-warm">soft-warm</option>
+            <option value="high-contrast">high-contrast</option>
+          </select>
+        </label>
+
+        <label>読み上げ速度
+          <input id="setting-speech-rate" type="range" min="0.5" max="2" step="0.1" />
+          <span id="speech-rate-value">1.0</span>
+        </label>
+
+        <label class="checkbox-row"><input id="setting-speech-enabled" type="checkbox" /> 読み上げON</label>
+        <label class="checkbox-row"><input id="setting-high-contrast" type="checkbox" /> 高コントラスト強制</label>
+        <label class="checkbox-row"><input id="setting-show-labels" type="checkbox" /> ラベル表示</label>
+
+        <menu>
+          <button value="cancel" class="btn">閉じる</button>
+          <button id="save-settings" value="default" class="btn primary">保存</button>
+        </menu>
+      </form>
+    </dialog>
+
+    <template id="card-template">
+      <article class="card-item" tabindex="0">
+        <img class="card-image" src="assets/ui/placeholder-card.svg" alt="" />
+        <p class="card-label"></p>
+        <button class="btn speak-card" type="button" aria-label="カードを読み上げ">よむ</button>
+      </article>
+    </template>
+
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>
