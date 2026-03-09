@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AIエディタ利用 セキュリティガイドライン | Portfolio</title>
+    <meta
+      name="description"
+      content="Codex 5.4 を活用して設計・実装した、AIエディタ利用におけるセキュリティガイドライン紹介ページ。安全性・透明性・実務運用を重視したポートフォリオです。"
+    />
+    <meta property="og:title" content="AIエディタ利用 セキュリティガイドライン | Portfolio" />
+    <meta
+      property="og:description"
+      content="AI利用時の情報分類・権限制御・機密管理を整理した、1ページ完結型セキュリティガイドライン。"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="ja_JP" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">本文へスキップ</a>
+
+    <header class="site-header" id="top">
+      <div class="container nav-wrap">
+        <p class="brand">AI Security Portfolio</p>
+        <nav aria-label="セクションナビゲーション">
+          <ul class="nav-list">
+            <li><a href="#about">About</a></li>
+            <li><a href="#guideline">Guideline</a></li>
+            <li><a href="#checklist">Checklist</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero section">
+        <div class="container hero-grid fade-in">
+          <div>
+            <p class="eyebrow">Portfolio × Security Governance</p>
+            <h1>AIエディタ利用<br />セキュリティガイドライン</h1>
+            <p class="hero-copy">AIを安全に使うための設計思想と実践ルールを、誠実かつ実務的に整理しました。</p>
+            <p class="hero-note">
+              このWebサイトは <strong>Codex 5.4</strong> を活用して設計・実装しています。便利さだけでなく、情報の扱いと権限制御を優先し、AIを「賢い外部委託先」として扱う姿勢を明確にしています。
+            </p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#guideline">ガイドラインを見る</a>
+              <a class="btn btn-secondary" href="#mindset">セキュリティ意識を見る</a>
+            </div>
+          </div>
+          <aside class="hero-card" aria-label="セキュリティスタンス概要">
+            <h2>Security Stance</h2>
+            <ul>
+              <li>情報分類を前提にプロンプト設計</li>
+              <li>権限最小化・送信範囲の明示</li>
+              <li>APIキーと機密は分離保管</li>
+              <li>未検証Skill/Pluginは導入前検証</li>
+            </ul>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section" id="about">
+        <div class="container fade-in">
+          <h2>About / Portfolio Intro</h2>
+          <p>
+            本ページは、AI活用の利便性とセキュリティ運用の両立を示すためのポートフォリオです。<strong>Codex 5.4</strong>
+            を制作パートナーとして活用しつつ、情報の持ち出し・権限の与えすぎ・APIキー管理・未検証スキル導入といったリスクを常に点検する設計を採っています。
+          </p>
+          <p>
+            私は高機密環境の完全閉域運用を断言する立場ではありませんが、日常開発では情報分類・権限制御・秘密情報の保管方法を重視しています。原則は、
+            <strong>「便利さより先に、失って困るものを渡さない」</strong> です。
+          </p>
+        </div>
+      </section>
+
+      <section class="section muted" id="mindset">
+        <div class="container fade-in">
+          <h2>Security Mindset</h2>
+          <div class="card-grid five">
+            <article class="card">
+              <h3>情報分類</h3>
+              <p>公開・社外秘・機密を分け、AIへ渡す情報を事前に仕分けます。</p>
+            </article>
+            <article class="card">
+              <h3>権限制御</h3>
+              <p>実行権限・アクセス範囲を最小化し、不要な自動実行を避けます。</p>
+            </article>
+            <article class="card">
+              <h3>機密の分離</h3>
+              <p>コードと秘密情報を同居させず、保管場所を分離します。</p>
+            </article>
+            <article class="card">
+              <h3>ログと監査</h3>
+              <p>送信内容と設定変更を追跡可能にし、説明責任を担保します。</p>
+            </article>
+            <article class="card">
+              <h3>供給網への警戒</h3>
+              <p>Skill/Plugin/拡張機能の出所と更新履歴を確認して導入します。</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="guideline">
+        <div class="container fade-in title-block">
+          <p class="hash"># AIエディタ利用</p>
+          <h2>## セキュリティガイドライン</h2>
+          <p>ここから、実務で運用しやすい形に落とし込んだ本編です。</p>
+        </div>
+      </section>
+
+      <section class="section muted">
+        <div class="container fade-in">
+          <h2>5 Principles</h2>
+          <div class="timeline">
+            <article class="timeline-item">
+              <h3>1. 失って困るものを渡してはいけない</h3>
+              <p><strong>要約:</strong> 取り返しがつかない情報は入力しない。</p>
+              <p><strong>危険:</strong> 学習・ログ保持・漏えい時の被害が大きい。</p>
+              <p><strong>対策:</strong> マスキング、ダミー化、送信前レビューを徹底。</p>
+            </article>
+            <article class="timeline-item">
+              <h3>2. 営業秘密を渡してはいけない</h3>
+              <p><strong>要約:</strong> 競争優位に関わる知見は社外AIへ渡さない。</p>
+              <p><strong>危険:</strong> 守秘義務違反や契約違反に発展する。</p>
+              <p><strong>対策:</strong> 機密区分ラベルを付与し、送信禁止ルールを明文化。</p>
+            </article>
+            <article class="timeline-item">
+              <h3>3. クローフィッシング脅威を軽視しない</h3>
+              <p><strong>要約:</strong> 組織内OpenClawを狙う誘導攻撃を前提に設計する。</p>
+              <p><strong>危険:</strong> 認証情報・内部文書の窃取に直結する。</p>
+              <p><strong>対策:</strong> 検証済み接続先のみ許可、URL検証・多要素認証を徹底。</p>
+            </article>
+            <article class="timeline-item">
+              <h3>4. APIキー等をJSON保存させない</h3>
+              <p><strong>要約:</strong> 機密を平文ファイル化しない。</p>
+              <p><strong>危険:</strong> Git誤コミットや共有時に漏えいする。</p>
+              <p><strong>対策:</strong> Secret Manager / .env分離 / ローテーション運用。</p>
+            </article>
+            <article class="timeline-item">
+              <h3>5. スキルをむやみに追加してはいけない</h3>
+              <p><strong>要約:</strong> 便利な拡張ほど、権限と供給網リスクを確認する。</p>
+              <p><strong>危険:</strong> 過剰権限・悪性アップデートの入口になる。</p>
+              <p><strong>対策:</strong> 検証環境で試験、署名確認、最小導入を維持。</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="classification">
+        <div class="container fade-in">
+          <h2>Information Classification</h2>
+          <div class="table-wrap" role="region" aria-label="情報分類表" tabindex="0">
+            <table>
+              <thead>
+                <tr>
+                  <th>情報種別</th>
+                  <th>AI入力可否</th>
+                  <th>補足</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>公開情報</td><td><span class="ok">可</span></td><td>出典確認のうえ利用</td></tr>
+                <tr><td>OSSコード</td><td><span class="ok">可</span></td><td>ライセンス表記を維持</td></tr>
+                <tr><td>社内コード</td><td><span class="limit">制限付き</span></td><td>匿名化・差分限定で扱う</td></tr>
+                <tr><td>未公開設計</td><td><span class="ng">原則禁止</span></td><td>社内承認がある場合のみ</td></tr>
+                <tr><td>顧客情報</td><td><span class="ng">禁止</span></td><td>契約・法令に基づき遮断</td></tr>
+                <tr><td>個人情報</td><td><span class="ng">禁止</span></td><td>特定可能情報は送信しない</td></tr>
+                <tr><td>認証情報</td><td><span class="ng">禁止</span></td><td>キー/トークンは専用保管</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="section muted" id="policy">
+        <div class="container fade-in">
+          <h2>Tool Usage Policy</h2>
+          <ul class="check-grid">
+            <li>本番フォルダをそのままAIへ読ませない</li>
+            <li>.env / 秘密鍵 / 証明書をプロジェクト分離する</li>
+            <li>承認なしで自動実行させない</li>
+            <li>Skill / Pluginは検証後に限定導入する</li>
+            <li>ログを残し、設定変更はレビューフローに乗せる</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section" id="stack">
+        <div class="container fade-in">
+          <h2>Recommended Stack</h2>
+          <div class="two-col">
+            <article class="card">
+              <h3>ローカル中心構成</h3>
+              <p>VSCode + Continue + Ollama/LM Studio + Local LLM</p>
+              <p>送信範囲を局所化し、機密の外部転送を抑制しやすい構成。</p>
+            </article>
+            <article class="card">
+              <h3>企業向け構成</h3>
+              <p>IDE + Copilot Enterprise + Exclusion設定 + APIログ管理</p>
+              <p>統制された運用ルールと監査ログで、組織説明に耐える構成。</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section muted" id="ng">
+        <div class="container fade-in">
+          <h2>NG Patterns</h2>
+          <div class="card-grid">
+            <article class="card danger">顧客コードを外部クラウドAIへ無加工で送信する</article>
+            <article class="card danger">外部Skillを無審査で導入する</article>
+            <article class="card danger">APIキーをJSONや平文に保存する</article>
+            <article class="card danger">自動実行エージェントへ広範な権限を付与する</article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="maturity">
+        <div class="container fade-in">
+          <h2>Security Maturity</h2>
+          <ol class="maturity-list">
+            <li><strong>L1</strong> 個人開発</li>
+            <li><strong>L2</strong> 小規模開発</li>
+            <li><strong>L3</strong> 組織利用</li>
+            <li><strong>L4</strong> 機密開発</li>
+            <li><strong>L5</strong> 完全閉域</li>
+          </ol>
+          <p>
+            私の現在地は日常開発〜小規模組織利用（L2〜L3）を強く意識する段階です。将来的には、より高い成熟度に対応できる運用設計へ段階的に拡張する方針です。
+          </p>
+        </div>
+      </section>
+
+      <section class="section muted" id="checklist">
+        <div class="container fade-in">
+          <h2>Checklist</h2>
+          <div class="checklist">
+            <label><input type="checkbox" /> 機密情報をプロンプトから削除した</label>
+            <label><input type="checkbox" /> APIキー・トークンを除去した</label>
+            <label><input type="checkbox" /> .env を送信対象から除外した</label>
+            <label><input type="checkbox" /> 送信範囲と保存先を確認した</label>
+            <label><input type="checkbox" /> Skill/Pluginの検証記録を確認した</label>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>このサイトは Codex 5.4 を活用して作成しました。</p>
+        <p>Portfolio / Security / AI Workflow</p>
+        <p>安全性と生産性を両立するため、透明性のある運用設計を継続します。</p>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
