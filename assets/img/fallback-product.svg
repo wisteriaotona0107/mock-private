@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="480" viewBox="0 0 640 480" role="img" aria-label="画像なし">
+  <rect width="640" height="480" fill="#e5e7eb"/>
+  <g fill="#6b7280" font-family="sans-serif" text-anchor="middle">
+    <text x="320" y="230" font-size="28">No Image</text>
+    <text x="320" y="270" font-size="20">画像を準備中です</text>
+  </g>
+</svg>

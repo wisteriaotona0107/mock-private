@@ -1,0 +1,37 @@
+{
+  "generatedAt": "2026-03-09T10:00:00+09:00",
+  "items": [
+    {
+      "id": "slot01",
+      "name": "商品A",
+      "price": 1800,
+      "category": "日本酒",
+      "description": "米のうまみを感じるすっきりした味わい。冷酒にも常温にも合います。",
+      "mainImage": "/sites/pj-a/prod/assets/sake/slot01/main.jpg",
+      "thumbImage": "/sites/pj-a/prod/assets/sake/slot01/thumb.jpg",
+      "visible": true,
+      "sortOrder": 10
+    },
+    {
+      "id": "slot02",
+      "name": "商品B",
+      "price": null,
+      "category": "",
+      "description": "季節限定商品。数量に限りがあります。",
+      "mainImage": "/sites/pj-a/prod/assets/sake/slot02/main.jpg",
+      "thumbImage": "/not-found-image.jpg",
+      "visible": true,
+      "sortOrder": 20
+    },
+    {
+      "id": "hidden01",
+      "name": "非公開商品",
+      "price": 999,
+      "category": "テスト",
+      "description": "表示されない商品",
+      "mainImage": "/sites/pj-a/prod/assets/sake/hidden01/main.jpg",
+      "visible": false,
+      "sortOrder": 1
+    }
+  ]
+}
