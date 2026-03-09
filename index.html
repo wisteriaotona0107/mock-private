@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>商品一覧 | 公開サイト</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body data-page="list">
+  <a class="skip-link" href="#main">本文へスキップ</a>
+  <header class="site-header">
+    <h1>商品一覧</h1>
+    <p class="lead">小規模事業者向け公開カタログ</p>
+  </header>
+
+  <main id="main" class="page-main" aria-live="polite">
+    <section id="status-region" class="status-region" aria-atomic="true"></section>
+    <section>
+      <h2 class="section-title">公開中の商品</h2>
+      <ul id="product-list" class="product-grid" aria-label="商品一覧"></ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <small>&copy; Public Product Catalog</small>
+  </footer>
+
+  <script type="module" src="/assets/js/app.js"></script>
+</body>
+</html>
