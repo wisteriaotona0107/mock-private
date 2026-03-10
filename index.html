@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Portfolio</title>
+    <meta
+      name="description"
+      content="Material Design 3 + Minimal style のレスポンシブなポートフォリオサイト"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav-wrap">
+        <p class="brand">Portfolio</p>
+        <a class="chip-link" href="#links">Web Site</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero container card reveal">
+        <p class="eyebrow">DESIGN + DEVELOPMENT</p>
+        <h1>こんにちは、<br />シンプルで伝わる体験を作ります。</h1>
+        <p class="lead">
+          Material Design 3 をベースに、最小限の要素で最大限の印象を残すポートフォリオです。
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#gallery">作品を見る</a>
+          <a class="btn btn-ghost" href="#links">サイトへ</a>
+        </div>
+      </section>
+
+      <section id="gallery" class="container section-space">
+        <div class="section-head">
+          <h2>Image Gallery</h2>
+          <p>画像を載せるセクションです。実際の制作物画像に差し替えて使えます。</p>
+        </div>
+
+        <div class="grid cards">
+          <article class="card media-card reveal">
+            <img
+              src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=900&q=80"
+              alt="デスクとラップトップの写真"
+            />
+            <div>
+              <h3>Project Snapshot 01</h3>
+              <p>UIコンセプトのスナップショット。落ち着いたトーンと余白重視の構成。</p>
+            </div>
+          </article>
+          <article class="card media-card reveal">
+            <img
+              src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=900&q=80"
+              alt="ノートPCで作業する写真"
+            />
+            <div>
+              <h3>Project Snapshot 02</h3>
+              <p>情報設計を最適化したカード型レイアウト。モバイルでも読みやすい設計。</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="links" class="container section-space">
+        <div class="section-head">
+          <h2>My Website</h2>
+          <p>所有しているサイトへのリンクを配置できるセクションです。</p>
+        </div>
+
+        <div class="card links-card reveal">
+          <a href="https://example.com" target="_blank" rel="noreferrer">
+            https://example.com
+            <span aria-hidden="true">↗</span>
+          </a>
+          <p>※ 上記URLは仮置きです。あなたの実サイトURLに差し替えてください。</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="container site-footer">
+      <small>© 2026 Minimal Portfolio</small>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
