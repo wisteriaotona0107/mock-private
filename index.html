@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Monotone Portfolio</title>
+    <title>Craft Portfolio</title>
     <meta
       name="description"
-      content="モノトーン調のミニマルなレスポンシブポートフォリオ"
+      content="タイル調のテクスチャを使った、ミニマルで見やすいレスポンシブポートフォリオ"
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -19,87 +19,72 @@
   <body>
     <header class="site-header">
       <div class="container nav-wrap">
-        <p class="brand">Portfolio</p>
-        <a class="chip-link" href="#sites">Works & Sites</a>
+        <p class="brand">Crafted Portfolio</p>
+        <nav aria-label="Section Navigation" class="menu-scroll">
+          <a href="#hero">Home</a>
+          <a href="#gallery">Works</a>
+          <a href="#sites">Sites</a>
+          <a href="#about">About</a>
+        </nav>
       </div>
     </header>
 
     <main>
-      <section class="hero container card reveal">
+      <section id="hero" class="hero container card reveal">
         <p class="eyebrow">DESIGN + FRONTEND</p>
-        <h1>静かで見やすい、<br />モノトーンの作品集。</h1>
+        <h1>手触り感のある、<br />作品中心のポートフォリオ。</h1>
         <p class="lead">
-          ミニマルな余白設計とカードレイアウトで、作品そのものが主役になるポートフォリオ。
+          単色でもグラデーションでもない、タイル調の背景テクスチャと余白設計で、
+          作品を見やすく整理したレイアウトです。
         </p>
         <div class="hero-actions">
-          <a class="btn btn-primary" href="#gallery">作品ギャラリー</a>
-          <a class="btn btn-ghost" href="#sites">公開サイト</a>
+          <a class="btn btn-primary" href="#gallery">作品を見る</a>
+          <a class="btn btn-ghost" href="#sites">サイトを見る</a>
         </div>
       </section>
 
       <section id="gallery" class="container section-space">
         <div class="section-head">
           <h2>Featured Works</h2>
-          <p>画像点数を増やした仮案です。将来、実案件画像に置き換えて使えます。</p>
+          <p>点数が増えても見やすいように、カードを整理してスクロール閲覧しやすくしています。</p>
         </div>
 
         <div class="grid cards gallery-grid">
-          <article class="card media-card reveal">
-            <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1000&q=80" alt="ワイヤーフレームのあるノートPC" />
-            <div><h3>Dashboard UI</h3><p>密度の高い情報を整然と見せる管理画面設計。</p></div>
-          </article>
-          <article class="card media-card reveal">
-            <img src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=1000&q=80" alt="デスクトップ環境の作業風景" />
-            <div><h3>Brand Landing</h3><p>タイポグラフィと余白を活かしたLPデザイン。</p></div>
-          </article>
-          <article class="card media-card reveal">
-            <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=1000&q=80" alt="コードエディタ画面" />
-            <div><h3>Frontend Build</h3><p>軽量で高速な実装を意識したフロントエンド開発。</p></div>
-          </article>
-          <article class="card media-card reveal">
-            <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1000&q=80" alt="ノートにメモを取る手元" />
-            <div><h3>UX Strategy</h3><p>ユーザー導線を最適化する情報設計の検討記録。</p></div>
-          </article>
-          <article class="card media-card reveal">
-            <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1000&q=80" alt="ミーティングテーブル" />
-            <div><h3>Team Project</h3><p>チームでの要件整理から実装までのプロセス。</p></div>
-          </article>
-          <article class="card media-card reveal">
-            <img src="https://images.unsplash.com/photo-1487014679447-9f8336841d58?auto=format&fit=crop&w=1000&q=80" alt="タブレットでUIを確認する様子" />
-            <div><h3>Mobile Product</h3><p>モバイル体験を中心に据えたプロダクトの改善。</p></div>
-          </article>
+          <article class="card media-card reveal"><img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80" alt="ワークスペース" /><div><h3>Dashboard Redesign</h3><p>情報を整理したB2B管理画面。</p></div></article>
+          <article class="card media-card reveal"><img src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=900&q=80" alt="開発画面" /><div><h3>UI Refactor</h3><p>既存UIを段階的に改善した実装。</p></div></article>
+          <article class="card media-card reveal"><img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=900&q=80" alt="エディタ" /><div><h3>Frontend System</h3><p>再利用可能なコンポーネント設計。</p></div></article>
+          <article class="card media-card reveal"><img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=900&q=80" alt="ノート" /><div><h3>UX Mapping</h3><p>体験設計と導線の可視化。</p></div></article>
+          <article class="card media-card reveal"><img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=900&q=80" alt="会議" /><div><h3>Team Delivery</h3><p>チーム開発での改善サイクル。</p></div></article>
+          <article class="card media-card reveal"><img src="https://images.unsplash.com/photo-1487014679447-9f8336841d58?auto=format&fit=crop&w=900&q=80" alt="タブレット" /><div><h3>Mobile Optimization</h3><p>モバイルの視認性と速度最適化。</p></div></article>
+          <article class="card media-card reveal"><img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=900&q=80" alt="コードレビュー" /><div><h3>Code Review Flow</h3><p>品質と開発速度のバランス設計。</p></div></article>
+          <article class="card media-card reveal"><img src="https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=900&q=80" alt="デザインツール" /><div><h3>Visual Craft</h3><p>過度にAIっぽくない手作業感の調整。</p></div></article>
         </div>
       </section>
 
       <section id="sites" class="container section-space">
         <div class="section-head">
           <h2>Web Sites</h2>
-          <p>文字リンクではなく、画像カードをクリックして別タブで開く構成です。</p>
+          <p>画像カードをクリックすると、各サイトが別タブで開きます。</p>
         </div>
 
         <div class="grid cards site-grid">
-          <a class="card site-card reveal" href="https://example.com" target="_blank" rel="noreferrer">
-            <img src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?auto=format&fit=crop&w=900&q=80" alt="ポートフォリオサイトのサムネイル" />
-            <div><h3>Portfolio Site</h3><p>https://example.com</p></div>
-          </a>
-          <a class="card site-card reveal" href="https://example.org" target="_blank" rel="noreferrer">
-            <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=900&q=80" alt="ブログサイトのサムネイル" />
-            <div><h3>Tech Blog</h3><p>https://example.org</p></div>
-          </a>
-          <a class="card site-card reveal" href="https://www.behance.net" target="_blank" rel="noreferrer">
-            <img src="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=900&q=80" alt="クリエイティブ作品サイトのサムネイル" />
-            <div><h3>Creative Archive</h3><p>https://www.behance.net</p></div>
-          </a>
-          <a class="card site-card reveal" href="https://dribbble.com" target="_blank" rel="noreferrer">
-            <img src="https://images.unsplash.com/photo-1522542550221-31fd19575a2d?auto=format&fit=crop&w=900&q=80" alt="UIショーケースサイトのサムネイル" />
-            <div><h3>UI Showcase</h3><p>https://dribbble.com</p></div>
-          </a>
+          <a class="card site-card reveal" href="https://example.com" target="_blank" rel="noreferrer"><img src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?auto=format&fit=crop&w=900&q=80" alt="Portfolio Site" /><div><h3>Portfolio</h3><p>https://example.com</p></div></a>
+          <a class="card site-card reveal" href="https://example.org" target="_blank" rel="noreferrer"><img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=900&q=80" alt="Tech Blog" /><div><h3>Tech Blog</h3><p>https://example.org</p></div></a>
+          <a class="card site-card reveal" href="https://www.behance.net" target="_blank" rel="noreferrer"><img src="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=900&q=80" alt="Creative Archive" /><div><h3>Creative Archive</h3><p>https://www.behance.net</p></div></a>
+          <a class="card site-card reveal" href="https://dribbble.com" target="_blank" rel="noreferrer"><img src="https://images.unsplash.com/photo-1522542550221-31fd19575a2d?auto=format&fit=crop&w=900&q=80" alt="UI Showcase" /><div><h3>UI Showcase</h3><p>https://dribbble.com</p></div></a>
+          <a class="card site-card reveal" href="https://www.figma.com" target="_blank" rel="noreferrer"><img src="https://images.unsplash.com/photo-1509395176047-4a66953fd231?auto=format&fit=crop&w=900&q=80" alt="Figma Works" /><div><h3>Figma Works</h3><p>https://www.figma.com</p></div></a>
+          <a class="card site-card reveal" href="https://github.com" target="_blank" rel="noreferrer"><img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=900&q=80" alt="GitHub" /><div><h3>GitHub</h3><p>https://github.com</p></div></a>
         </div>
+      </section>
+
+      <section id="about" class="container section-space about card reveal">
+        <h2>About</h2>
+        <p>この仮案は、実プロジェクトの画像とURLを差し替えてそのまま使える構造です。スクロール時の移動用メニューを固定表示し、点数が増えても迷いにくい設計にしています。</p>
       </section>
     </main>
 
     <footer class="container site-footer">
-      <small>© 2026 Monotone Portfolio</small>
+      <small>© 2026 Crafted Portfolio</small>
     </footer>
 
     <script src="script.js"></script>
