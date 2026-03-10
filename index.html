@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Portfolio</title>
+    <title>Monotone Portfolio</title>
     <meta
       name="description"
-      content="Material Design 3 + Minimal style のレスポンシブなポートフォリオサイト"
+      content="モノトーン調のミニマルなレスポンシブポートフォリオ"
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -20,71 +20,86 @@
     <header class="site-header">
       <div class="container nav-wrap">
         <p class="brand">Portfolio</p>
-        <a class="chip-link" href="#links">Web Site</a>
+        <a class="chip-link" href="#sites">Works & Sites</a>
       </div>
     </header>
 
     <main>
       <section class="hero container card reveal">
-        <p class="eyebrow">DESIGN + DEVELOPMENT</p>
-        <h1>こんにちは、<br />シンプルで伝わる体験を作ります。</h1>
+        <p class="eyebrow">DESIGN + FRONTEND</p>
+        <h1>静かで見やすい、<br />モノトーンの作品集。</h1>
         <p class="lead">
-          Material Design 3 をベースに、最小限の要素で最大限の印象を残すポートフォリオです。
+          ミニマルな余白設計とカードレイアウトで、作品そのものが主役になるポートフォリオ。
         </p>
         <div class="hero-actions">
-          <a class="btn btn-primary" href="#gallery">作品を見る</a>
-          <a class="btn btn-ghost" href="#links">サイトへ</a>
+          <a class="btn btn-primary" href="#gallery">作品ギャラリー</a>
+          <a class="btn btn-ghost" href="#sites">公開サイト</a>
         </div>
       </section>
 
       <section id="gallery" class="container section-space">
         <div class="section-head">
-          <h2>Image Gallery</h2>
-          <p>画像を載せるセクションです。実際の制作物画像に差し替えて使えます。</p>
+          <h2>Featured Works</h2>
+          <p>画像点数を増やした仮案です。将来、実案件画像に置き換えて使えます。</p>
         </div>
 
-        <div class="grid cards">
+        <div class="grid cards gallery-grid">
           <article class="card media-card reveal">
-            <img
-              src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=900&q=80"
-              alt="デスクとラップトップの写真"
-            />
-            <div>
-              <h3>Project Snapshot 01</h3>
-              <p>UIコンセプトのスナップショット。落ち着いたトーンと余白重視の構成。</p>
-            </div>
+            <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1000&q=80" alt="ワイヤーフレームのあるノートPC" />
+            <div><h3>Dashboard UI</h3><p>密度の高い情報を整然と見せる管理画面設計。</p></div>
           </article>
           <article class="card media-card reveal">
-            <img
-              src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=900&q=80"
-              alt="ノートPCで作業する写真"
-            />
-            <div>
-              <h3>Project Snapshot 02</h3>
-              <p>情報設計を最適化したカード型レイアウト。モバイルでも読みやすい設計。</p>
-            </div>
+            <img src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=1000&q=80" alt="デスクトップ環境の作業風景" />
+            <div><h3>Brand Landing</h3><p>タイポグラフィと余白を活かしたLPデザイン。</p></div>
+          </article>
+          <article class="card media-card reveal">
+            <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=1000&q=80" alt="コードエディタ画面" />
+            <div><h3>Frontend Build</h3><p>軽量で高速な実装を意識したフロントエンド開発。</p></div>
+          </article>
+          <article class="card media-card reveal">
+            <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1000&q=80" alt="ノートにメモを取る手元" />
+            <div><h3>UX Strategy</h3><p>ユーザー導線を最適化する情報設計の検討記録。</p></div>
+          </article>
+          <article class="card media-card reveal">
+            <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1000&q=80" alt="ミーティングテーブル" />
+            <div><h3>Team Project</h3><p>チームでの要件整理から実装までのプロセス。</p></div>
+          </article>
+          <article class="card media-card reveal">
+            <img src="https://images.unsplash.com/photo-1487014679447-9f8336841d58?auto=format&fit=crop&w=1000&q=80" alt="タブレットでUIを確認する様子" />
+            <div><h3>Mobile Product</h3><p>モバイル体験を中心に据えたプロダクトの改善。</p></div>
           </article>
         </div>
       </section>
 
-      <section id="links" class="container section-space">
+      <section id="sites" class="container section-space">
         <div class="section-head">
-          <h2>My Website</h2>
-          <p>所有しているサイトへのリンクを配置できるセクションです。</p>
+          <h2>Web Sites</h2>
+          <p>文字リンクではなく、画像カードをクリックして別タブで開く構成です。</p>
         </div>
 
-        <div class="card links-card reveal">
-          <a href="https://example.com" target="_blank" rel="noreferrer">
-            https://example.com
-            <span aria-hidden="true">↗</span>
+        <div class="grid cards site-grid">
+          <a class="card site-card reveal" href="https://example.com" target="_blank" rel="noreferrer">
+            <img src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?auto=format&fit=crop&w=900&q=80" alt="ポートフォリオサイトのサムネイル" />
+            <div><h3>Portfolio Site</h3><p>https://example.com</p></div>
           </a>
-          <p>※ 上記URLは仮置きです。あなたの実サイトURLに差し替えてください。</p>
+          <a class="card site-card reveal" href="https://example.org" target="_blank" rel="noreferrer">
+            <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=900&q=80" alt="ブログサイトのサムネイル" />
+            <div><h3>Tech Blog</h3><p>https://example.org</p></div>
+          </a>
+          <a class="card site-card reveal" href="https://www.behance.net" target="_blank" rel="noreferrer">
+            <img src="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=900&q=80" alt="クリエイティブ作品サイトのサムネイル" />
+            <div><h3>Creative Archive</h3><p>https://www.behance.net</p></div>
+          </a>
+          <a class="card site-card reveal" href="https://dribbble.com" target="_blank" rel="noreferrer">
+            <img src="https://images.unsplash.com/photo-1522542550221-31fd19575a2d?auto=format&fit=crop&w=900&q=80" alt="UIショーケースサイトのサムネイル" />
+            <div><h3>UI Showcase</h3><p>https://dribbble.com</p></div>
+          </a>
         </div>
       </section>
     </main>
 
     <footer class="container site-footer">
-      <small>© 2026 Minimal Portfolio</small>
+      <small>© 2026 Monotone Portfolio</small>
     </footer>
 
     <script src="script.js"></script>
