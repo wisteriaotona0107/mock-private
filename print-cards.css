@@ -1,0 +1,164 @@
+:root {
+  --bg: #f5f2eb;
+  --ink: #26221d;
+  --sub-ink: #5e574d;
+  --accent: #7a1111;
+  --card-bg: #ffffff;
+  --line: #ddd5c8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Yu Mincho", "Hiragino Mincho ProN", "Noto Serif JP", serif;
+  color: var(--ink);
+  background: var(--bg);
+}
+
+.screen-ui {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 20px 12px;
+}
+
+h1 {
+  margin: 0 0 8px;
+  font-size: 1.75rem;
+}
+
+.lead {
+  margin: 0 0 16px;
+  color: var(--sub-ink);
+}
+
+#printButton {
+  border: 1px solid var(--ink);
+  background: var(--card-bg);
+  color: var(--ink);
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+#printButton:hover {
+  background: #fdfaf3;
+}
+
+#pages {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 8px 20px 32px;
+  display: grid;
+  gap: 20px;
+}
+
+.page {
+  width: 100%;
+  min-height: 1122px;
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  padding: 14mm 12mm;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(3, 1fr);
+  gap: 10mm;
+  break-after: page;
+}
+
+.card {
+  border: 1px solid var(--line);
+  padding: 10px;
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 8px;
+}
+
+.card-image-wrap {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border: 1px solid #e8e0d4;
+  overflow: hidden;
+  background: #faf8f3;
+}
+
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-name {
+  margin: 0;
+  font-size: 1.1rem;
+  line-height: 1.35;
+  word-break: break-word;
+}
+
+.card-desc {
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: var(--sub-ink);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.card-price {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.card-id {
+  margin: 0;
+  color: var(--sub-ink);
+  font-size: 0.8rem;
+}
+
+.card.empty {
+  background: #fcfbf9;
+}
+
+@page {
+  size: A4 portrait;
+  margin: 10mm;
+}
+
+@media print {
+  body {
+    background: #fff;
+  }
+
+  .screen-ui {
+    display: none;
+  }
+
+  #pages {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    gap: 0;
+  }
+
+  .page {
+    border: 0;
+    width: auto;
+    min-height: auto;
+    padding: 0;
+    gap: 8mm;
+  }
+}
