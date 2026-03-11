@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>酒香 - 日本酒居酒屋</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html">酒香 Sake Lounge</a>
+      <nav class="nav-links" aria-label="メインナビゲーション">
+        <a class="active" href="index.html">ホーム</a>
+        <a href="menu.html">日本酒メニュー</a>
+        <a href="shop.html">店舗情報</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <article class="hero-card">
+        <h1>お気に入りの一杯を、もっとわかりやすく。</h1>
+        <p>日本酒初心者から通なお客様まで、味タイプ・香り・料理ペアリングで直感的に選べる日本酒ガイドです。</p>
+        <p>
+          <a class="btn" href="menu.html">メニューを見る</a>
+          <a class="btn secondary" href="shop.html">店舗情報へ</a>
+        </p>
+      </article>
+      <article class="hero-card" aria-labelledby="recommend-title">
+        <h2 id="recommend-title">本日のおすすめ</h2>
+        <div id="today-recommend" class="meta">読み込み中...</div>
+      </article>
+    </section>
+
+    <section>
+      <h2 class="section-title">人気ランキング</h2>
+      <div id="ranking-grid" class="grid"></div>
+    </section>
+
+    <section>
+      <h2 class="section-title">日本酒フレーバーマップ</h2>
+      <p class="meta">横軸: 甘口 ↔ 辛口 / 縦軸: 軽い ↔ 濃厚</p>
+      <div id="flavor-map" class="chart-box" role="img" aria-label="日本酒フレーバーマップ">
+        <div class="axes"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">© 酒香 Sake Lounge</footer>
+
+  <script src="js/app.js" type="module"></script>
+  <script src="js/chart.js" type="module"></script>
+</body>
+</html>
