@@ -75,11 +75,20 @@ function createCard(item) {
   price.className = "card-price";
   price.textContent = formatPrice(item.price);
 
+  const meta = document.createElement("div");
+  meta.className = "card-meta";
+
   const id = document.createElement("p");
   id.className = "card-id";
   id.textContent = `ID: ${item.id}`;
 
-  footer.append(price, id);
+  const qrFrame = document.createElement("div");
+  qrFrame.className = "card-qr";
+  qrFrame.setAttribute("aria-label", "QRコード枠");
+  qrFrame.textContent = "QR";
+
+  meta.append(id, qrFrame);
+  footer.append(price, meta);
   card.append(imageWrap, name, desc, footer);
 
   return card;

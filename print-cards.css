@@ -70,7 +70,8 @@ h1 {
 }
 
 .card {
-  border: 1px solid var(--line);
+  border: 1.5px solid #cfc4b4;
+  border-radius: 0;
   padding: 10px;
   display: grid;
   grid-template-rows: auto auto 1fr auto;
@@ -112,7 +113,7 @@ h1 {
 .card-footer {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: flex-end;
   gap: 8px;
 }
 
@@ -123,10 +124,28 @@ h1 {
   color: var(--accent);
 }
 
+.card-meta {
+  display: grid;
+  justify-items: end;
+  gap: 4px;
+}
+
 .card-id {
   margin: 0;
   color: var(--sub-ink);
   font-size: 0.8rem;
+}
+
+.card-qr {
+  width: 52px;
+  aspect-ratio: 1 / 1;
+  border: 1.5px solid #b8ab98;
+  display: grid;
+  place-items: center;
+  font-size: 0.75rem;
+  color: #73695b;
+  font-family: "Noto Sans JP", sans-serif;
+  letter-spacing: 0.06em;
 }
 
 .card.empty {
