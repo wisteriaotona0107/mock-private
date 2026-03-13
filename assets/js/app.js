@@ -20,6 +20,13 @@
     return node;
   }
 
+  function clearContainers() {
+    phaseList.textContent = '';
+    toolList.textContent = '';
+    reviewList.textContent = '';
+    securityList.textContent = '';
+  }
+
   function renderPhases(phases) {
     phases.forEach(function (phase, index) {
       const li = document.createElement('li');
@@ -72,6 +79,35 @@
     );
   }
 
+  function readInlineData() {
+    const inlineNode = document.getElementById('ai-workflow-inline');
+    if (!inlineNode) {
+      return null;
+    }
+
+    try {
+      return JSON.parse(inlineNode.textContent);
+    } catch (error) {
+      console.error('inline data parse error', error);
+      return null;
+    }
+  }
+
+  function renderAll(data) {
+    clearContainers();
+    renderPhases(data.phases);
+    renderTools(data.tools);
+    renderNotes(data.review_points, reviewList);
+    renderNotes(data.security_notes, securityList);
+    setStatus('');
+  }
+
+  function showFailureMessage() {
+    setStatus(
+      '表示データを取得できませんでした。HTTP配信または埋め込みデータをご確認のうえ、再読み込みしてください。'
+    );
+  }
+
   fetch(DATA_PATH)
     .then(function (response) {
       if (!response.ok) {
@@ -83,14 +119,18 @@
       if (!isValidData(data)) {
         throw new Error('データ形式が不正です');
       }
-      renderPhases(data.phases);
-      renderTools(data.tools);
-      renderNotes(data.review_points, reviewList);
-      renderNotes(data.security_notes, securityList);
-      setStatus('');
+      renderAll(data);
     })
     .catch(function (error) {
-      console.error(error);
-      setStatus('表示データを取得できませんでした。時間をおいて再読み込みしてください。');
+      console.warn('fetch failed, trying inline fallback', error);
+      const fallbackData = readInlineData();
+
+      if (isValidData(fallbackData)) {
+        renderAll(fallbackData);
+        setStatus('ローカル表示モード: 埋め込みデータで表示しています。');
+        return;
+      }
+
+      showFailureMessage();
     });
 })();
