@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>日本酒メニュー | 吟味亭</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">吟味亭</div>
+      <nav class="tabs" aria-label="主要ナビゲーション">
+        <a href="index.html">ホーム</a>
+        <a href="menu.html" aria-current="page">日本酒メニュー</a>
+        <a href="shop.html">店舗情報</a>
+      </nav>
+    </header>
+
+    <main class="container">
+      <section class="card">
+        <h1>日本酒メニュー</h1>
+        <form id="filter-form" class="filters" aria-label="日本酒検索フィルタ">
+          <label>キーワード<input name="keyword" type="search" placeholder="銘柄名・説明" /></label>
+          <label>味タイプ
+            <select name="type">
+              <option value="">すべて</option>
+              <option value="フルーティ">フルーティ</option>
+              <option value="キレ">キレ</option>
+              <option value="旨口">旨口</option>
+              <option value="辛口">辛口</option>
+            </select>
+          </label>
+          <label>甘辛
+            <select name="sweetness">
+              <option value="">すべて</option>
+              <option value="sweet">甘口寄り</option>
+              <option value="dry">辛口寄り</option>
+            </select>
+          </label>
+          <label>軽重
+            <select name="body">
+              <option value="">すべて</option>
+              <option value="light">軽い</option>
+              <option value="full">濃厚</option>
+            </select>
+          </label>
+          <label>酒米<input name="rice" type="search" placeholder="例: 山田錦" /></label>
+          <label>地域<input name="region" type="search" placeholder="例: 秋田" /></label>
+          <label>価格帯
+            <select name="priceRange">
+              <option value="">すべて</option>
+              <option value="low">〜899円</option>
+              <option value="mid">900〜1199円</option>
+              <option value="high">1200円〜</option>
+            </select>
+          </label>
+          <button class="btn primary" type="submit">検索する</button>
+          <button class="btn" type="button" id="reset-btn">リセット</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>日本酒フレーバーマップ</h2>
+        <p class="muted">横軸: 甘口 ↔ 辛口 / 縦軸: 軽い ↔ 濃厚</p>
+        <canvas id="flavor-map" width="640" height="320" aria-label="日本酒フレーバーマップ"></canvas>
+      </section>
+
+      <section id="menu-list" class="grid three-col" aria-live="polite"></section>
+    </main>
+
+    <footer class="footer">© <span id="year"></span> 吟味亭</footer>
+    <script type="module" src="js/menu.js"></script>
+  </body>
+</html>

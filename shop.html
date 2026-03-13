@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>店舗情報 | 吟味亭</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">吟味亭</div>
+      <nav class="tabs" aria-label="主要ナビゲーション">
+        <a href="index.html">ホーム</a>
+        <a href="menu.html">日本酒メニュー</a>
+        <a href="shop.html" aria-current="page">店舗情報</a>
+      </nav>
+    </header>
+
+    <main class="container">
+      <section class="card shop-hero">
+        <h1>店舗情報</h1>
+        <p>旬の和食と日本酒をゆっくり楽しめる、落ち着いた空間です。</p>
+        <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1200&q=80" alt="店内カウンター席の写真" loading="lazy" />
+      </section>
+
+      <section class="grid two-col">
+        <article class="card">
+          <h2>営業時間</h2>
+          <ul>
+            <li>月〜金 17:00 - 23:30</li>
+            <li>土日祝 16:00 - 23:30</li>
+            <li>ラストオーダー 23:00</li>
+          </ul>
+          <a class="btn primary" href="https://example.com" target="_blank" rel="noreferrer">予約する</a>
+        </article>
+        <article class="card">
+          <h2>アクセス</h2>
+          <p>東京都渋谷区道玄坂1-2-3 吟味ビル1F</p>
+          <iframe
+            title="吟味亭 地図"
+            loading="lazy"
+            src="https://maps.google.com/maps?q=Shibuya%20Station&t=&z=13&ie=UTF8&iwloc=&output=embed"
+          ></iframe>
+        </article>
+      </section>
+    </main>
+
+    <footer class="footer">© <span id="year"></span> 吟味亭</footer>
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>
