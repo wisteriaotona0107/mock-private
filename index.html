@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI活用と制作フロー</title>
+    <meta
+      name="description"
+      content="AIを使った企画・設計・実装・レビューの進め方と、人の判断ポイントを整理して紹介します。"
+    />
+    <link rel="stylesheet" href="assets/css/style.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <p class="eyebrow">Workflow Overview</p>
+      <h1>AI活用と制作フロー紹介</h1>
+      <p class="lead">
+        AIを活用した制作プロセスを、役割分担と人の判断ポイントまで含めて簡潔に可視化します。
+      </p>
+    </header>
+
+    <main class="layout">
+      <section class="panel" aria-labelledby="flow-title">
+        <div class="panel-head">
+          <h2 id="flow-title">制作フロー</h2>
+          <p>段階ごとの目的・AIの役割・成果物を一覧化しています。</p>
+        </div>
+        <ol id="phase-list" class="phase-list" aria-live="polite"></ol>
+      </section>
+
+      <section class="grid-two">
+        <article class="panel" aria-labelledby="tool-title">
+          <div class="panel-head">
+            <h2 id="tool-title">使用AIと役割</h2>
+          </div>
+          <ul id="tool-list" class="card-list"></ul>
+        </article>
+
+        <article class="panel" aria-labelledby="review-title">
+          <div class="panel-head">
+            <h2 id="review-title">人が判断するポイント</h2>
+          </div>
+          <ul id="review-list" class="note-list"></ul>
+        </article>
+      </section>
+
+      <section class="panel" aria-labelledby="security-title">
+        <div class="panel-head">
+          <h2 id="security-title">セキュリティ・品質配慮</h2>
+          <p>不安を減らすために、運用上の前提を明確にしています。</p>
+        </div>
+        <ul id="security-list" class="note-list"></ul>
+      </section>
+
+      <p id="status" class="status" role="status"></p>
+    </main>
+
+    <script src="assets/js/app.js" defer></script>
+  </body>
+</html>
