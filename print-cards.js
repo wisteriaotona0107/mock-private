@@ -1,4 +1,4 @@
-const ITEMS_PER_PAGE = 6;
+const ITEMS_PER_PAGE = 1;
 
 const FALLBACK_ITEMS = [
   {

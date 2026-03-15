@@ -1,10 +1,11 @@
 :root {
-  --bg: #f5f2eb;
-  --ink: #26221d;
-  --sub-ink: #5e574d;
+  --bg: #efe9dd;
+  --ink: #1f1a14;
+  --sub-ink: #5a5247;
   --accent: #7a1111;
-  --card-bg: #ffffff;
-  --line: #ddd5c8;
+  --card-bg: #fffefb;
+  --line: #bfae97;
+  --gold: #9f7b3a;
 }
 
 * {
@@ -15,45 +16,46 @@ body {
   margin: 0;
   font-family: "Yu Mincho", "Hiragino Mincho ProN", "Noto Serif JP", serif;
   color: var(--ink);
-  background: var(--bg);
+  background: radial-gradient(circle at top, #f4efe5 0%, var(--bg) 60%);
 }
 
 .screen-ui {
-  max-width: 960px;
+  max-width: 1000px;
   margin: 0 auto;
-  padding: 24px 20px 12px;
+  padding: 28px 22px 14px;
 }
 
 h1 {
-  margin: 0 0 8px;
-  font-size: 1.75rem;
+  margin: 0 0 10px;
+  font-size: 1.9rem;
+  letter-spacing: 0.04em;
 }
 
 .lead {
-  margin: 0 0 16px;
+  margin: 0 0 18px;
   color: var(--sub-ink);
 }
 
 #printButton {
-  border: 1px solid var(--ink);
+  border: 1.5px solid var(--ink);
   background: var(--card-bg);
   color: var(--ink);
-  padding: 10px 16px;
-  border-radius: 6px;
-  font-size: 0.95rem;
+  padding: 10px 18px;
+  border-radius: 0;
+  font-size: 1rem;
   cursor: pointer;
 }
 
 #printButton:hover {
-  background: #fdfaf3;
+  background: #faf4e8;
 }
 
 #pages {
-  max-width: 960px;
+  max-width: 1000px;
   margin: 0 auto;
-  padding: 8px 20px 32px;
+  padding: 10px 22px 34px;
   display: grid;
-  gap: 20px;
+  gap: 24px;
 }
 
 .page {
@@ -61,29 +63,30 @@ h1 {
   min-height: 1122px;
   background: var(--card-bg);
   border: 1px solid var(--line);
-  padding: 14mm 12mm;
+  padding: 10mm;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: repeat(3, 1fr);
-  gap: 10mm;
+  grid-template-columns: 1fr;
   break-after: page;
 }
 
 .card {
-  border: 1.5px solid #cfc4b4;
+  border: 2px solid var(--line);
   border-radius: 0;
-  padding: 10px;
+  padding: 14mm;
   display: grid;
   grid-template-rows: auto auto 1fr auto;
-  gap: 8px;
+  gap: 10mm;
+  background:
+    linear-gradient(to right, transparent 0 18mm, rgba(191, 174, 151, 0.12) 18mm 18.7mm, transparent 18.7mm 100%),
+    var(--card-bg);
 }
 
 .card-image-wrap {
   width: 100%;
-  aspect-ratio: 4 / 3;
-  border: 1px solid #e8e0d4;
+  aspect-ratio: 16 / 9;
+  border: 1.5px solid #d7c8b3;
   overflow: hidden;
-  background: #faf8f3;
+  background: #f5f0e8;
 }
 
 .card-image {
@@ -94,32 +97,33 @@ h1 {
 
 .card-name {
   margin: 0;
-  font-size: 1.1rem;
-  line-height: 1.35;
+  font-size: clamp(1.8rem, 2.3vw, 2.4rem);
+  line-height: 1.25;
+  letter-spacing: 0.03em;
   word-break: break-word;
 }
 
 .card-desc {
   margin: 0;
-  font-size: 0.86rem;
-  line-height: 1.5;
+  max-width: 90%;
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  line-height: 1.8;
   color: var(--sub-ink);
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  overflow-wrap: anywhere;
 }
 
 .card-footer {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  gap: 8px;
+  gap: 12px;
+  padding-top: 8mm;
+  border-top: 1px solid #d9ccb9;
 }
 
 .card-price {
   margin: 0;
-  font-size: 1.2rem;
+  font-size: clamp(2rem, 2.5vw, 2.6rem);
   font-weight: 700;
   color: var(--accent);
 }
@@ -127,25 +131,26 @@ h1 {
 .card-meta {
   display: grid;
   justify-items: end;
-  gap: 4px;
+  gap: 8px;
 }
 
 .card-id {
   margin: 0;
   color: var(--sub-ink);
-  font-size: 0.8rem;
+  font-size: 1rem;
+  letter-spacing: 0.05em;
 }
 
 .card-qr {
-  width: 52px;
+  width: 92px;
   aspect-ratio: 1 / 1;
-  border: 1.5px solid #b8ab98;
+  border: 2px solid var(--gold);
   display: grid;
   place-items: center;
-  font-size: 0.75rem;
-  color: #73695b;
+  font-size: 0.95rem;
+  color: #645132;
   font-family: "Noto Sans JP", sans-serif;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
 }
 
 .card.empty {
@@ -154,7 +159,7 @@ h1 {
 
 @page {
   size: A4 portrait;
-  margin: 10mm;
+  margin: 8mm;
 }
 
 @media print {
@@ -178,6 +183,9 @@ h1 {
     width: auto;
     min-height: auto;
     padding: 0;
-    gap: 8mm;
+  }
+
+  .card {
+    min-height: 100%;
   }
 }
