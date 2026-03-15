@@ -1,0 +1,273 @@
+:root {
+  --bg: #f5f7fb;
+  --surface: #ffffff;
+  --ink: #0f172a;
+  --muted: #475569;
+  --primary: #1d3557;
+  --accent: #d4a017;
+  --line: #dbe4f0;
+  --radius: 18px;
+  --shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", "Noto Sans JP", system-ui, -apple-system, sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 90% 5%, rgba(142, 184, 255, 0.25), transparent 35%),
+    radial-gradient(circle at 0% 25%, rgba(212, 160, 23, 0.15), transparent 30%),
+    var(--bg);
+  line-height: 1.75;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.2rem;
+  backdrop-filter: blur(8px);
+  background: rgba(245, 247, 251, 0.82);
+  border-bottom: 1px solid rgba(219, 228, 240, 0.8);
+}
+
+.brand {
+  font-weight: 700;
+  color: var(--primary);
+  text-decoration: none;
+}
+
+nav {
+  display: flex;
+  gap: 0.9rem;
+}
+
+nav a {
+  text-decoration: none;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+main {
+  width: min(1100px, 92%);
+  margin: 0 auto;
+  padding-bottom: 5rem;
+}
+
+.section {
+  margin-top: 3.8rem;
+}
+
+.hero {
+  padding-top: 2.8rem;
+}
+
+.eyebrow {
+  display: inline-block;
+  margin: 0;
+  padding: 0.2rem 0.65rem;
+  background: #eaf0f8;
+  color: var(--primary);
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.3;
+}
+
+h1 {
+  margin: 0.8rem 0 0;
+  font-size: clamp(2rem, 7vw, 4rem);
+}
+
+h2 {
+  margin: 0.8rem 0 1rem;
+  font-size: clamp(1.4rem, 4.5vw, 2.4rem);
+}
+
+.lead {
+  max-width: 700px;
+  color: var(--muted);
+}
+
+.hero-cta {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  margin-top: 1.3rem;
+}
+
+.btn {
+  padding: 0.7rem 1.15rem;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+}
+
+.btn-ghost {
+  border: 1px solid var(--line);
+  color: var(--primary);
+  background: var(--surface);
+}
+
+.grid-two,
+.comparison {
+  display: grid;
+  gap: 1rem;
+}
+
+.card-stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.2rem;
+  box-shadow: var(--shadow);
+}
+
+.card h3 {
+  margin-top: 0;
+}
+
+.card ul {
+  padding-left: 1.1rem;
+  margin: 0.5rem 0 0;
+}
+
+.warning {
+  border-left: 4px solid #dc2626;
+}
+
+.metric .label {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.metric .value {
+  margin: 0.35rem 0;
+  font-size: 1.8rem;
+  color: var(--primary);
+  font-weight: 800;
+}
+
+.metric .sub {
+  margin: 0;
+}
+
+.highlight {
+  border: 1px solid #c8d9f1;
+  background: linear-gradient(145deg, #ffffff, #eff6ff);
+}
+
+.feature-grid,
+.timeline,
+.case-flow {
+  display: grid;
+  gap: 1rem;
+}
+
+.timeline .step span {
+  color: var(--accent);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+.quote {
+  margin-top: 1rem;
+  border-left: 4px solid var(--accent);
+  padding: 0.4rem 1rem;
+  color: var(--primary);
+  font-size: 1.05rem;
+}
+
+.accent {
+  border: 1px solid #f4e0a3;
+  background: linear-gradient(135deg, #fffcf1, #ffffff);
+}
+
+.closing {
+  text-align: center;
+  padding: 2.4rem 1.4rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: calc(var(--radius) + 4px);
+}
+
+.site-footer {
+  padding: 1.3rem;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.fade-in.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (min-width: 760px) {
+  .section {
+    margin-top: 5.4rem;
+  }
+
+  .grid-two {
+    grid-template-columns: 1.1fr 0.9fr;
+    align-items: start;
+  }
+
+  .comparison {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .feature-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .timeline {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .case-flow {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  nav a {
+    font-size: 0.96rem;
+  }
+}
