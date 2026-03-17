@@ -10,7 +10,7 @@
     <main class="app-card">
       <header class="app-header">
         <h1>経路可視化モック</h1>
-        <p>ピュア HTML/CSS/JavaScript で作る学習用デモ</p>
+        <p>マスをタップして現在地を移動する学習用デモ</p>
       </header>
 
       <!-- グリッドは JavaScript で再描画する -->
@@ -18,17 +18,15 @@
 
       <section class="status-card" aria-live="polite">
         <h2>現在位置</h2>
-        <p id="currentRouteText" class="current-route-text">-</p>
+        <p id="currentRouteText" class="current-route-text">未選択</p>
       </section>
 
       <section class="history-card">
         <h2>通過履歴 (配列風)</h2>
-        <pre id="historyText" class="history-text">-</pre>
+        <pre id="historyText" class="history-text">まだ通過履歴はありません</pre>
       </section>
 
       <section class="controls">
-        <button id="prevBtn" type="button">戻る</button>
-        <button id="nextBtn" type="button">次へ</button>
         <button id="resetBtn" type="button" class="reset">リセット</button>
       </section>
     </main>

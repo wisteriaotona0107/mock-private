@@ -1,33 +1,28 @@
 // 4x5 グリッドに置く経路番号 (1〜20)
 const routeList = Array.from({ length: 20 }, (_, index) => index + 1);
 
-// 現在位置の配列インデックス
-let currentIndex = 0;
+// 初期状態では未選択なので null
+let currentIndex = null;
 
-// 通過済みの経路番号を保持する配列
+// 通過履歴を配列として保持する
 let passedRoutes = [];
 
 const gridElement = document.getElementById("grid");
 const currentRouteText = document.getElementById("currentRouteText");
 const historyText = document.getElementById("historyText");
-const prevBtn = document.getElementById("prevBtn");
-const nextBtn = document.getElementById("nextBtn");
 const resetBtn = document.getElementById("resetBtn");
-
-function syncPassedRoutes() {
-  // currentIndex より前を「通過済み」として扱う
-  passedRoutes = routeList.slice(0, currentIndex);
-}
 
 function renderGrid() {
   gridElement.innerHTML = "";
 
   routeList.forEach((routeNumber, index) => {
-    const cell = document.createElement("div");
+    const cell = document.createElement("button");
+    cell.type = "button";
     cell.className = "route-cell";
     cell.textContent = routeNumber;
+    cell.setAttribute("aria-label", `経路 ${routeNumber}`);
 
-    if (index < currentIndex) {
+    if (passedRoutes.includes(routeNumber)) {
       cell.classList.add("passed");
     }
 
@@ -35,18 +30,26 @@ function renderGrid() {
       cell.classList.add("current");
     }
 
+    // マスのタップで現在位置を移動
+    cell.addEventListener("click", () => {
+      currentIndex = index;
+      passedRoutes.push(routeNumber);
+      render();
+    });
+
     gridElement.appendChild(cell);
   });
 }
 
 function renderTextInfo() {
-  const currentRouteNumber = routeList[currentIndex];
-  currentRouteText.textContent = `現在の経路番号: ${currentRouteNumber}`;
-
-  if (passedRoutes.length === 0) {
+  if (currentIndex === null) {
+    currentRouteText.textContent = "未選択（初期地点をタップしてください）";
     historyText.textContent = "まだ通過履歴はありません";
     return;
   }
+
+  const currentRouteNumber = routeList[currentIndex];
+  currentRouteText.textContent = `現在の経路番号: ${currentRouteNumber}`;
 
   const historyLines = passedRoutes.map(
     (routeNumber, index) => `route[${index}] = ${routeNumber}`
@@ -54,34 +57,13 @@ function renderTextInfo() {
   historyText.textContent = historyLines.join("\n");
 }
 
-function updateButtons() {
-  prevBtn.disabled = currentIndex === 0;
-  nextBtn.disabled = currentIndex === routeList.length - 1;
-}
-
 function render() {
-  syncPassedRoutes();
   renderGrid();
   renderTextInfo();
-  updateButtons();
 }
 
-nextBtn.addEventListener("click", () => {
-  if (currentIndex < routeList.length - 1) {
-    currentIndex += 1;
-    render();
-  }
-});
-
-prevBtn.addEventListener("click", () => {
-  if (currentIndex > 0) {
-    currentIndex -= 1;
-    render();
-  }
-});
-
 resetBtn.addEventListener("click", () => {
-  currentIndex = 0;
+  currentIndex = null;
   passedRoutes = [];
   render();
 });
