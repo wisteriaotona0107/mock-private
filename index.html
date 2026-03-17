@@ -10,10 +10,29 @@
     <main class="app-card">
       <header class="app-header">
         <h1>経路可視化モック</h1>
-        <p>マスをタップして現在地を移動する学習用デモ</p>
+        <p>行・列・経路数を指定してマスをタップ移動する学習用デモ</p>
       </header>
 
-      <!-- グリッドは JavaScript で再描画する -->
+      <section class="config-card">
+        <h2>グリッド設定</h2>
+        <div class="config-row">
+          <label>
+            行（縦）
+            <input id="rowsInput" type="number" min="1" value="4" />
+          </label>
+          <label>
+            列（横）
+            <input id="colsInput" type="number" min="1" value="5" />
+          </label>
+          <label>
+            経路数
+            <input id="routeCountInput" type="number" min="1" value="18" />
+          </label>
+          <button id="applyBtn" type="button">設定を反映</button>
+        </div>
+        <p class="config-note">※ マス数（行×列）を超える経路数は自動で切り詰めます。</p>
+      </section>
+
       <section id="grid" class="route-grid" aria-label="経路グリッド"></section>
 
       <section class="status-card" aria-live="polite">

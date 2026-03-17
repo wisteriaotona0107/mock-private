@@ -45,9 +45,50 @@ body {
   color: var(--muted);
 }
 
-.route-grid {
+.config-card {
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 12px 14px;
+}
+
+.config-card h2 {
+  margin: 0 0 10px;
+  font-size: 1rem;
+}
+
+.config-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: end;
+}
+
+.config-row label {
   display: grid;
-  grid-template-columns: repeat(5, minmax(56px, 1fr));
+  gap: 4px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.config-row input {
+  width: 90px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 8px;
+  font-size: 0.95rem;
+}
+
+.config-note {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.route-grid {
+  --grid-columns: 5;
+  display: grid;
+  grid-template-columns: repeat(var(--grid-columns), minmax(56px, 1fr));
   gap: 10px;
 }
 
@@ -77,6 +118,13 @@ body {
   color: #064e3b;
   transform: translateY(-2px);
   box-shadow: 0 6px 18px rgba(16, 185, 129, 0.25);
+}
+
+.route-cell.disabled {
+  background: #e5e7eb;
+  border-color: #cbd5e1;
+  color: #9ca3af;
+  cursor: not-allowed;
 }
 
 .status-card,
@@ -112,17 +160,25 @@ body {
   gap: 10px;
 }
 
-.controls button {
+button {
   border: none;
   border-radius: 10px;
   padding: 10px 16px;
   font-size: 0.95rem;
   font-weight: 700;
-  background: #6b7280;
   color: #ffffff;
   cursor: pointer;
 }
 
-.controls button:hover {
+#applyBtn {
+  background: #2563eb;
+}
+
+#resetBtn {
+  background: #6b7280;
+}
+
+#applyBtn:hover,
+#resetBtn:hover {
   filter: brightness(1.06);
 }
