@@ -1,0 +1,135 @@
+:root {
+  --bg: #f3f5fb;
+  --card-bg: #ffffff;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --cell: #f9fafb;
+  --cell-passed: #dbeafe;
+  --cell-current: #34d399;
+  --cell-border: #d1d5db;
+  --shadow: 0 10px 28px rgba(31, 41, 55, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Inter", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  background: linear-gradient(145deg, #eef2ff, var(--bg));
+  color: var(--text);
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.app-card {
+  width: min(920px, 100%);
+  background: var(--card-bg);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  padding: 24px;
+  display: grid;
+  gap: 18px;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+.app-header p {
+  margin: 6px 0 0;
+  color: var(--muted);
+}
+
+.route-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(56px, 1fr));
+  gap: 10px;
+}
+
+.route-cell {
+  border: 1px solid var(--cell-border);
+  background: var(--cell);
+  border-radius: 12px;
+  min-height: 70px;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 1.05rem;
+  transition: all 0.2s ease;
+}
+
+.route-cell.passed {
+  background: var(--cell-passed);
+  border-color: #93c5fd;
+  color: #1d4ed8;
+}
+
+.route-cell.current {
+  background: var(--cell-current);
+  border-color: #10b981;
+  color: #064e3b;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(16, 185, 129, 0.25);
+}
+
+.status-card,
+.history-card {
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 12px 14px;
+}
+
+.status-card h2,
+.history-card h2 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+}
+
+.current-route-text {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.history-text {
+  margin: 0;
+  white-space: pre-wrap;
+  line-height: 1.4;
+  color: #111827;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+button {
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  background: #2563eb;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+button:hover:enabled {
+  filter: brightness(1.06);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button.reset {
+  background: #6b7280;
+}

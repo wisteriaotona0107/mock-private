@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>経路可視化モック</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-card">
+      <header class="app-header">
+        <h1>経路可視化モック</h1>
+        <p>ピュア HTML/CSS/JavaScript で作る学習用デモ</p>
+      </header>
+
+      <!-- グリッドは JavaScript で再描画する -->
+      <section id="grid" class="route-grid" aria-label="経路グリッド"></section>
+
+      <section class="status-card" aria-live="polite">
+        <h2>現在位置</h2>
+        <p id="currentRouteText" class="current-route-text">-</p>
+      </section>
+
+      <section class="history-card">
+        <h2>通過履歴 (配列風)</h2>
+        <pre id="historyText" class="history-text">-</pre>
+      </section>
+
+      <section class="controls">
+        <button id="prevBtn" type="button">戻る</button>
+        <button id="nextBtn" type="button">次へ</button>
+        <button id="resetBtn" type="button" class="reset">リセット</button>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
