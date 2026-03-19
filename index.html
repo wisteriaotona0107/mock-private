@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>飲食店スタッフ向け 注文・提供管理モック</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #111311;
+      --bg-elevated: rgba(28, 30, 27, 0.94);
+      --panel: rgba(34, 36, 33, 0.92);
+      --panel-strong: #1b1d1a;
+      --panel-soft: rgba(246, 239, 224, 0.06);
+      --line: rgba(214, 195, 139, 0.18);
+      --line-strong: rgba(214, 195, 139, 0.32);
+      --text: #f5f0e5;
+      --text-muted: #bfb5a1;
+      --text-soft: #938c7d;
+      --accent: #c5a35a;
+      --accent-soft: rgba(197, 163, 90, 0.16);
+      --green: #2f5d4f;
+      --green-soft: rgba(47, 93, 79, 0.2);
+      --ink: #0b0d0c;
+      --danger: #8a4038;
+      --shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
+      --transition: 180ms ease;
+      --sidebar-width: 220px;
+      --detail-width: 360px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      font-family: Inter, "Noto Sans JP", "Hiragino Sans", "Yu Gothic UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(197, 163, 90, 0.12), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(47, 93, 79, 0.22), transparent 26%),
+        linear-gradient(135deg, #0c0f0d 0%, #151713 50%, #101210 100%);
+      color: var(--text);
+    }
+
+    body {
+      padding: 20px;
+    }
+
+    button, input {
+      font: inherit;
+    }
+
+    .app-shell {
+      display: grid;
+      grid-template-columns: var(--sidebar-width) minmax(0, 1fr) var(--detail-width);
+      gap: 18px;
+      min-height: calc(100vh - 40px);
+    }
+
+    .panel {
+      background: linear-gradient(180deg, rgba(37, 39, 35, 0.95), rgba(23, 25, 22, 0.96));
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+    }
+
+    .sidebar {
+      padding: 24px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      position: sticky;
+      top: 20px;
+      height: calc(100vh - 40px);
+    }
+
+    .brand {
+      padding: 8px 10px 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand__eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--accent);
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .brand__title {
+      margin: 12px 0 6px;
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .brand__subtitle {
+      margin: 0;
+      color: var(--text-muted);
+      line-height: 1.6;
+      font-size: 13px;
+    }
+
+    .nav-menu {
+      display: grid;
+      gap: 10px;
+    }
+
+    .nav-button {
+      width: 100%;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-muted);
+      border-radius: 16px;
+      padding: 16px 14px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-align: left;
+      cursor: pointer;
+      transition: transform var(--transition), background var(--transition), border-color var(--transition), color var(--transition);
+      min-height: 56px;
+    }
+
+    .nav-button:hover,
+    .nav-button:focus-visible {
+      background: rgba(255,255,255,0.04);
+      border-color: rgba(255,255,255,0.06);
+      color: var(--text);
+      outline: none;
+    }
+
+    .nav-button.is-active {
+      background: linear-gradient(135deg, rgba(197, 163, 90, 0.2), rgba(47, 93, 79, 0.2));
+      border-color: var(--line-strong);
+      color: var(--text);
+      transform: translateX(2px);
+    }
+
+    .nav-button__icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 6px;
+      background: rgba(245, 240, 229, 0.08);
+      flex: 0 0 auto;
+      position: relative;
+    }
+
+    .nav-button.is-active .nav-button__icon {
+      background: var(--accent-soft);
+    }
+
+    .nav-button__icon::after {
+      content: "";
+      position: absolute;
+      inset: 4px;
+      border-radius: 4px;
+      border: 1.5px solid currentColor;
+      opacity: 0.82;
+    }
+
+    .sidebar__footer {
+      margin-top: auto;
+      padding: 16px;
+      border-radius: 18px;
+      background: var(--panel-soft);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .sidebar__footer strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+
+    .sidebar__footer span {
+      color: var(--text-muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .content {
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      min-width: 0;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 6px;
+    }
+
+    .topbar__title {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.2;
+    }
+
+    .topbar__description {
+      margin: 8px 0 0;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .summary-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .summary-pill {
+      min-width: 120px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: var(--panel-soft);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .summary-pill__label {
+      font-size: 12px;
+      color: var(--text-soft);
+      margin-bottom: 4px;
+    }
+
+    .summary-pill__value {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding: 18px 20px;
+      border-radius: var(--radius-lg);
+      background: rgba(246, 239, 224, 0.04);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .search-field {
+      min-width: min(100%, 320px);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: rgba(10, 12, 11, 0.5);
+      border: 1px solid rgba(255,255,255,0.08);
+      flex: 1;
+    }
+
+    .search-field input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      color: var(--text);
+      outline: none;
+      font-size: 15px;
+    }
+
+    .search-field input::placeholder {
+      color: var(--text-soft);
+    }
+
+    .filter-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .filter-chip {
+      min-height: 48px;
+      padding: 0 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .filter-chip:hover,
+    .filter-chip:focus-visible {
+      color: var(--text);
+      border-color: var(--line-strong);
+      outline: none;
+    }
+
+    .filter-chip.is-active {
+      background: linear-gradient(135deg, rgba(197, 163, 90, 0.24), rgba(47, 93, 79, 0.26));
+      color: var(--text);
+      border-color: var(--line-strong);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+    }
+
+    .list-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 2px;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      align-content: start;
+    }
+
+    .order-card {
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 22px;
+      padding: 18px;
+      background: linear-gradient(180deg, rgba(39, 41, 38, 0.95), rgba(24, 26, 24, 0.96));
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-height: 255px;
+      cursor: pointer;
+      transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition), background var(--transition);
+    }
+
+    .order-card:hover,
+    .order-card:focus-visible {
+      transform: translateY(-2px);
+      border-color: var(--line-strong);
+      outline: none;
+    }
+
+    .order-card.is-selected {
+      border-color: rgba(197, 163, 90, 0.58);
+      box-shadow: 0 16px 38px rgba(0, 0, 0, 0.28), inset 0 0 0 1px rgba(197, 163, 90, 0.15);
+      background: linear-gradient(180deg, rgba(48, 45, 36, 0.98), rgba(28, 30, 26, 0.96));
+    }
+
+    .order-card__top,
+    .order-card__meta,
+    .order-card__actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .order-card__table {
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .order-card__id {
+      color: var(--text-soft);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+      border: 1px solid transparent;
+    }
+
+    .status-badge::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 0 4px rgba(255,255,255,0.04);
+    }
+
+    .status-new {
+      color: #d8bc75;
+      background: rgba(216, 188, 117, 0.12);
+      border-color: rgba(216, 188, 117, 0.22);
+    }
+
+    .status-cooking {
+      color: #8bc5a8;
+      background: rgba(92, 148, 123, 0.18);
+      border-color: rgba(92, 148, 123, 0.28);
+    }
+
+    .status-ready {
+      color: #8cb3d8;
+      background: rgba(98, 123, 171, 0.18);
+      border-color: rgba(98, 123, 171, 0.28);
+    }
+
+    .status-served {
+      color: #d9d7d1;
+      background: rgba(217, 215, 209, 0.14);
+      border-color: rgba(217, 215, 209, 0.2);
+    }
+
+    .order-card__summary {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.7;
+      flex: 1;
+    }
+
+    .order-card__meta {
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    .quick-action {
+      flex: 1;
+      min-height: 44px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.07);
+      background: rgba(255,255,255,0.03);
+      color: var(--text);
+      cursor: pointer;
+      transition: background var(--transition), border-color var(--transition), transform var(--transition);
+      padding: 0 10px;
+    }
+
+    .quick-action:hover,
+    .quick-action:focus-visible {
+      background: rgba(255,255,255,0.08);
+      border-color: var(--line-strong);
+      outline: none;
+    }
+
+    .quick-action:active {
+      transform: translateY(1px);
+    }
+
+    .detail {
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      position: sticky;
+      top: 20px;
+      height: calc(100vh - 40px);
+    }
+
+    .detail__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .detail__title {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .detail__subtitle {
+      margin: 6px 0 0;
+      color: var(--text-muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .detail__placeholder {
+      flex: 1;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      color: var(--text-muted);
+      padding: 24px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.03);
+      border: 1px dashed rgba(255,255,255,0.08);
+    }
+
+    .detail__content[hidden],
+    .detail__placeholder[hidden] {
+      display: none;
+    }
+
+    .detail-section {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .detail-key {
+      color: var(--text-soft);
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+
+    .detail-value {
+      font-size: 17px;
+      font-weight: 600;
+    }
+
+    .item-list {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .item-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--text-muted);
+      font-size: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .item-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .detail-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .detail-action {
+      min-height: 52px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      cursor: pointer;
+      transition: all var(--transition);
+      padding: 0 12px;
+    }
+
+    .detail-action:hover,
+    .detail-action:focus-visible {
+      border-color: var(--line-strong);
+      background: rgba(255,255,255,0.08);
+      outline: none;
+    }
+
+    .detail-action.is-disabled,
+    .detail-action:disabled {
+      opacity: 0.45;
+      cursor: default;
+    }
+
+    .empty-state {
+      padding: 52px 24px;
+      border-radius: 24px;
+      text-align: center;
+      background: rgba(255,255,255,0.03);
+      border: 1px dashed rgba(255,255,255,0.08);
+      color: var(--text-muted);
+    }
+
+    .empty-state h3 {
+      margin: 0 0 10px;
+      color: var(--text);
+      font-size: 22px;
+    }
+
+    .detail-toggle {
+      display: none;
+      min-height: 46px;
+      padding: 0 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+    }
+
+    @media (max-width: 1180px) {
+      .app-shell {
+        grid-template-columns: 200px minmax(0, 1fr);
+      }
+
+      .detail {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        width: min(380px, calc(100vw - 40px));
+        transform: translateX(calc(100% + 20px));
+        transition: transform var(--transition);
+        z-index: 20;
+      }
+
+      .detail.is-open {
+        transform: translateX(0);
+      }
+
+      .detail-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 920px) {
+      body {
+        padding: 14px;
+      }
+
+      .app-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar,
+      .detail {
+        position: static;
+        height: auto;
+      }
+
+      .detail {
+        width: auto;
+        transform: none;
+      }
+
+      .topbar,
+      .list-meta {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar panel" aria-label="サイドメニュー">
+      <div class="brand">
+        <div class="brand__eyebrow"><span>和モダン 業務端末</span></div>
+        <h1 class="brand__title">KASANE</h1>
+        <p class="brand__subtitle">注文確認から提供完了までを、現場で迷わず進めるためのタブレットUIモック。</p>
+      </div>
+      <nav class="nav-menu" aria-label="主要メニュー">
+        <button class="nav-button" type="button"><span class="nav-button__icon"></span><span>ダッシュボード</span></button>
+        <button class="nav-button is-active" type="button" aria-current="page"><span class="nav-button__icon"></span><span>注文一覧</span></button>
+        <button class="nav-button" type="button"><span class="nav-button__icon"></span><span>提供管理</span></button>
+        <button class="nav-button" type="button"><span class="nav-button__icon"></span><span>在庫</span></button>
+        <button class="nav-button" type="button"><span class="nav-button__icon"></span><span>設定</span></button>
+      </nav>
+      <div class="sidebar__footer">
+        <strong>本日の営業状況</strong>
+        <span>ピーク帯の注文集中を想定し、状態更新を1タップで完結できる構成にしています。</span>
+      </div>
+    </aside>
+
+    <main class="content panel">
+      <header class="topbar">
+        <div>
+          <h2 class="topbar__title">注文・提供管理</h2>
+          <p class="topbar__description">一覧性、即時更新、誤操作しにくさを優先した3ペイン構成です。</p>
+        </div>
+        <div class="summary-pills" id="summaryPills" aria-label="集計サマリー"></div>
+      </header>
+
+      <section class="toolbar" aria-label="検索と絞り込み">
+        <label class="search-field">
+          <span aria-hidden="true">⌕</span>
+          <input id="searchInput" type="search" placeholder="テーブル番号・注文ID・商品名で検索" />
+        </label>
+        <div class="filter-group" id="filterGroup" role="tablist" aria-label="ステータス絞り込み"></div>
+        <button class="detail-toggle" id="detailToggle" type="button">詳細を表示</button>
+      </section>
+
+      <section class="list-meta" aria-live="polite">
+        <div id="listSummary">表示件数 0件</div>
+        <div id="peakHint">最新注文を上に表示しています。</div>
+      </section>
+
+      <section class="cards-grid" id="orderList" aria-label="注文カード一覧"></section>
+      <section class="empty-state" id="emptyState" hidden>
+        <h3>該当する注文はありません</h3>
+        <p>検索条件またはステータス絞り込みを変更すると、対象の注文が表示されます。</p>
+      </section>
+    </main>
+
+    <aside class="detail panel" id="detailPane" aria-label="注文詳細">
+      <div class="detail__header">
+        <div>
+          <h2 class="detail__title">注文詳細</h2>
+          <p class="detail__subtitle">カードを選択すると、内容確認と状態更新をここで行えます。</p>
+        </div>
+        <button class="detail-toggle" id="detailClose" type="button">閉じる</button>
+      </div>
+
+      <div class="detail__placeholder" id="detailPlaceholder">
+        <div>
+          <strong>注文を選択してください</strong>
+          <p>中央のカードをタップすると、テーブル情報・商品一覧・メモ・状態更新ボタンが表示されます。</p>
+        </div>
+      </div>
+
+      <div class="detail__content" id="detailContent" hidden>
+        <section class="detail-section">
+          <div class="detail-grid">
+            <div>
+              <div class="detail-key">テーブル</div>
+              <div class="detail-value" id="detailTable">-</div>
+            </div>
+            <div>
+              <div class="detail-key">注文ID</div>
+              <div class="detail-value" id="detailId">-</div>
+            </div>
+            <div>
+              <div class="detail-key">注文時刻</div>
+              <div class="detail-value" id="detailTime">-</div>
+            </div>
+            <div>
+              <div class="detail-key">担当者</div>
+              <div class="detail-value" id="detailStaff">-</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="detail-section">
+          <div class="detail-key">現在ステータス</div>
+          <div id="detailStatus"></div>
+        </section>
+
+        <section class="detail-section">
+          <div class="detail-key">注文商品</div>
+          <ul class="item-list" id="detailItems"></ul>
+        </section>
+
+        <section class="detail-section">
+          <div class="detail-key">メモ</div>
+          <div class="detail-value" id="detailMemo" style="font-size:15px; line-height:1.7; font-weight:500; color: var(--text-muted);"></div>
+        </section>
+
+        <section class="detail-section">
+          <div class="detail-key">ステータス変更</div>
+          <div class="detail-actions" id="detailActions"></div>
+        </section>
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    (() => {
+      const statusConfig = {
+        all: { label: '全件' },
+        new: { label: '新規', className: 'status-new' },
+        cooking: { label: '調理中', className: 'status-cooking' },
+        ready: { label: '提供待ち', className: 'status-ready' },
+        served: { label: '提供済み', className: 'status-served' }
+      };
+
+      const statusFlow = ['new', 'cooking', 'ready', 'served'];
+
+      const orders = [
+        { id: 'ORD-240319-108', table: 'テーブル12', orderedAt: '19:12', status: 'new', staff: '佐藤', memo: 'だし巻き卵は甘さ控えめ。', items: [{ name: 'だし巻き卵', qty: 1 }, { name: '唐揚げ', qty: 2 }, { name: '生ビール', qty: 2 }] },
+        { id: 'ORD-240319-107', table: 'テーブル04', orderedAt: '19:09', status: 'cooking', staff: '山田', memo: 'お刺身盛り合わせは提供タイミングを合わせる。', items: [{ name: 'お刺身盛り合わせ', qty: 1 }, { name: '天ぷら盛り合わせ', qty: 1 }, { name: '日本酒 冷', qty: 2 }] },
+        { id: 'ORD-240319-106', table: 'カウンター2', orderedAt: '19:05', status: 'ready', staff: '中村', memo: '焼き魚は骨に注意を一言添える。', items: [{ name: '焼き魚', qty: 1 }, { name: '茶碗蒸し', qty: 1 }] },
+        { id: 'ORD-240319-105', table: '個室A', orderedAt: '18:58', status: 'served', staff: '高橋', memo: '追加注文の可能性あり。', items: [{ name: '和牛たたき', qty: 1 }, { name: '季節野菜のおひたし', qty: 2 }, { name: '烏龍茶', qty: 3 }] },
+        { id: 'ORD-240319-104', table: 'テーブル08', orderedAt: '18:55', status: 'cooking', staff: '伊藤', memo: '唐揚げはレモン別添え。', items: [{ name: '唐揚げ', qty: 1 }, { name: 'ポテトサラダ', qty: 1 }, { name: 'ハイボール', qty: 2 }] },
+        { id: 'ORD-240319-103', table: 'テーブル15', orderedAt: '18:51', status: 'new', staff: '小林', memo: 'お子さま用取り皿を先に。', items: [{ name: 'うどん', qty: 1 }, { name: '天ぷら', qty: 1 }, { name: 'りんごジュース', qty: 1 }] },
+        { id: 'ORD-240319-102', table: 'カウンター5', orderedAt: '18:47', status: 'ready', staff: '松本', memo: '日本酒は常温希望。', items: [{ name: '焼き鳥盛り合わせ', qty: 1 }, { name: '日本酒 常温', qty: 1 }] },
+        { id: 'ORD-240319-101', table: 'テーブル02', orderedAt: '18:42', status: 'served', staff: '吉田', memo: '提供済み。会計待ち。', items: [{ name: 'だし茶漬け', qty: 2 }, { name: 'ほうじ茶アイス', qty: 2 }] },
+        { id: 'ORD-240319-100', table: '個室B', orderedAt: '18:38', status: 'cooking', staff: '井上', memo: 'アレルギー: 海老抜き。', items: [{ name: '天ぷら盛り合わせ', qty: 1 }, { name: '焼き魚', qty: 1 }, { name: '白ごはん', qty: 2 }] }
+      ];
+
+      const state = {
+        activeMenu: '注文一覧',
+        activeFilter: 'all',
+        searchText: '',
+        selectedOrderId: orders[0].id
+      };
+
+      const summaryPills = document.getElementById('summaryPills');
+      const filterGroup = document.getElementById('filterGroup');
+      const searchInput = document.getElementById('searchInput');
+      const orderList = document.getElementById('orderList');
+      const emptyState = document.getElementById('emptyState');
+      const listSummary = document.getElementById('listSummary');
+      const peakHint = document.getElementById('peakHint');
+      const detailPane = document.getElementById('detailPane');
+      const detailToggle = document.getElementById('detailToggle');
+      const detailClose = document.getElementById('detailClose');
+      const detailPlaceholder = document.getElementById('detailPlaceholder');
+      const detailContent = document.getElementById('detailContent');
+      const detailTable = document.getElementById('detailTable');
+      const detailId = document.getElementById('detailId');
+      const detailTime = document.getElementById('detailTime');
+      const detailStaff = document.getElementById('detailStaff');
+      const detailStatus = document.getElementById('detailStatus');
+      const detailItems = document.getElementById('detailItems');
+      const detailMemo = document.getElementById('detailMemo');
+      const detailActions = document.getElementById('detailActions');
+
+      function totalItems(order) {
+        return order.items.reduce((sum, item) => sum + item.qty, 0);
+      }
+
+      function orderSummary(order) {
+        return order.items.map(item => item.name).slice(0, 3).join(' / ');
+      }
+
+      function createStatusBadge(status) {
+        const badge = document.createElement('span');
+        const config = statusConfig[status];
+        badge.className = `status-badge ${config.className}`;
+        badge.textContent = config.label;
+        return badge;
+      }
+
+      function getFilteredOrders() {
+        const keyword = state.searchText.trim().toLowerCase();
+        return orders.filter((order) => {
+          const matchesFilter = state.activeFilter === 'all' || order.status === state.activeFilter;
+          const haystack = [order.table, order.id, orderSummary(order), order.staff].join(' ').toLowerCase();
+          const matchesSearch = keyword === '' || haystack.includes(keyword);
+          return matchesFilter && matchesSearch;
+        });
+      }
+
+      function updateSummaryPills() {
+        summaryPills.textContent = '';
+        const stats = [
+          { label: '表示件数', value: getFilteredOrders().length },
+          { label: '新規', value: orders.filter(order => order.status === 'new').length },
+          { label: '提供待ち', value: orders.filter(order => order.status === 'ready').length }
+        ];
+
+        stats.forEach((stat) => {
+          const pill = document.createElement('div');
+          pill.className = 'summary-pill';
+          const label = document.createElement('div');
+          label.className = 'summary-pill__label';
+          label.textContent = stat.label;
+          const value = document.createElement('div');
+          value.className = 'summary-pill__value';
+          value.textContent = String(stat.value);
+          pill.append(label, value);
+          summaryPills.appendChild(pill);
+        });
+      }
+
+      function renderFilterChips() {
+        filterGroup.textContent = '';
+        Object.entries(statusConfig).forEach(([key, config]) => {
+          const chip = document.createElement('button');
+          chip.type = 'button';
+          chip.className = `filter-chip${state.activeFilter === key ? ' is-active' : ''}`;
+          chip.textContent = config.label;
+          chip.setAttribute('role', 'tab');
+          chip.setAttribute('aria-selected', String(state.activeFilter === key));
+          chip.addEventListener('click', () => {
+            state.activeFilter = key;
+            render();
+          });
+          filterGroup.appendChild(chip);
+        });
+      }
+
+      function setSelectedOrder(orderId) {
+        state.selectedOrderId = orderId;
+        if (window.innerWidth <= 1180) {
+          detailPane.classList.add('is-open');
+        }
+        render();
+      }
+
+      function updateOrderStatus(orderId, nextStatus) {
+        const order = orders.find((item) => item.id === orderId);
+        if (!order || order.status === nextStatus) {
+          return;
+        }
+        order.status = nextStatus;
+        render();
+      }
+
+      function renderOrderCards() {
+        orderList.textContent = '';
+        const filteredOrders = getFilteredOrders();
+
+        listSummary.textContent = `表示件数 ${filteredOrders.length}件 / 全${orders.length}件`;
+        peakHint.textContent = state.activeFilter === 'all'
+          ? '最新注文を上に表示しています。'
+          : `${statusConfig[state.activeFilter].label} の注文を表示しています。`;
+
+        emptyState.hidden = filteredOrders.length !== 0;
+        orderList.hidden = filteredOrders.length === 0;
+
+        filteredOrders.forEach((order) => {
+          const card = document.createElement('article');
+          card.className = `order-card${state.selectedOrderId === order.id ? ' is-selected' : ''}`;
+          card.tabIndex = 0;
+          card.addEventListener('click', () => setSelectedOrder(order.id));
+          card.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              setSelectedOrder(order.id);
+            }
+          });
+
+          const top = document.createElement('div');
+          top.className = 'order-card__top';
+          const tableWrap = document.createElement('div');
+          const table = document.createElement('div');
+          table.className = 'order-card__table';
+          table.textContent = order.table;
+          const id = document.createElement('div');
+          id.className = 'order-card__id';
+          id.textContent = order.id;
+          tableWrap.append(table, id);
+          top.append(tableWrap, createStatusBadge(order.status));
+
+          const summary = document.createElement('div');
+          summary.className = 'order-card__summary';
+          summary.textContent = orderSummary(order);
+
+          const meta = document.createElement('div');
+          meta.className = 'order-card__meta';
+          const time = document.createElement('span');
+          time.textContent = `注文 ${order.orderedAt}`;
+          const qty = document.createElement('span');
+          qty.textContent = `合計 ${totalItems(order)}点`;
+          meta.append(time, qty);
+
+          const actions = document.createElement('div');
+          actions.className = 'order-card__actions';
+          statusFlow
+            .filter((status) => status !== order.status)
+            .slice(0, 2)
+            .forEach((status) => {
+              const action = document.createElement('button');
+              action.type = 'button';
+              action.className = 'quick-action';
+              action.textContent = `${statusConfig[status].label}へ`;
+              action.addEventListener('click', (event) => {
+                event.stopPropagation();
+                updateOrderStatus(order.id, status);
+              });
+              actions.appendChild(action);
+            });
+
+          card.append(top, summary, meta, actions);
+          orderList.appendChild(card);
+        });
+      }
+
+      function renderDetail() {
+        const selectedOrder = orders.find((order) => order.id === state.selectedOrderId);
+
+        if (!selectedOrder) {
+          detailPlaceholder.hidden = false;
+          detailContent.hidden = true;
+          return;
+        }
+
+        detailPlaceholder.hidden = true;
+        detailContent.hidden = false;
+
+        detailTable.textContent = selectedOrder.table;
+        detailId.textContent = selectedOrder.id;
+        detailTime.textContent = selectedOrder.orderedAt;
+        detailStaff.textContent = selectedOrder.staff;
+        detailMemo.textContent = selectedOrder.memo;
+
+        detailStatus.textContent = '';
+        detailStatus.appendChild(createStatusBadge(selectedOrder.status));
+
+        detailItems.textContent = '';
+        selectedOrder.items.forEach((item) => {
+          const row = document.createElement('li');
+          row.className = 'item-row';
+          const name = document.createElement('span');
+          name.textContent = item.name;
+          const qty = document.createElement('strong');
+          qty.textContent = `${item.qty}点`;
+          row.append(name, qty);
+          detailItems.appendChild(row);
+        });
+
+        detailActions.textContent = '';
+        statusFlow.forEach((status) => {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'detail-action';
+          button.textContent = statusConfig[status].label;
+          const isCurrent = selectedOrder.status === status;
+          button.disabled = isCurrent;
+          if (isCurrent) {
+            button.classList.add('is-disabled');
+          }
+          button.addEventListener('click', () => updateOrderStatus(selectedOrder.id, status));
+          detailActions.appendChild(button);
+        });
+      }
+
+      function render() {
+        renderFilterChips();
+        updateSummaryPills();
+        renderOrderCards();
+        renderDetail();
+      }
+
+      searchInput.addEventListener('input', (event) => {
+        state.searchText = event.target.value;
+        render();
+      });
+
+      detailToggle.addEventListener('click', () => {
+        detailPane.classList.add('is-open');
+      });
+
+      detailClose.addEventListener('click', () => {
+        detailPane.classList.remove('is-open');
+      });
+
+      render();
+    })();
+  </script>
+</body>
+</html>
