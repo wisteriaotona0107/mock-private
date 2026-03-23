@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>mock-private | 100-to-platform mock site</title>
+    <meta
+      name="description"
+      content="README と AGENTS.md の内容を確認するための mock-private ドキュメントサイト。"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <nav class="top-nav">
+        <a class="brand" href="#top">mock-private</a>
+        <div class="nav-links">
+          <a href="#positioning">Positioning</a>
+          <a href="#reading-order">Reading Order</a>
+          <a href="#agents">Agents</a>
+          <a href="#docs">Docs</a>
+        </div>
+      </nav>
+
+      <div class="hero__content" id="top">
+        <p class="eyebrow">100-to-platform</p>
+        <h1>README / AGENTS.md の内容を確認できるモックサイト</h1>
+        <p class="hero__lead">
+          このサイトは、リポジトリの位置づけ・運用原則・関連ドキュメントの導線をブラウザ上で確認するための静的モックです。
+        </p>
+        <div class="hero__actions">
+          <a class="button button--primary" href="#reading-order">読む順番を見る</a>
+          <a class="button button--ghost" href="#repository-map">構成を見る</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="section" id="positioning">
+        <div class="section-heading">
+          <p class="section-label">README</p>
+          <h2>Positioning</h2>
+        </div>
+        <div class="grid-two">
+          <article class="card card--emphasis">
+            <h3>リポジトリの役割</h3>
+            <p>
+              これまでの試行錯誤的な開発成果を、将来継続利用できる「プラットフォーム型の開発基盤」へ移行するための整理用リポジトリです。
+            </p>
+            <p>
+              現時点では実装資産よりも、今後の設計・運用・分業の土台づくりを重視しています。
+            </p>
+          </article>
+          <article class="card">
+            <h3>Current Status</h3>
+            <ul>
+              <li>最小構成から開始し、設計・運用ドキュメントの整備を優先しています。</li>
+              <li>実装ディレクトリやアプリ構成は今後確定していく前提です。</li>
+              <li>不明点は断定せず、<strong>要確認 / 仮説</strong> として扱います。</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="section section--alt" id="reading-order">
+        <div class="section-heading">
+          <p class="section-label">README</p>
+          <h2>Recommended Reading Order</h2>
+        </div>
+        <div class="timeline">
+          <article class="timeline-item">
+            <span class="timeline-item__index">1</span>
+            <div>
+              <h3>Milestone</h3>
+              <p><code>docs/milestones/100-to-platform.md</code></p>
+            </div>
+          </article>
+          <article class="timeline-item">
+            <span class="timeline-item__index">2</span>
+            <div>
+              <h3>Current State</h3>
+              <p><code>docs/architecture/current-state.md</code></p>
+            </div>
+          </article>
+          <article class="timeline-item">
+            <span class="timeline-item__index">3</span>
+            <div>
+              <h3>Target State</h3>
+              <p><code>docs/architecture/target-state.md</code></p>
+            </div>
+          </article>
+          <article class="timeline-item">
+            <span class="timeline-item__index">4</span>
+            <div>
+              <h3>Transition Plan</h3>
+              <p><code>docs/architecture/transition-plan.md</code></p>
+            </div>
+          </article>
+          <article class="timeline-item">
+            <span class="timeline-item__index">5</span>
+            <div>
+              <h3>Codex Workflow</h3>
+              <p><code>docs/operations/codex-workflow.md</code></p>
+            </div>
+          </article>
+          <article class="timeline-item">
+            <span class="timeline-item__index">6</span>
+            <div>
+              <h3>Roadmap</h3>
+              <p><code>docs/roadmap/next-phase-roadmap.md</code></p>
+            </div>
+          </article>
+          <article class="timeline-item">
+            <span class="timeline-item__index">7</span>
+            <div>
+              <h3>Product Vision</h3>
+              <p><code>docs/vision/product-vision.md</code></p>
+            </div>
+          </article>
+          <article class="timeline-item">
+            <span class="timeline-item__index">8</span>
+            <div>
+              <h3>Orchestrator</h3>
+              <p><code>agents/orchestrator.md</code></p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="agents">
+        <div class="section-heading">
+          <p class="section-label">AGENTS.md</p>
+          <h2>Working Principles</h2>
+        </div>
+        <div class="grid-three">
+          <article class="card">
+            <h3>Read First</h3>
+            <p>変更前に README と主要な architecture / operations / agents 文書を確認します。</p>
+          </article>
+          <article class="card">
+            <h3>Default Rule</h3>
+            <p>迷ったら実装追加よりも、構造・責務・判断理由の明確化を優先します。</p>
+          </article>
+          <article class="card">
+            <h3>Safe Change</h3>
+            <p>大きな変更ほど、先に docs を更新し、壊すより文書化して保留を優先します。</p>
+          </article>
+        </div>
+
+        <div class="checklist-wrapper">
+          <article class="card">
+            <h3>Before Changing Anything</h3>
+            <ul class="checklist">
+              <li>ブランチ名と目的が一致しているか確認する。</li>
+              <li><code>git status</code> で未コミット変更を確認する。</li>
+              <li>対象領域の設計文書・決定メモの有無を確認する。</li>
+              <li>変更の種類を小修正 / 設計変更 / 将来運用影響で分類する。</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Documentation Update Rules</h3>
+            <ul class="checklist">
+              <li>役割や責務の変更 → <code>docs/architecture/</code> と <code>agents/</code></li>
+              <li>開発フローの変更 → <code>docs/operations/</code></li>
+              <li>位置づけ変更 → <code>README.md</code> と <code>docs/vision/</code></li>
+              <li>重要な判断追加 → <code>docs/decisions/</code></li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="section section--alt" id="docs">
+        <div class="section-heading">
+          <p class="section-label">Repository Guide</p>
+          <h2>Docs &amp; Roles Overview</h2>
+        </div>
+        <div class="repo-grid" id="repository-map">
+          <article class="repo-card">
+            <h3>docs/architecture</h3>
+            <p>現状・目標・移行手順を記述する領域。</p>
+          </article>
+          <article class="repo-card">
+            <h3>docs/operations</h3>
+            <p>Codex 運用、変更ポリシー、ブランチ戦略の整理先。</p>
+          </article>
+          <article class="repo-card">
+            <h3>docs/vision</h3>
+            <p>将来の見せ方、プロダクト・プラットフォーム構想を扱う領域。</p>
+          </article>
+          <article class="repo-card">
+            <h3>docs/milestones</h3>
+            <p>節目ブランチや転換点の意味を整理する領域。</p>
+          </article>
+          <article class="repo-card">
+            <h3>docs/structure / decisions</h3>
+            <p>現在地の把握資料と、今後の判断メモの保管場所。</p>
+          </article>
+          <article class="repo-card">
+            <h3>agents</h3>
+            <p>将来の Harness 的運用も見据えたロール定義の領域。</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>mock-private documentation mock site</p>
+      <button class="button button--ghost button--small" id="theme-toggle" type="button">
+        テーマ切替
+      </button>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
