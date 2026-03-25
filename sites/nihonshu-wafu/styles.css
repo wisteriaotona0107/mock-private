@@ -1,0 +1,347 @@
+:root {
+  --bg: #f7f5f1;
+  --paper: #fbfaf7;
+  --ink: #22201d;
+  --ink-soft: #5a544d;
+  --line: #d9d2c8;
+  --deep: #1e2b24;
+  --accent: #7f6a45;
+  --radius: 14px;
+  --wrap: min(1100px, calc(100vw - 48px));
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", sans-serif;
+  color: var(--ink);
+  background: linear-gradient(180deg, #f6f3ee 0%, #f2ede6 100%);
+  line-height: 1.8;
+}
+
+.wrap {
+  width: var(--wrap);
+  margin: 0 auto;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(251, 250, 247, 0.92);
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(6px);
+}
+
+.header-inner {
+  min-height: 78px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.logo-mark {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid #6d665d;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.logo-text strong {
+  display: block;
+  font-size: 1.05rem;
+  letter-spacing: 0.06em;
+}
+
+.logo-text small {
+  color: var(--ink-soft);
+  letter-spacing: 0.08em;
+}
+
+.site-nav {
+  display: flex;
+  gap: 22px;
+}
+
+.site-nav a {
+  text-decoration: none;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+.site-nav a:hover {
+  color: var(--ink);
+}
+
+.hero {
+  padding: 72px 0 56px;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.08fr 0.92fr;
+  gap: 28px;
+  align-items: start;
+}
+
+.kicker,
+.section-kicker,
+.tag,
+.panel-label {
+  font-size: 0.76rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.hero h1,
+.section h2,
+.card h3,
+.hero-panel h2,
+.site-footer h2,
+.site-footer h3 {
+  font-family: "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.hero h1 {
+  margin: 10px 0 16px;
+  font-size: clamp(2rem, 4vw, 3.35rem);
+}
+
+.hero h1 span {
+  display: inline-block;
+}
+
+.hero p {
+  color: var(--ink-soft);
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 26px;
+}
+
+.hero-meta {
+  margin: 22px 0 0;
+  padding-left: 18px;
+  color: var(--ink-soft);
+}
+
+.hero-panel,
+.card,
+.regular-box,
+.contact-box {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.hero-panel {
+  padding: 22px;
+}
+
+.hero-panel h2 {
+  margin: 6px 0 14px;
+  font-size: 1.55rem;
+}
+
+.hero-panel dl {
+  margin: 0 0 18px;
+  display: grid;
+  gap: 10px;
+}
+
+.hero-panel dt {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
+.hero-panel dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.section {
+  padding: 34px 0 78px;
+}
+
+.section-ink {
+  background: linear-gradient(180deg, rgba(34, 32, 29, 0.03) 0%, rgba(34, 32, 29, 0.06) 100%);
+  border-top: 1px solid rgba(34, 32, 29, 0.07);
+  border-bottom: 1px solid rgba(34, 32, 29, 0.07);
+}
+
+.two-col,
+.section-head,
+.contact-box,
+.footer-inner {
+  display: grid;
+  gap: 22px;
+}
+
+.two-col,
+.section-head {
+  grid-template-columns: 0.95fr 1.05fr;
+}
+
+.section h2 {
+  margin: 8px 0 0;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+}
+
+.text-block p,
+.section-head p,
+.regular-box p,
+.contact-box p,
+.site-footer p {
+  color: var(--ink-soft);
+}
+
+.card-grid {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.card {
+  padding: 18px;
+}
+
+.card h3 {
+  margin: 4px 0 8px;
+  font-size: 1.25rem;
+}
+
+.price {
+  margin: 14px 0 0;
+  font-weight: 700;
+  color: var(--deep);
+}
+
+.regular-box,
+.contact-box {
+  padding: 24px;
+}
+
+.regular-box {
+  display: grid;
+  grid-template-columns: 1.08fr 0.92fr;
+  gap: 20px;
+  align-items: center;
+}
+
+.regular-box ul {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--ink-soft);
+}
+
+.actions {
+  display: grid;
+  gap: 10px;
+}
+
+.btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 46px;
+  padding: 0 18px;
+  text-decoration: none;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-weight: 700;
+  font-size: 0.93rem;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.btn.wide {
+  width: 100%;
+}
+
+.btn-solid {
+  background: #2f3e35;
+  color: #f7f4ef;
+}
+
+.btn-solid:hover {
+  background: #243229;
+}
+
+.btn-muted {
+  background: #ece7de;
+  color: #302a24;
+  border-color: #ddd4c8;
+}
+
+.btn-outline {
+  background: transparent;
+  color: #2d2721;
+  border-color: #b7aa97;
+}
+
+.site-footer {
+  padding: 28px 0 42px;
+}
+
+.footer-inner {
+  grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 960px) {
+  .site-nav {
+    display: none;
+  }
+
+  .hero-grid,
+  .two-col,
+  .section-head,
+  .card-grid,
+  .regular-box,
+  .contact-box,
+  .footer-inner {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --wrap: min(100vw - 28px, 1100px);
+  }
+
+  .header-inner {
+    padding: 10px 0;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}
