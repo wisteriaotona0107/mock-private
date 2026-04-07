@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Skunk × Bicorne | 1人で試し、2人で勝つ。</title>
+    <meta
+      name="description"
+      content="Skunk × Bicorne思想を伝えるランディングページ。小さく試し、当てたものだけを2人チームで伸ばす開発アプローチ。"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #090a12;
+        --surface: rgba(255, 255, 255, 0.06);
+        --surface-strong: rgba(255, 255, 255, 0.11);
+        --text: #f4f6ff;
+        --muted: #b9bfdd;
+        --magenta: #ff2e88;
+        --blue: #2ed3ff;
+        --radius: 8px;
+        --container: min(1180px, 92vw);
+        --glow-magenta: 0 0 0 1px rgba(255, 46, 136, 0.35), 0 0 20px rgba(255, 46, 136, 0.3);
+        --glow-blue: 0 0 0 1px rgba(46, 211, 255, 0.35), 0 0 20px rgba(46, 211, 255, 0.28);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        color: var(--text);
+        font-family: "Inter", "Noto Sans JP", system-ui, sans-serif;
+        background: radial-gradient(circle at 20% 10%, rgba(255, 46, 136, 0.13), transparent 30%),
+          radial-gradient(circle at 85% 25%, rgba(46, 211, 255, 0.16), transparent 32%),
+          linear-gradient(150deg, #090a12 20%, #0d1020 60%, #08090f 100%);
+        min-height: 100%;
+        scroll-behavior: smooth;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.22;
+        background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+        background-size: 34px 34px;
+        mask-image: radial-gradient(circle at center, black 30%, transparent 85%);
+        z-index: 0;
+      }
+
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.05;
+        background-image: radial-gradient(circle, #fff 0.5px, transparent 0.5px);
+        background-size: 4px 4px;
+        z-index: 0;
+      }
+
+      .page {
+        position: relative;
+        z-index: 1;
+      }
+
+      .container {
+        width: var(--container);
+        margin-inline: auto;
+      }
+
+      section {
+        padding: clamp(70px, 10vw, 120px) 0;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      .hero {
+        padding-top: clamp(72px, 10vw, 120px);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1.05fr 0.95fr;
+        align-items: center;
+        gap: clamp(24px, 4vw, 64px);
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        gap: 8px;
+        align-items: center;
+        font-size: 0.88rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--blue);
+        padding: 6px 12px;
+        border-radius: 999px;
+        border: 1px solid rgba(46, 211, 255, 0.35);
+        background: rgba(46, 211, 255, 0.1);
+      }
+
+      .hero h1 {
+        margin-top: 18px;
+        font-size: clamp(2rem, 4.5vw, 4.2rem);
+        line-height: 1.15;
+        letter-spacing: -0.02em;
+      }
+
+      .hero h1 .accent {
+        background: linear-gradient(90deg, var(--magenta), var(--blue));
+        -webkit-background-clip: text;
+        color: transparent;
+      }
+
+      .subcopy {
+        margin-top: 22px;
+        color: var(--muted);
+        font-size: clamp(1rem, 1.4vw, 1.2rem);
+        line-height: 1.9;
+        max-width: 44ch;
+      }
+
+      .social-proof {
+        margin-top: 28px;
+        font-size: 0.95rem;
+        color: #d6ddff;
+      }
+
+      .social-proof strong {
+        color: #fff;
+        font-weight: 700;
+      }
+
+      .cta-row {
+        margin-top: 34px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .btn {
+        border: 1px solid transparent;
+        border-radius: var(--radius);
+        padding: 12px 22px;
+        text-decoration: none;
+        color: white;
+        font-weight: 600;
+        font-size: 0.95rem;
+        letter-spacing: 0.02em;
+        transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+      }
+
+      .btn-primary {
+        background: linear-gradient(100deg, rgba(255, 46, 136, 0.92), rgba(46, 211, 255, 0.9));
+        box-shadow: 0 10px 30px rgba(20, 24, 42, 0.45);
+      }
+
+      .btn-secondary {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.28);
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--glow-magenta), var(--glow-blue);
+      }
+
+      .hero-visual {
+        position: relative;
+        display: grid;
+        place-items: center;
+      }
+
+      .orb {
+        position: absolute;
+        width: clamp(210px, 36vw, 430px);
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(46, 211, 255, 0.3), rgba(255, 46, 136, 0.11) 45%, transparent 75%);
+        filter: blur(6px);
+      }
+
+      .emblem-wrap {
+        width: min(76%, 460px);
+        aspect-ratio: 1;
+        border-radius: 26px;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(16px);
+        background: linear-gradient(140deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+        display: grid;
+        place-items: center;
+        box-shadow: var(--glow-blue);
+        animation: emblemGlow 6.6s ease-in-out infinite;
+        overflow: hidden;
+      }
+
+      .emblem-wrap img {
+        width: 76%;
+        max-width: 300px;
+        filter: drop-shadow(0 0 16px rgba(46, 211, 255, 0.35));
+      }
+
+      .scroll-cue {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 18px;
+        color: var(--muted);
+        font-size: 0.78rem;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .scroll-cue::after {
+        content: "";
+        width: 1px;
+        height: 36px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(46, 211, 255, 0.85));
+        animation: cue 1.6s ease-in-out infinite;
+      }
+
+      .section-header {
+        margin-bottom: clamp(20px, 4vw, 40px);
+      }
+
+      .section-header h2 {
+        font-size: clamp(1.4rem, 2.4vw, 2.2rem);
+        letter-spacing: -0.01em;
+      }
+
+      .section-header p {
+        margin-top: 10px;
+        color: var(--muted);
+        line-height: 1.85;
+        max-width: 64ch;
+      }
+
+      .cards-3 {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .card {
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        border-radius: var(--radius);
+        background: var(--surface);
+        backdrop-filter: blur(10px);
+        padding: clamp(18px, 2.6vw, 24px);
+      }
+
+      .card h3 {
+        font-size: 1.1rem;
+      }
+
+      .card p {
+        margin-top: 10px;
+        color: var(--muted);
+        line-height: 1.85;
+        font-size: 0.95rem;
+      }
+
+      .flow {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .step {
+        position: relative;
+        padding: 18px;
+        border-radius: var(--radius);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: var(--surface);
+      }
+
+      .step small {
+        color: var(--blue);
+        font-weight: 700;
+        letter-spacing: 0.08em;
+      }
+
+      .step h3 {
+        margin-top: 8px;
+      }
+
+      .step p {
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 0.92rem;
+        line-height: 1.7;
+      }
+
+      .step:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        right: -8px;
+        top: 50%;
+        width: 16px;
+        height: 1px;
+        background: linear-gradient(90deg, rgba(255, 46, 136, 0.8), rgba(46, 211, 255, 0.8));
+      }
+
+      .values {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .value-card {
+        padding: 26px 20px;
+        border-radius: var(--radius);
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        background: var(--surface-strong);
+      }
+
+      .value-card h3 {
+        margin-top: 10px;
+      }
+
+      .value-card p {
+        margin-top: 8px;
+        color: var(--muted);
+        line-height: 1.8;
+      }
+
+      .cta-panel {
+        padding: clamp(24px, 4vw, 44px);
+        border-radius: calc(var(--radius) + 4px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: linear-gradient(145deg, rgba(255, 46, 136, 0.14), rgba(46, 211, 255, 0.08));
+        backdrop-filter: blur(12px);
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 18px;
+      }
+
+      .cta-panel p {
+        color: #dce4ff;
+        line-height: 1.8;
+      }
+
+      .footer {
+        padding: 28px 0 40px;
+        color: rgba(220, 230, 255, 0.7);
+        font-size: 0.82rem;
+      }
+
+      [data-reveal] {
+        opacity: 0;
+        transform: translateY(26px);
+        transition: opacity 0.65s ease, transform 0.65s ease;
+      }
+
+      [data-reveal].show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      @keyframes emblemGlow {
+        0%,
+        100% {
+          box-shadow: var(--glow-blue);
+          transform: translateY(0px) scale(1);
+        }
+        50% {
+          box-shadow: var(--glow-magenta), var(--glow-blue);
+          transform: translateY(-3px) scale(1.01);
+        }
+      }
+
+      @keyframes cue {
+        0%,
+        100% {
+          transform: scaleY(0.75);
+          opacity: 0.4;
+        }
+        50% {
+          transform: scaleY(1.2);
+          opacity: 1;
+        }
+      }
+
+      @media (max-width: 1024px) {
+        .hero {
+          min-height: auto;
+          padding-bottom: 90px;
+        }
+
+        .hero-grid,
+        .cards-3,
+        .flow,
+        .values {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .step:not(:last-child)::after {
+          display: none;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .hero-grid,
+        .cards-3,
+        .flow,
+        .values {
+          grid-template-columns: 1fr;
+        }
+
+        .hero h1 {
+          font-size: clamp(1.9rem, 9vw, 2.6rem);
+        }
+
+        .scroll-cue {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero" id="top">
+        <div class="container hero-grid">
+          <div data-reveal>
+            <span class="eyebrow">Skunk × Bicorne Method</span>
+            <h1>
+              <span class="accent">1人で試し、</span><br />
+              2人で勝つ。
+            </h1>
+            <p class="subcopy">
+              試作（Skunk）で当てたものだけを、<br />
+              2人チーム（Bicorne）でプロダクト化する。<br />
+              小さく始めて、強く伸ばすための開発思想。
+            </p>
+            <p class="social-proof">すでに<strong>小規模事業者・飲食店オーナー</strong>の現場で導入が進んでいます。</p>
+            <div class="cta-row">
+              <a class="btn btn-primary" href="#flow">仕組みを見る</a>
+              <a class="btn btn-secondary" href="#contact">無料相談</a>
+            </div>
+          </div>
+          <div class="hero-visual" data-reveal>
+            <span class="orb" aria-hidden="true"></span>
+            <div class="emblem-wrap" id="emblemWrap">
+              <img src="emblem.png" alt="Skunk × Bicorne エンブレム" />
+            </div>
+          </div>
+        </div>
+        <a class="scroll-cue" href="#concept">Scroll</a>
+      </section>
+
+      <section id="concept">
+        <div class="container">
+          <header class="section-header" data-reveal>
+            <h2>Skunk / Bicorne / Navigator</h2>
+            <p>検証と実装を分離し、意思決定を最短化。限られたリソースで成果の確率を上げる設計です。</p>
+          </header>
+          <div class="cards-3">
+            <article class="card" data-reveal>
+              <h3>Skunk</h3>
+              <p>最小の試作で仮説を高速検証。広告・導線・業務フローまで、まずは当たる形を見つけます。</p>
+            </article>
+            <article class="card" data-reveal>
+              <h3>Bicorne</h3>
+              <p>2人編成で実装を集中。手戻りを抑え、運用まで想定したプロダクトへ磨き込みます。</p>
+            </article>
+            <article class="card" data-reveal>
+              <h3>Navigator</h3>
+              <p>判断軸を明確化し、次の一手を提示。感覚ではなく、データと現場感で意思決定を支えます。</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="flow">
+        <div class="container">
+          <header class="section-header" data-reveal>
+            <h2>仕組み（Flow）</h2>
+            <p>やるべきことだけを残す、4ステップの開発フロー。</p>
+          </header>
+          <div class="flow">
+            <article class="step" data-reveal>
+              <small>STEP 01</small>
+              <h3>Skunk</h3>
+              <p>仮説を最短で可視化。使われるかどうかを先に検証。</p>
+            </article>
+            <article class="step" data-reveal>
+              <small>STEP 02</small>
+              <h3>選別</h3>
+              <p>反応データを基に、勝ち筋のみを残して意思決定。</p>
+            </article>
+            <article class="step" data-reveal>
+              <small>STEP 03</small>
+              <h3>Bicorne</h3>
+              <p>2人チームで開発を高速化し、運用可能な形に整備。</p>
+            </article>
+            <article class="step" data-reveal>
+              <small>STEP 04</small>
+              <h3>プロダクト化</h3>
+              <p>再現可能な構造として定着。継続的に改善しながら拡張。</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="value">
+        <div class="container">
+          <header class="section-header" data-reveal>
+            <h2>提供価値</h2>
+            <p>「大きく作って失敗する」ではなく、「小さく当ててから大きく育てる」。</p>
+          </header>
+          <div class="values">
+            <article class="value-card" data-reveal>
+              <h3>低コスト</h3>
+              <p>最小構成で着手し、無駄な初期投資を抑制。スモールビジネスでも始めやすい。</p>
+            </article>
+            <article class="value-card" data-reveal>
+              <h3>高速開発</h3>
+              <p>検証済みの機能だけを実装するため、開発速度と意思決定速度が同時に上がる。</p>
+            </article>
+            <article class="value-card" data-reveal>
+              <h3>再現性</h3>
+              <p>属人化しにくいフローを設計。案件や業種が変わっても成果を再利用できる。</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact">
+        <div class="container">
+          <div class="cta-panel" data-reveal>
+            <div>
+              <h2>小さく試して、確実に前へ。</h2>
+              <p>
+                まずは現場に合うSkunkを設計しませんか。<br />
+                費用感と導入ステップを、30分で具体化します。
+              </p>
+            </div>
+            <div class="cta-row">
+              <a href="#top" class="btn btn-primary">問い合わせる</a>
+              <a href="#top" class="btn btn-secondary">資料DL（準備中）</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <div class="container">© 2026 Skunk × Bicorne. Built for lean challengers.</div>
+      </footer>
+    </main>
+
+    <script>
+      const revealTargets = document.querySelectorAll("[data-reveal]");
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("show");
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.2 }
+      );
+
+      revealTargets.forEach((node) => observer.observe(node));
+
+      const emblemWrap = document.getElementById("emblemWrap");
+      window.addEventListener("mousemove", (event) => {
+        const x = (event.clientX / window.innerWidth - 0.5) * 10;
+        const y = (event.clientY / window.innerHeight - 0.5) * 10;
+        emblemWrap.style.transform = `rotateY(${x}deg) rotateX(${-y}deg)`;
+      });
+
+      window.addEventListener("mouseleave", () => {
+        emblemWrap.style.transform = "rotateY(0deg) rotateX(0deg)";
+      });
+    </script>
+  </body>
+</html>
