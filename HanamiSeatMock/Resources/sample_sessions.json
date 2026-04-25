@@ -1,0 +1,18 @@
+[
+  {
+    "id": "4DB50F4A-709E-455A-931A-2F5E4DCE7C10",
+    "createdAt": "2026-04-24T08:30:00Z",
+    "title": "中規模で様子見",
+    "parkType": "中規模公園",
+    "timeSlot": "朝",
+    "participants": 4,
+    "sheetSize": "4人用",
+    "aiMemo": "AI提案: 通路から2マス離れた並木中央が無難",
+    "mermaidText": "graph TD\nA[入力]-->B[評価]-->C[保存]",
+    "score": {
+      "blossom": 4.0,
+      "space": 5.0,
+      "congestion": 3.0
+    }
+  }
+]
