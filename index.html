@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>芝生で昼から肉を楽しむビアガーデン</title>
+  <style>
+    :root {
+      --bg: #f6f2e8;
+      --bg-soft: #efe7d5;
+      --card: #fffaf0;
+      --text: #2b2a25;
+      --muted: #5f5a4c;
+      --accent: #b14f1f;
+      --accent-2: #d08425;
+      --line: #dfd4bc;
+      --ok: #2f8f4e;
+      --container: min(1120px, 92vw);
+      --radius: 18px;
+      --shadow: 0 10px 30px rgba(65, 48, 20, 0.12);
+      --transition: 220ms ease;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Inter", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", sans-serif;
+      color: var(--text);
+      background: linear-gradient(180deg, #f6f4ee 0%, #f2ecd9 100%);
+      line-height: 1.65;
+    }
+
+    .container { width: var(--container); margin: 0 auto; }
+    .section { padding: 72px 0; }
+    .title { font-size: clamp(1.7rem, 2.3vw, 2.4rem); margin: 0 0 10px; }
+    .lead { margin: 0 0 30px; color: var(--muted); max-width: 68ch; }
+
+    .btn {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      min-height: 48px;
+      padding: 12px 22px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
+    }
+
+    .btn-primary {
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent), #8c3f17);
+      box-shadow: 0 6px 18px rgba(177, 79, 31, 0.28);
+    }
+
+    .btn-secondary {
+      color: var(--text);
+      border-color: #c8b99a;
+      background: rgba(255, 255, 255, 0.7);
+    }
+
+    .btn:hover,
+    .btn:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: 0 0 0 3px rgba(208, 132, 37, 0.18), 0 12px 24px rgba(60, 40, 20, 0.14);
+      outline: none;
+    }
+
+    .hero {
+      min-height: 92vh;
+      position: relative;
+      display: grid;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to bottom, rgba(255, 252, 246, 0.50), rgba(244, 236, 217, 0.90)),
+        url("https://images.unsplash.com/photo-1529516548873-9ce57c8f155e?auto=format&fit=crop&w=2000&q=80") center/cover no-repeat;
+      z-index: -2;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 80% 15%, rgba(208, 132, 37, 0.25), transparent 36%);
+      z-index: -1;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      font-size: .79rem;
+      letter-spacing: .08em;
+      padding: 6px 12px;
+      border-radius: 999px;
+      color: #6b3e1f;
+      border: 1px solid #cbad80;
+      background: rgba(255, 246, 231, 0.85);
+      margin-bottom: 14px;
+    }
+
+    .hero h1 {
+      margin: 0;
+      max-width: 15ch;
+      font-size: clamp(2.1rem, 5.5vw, 4.2rem);
+      line-height: 1.12;
+    }
+
+    .hero p { max-width: 38ch; font-size: clamp(1rem, 1.9vw, 1.2rem); color: #4e493d; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+
+    .cards { display: grid; gap: 16px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      right: -80px;
+      bottom: -80px;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(208, 132, 37, 0.14), transparent 70%);
+      pointer-events: none;
+    }
+
+    .exp-wrap { display: grid; grid-template-columns: 1fr; gap: 18px; }
+    .steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 14px; }
+    .step { border: 1px solid var(--line); border-radius: 12px; background: #fff; padding: 12px; }
+    .step b {
+      display: inline-grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #f8e1bf;
+      color: #7a4318;
+      margin-bottom: 8px;
+      font-size: .85rem;
+    }
+
+    .drink-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .drink-tags span {
+      border: 1px solid #d7c6a8;
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-size: .85rem;
+      background: #fff;
+    }
+
+    .demo { background: #fffdf7; border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
+    .tap { text-align: center; width: min(300px,100%); margin-inline: auto; }
+    .tap-head { width: 74px; height: 70px; margin: 0 auto; border-radius: 18px; background: linear-gradient(165deg,#8c938f,#66706e); position: relative; }
+    .tap-head::after { content: ""; position: absolute; top: 62px; left: 50%; transform: translateX(-50%); width: 20px; height: 14px; background: #7f8a87; border-radius: 0 0 8px 8px; }
+    .stream { width: 12px; height: 0; margin: 8px auto 0; border-radius: 999px; background: linear-gradient(#f4c86f,#d98d22); transition: height .9s ease; }
+    .glass { width: 110px; height: 140px; margin: 8px auto 0; border: 3px solid rgba(118, 118, 118, .58); border-top-width: 6px; border-radius: 10px 10px 14px 14px; overflow: hidden; position: relative; background: rgba(255,255,255,.6); }
+    .fill { position: absolute; bottom: 0; left: 0; width: 100%; height: 0; background: linear-gradient(to top,#b56817,#da9529,#efbe63); transition: height 1s ease; }
+    .foam { position: absolute; bottom: 0; left: 0; width: 100%; height: 0; background: rgba(254,245,218,.95); transition: height 1s ease; }
+    .controls { margin-top: 12px; display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
+    .status { text-align: center; min-height: 1.5em; color: #645d4f; font-size: .92rem; margin-top: 10px; }
+    .status.ok { color: var(--ok); }
+
+    .menu-grid { grid-template-columns: repeat(3,1fr); }
+    .price { font-weight: 800; color: #8c3f17; margin-top: 8px; }
+
+    .gallery { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(240px, 33%); gap: 12px; overflow-x: auto; padding-bottom: 6px; }
+    .gallery img { width: 100%; height: 240px; object-fit: cover; border-radius: 14px; border: 1px solid var(--line); }
+
+    .scene-grid { grid-template-columns: repeat(3,1fr); }
+    .icon { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 10px; background: #f6dfbf; margin-bottom: 8px; }
+
+    .booking { background: #fffaf0; border: 1px solid var(--line); border-radius: var(--radius); padding: clamp(18px,3vw,28px); box-shadow: var(--shadow); }
+    .booking-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+    .field { display: grid; gap: 6px; }
+    .field label { font-size: .86rem; color: #5d5749; }
+    .field input,.field select { padding: 12px; border-radius: 10px; border: 1px solid #cfbea0; background: #fff; font-size: .96rem; }
+
+    footer { border-top: 1px solid #dccfb7; background: #f1e8d5; padding: 28px 0 38px; }
+    .foot-grid { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 12px; font-size: .92rem; color: #554f41; }
+
+    .reveal { opacity: 0; transform: translateY(16px); transition: opacity .65s ease, transform .65s ease; }
+    .reveal.show { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 1024px) {
+      .menu-grid,.scene-grid { grid-template-columns: repeat(2,1fr); }
+      .booking-grid { grid-template-columns: 1fr 1fr; }
+      .gallery { grid-auto-columns: minmax(250px, 46%); }
+    }
+
+    @media (max-width: 760px) {
+      .section { padding: 62px 0; }
+      .hero { min-height: 82vh; }
+      .steps,.menu-grid,.scene-grid,.booking-grid,.foot-grid { grid-template-columns: 1fr; }
+      .gallery { grid-auto-columns: 84%; }
+      .hero-actions .btn { width: 100%; }
+    }
+
+    @media (min-width: 768px) and (max-width: 1180px) {
+      .exp-wrap { grid-template-columns: 1.1fr .9fr; }
+      .hero h1 { max-width: 17ch; }
+    }
+  </style>
+</head>
+<body>
+  <!-- 1. ヒーローセクション（昼の芝生イメージ） -->
+  <header class="hero">
+    <div class="container reveal">
+      <span class="eyebrow">DAYTIME BEER GARDEN</span>
+      <h1>自分で注ぐ、その一杯が一番うまい</h1>
+      <p>サーバー体験 × 昼風 × 芝生。焼ける肉の香りと一緒に、午後をまるごと楽しむ。</p>
+      <div class="hero-actions">
+        <a href="#booking" class="btn btn-primary">予約する</a>
+        <a href="#menu" class="btn btn-secondary">メニューを見る</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- 2. 体験セクション（最重要） -->
+    <section class="section">
+      <div class="container">
+        <h2 class="title reveal">体験する、アルコールサーバー</h2>
+        <p class="lead reveal">グラスを置いて、レバーを引く。泡が立つ瞬間までが、昼飲みのハイライト。</p>
+        <div class="exp-wrap">
+          <article class="card reveal">
+            <h3>サーバー操作 3ステップ</h3>
+            <div class="steps">
+              <div class="step"><b>1</b><div>グラスをセット</div></div>
+              <div class="step"><b>2</b><div>レバーを引く</div></div>
+              <div class="step"><b>3</b><div>完成。芝生で乾杯</div></div>
+            </div>
+            <p>ビール / ハイボール / カクテル。自分で注いで、ちょうどいい一杯に。</p>
+            <div class="drink-tags">
+              <span>🍺 ビール</span><span>🥃 ハイボール</span><span>🍸 カクテル</span>
+            </div>
+          </article>
+
+          <aside class="demo reveal" aria-live="polite">
+            <h3>注ぎ体験シミュレーション</h3>
+            <div class="tap">
+              <div class="tap-head" aria-hidden="true"></div>
+              <div id="stream" class="stream" aria-hidden="true"></div>
+              <div class="glass" aria-label="ビールグラス">
+                <div id="fill" class="fill"></div>
+                <div id="foam" class="foam"></div>
+              </div>
+            </div>
+            <div class="controls">
+              <button id="pour" class="btn btn-primary" type="button">レバーを引く</button>
+              <button id="reset" class="btn btn-secondary" type="button">リセット</button>
+            </div>
+            <p id="status" class="status">グラスをセットして、注いでみよう。</p>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. メニューセクション（肉メイン） -->
+    <section id="menu" class="section">
+      <div class="container">
+        <h2 class="title reveal">メニュー</h2>
+        <p class="lead reveal">主役は肉。昼からしっかり食べて、しっかり飲む。</p>
+        <div class="cards menu-grid">
+          <article class="card reveal">
+            <h3>肉プレート食べ比べ</h3>
+            <p>牛ハラミ・豚肩ロース・鶏ももを炭火で。焼き野菜付き。</p>
+            <p class="price">¥2,980 / 1名</p>
+          </article>
+          <article class="card reveal">
+            <h3>昼BBQ & 飲み放題 90分</h3>
+            <p>サーバードリンク全種 + 肉3種 + 前菜。会社仲間に人気。</p>
+            <p class="price">¥4,480 / 1名</p>
+          </article>
+          <article class="card reveal">
+            <h3>ステーキシェアセット</h3>
+            <p>塊肉ステーキ + ソーセージ + フライ。グループ向け。</p>
+            <p class="price">¥5,600 / 2〜3名</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. 空間・雰囲気セクション（芝生 / 昼） -->
+    <section class="section">
+      <div class="container">
+        <h2 class="title reveal">芝生と陽ざしで、午後がほどける</h2>
+        <p class="lead reveal">やわらかい日差し、芝生の香り、焼き網の音。風を感じるオープンテラスで過ごす昼時間。</p>
+        <div class="gallery reveal" aria-label="日中のビアガーデンギャラリー">
+          <img src="https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=1000&q=80" alt="芝生エリアのテラス席" loading="lazy" />
+          <img src="https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?auto=format&fit=crop&w=1000&q=80" alt="焼き上がる肉のグリル" loading="lazy" />
+          <img src="https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=1000&q=80" alt="昼の屋外で乾杯するグループ" loading="lazy" />
+          <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1000&q=80" alt="肉料理とドリンクのテーブル" loading="lazy" />
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. 利用シーン -->
+    <section class="section">
+      <div class="container">
+        <h2 class="title reveal">利用シーン</h2>
+        <div class="cards scene-grid">
+          <article class="card reveal"><div class="icon">💼</div><h3>会社ランチ会</h3><p>午後1時からでも、短時間でしっかり満足。</p></article>
+          <article class="card reveal"><div class="icon">☀️</div><h3>休日デート</h3><p>昼の開放感と芝生の空気で、気取らない大人時間。</p></article>
+          <article class="card reveal"><div class="icon">🍖</div><h3>グループBBQ</h3><p>肉を囲んで、注ぎ体験で盛り上がる定番プラン。</p></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. 予約セクション -->
+    <section id="booking" class="section">
+      <div class="container">
+        <div class="booking reveal">
+          <h2 class="title">今日の午後、予約する</h2>
+          <p class="lead">「行ってみたい」より「今予約したい」。席が埋まる前に。</p>
+          <form class="booking-grid" onsubmit="return false;" aria-label="予約フォーム（ダミー）">
+            <div class="field"><label for="date">日付</label><input id="date" name="date" type="date" required /></div>
+            <div class="field"><label for="time">時間</label><select id="time" name="time"><option>13:00</option><option>14:00</option><option>15:00</option><option>16:00</option></select></div>
+            <div class="field"><label for="party">人数</label><select id="party" name="party"><option>2名</option><option>3〜4名</option><option>5〜8名</option><option>9名以上</option></select></div>
+          </form>
+          <div style="margin-top:12px;"><button class="btn btn-primary" type="button">空席を確認して予約する</button></div>
+          <p style="font-size:.85rem;color:#6a6354;">※デモUIです。実運用では予約システム連携を行ってください。</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 7. フッター -->
+  <footer>
+    <div class="container foot-grid">
+      <div><strong>GRASS TERRACE BEER GARDEN</strong><br />東京都港区◯◯ 1-2-3 Terrace 4F</div>
+      <div><strong>アクセス</strong><br />○○駅 徒歩4分 / 11:30 - 22:00</div>
+      <div><strong>SNS</strong><br />Instagram / X / LINE</div>
+    </div>
+  </footer>
+
+  <script>
+    // スクロールフェードイン
+    const targets = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('show');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    targets.forEach((el) => io.observe(el));
+
+    // 注ぎ体験の疑似アニメーション
+    const pour = document.getElementById('pour');
+    const reset = document.getElementById('reset');
+    const stream = document.getElementById('stream');
+    const fill = document.getElementById('fill');
+    const foam = document.getElementById('foam');
+    const status = document.getElementById('status');
+    let active = false;
+
+    function setStatus(msg, ok = false) {
+      status.textContent = msg;
+      status.classList.toggle('ok', ok);
+    }
+
+    function resetPour() {
+      active = false;
+      stream.style.height = '0';
+      fill.style.height = '0';
+      foam.style.height = '0';
+      setStatus('グラスをセットして、注いでみよう。');
+    }
+
+    function startPour() {
+      if (active) return;
+      active = true;
+      setStatus('注いでいます… 昼風に合う一杯を。');
+      stream.style.height = '92px';
+      fill.style.height = '72%';
+      foam.style.height = '12%';
+      window.setTimeout(() => {
+        setStatus('完成。芝生の上で乾杯！', true);
+        active = false;
+      }, 1050);
+    }
+
+    pour.addEventListener('click', startPour);
+    reset.addEventListener('click', resetPour);
+    resetPour();
+  </script>
+</body>
+</html>
