@@ -1,0 +1,51 @@
+:root {
+  --bg: #f5f7fa;
+  --card: #ffffff;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --primary: #2563eb;
+  --danger: #dc2626;
+  --red: #d32f2f;
+  --blue: #1e88e5;
+  --green: #2e7d32;
+  --yellow: #f9a825;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  padding: 16px;
+}
+.card {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.08);
+}
+.layout { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
+.row { display: flex; gap: 12px; align-items: center; }
+.wrap { flex-wrap: wrap; }
+.mode-group { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn {
+  border: none; border-radius: 999px; padding: 10px 16px;
+  background: var(--primary); color: white; cursor: pointer;
+}
+.btn-danger { background: var(--danger); }
+.file-input input { display:block; margin-top:6px; }
+.legend { display:flex; gap:16px; flex-wrap:wrap; margin-top:12px; font-size:14px; }
+.dot { width:12px; height:12px; border-radius:50%; display:inline-block; margin-right:6px; }
+.red{background:var(--red)} .blue{background:var(--blue)} .green{background:var(--green)} .yellow{background:var(--yellow)}
+#canvasContainer { position: relative; width: 100%; min-height: 500px; border:1px dashed #cbd5e1; border-radius: 12px; overflow:hidden; background:#f8fafc; }
+#bgImage { max-width: 100%; display: block; }
+#overlay { position:absolute; inset:0; width:100%; height:100%; }
+.mode-btn { padding:8px 12px; border:1px solid #cbd5e1; border-radius:999px; background:white; cursor:pointer; }
+.mode-btn.active { background:#dbeafe; border-color:#60a5fa; }
+table { width:100%; border-collapse: collapse; margin:10px 0 24px; font-size:14px; }
+th, td { border:1px solid #e5e7eb; padding:8px; text-align:left; vertical-align:top; }
+th { background:#f3f4f6; }
+input, select, textarea { width:100%; padding:8px; border:1px solid #d1d5db; border-radius:8px; margin-bottom:8px; }
+.small { color:var(--muted); font-size:12px; }
+@media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
