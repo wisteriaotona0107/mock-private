@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>搬送経路可視化モック</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="app-header card">
+      <h1>搬送経路 可視化・構造化モック</h1>
+      <p>画像を見ながら手動で MOVE / ROUTE / MECH / SENSOR を整理（推定・要確認を明示）</p>
+    </header>
+
+    <section class="toolbar card">
+      <div class="row wrap">
+        <label class="file-input">
+          画像アップロード
+          <input type="file" id="imageUpload" accept="image/*" />
+        </label>
+        <div class="mode-group" id="modeGroup"></div>
+        <button id="saveBtn" class="btn">保存</button>
+        <button id="resetBtn" class="btn btn-danger">初期化</button>
+      </div>
+      <div class="legend">
+        <span><i class="dot red"></i>赤: MOVE（1回の移動）</span>
+        <span><i class="dot blue"></i>青: ROUTE（全体経路）</span>
+        <span><i class="dot green"></i>緑: MECH（干渉候補）</span>
+        <span><i class="dot yellow"></i>黄: SENSOR（制御条件候補）</span>
+      </div>
+    </section>
+
+    <main class="layout">
+      <section class="canvas-area card">
+        <div id="canvasContainer">
+          <img id="bgImage" alt="background" />
+          <svg id="overlay" xmlns="http://www.w3.org/2000/svg"></svg>
+        </div>
+      </section>
+
+      <aside class="editor card">
+        <h2>選択中要素編集</h2>
+        <div id="editorContent">要素を選択してください。</div>
+      </aside>
+    </main>
+
+    <section class="tables card">
+      <h2>一覧</h2>
+      <div id="tables"></div>
+    </section>
+
+    <section class="exports card">
+      <h2>Mermaid出力</h2>
+      <textarea id="mermaidOutput" rows="10" readonly></textarea>
+      <button id="copyMermaidBtn" class="btn">Mermaidをコピー</button>
+
+      <h2>JSON出力</h2>
+      <textarea id="jsonOutput" rows="10" readonly></textarea>
+      <button id="downloadJsonBtn" class="btn">JSONダウンロード</button>
+    </section>
+
+    <script src="app.js"></script>
+  </body>
+</html>
