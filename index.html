@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ルールエンジン型Webモック</title>
+  <style>
+    :root {
+      --bg: #f3f5f7;
+      --panel: #ffffff;
+      --line: #cbd5e1;
+      --text: #1f2937;
+      --muted: #64748b;
+      --accent: #1d4ed8;
+      --accent-soft: #dbeafe;
+      --danger: #b91c1c;
+      --danger-soft: #fee2e2;
+      --ok: #166534;
+      --ok-soft: #dcfce7;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .app {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 12px;
+      display: grid;
+      gap: 12px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1.25rem;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+    }
+
+    button {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      border-radius: 6px;
+      padding: 8px 10px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    button:hover { background: #f8fafc; }
+    .primary {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      min-height: 360px;
+    }
+
+    .panel h2 {
+      margin: 0;
+      font-size: 1rem;
+      padding: 10px;
+      border-bottom: 1px solid var(--line);
+      background: #f8fafc;
+    }
+
+    textarea, pre {
+      width: 100%;
+      flex: 1;
+      margin: 0;
+      border: 0;
+      outline: none;
+      padding: 10px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.86rem;
+      line-height: 1.5;
+      background: #fff;
+      color: var(--text);
+      overflow: auto;
+      white-space: pre-wrap;
+    }
+
+    .footer {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .error {
+      margin: 8px 10px;
+      padding: 8px;
+      border-radius: 6px;
+      background: var(--danger-soft);
+      color: var(--danger);
+      border: 1px solid #fecaca;
+      font-size: 0.9rem;
+      display: none;
+    }
+
+    .hint {
+      margin: 0;
+      padding: 0 10px 10px;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .status {
+      margin-left: auto;
+      color: var(--muted);
+      font-size: 0.85rem;
+      align-self: center;
+    }
+
+    .diff-list {
+      list-style: none;
+      padding: 10px;
+      margin: 0;
+      display: grid;
+      gap: 6px;
+    }
+
+    .add { background: var(--ok-soft); color: var(--ok); border: 1px solid #bbf7d0; }
+    .remove { background: var(--danger-soft); color: var(--danger); border: 1px solid #fecaca; }
+    .item { padding: 8px; border-radius: 6px; font-size: 0.9rem; }
+
+    @media (max-width: 1200px) {
+      .grid { grid-template-columns: 1fr 1fr; }
+      .grid .panel:last-child { grid-column: span 2; }
+    }
+    @media (max-width: 860px) {
+      .grid { grid-template-columns: 1fr; }
+      .grid .panel:last-child { grid-column: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h1>ルールエンジン型 Webモック（装置ログ・搬送制御風）</h1>
+
+    <div class="toolbar">
+      <button id="sampleInputBtn">サンプル入力を入れる</button>
+      <button id="sampleRulesBtn">サンプルルールを入れる</button>
+      <button id="evaluateBtn" class="primary">評価する</button>
+      <button id="saveBeforeBtn">Beforeとして保存</button>
+      <button id="diffBtn">差分を見る</button>
+      <button id="saveLocalBtn">localStorageへ保存</button>
+      <button id="loadLocalBtn">localStorageから復元</button>
+      <button id="clearBtn">クリア</button>
+      <span class="status" id="statusText">Ready</span>
+    </div>
+
+    <div class="grid">
+      <section class="panel">
+        <h2>入力データ JSON</h2>
+        <div id="inputError" class="error"></div>
+        <textarea id="inputJson"></textarea>
+        <p class="hint">正常系/境界値例: retry_count=3,4 / temperature=70,72 / status=ERROR or OK</p>
+      </section>
+
+      <section class="panel">
+        <h2>ルール JSON</h2>
+        <div id="rulesError" class="error"></div>
+        <textarea id="rulesJson"></textarea>
+        <p class="hint">異常系例: opを"unknown"にする、value型を意図的に不整合にする</p>
+      </section>
+
+      <section class="panel">
+        <h2>評価結果 JSON</h2>
+        <pre id="resultJson">{} </pre>
+      </section>
+    </div>
+
+    <section class="footer panel" style="min-height:220px;">
+      <h2>差分結果（Before vs After）</h2>
+      <pre id="diffJson">{} </pre>
+      <ul id="diffList" class="diff-list"></ul>
+    </section>
+  </div>
+
+  <script>
+    const SAMPLE_INPUT = {
+      status: "ERROR",
+      retry_count: 4,
+      device: "CONVEYOR_A",
+      temperature: 72,
+      message: "motor overload detected"
+    };
+
+    const SAMPLE_RULES = {
+      rules: [
+        {
+          id: "R001",
+          name: "再試行回数超過",
+          priority: 100,
+          enabled: true,
+          conditions: [
+            { field: "status", op: "eq", value: "ERROR" },
+            { field: "retry_count", op: "gt", value: 3 }
+          ],
+          actions: [
+            { type: "flag", value: "CRITICAL" },
+            { type: "message", value: "再試行回数超過" }
+          ]
+        },
+        {
+          id: "R002",
+          name: "モーター過負荷検出",
+          priority: 90,
+          enabled: true,
+          conditions: [
+            { field: "message", op: "contains", value: "overload" }
+          ],
+          actions: [
+            { type: "flag", value: "MOTOR_ALERT" },
+            { type: "message", value: "モーター過負荷の可能性" }
+          ]
+        }
+      ]
+    };
+
+    const state = {
+      beforeResult: null,
+      lastResult: null
+    };
+
+    function parseJsonSafe(text) {
+      try {
+        return { ok: true, value: JSON.parse(text), error: null };
+      } catch (error) {
+        return { ok: false, value: null, error: error.message };
+      }
+    }
+
+    function evaluateCondition(input, condition) {
+      const actual = input[condition.field];
+      const expected = condition.value;
+      switch (condition.op) {
+        case "eq": return actual === expected;
+        case "ne": return actual !== expected;
+        case "gt": return actual > expected;
+        case "gte": return actual >= expected;
+        case "lt": return actual < expected;
+        case "lte": return actual <= expected;
+        case "in": return Array.isArray(expected) ? expected.includes(actual) : false;
+        case "contains":
+          if (typeof actual === "string") return actual.includes(String(expected));
+          if (Array.isArray(actual)) return actual.includes(expected);
+          return false;
+        default: return false;
+      }
+    }
+
+    function evaluateRule(input, rule) {
+      const conditions = Array.isArray(rule.conditions) ? rule.conditions : [];
+      const matched = conditions.every((c) => evaluateCondition(input, c));
+      if (!matched) return null;
+
+      const flags = (rule.actions || []).filter((a) => a.type === "flag").map((a) => a.value);
+      const messages = (rule.actions || []).filter((a) => a.type === "message").map((a) => a.value);
+      return { rule_id: rule.id, name: rule.name, priority: rule.priority || 0, flags, messages };
+    }
+
+    function evaluateRules(input, ruleSet) {
+      const rules = Array.isArray(ruleSet.rules) ? ruleSet.rules : [];
+      const sorted = [...rules].filter((r) => r.enabled !== false).sort((a, b) => (b.priority || 0) - (a.priority || 0));
+      const matched = [];
+      for (const rule of sorted) {
+        const result = evaluateRule(input, rule);
+        if (result) matched.push(result);
+      }
+      return { matched, summary: buildSummary(matched) };
+    }
+
+    function buildSummary(matchedRules) {
+      const flags = [...new Set(matchedRules.flatMap((r) => r.flags))];
+      const messages = [...new Set(matchedRules.flatMap((r) => r.messages))];
+      return { matched_count: matchedRules.length, flags, messages };
+    }
+
+    function diffResults(beforeResult, afterResult) {
+      const beforeMatched = new Set((beforeResult?.matched || []).map((m) => m.rule_id));
+      const afterMatched = new Set((afterResult?.matched || []).map((m) => m.rule_id));
+      const beforeFlags = new Set(beforeResult?.summary?.flags || []);
+      const afterFlags = new Set(afterResult?.summary?.flags || []);
+      const beforeMessages = new Set(beforeResult?.summary?.messages || []);
+      const afterMessages = new Set(afterResult?.summary?.messages || []);
+
+      const addedMatchedRules = [...afterMatched].filter((r) => !beforeMatched.has(r));
+      const removedMatchedRules = [...beforeMatched].filter((r) => !afterMatched.has(r));
+      const addedFlags = [...afterFlags].filter((f) => !beforeFlags.has(f));
+      const removedFlags = [...beforeFlags].filter((f) => !afterFlags.has(f));
+      const addedMessages = [...afterMessages].filter((m) => !beforeMessages.has(m));
+      const removedMessages = [...beforeMessages].filter((m) => !afterMessages.has(m));
+
+      return { addedMatchedRules, removedMatchedRules, addedFlags, removedFlags, addedMessages, removedMessages };
+    }
+
+    function renderResult(result) {
+      document.getElementById("resultJson").textContent = JSON.stringify(result, null, 2);
+    }
+
+    function renderDiff(diff) {
+      document.getElementById("diffJson").textContent = JSON.stringify(diff, null, 2);
+      const diffList = document.getElementById("diffList");
+      diffList.innerHTML = "";
+
+      const add = (label, values, cls) => values.forEach((value) => {
+        const li = document.createElement("li");
+        li.className = `item ${cls}`;
+        li.textContent = `${label}: ${value}`;
+        diffList.appendChild(li);
+      });
+
+      add("追加されたmatched rule", diff.addedMatchedRules, "add");
+      add("消えたmatched rule", diff.removedMatchedRules, "remove");
+      add("追加されたflag", diff.addedFlags, "add");
+      add("消えたflag", diff.removedFlags, "remove");
+      add("追加されたmessage", diff.addedMessages, "add");
+      add("消えたmessage", diff.removedMessages, "remove");
+    }
+
+    function setError(elId, message) {
+      const el = document.getElementById(elId);
+      if (!message) { el.style.display = "none"; el.textContent = ""; return; }
+      el.style.display = "block";
+      el.textContent = message;
+    }
+
+    function setStatus(message) {
+      document.getElementById("statusText").textContent = message;
+    }
+
+    function runEvaluation() {
+      setError("inputError", "");
+      setError("rulesError", "");
+      const inputParsed = parseJsonSafe(document.getElementById("inputJson").value);
+      if (!inputParsed.ok) {
+        setError("inputError", `入力JSONのパースエラー: ${inputParsed.error}`);
+        setStatus("入力エラー");
+        return null;
+      }
+
+      const rulesParsed = parseJsonSafe(document.getElementById("rulesJson").value);
+      if (!rulesParsed.ok) {
+        setError("rulesError", `ルールJSONのパースエラー: ${rulesParsed.error}`);
+        setStatus("ルールエラー");
+        return null;
+      }
+
+      const result = evaluateRules(inputParsed.value, rulesParsed.value);
+      state.lastResult = result;
+      renderResult(result);
+      setStatus("評価完了");
+      return result;
+    }
+
+    function fillSampleInput() { document.getElementById("inputJson").value = JSON.stringify(SAMPLE_INPUT, null, 2); }
+    function fillSampleRules() { document.getElementById("rulesJson").value = JSON.stringify(SAMPLE_RULES, null, 2); }
+
+    document.getElementById("sampleInputBtn").addEventListener("click", () => { fillSampleInput(); setStatus("サンプル入力を反映"); });
+    document.getElementById("sampleRulesBtn").addEventListener("click", () => { fillSampleRules(); setStatus("サンプルルールを反映"); });
+    document.getElementById("evaluateBtn").addEventListener("click", runEvaluation);
+    document.getElementById("saveBeforeBtn").addEventListener("click", () => {
+      const result = state.lastResult || runEvaluation();
+      if (!result) return;
+      state.beforeResult = JSON.parse(JSON.stringify(result));
+      setStatus("Beforeを保存");
+    });
+    document.getElementById("diffBtn").addEventListener("click", () => {
+      const after = state.lastResult || runEvaluation();
+      if (!after) return;
+      const diff = diffResults(state.beforeResult || { matched: [], summary: { flags: [], messages: [] } }, after);
+      renderDiff(diff);
+      setStatus("差分表示完了");
+    });
+    document.getElementById("saveLocalBtn").addEventListener("click", () => {
+      localStorage.setItem("ruleMock.input", document.getElementById("inputJson").value);
+      localStorage.setItem("ruleMock.rules", document.getElementById("rulesJson").value);
+      localStorage.setItem("ruleMock.before", JSON.stringify(state.beforeResult || null));
+      setStatus("localStorageへ保存");
+    });
+    document.getElementById("loadLocalBtn").addEventListener("click", () => {
+      document.getElementById("inputJson").value = localStorage.getItem("ruleMock.input") || "";
+      document.getElementById("rulesJson").value = localStorage.getItem("ruleMock.rules") || "";
+      state.beforeResult = parseJsonSafe(localStorage.getItem("ruleMock.before") || "null").value;
+      setStatus("localStorageから復元");
+    });
+    document.getElementById("clearBtn").addEventListener("click", () => {
+      document.getElementById("inputJson").value = "";
+      document.getElementById("rulesJson").value = "";
+      document.getElementById("resultJson").textContent = "{}";
+      document.getElementById("diffJson").textContent = "{}";
+      document.getElementById("diffList").innerHTML = "";
+      state.beforeResult = null;
+      state.lastResult = null;
+      setError("inputError", "");
+      setError("rulesError", "");
+      setStatus("クリア完了");
+    });
+
+    fillSampleInput();
+    fillSampleRules();
+  </script>
+</body>
+</html>
