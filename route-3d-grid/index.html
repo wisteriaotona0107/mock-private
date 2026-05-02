@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3D Grid Pathfinding Mock</title>
+    <script type="module" src="/src/main.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <div id="scene-container"></div>
+      <aside id="control-panel">
+        <h1>Route 3D Grid</h1>
+
+        <section>
+          <h2>Mode</h2>
+          <div id="mode-buttons" class="button-group"></div>
+        </section>
+
+        <section>
+          <h2>Height</h2>
+          <select id="height-select">
+            <option value="0">-2 (z=0)</option>
+            <option value="1">-1 (z=1)</option>
+            <option value="2" selected>0 (z=2)</option>
+            <option value="3">+1 (z=3)</option>
+            <option value="4">+2 (z=4)</option>
+          </select>
+        </section>
+
+        <section>
+          <h2>Search</h2>
+          <div class="button-group" id="search-buttons"></div>
+        </section>
+
+        <section>
+          <h2>Logs & JSON</h2>
+          <div class="button-group" id="log-buttons"></div>
+          <input id="json-import" type="file" accept="application/json" />
+        </section>
+
+        <section>
+          <h2>Selection</h2>
+          <pre id="selection-info">none</pre>
+        </section>
+
+        <section>
+          <h2>Logs</h2>
+          <div id="log-table-wrap">
+            <table id="log-table">
+              <thead>
+                <tr>
+                  <th>step</th><th>action</th><th>from</th><th>to</th>
+                  <th>heightDiff</th><th>cost</th><th>totalCost</th><th>result/reason</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+      </aside>
+    </div>
+  </body>
+</html>

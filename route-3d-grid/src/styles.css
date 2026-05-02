@@ -1,0 +1,14 @@
+:root { color-scheme: dark; font-family: Inter, system-ui, sans-serif; }
+body { margin: 0; }
+#app { display: grid; grid-template-columns: 1fr 380px; height: 100vh; }
+#scene-container { background: #0e1116; }
+#control-panel { padding: 12px; overflow: auto; background: #181d26; }
+h1,h2 { margin: 8px 0; }
+section { margin-bottom: 10px; border: 1px solid #293141; padding: 8px; border-radius: 8px; }
+.button-group { display: flex; flex-wrap: wrap; gap: 6px; }
+button { border: 1px solid #465268; background:#232b3a; color:#e8f0ff; padding:6px 8px; border-radius:6px; cursor:pointer; }
+button.active { background:#3a7bd5; }
+#log-table-wrap { max-height: 280px; overflow:auto; }
+table { border-collapse: collapse; width:100%; font-size:12px; }
+th,td { border: 1px solid #3a455b; padding: 4px; }
+pre { margin: 0; white-space: pre-wrap; }
