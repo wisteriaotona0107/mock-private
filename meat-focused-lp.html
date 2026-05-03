@@ -193,6 +193,18 @@
       .btn { width: 100%; }
       .hero-image { min-height: 360px; }
     }
+  
+    .diag-wrap{margin-top:18px;background:#fff;border:1px solid var(--line, #e1d9c8);border-radius:16px;padding:18px;box-shadow:var(--shadow)}
+    .diag-progress{font-weight:700;margin-bottom:10px;color:var(--muted)}
+    .diag-q{font-size:1.15rem;margin-bottom:14px}
+    .yn{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .yn button{font-size:1rem;padding:14px;border-radius:12px;border:1px solid #bfcdda;background:#fff;cursor:pointer;font-weight:800}
+    .yn button:hover{transform:translateY(-2px)}
+    .diag-result{display:none;animation:pop .45s ease}
+    .diag-result.show{display:block}
+    .type-badge{display:inline-block;padding:6px 12px;border-radius:999px;border:2px solid currentColor;font-weight:900;letter-spacing:.08em;margin:8px 0}
+    @keyframes pop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+
   </style>
 </head>
 <body>
@@ -268,6 +280,35 @@
       </div>
     </section>
 
+    
+
+    <section class="sec wrap fade" id="diagnosis">
+      <h2>ビアガーデン診断（8問）</h2>
+      <div class="diag-wrap">
+        <div id="diagQuestion">
+          <div class="diag-progress" id="diagProgress">1 / 8</div>
+          <div class="diag-q" id="diagText"></div>
+          <div class="yn">
+            <button id="yesBtn" type="button">Yes</button>
+            <button id="noBtn" type="button">No</button>
+          </div>
+        </div>
+        <div class="diag-result" id="diagResult">
+          <p>あなたのタイプ</p>
+          <h3 id="typeCode"></h3>
+          <div class="type-badge" id="typeBadge"></div>
+          <p id="typeDesc"></p>
+          <p><strong>おすすめ料理：</strong><span id="typeFood"></span></p>
+          <p><strong>おすすめドリンク：</strong><span id="typeDrink"></span></p>
+          <p><strong>キャッチコピー：</strong><span id="typeCatch"></span></p>
+          <div class="cta" style="margin-top:10px;">
+            <a class="btn btn-main" href="#reserve">サーバー体験を予約する</a>
+            <button id="retryBtn" type="button" class="btn btn-sub">もう一度診断する</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section id="reserve" class="sec wrap fade">
       <div class="final">
         <h2>席が埋まる前に、肉の主役席を。</h2>
@@ -290,5 +331,59 @@
 
     document.querySelectorAll('.fade').forEach((el) => io.observe(el));
   </script>
+
+  <script>
+    // 8問のYes/No診断。各回答で5軸にスコア加算する。
+    const questions=[
+      {q:'濃い味・香ばしい料理に惹かれる',yes:{flavor:1,meat:1},no:{drink:1}},
+      {q:'赤身肉の旨みをじっくり味わいたい',yes:{meat:-1,scene:-1},no:{meat:1,scene:1}},
+      {q:'ビールは苦味しっかり派だ',yes:{drink:1},no:{drink:-1}},
+      {q:'食事はみんなでシェアする方が好き',yes:{scene:1},no:{scene:-1}},
+      {q:'冒険的なクラフト系を試したくなる',yes:{drink:1,flavor:1},no:{drink:-1}},
+      {q:'脂の甘みよりキレのある後味を重視する',yes:{flavor:-1,meat:-1},no:{flavor:1,meat:1}},
+      {q:'一人時間のご褒美飲みが好きだ',yes:{scene:-1,sense:1},no:{scene:1,sense:-1}},
+      {q:'夕焼けテラスの高揚感を大事にしたい',yes:{sense:1},no:{sense:-1}}
+    ];
+
+    // タイプ定義はオブジェクト管理
+    const typeMap={
+      FMBS:{name:'FMBS',desc:'濃厚&脂旨派。パンチある組み合わせを楽しむタイプ。',food:'炭火リブグリル / 肉盛りプレート',drink:'プレミアム系・黒ビール',catch:'一口で沼る、濃密ペアリング。'},
+      RLAS:{name:'RLAS',desc:'さっぱり赤身派。軽快に飲み比べを楽しむタイプ。',food:'赤身ステーキ / ハーブチキン',drink:'定番ラガー・軽やかクラフト',catch:'軽やかに、何杯でも夏が進む。'},
+      FMDS:{name:'FMDS',desc:'香りと苦味を愛する体験重視タイプ。',food:'スパイスチキン / 粗挽きソーセージ',drink:'ホップ系クラフト / プレミアム',catch:'選ぶたび、注ぐたび、気分が上がる。'},
+      RLBS:{name:'RLBS',desc:'バランス型。料理とドリンクの調和を楽しむ。',food:'グリル3種盛り',drink:'ラガー〜クラフト飲み比べ',catch:'迷う時間もおいしい、夏の正解。'}
+    };
+
+    const senseColor=(v)=> v>0? '#f1c40f' : '#5dade2';
+    let i=0, score={flavor:0,meat:0,drink:0,scene:0,sense:0};
+    const qEl=document.getElementById('diagText'), pEl=document.getElementById('diagProgress');
+    const qBox=document.getElementById('diagQuestion'), rBox=document.getElementById('diagResult');
+
+    function renderQ(){ pEl.textContent=`${i+1} / 8`; qEl.textContent=questions[i].q; }
+    function add(axis,delta){ score[axis]=(score[axis]||0)+delta; }
+    function answer(isYes){
+      const delta=isYes?questions[i].yes:questions[i].no;
+      Object.entries(delta).forEach(([k,v])=>add(k,v));
+      i++;
+      if(i<questions.length) renderQ(); else showResult();
+    }
+    function showResult(){
+      qBox.style.display='none';
+      const code=(score.flavor>=0?'F':'R')+(score.meat>=0?'M':'L')+(score.drink>=0?'B':'A')+(score.scene>=0?'S':'D');
+      const data=typeMap[code]||typeMap.RLBS;
+      const color=senseColor(score.sense);
+      document.getElementById('typeCode').textContent=`${data.name}`;
+      const badge=document.getElementById('typeBadge'); badge.textContent=`${data.name}`; badge.style.color=color;
+      document.getElementById('typeDesc').textContent=data.desc;
+      document.getElementById('typeFood').textContent=data.food;
+      document.getElementById('typeDrink').textContent=data.drink;
+      document.getElementById('typeCatch').textContent=data.catch;
+      rBox.classList.add('show');
+    }
+    document.getElementById('yesBtn')?.addEventListener('click',()=>answer(true));
+    document.getElementById('noBtn')?.addEventListener('click',()=>answer(false));
+    document.getElementById('retryBtn')?.addEventListener('click',()=>{i=0;score={flavor:0,meat:0,drink:0,scene:0,sense:0};rBox.classList.remove('show');qBox.style.display='block';renderQ();});
+    renderQ();
+  </script>
+
 </body>
 </html>
