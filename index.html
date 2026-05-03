@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Rice Field Simulator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+JP:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app">
+    <header class="panel"><h1>Rice Planting Experience</h1><p class="muted">Rhythm planting · Pattern synergy · Crafting</p></header>
+    <section class="panel controls">
+      <label>Water <strong id="waterValue">0.50</strong></label><input id="waterSlider" type="range" min="0" max="1" step="0.01" value="0.5" />
+      <label>BPM <strong id="bpmValue">120</strong></label><input id="bpmSlider" type="range" min="60" max="180" step="1" value="120" />
+      <button id="rhythmTapBtn">Tap Beat</button>
+      <p id="timingText" class="muted">Timing: - | Combo: 0</p><p id="weatherText" class="muted"></p>
+      <div class="stats" id="scoreBoard"></div>
+      <div class="control-buttons"><button id="saveBtn">Save</button><button id="exportJsonBtn">Export JSON</button><button id="exportCsvBtn">Export CSV</button><button id="resetBtn" class="danger">Reset</button></div>
+    </section>
+    <section class="panel"><div id="field" class="field" role="grid"></div></section>
+    <section class="panel craft">
+      <h2>Crafting</h2>
+      <div class="control-buttons"><button class="craftBtn" data-product="onigiri">Onigiri</button><button class="craftBtn" data-product="bento">Bento</button><button class="craftBtn" data-product="sake">Sake</button><button class="craftBtn" data-product="teishoku">Teishoku</button></div>
+      <p id="craftResult" class="muted">Harvest rice to craft products.</p>
+    </section>
+    <section class="panel logs"><h2>Action Log (CSV)</h2><textarea id="logOutput" readonly></textarea></section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
