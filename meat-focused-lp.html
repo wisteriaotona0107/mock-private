@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>夏季限定ビアガーデン | GRILL TERRACE 88</title>
+  <style>
+    :root {
+      --bg: #f7f5ef;
+      --surface: #fff;
+      --ink: #1f1f1f;
+      --muted: #5e5e5e;
+      --accent: #c94a1b;
+      --accent-2: #f1a40d;
+      --green: #3f8a57;
+      --line: #e8deca;
+      --radius: 18px;
+      --shadow: 0 12px 30px rgba(66, 42, 16, .12);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+      color: var(--ink);
+      background: linear-gradient(180deg, #fffdf8 0%, var(--bg) 100%);
+    }
+    .wrap { width: min(1180px, 92vw); margin: 0 auto; }
+    .sec { padding: 78px 0; }
+    h1,h2,h3,p { margin: 0; }
+    h2 {
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      letter-spacing: .02em;
+      margin-bottom: 18px;
+    }
+
+    .hero { padding: 62px 0 54px; }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 20px;
+      align-items: stretch;
+    }
+    .hero-image {
+      min-height: min(68vh, 560px);
+      border-radius: 24px;
+      border: 1px dashed #cfb28c;
+      background:
+        radial-gradient(circle at 74% 18%, rgba(255, 172, 39, .32), transparent 42%),
+        radial-gradient(circle at 18% 82%, rgba(58,138,87,.22), transparent 45%),
+        linear-gradient(155deg, #ffe8c9 0%, #f8d1ad 42%, #f4c594 100%);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 24px;
+      font-weight: 800;
+      color: #684423;
+    }
+    .hero-image::after {
+      content: "PHOTO PLACEHOLDER / メイン肉料理";
+      position: absolute;
+      inset: auto 16px 16px auto;
+      font-size: .8rem;
+      background: rgba(255,255,255,.65);
+      padding: 7px 10px;
+      border-radius: 999px;
+    }
+    .hero-copy {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: clamp(20px, 4vw, 34px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 18px;
+    }
+    .tag {
+      display: inline-flex;
+      background: #fff4dd;
+      color: #8a4d1a;
+      border: 1px solid #efcf9d;
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-size: .88rem;
+      font-weight: 700;
+      width: fit-content;
+    }
+    h1 {
+      font-size: clamp(2rem, 5.4vw, 3.9rem);
+      line-height: 1.08;
+      letter-spacing: .01em;
+    }
+    .sub { color: var(--muted); font-size: 1rem; }
+
+    .cta { display: flex; flex-wrap: wrap; gap: 10px; }
+    .btn {
+      text-decoration: none;
+      border-radius: 12px;
+      padding: 12px 18px;
+      font-weight: 800;
+      font-size: .95rem;
+      transition: .2s ease;
+      border: 1px solid transparent;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-main { background: var(--accent); color: #fff; box-shadow: 0 8px 18px rgba(201,74,27,.28); }
+    .btn-sub { background: #fff; border-color: #e4b79a; color: #7a3a18; }
+    .btn:hover { transform: translateY(-2px); }
+
+    .visual-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .visual-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .ph {
+      min-height: 230px;
+      background:
+        linear-gradient(145deg, rgba(255,176,68,.38), rgba(226,105,39,.3)),
+        repeating-linear-gradient(35deg, rgba(255,255,255,.45) 0 10px, rgba(255,255,255,.2) 10px 18px);
+      border-bottom: 1px dashed #cfa87a;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 12px;
+      color: #6c3e1d;
+      font-weight: 700;
+    }
+    .caption { padding: 14px; }
+    .caption h3 { font-size: 1.15rem; margin-bottom: 4px; }
+    .caption p { color: var(--muted); font-size: .94rem; }
+
+    .pair-grid, .scene-grid, .course-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .gallery-grid .ph { min-height: 170px; border: 1px dashed #d4b88d; border-bottom: none; border-radius: 12px; }
+
+    .experience {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .final {
+      background: linear-gradient(130deg, #3f8a57, #346f49);
+      color: #fff;
+      border-radius: 24px;
+      padding: 34px;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+    .final p { color: rgba(255,255,255,.88); margin: 8px 0 18px; }
+
+    .fade { opacity: 0; transform: translateY(20px); transition: .65s ease; }
+    .fade.show { opacity: 1; transform: none; }
+
+    @media (max-width: 1024px) {
+      .hero-grid, .experience { grid-template-columns: 1fr; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .visual-grid, .pair-grid, .scene-grid, .course-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .sec { padding: 58px 0; }
+      .gallery-grid, .visual-grid, .pair-grid, .scene-grid, .course-grid { grid-template-columns: 1fr; }
+      .btn { width: 100%; }
+      .hero-image { min-height: 360px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero wrap fade">
+      <div class="hero-grid">
+        <div class="hero-image">焼ける音、肉汁、冷えた一杯。<br>ここに、夏の主役。</div>
+        <div class="hero-copy">
+          <span class="tag">夏季限定開催｜2026.6.1 - 2026.9.30</span>
+          <h1>肉で選ぶ、<br>今年のビアガーデン。</h1>
+          <p class="sub">架空店舗 <strong>GRILL TERRACE 88</strong>。明るい屋外テラスで、焼きたて肉料理とこだわりサーバービールを楽しむビジュアル重視の夏季限定ビアガーデン。</p>
+          <div class="cta">
+            <a class="btn btn-main" href="#reserve">肉コースを予約する</a>
+            <a class="btn btn-sub" href="#reserve">空席を確認する</a>
+            <a class="btn btn-sub" href="#signature">料理を見る</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="signature" class="sec wrap fade">
+      <h2>Signature Meat</h2>
+      <div class="visual-grid">
+        <article class="visual-card"><div class="ph">看板肉写真枠 / 厚切りリブグリル</div><div class="caption"><h3>炭火リブグリル</h3><p>強火で香ばしく、切るたび肉汁があふれる主役メニュー。</p></div></article>
+        <article class="visual-card"><div class="ph">看板肉写真枠 / 骨付きチキン</div><div class="caption"><h3>骨付きスパイスチキン</h3><p>皮はパリッと、中はジューシー。ビールが進む定番。</p></div></article>
+        <article class="visual-card"><div class="ph">看板肉写真枠 / 肉盛り</div><div class="caption"><h3>ミートマウンテンプレート</h3><p>複数部位を豪快に盛り込み、シェアで映える一皿。</p></div></article>
+      </div>
+    </section>
+
+    <section class="sec wrap fade">
+      <h2>Beer Pairing</h2>
+      <div class="pair-grid">
+        <article class="card"><h3>定番ラガーサーバー</h3><p>キレと泡のバランスが良く、脂の旨みをすっきりリセット。</p></article>
+        <article class="card"><h3>クラフトサーバー</h3><p>ホップ香るフルーティー系で、スパイス肉の香りを引き立てる。</p></article>
+        <article class="card"><h3>黒/プレミアム系</h3><p>コクのある味わいが濃厚ソース肉と好相性。</p></article>
+      </div>
+    </section>
+
+    <section class="sec wrap fade">
+      <h2>Grill Experience</h2>
+      <div class="experience">
+        <div class="ph" style="min-height:340px;border-radius:18px; border:1px dashed #cfa87a;">ライブグリル写真枠 / 焼き目・湯気・炎</div>
+        <div class="card">
+          <h3>夏のご褒美は、屋外グリルで。</h3>
+          <p style="margin-top:8px;color:var(--muted);">目の前で仕上げるライブ感。焼ける音と香りまで含めて、料理体験そのものを楽しめます。昼は爽やかに、夕方は黄金色の光の中で。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec wrap fade">
+      <h2>Course</h2>
+      <div class="course-grid">
+        <article class="card"><h3>MEAT LIGHT</h3><p><strong>¥4,800</strong><br>肉料理4品 + 飲み放題90分</p></article>
+        <article class="card"><h3>MEAT STANDARD</h3><p><strong>¥6,200</strong><br>肉料理6品 + 飲み放題120分</p></article>
+        <article class="card"><h3>MEAT PREMIUM</h3><p><strong>¥7,800</strong><br>看板肉3種 + プレミアムビール付き</p></article>
+      </div>
+    </section>
+
+    <section class="sec wrap fade">
+      <h2>Gallery</h2>
+      <div class="gallery-grid">
+        <div class="ph">差し替え用写真枠 01</div><div class="ph">差し替え用写真枠 02</div><div class="ph">差し替え用写真枠 03</div><div class="ph">差し替え用写真枠 04</div>
+        <div class="ph">差し替え用写真枠 05</div><div class="ph">差し替え用写真枠 06</div><div class="ph">差し替え用写真枠 07</div><div class="ph">差し替え用写真枠 08</div>
+      </div>
+    </section>
+
+    <section class="sec wrap fade">
+      <h2>利用シーン</h2>
+      <div class="scene-grid">
+        <article class="card"><h3>仕事帰りの一杯</h3><p>短時間でも満足できる肉とビールの黄金セット。</p></article>
+        <article class="card"><h3>休日の昼飲み</h3><p>明るいテラス空間で、ゆっくり楽しむご褒美時間。</p></article>
+        <article class="card"><h3>友人グループ</h3><p>大皿肉メニューで会話が弾む、SNS映えの集まりに。</p></article>
+      </div>
+    </section>
+
+    <section id="reserve" class="sec wrap fade">
+      <div class="final">
+        <h2>席が埋まる前に、肉の主役席を。</h2>
+        <p>人気の夕方帯は早めの予約がおすすめです。</p>
+        <div class="cta" style="justify-content:center;">
+          <a class="btn btn-main" href="#">肉コースを予約する</a>
+          <a class="btn btn-sub" href="#" style="background:rgba(255,255,255,.16);color:#fff;border-color:rgba(255,255,255,.45);">空席を確認する</a>
+          <a class="btn btn-sub" href="#signature" style="background:rgba(255,255,255,.16);color:#fff;border-color:rgba(255,255,255,.45);">料理を見る</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add('show');
+      });
+    }, { threshold: 0.16 });
+
+    document.querySelectorAll('.fade').forEach((el) => io.observe(el));
+  </script>
+</body>
+</html>
