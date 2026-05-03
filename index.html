@@ -3,323 +3,121 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>夏季限定ビアガーデン「Terrace Brew & Grill」</title>
+  <title>SUMMER TAP TERRACE | サーバー体験型ビアガーデン</title>
   <style>
-    :root {
-      --bg: #f8f7f2;
-      --surface: #ffffff;
-      --primary: #f4a500;
-      --primary-deep: #d98900;
-      --accent: #3a7d44;
-      --text: #2f2f2f;
-      --muted: #6b6b6b;
-      --border: #e9e3d6;
-      --shadow: 0 8px 24px rgba(60, 45, 20, 0.08);
-      --radius: 16px;
-    }
-
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
-      color: var(--text);
-      background: linear-gradient(180deg, #fffef8 0%, var(--bg) 100%);
-      line-height: 1.65;
-    }
-
-    img { max-width: 100%; display: block; }
-
-    .container {
-      width: min(1120px, 92vw);
-      margin: 0 auto;
-    }
-
-    .section { padding: 72px 0; }
-    .section-title {
-      font-size: clamp(1.5rem, 2.2vw, 2rem);
-      margin-bottom: 12px;
-    }
-    .section-lead { color: var(--muted); margin-top: 0; }
-
-    .hero {
-      position: relative;
-      padding: 88px 0 72px;
-      overflow: hidden;
-    }
-    .hero::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 80% 20%, rgba(244,165,0,0.22), transparent 46%),
-                  radial-gradient(circle at 15% 85%, rgba(58,125,68,0.15), transparent 44%);
-      z-index: -1;
-    }
-
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1.05fr 0.95fr;
-      gap: 28px;
-      align-items: center;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: #fff4d8;
-      color: #8a5a00;
-      border: 1px solid #f0d79d;
-      padding: 8px 12px;
-      border-radius: 999px;
-      font-size: 0.9rem;
-      font-weight: 700;
-      margin-bottom: 14px;
-    }
-
-    h1 {
-      font-size: clamp(2rem, 4.2vw, 3.4rem);
-      line-height: 1.2;
-      margin: 0 0 16px;
-    }
-
-    .hero p { color: #4b4b4b; margin: 0 0 22px; }
-
-    .cta-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .btn {
-      border: none;
-      cursor: pointer;
-      text-decoration: none;
-      font-weight: 700;
-      padding: 12px 18px;
-      border-radius: 12px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      transition: .25s ease;
-      font-size: .95rem;
-    }
-    .btn-primary {
-      background: var(--primary);
-      color: #fff;
-      box-shadow: 0 8px 18px rgba(244, 165, 0, 0.35);
-    }
-    .btn-primary:hover { background: var(--primary-deep); transform: translateY(-2px); }
-    .btn-outline {
-      background: #fff;
-      color: #6a4a10;
-      border: 1px solid #e7c778;
-    }
-    .btn-outline:hover { background: #fff7e5; transform: translateY(-2px); }
-
-    .hero-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 18px;
-    }
-
-    .image-placeholder {
-      border-radius: 12px;
-      min-height: 210px;
-      border: 1px dashed #ccb889;
-      background:
-        linear-gradient(135deg, rgba(255, 224, 154, 0.4), rgba(179, 215, 184, 0.35)),
-        repeating-linear-gradient(45deg, rgba(255,255,255,.5) 0 8px, rgba(255,255,255,.2) 8px 16px);
-      display: grid;
-      place-items: center;
-      text-align: center;
-      padding: 12px;
-      color: #6e5a28;
-      font-weight: 700;
-      letter-spacing: .02em;
-    }
-
-    .cards {
-      display: grid;
-      gap: 16px;
-      grid-template-columns: repeat(3, 1fr);
-      margin-top: 24px;
-    }
-
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 18px;
-      box-shadow: var(--shadow);
-      transition: transform .25s ease, box-shadow .25s ease;
-    }
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 14px 28px rgba(60,45,20,0.14);
-    }
-
-    .icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 10px;
-      background: #fff2cc;
-      display: grid;
-      place-items: center;
-      margin-bottom: 10px;
-      font-weight: bold;
-      color: #7b5500;
-    }
-
-    .split {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-      margin-top: 18px;
-    }
-
-    .scene-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 20px; }
-
-    .pricing .card h3 { margin-bottom: 8px; }
-    .price { font-size: 1.6rem; font-weight: 800; color: #7a4d00; }
-
-    .faq-item {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 14px 16px;
-      margin-bottom: 10px;
-    }
-    .faq-item h4 { margin: 0 0 6px; font-size: 1rem; }
-    .faq-item p { margin: 0; color: #555; }
-
-    .final-cta {
-      background: linear-gradient(120deg, #3a7d44, #2e5e35);
-      color: #fff;
-      border-radius: 22px;
-      padding: 34px;
-      box-shadow: var(--shadow);
-      text-align: center;
-    }
-
-    .fadein {
-      opacity: 0;
-      transform: translateY(18px);
-      transition: opacity .7s ease, transform .7s ease;
-    }
-    .fadein.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    @media (max-width: 1024px) {
-      .cards { grid-template-columns: repeat(2, 1fr); }
-      .scene-grid { grid-template-columns: repeat(2, 1fr); }
-      .hero-grid { grid-template-columns: 1fr; }
-    }
-
-    @media (max-width: 640px) {
-      .section { padding: 58px 0; }
-      .cards, .split, .scene-grid { grid-template-columns: 1fr; }
-      .btn { width: 100%; }
-      .hero { padding-top: 64px; }
-      .hero-card { padding: 14px; }
-    }
+    :root{--bg:#f2f6f8;--surface:#fff;--ink:#1f2a30;--muted:#5f6e78;--line:#d8e2e8;--gold:#d9a441;--blue:#2285b3;--green:#3c8a63;--shadow:0 10px 24px rgba(21,40,54,.12);--r:16px}
+    *{box-sizing:border-box} body{margin:0;font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;color:var(--ink);background:linear-gradient(#fbfeff,var(--bg));line-height:1.65}
+    .wrap{width:min(1120px,92vw);margin:0 auto}.sec{padding:72px 0} h1,h2,h3,p{margin:0}
+    h2{font-size:clamp(1.5rem,2.8vw,2.2rem);margin-bottom:14px}
+    .hero{padding:64px 0 56px}.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;align-items:stretch}
+    .hero-visual{min-height:460px;border-radius:24px;border:1px dashed #95afbf;background:radial-gradient(circle at 75% 20%,rgba(34,133,179,.32),transparent 40%),radial-gradient(circle at 22% 80%,rgba(217,164,65,.26),transparent 46%),linear-gradient(145deg,#e6f5ff,#eef2f4 45%,#dfe9ef);display:grid;place-items:center;text-align:center;padding:18px;font-weight:800;color:#2e4f63;box-shadow:var(--shadow)}
+    .hero-copy{background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:28px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:16px;justify-content:center}
+    .tag{display:inline-flex;width:fit-content;border:1px solid #b9d4e2;background:#edf8ff;color:#1f6488;padding:7px 12px;border-radius:999px;font-weight:700;font-size:.87rem}
+    h1{font-size:clamp(2rem,5vw,3.6rem);line-height:1.1}.cta{display:flex;flex-wrap:wrap;gap:10px}
+    .btn{padding:12px 16px;border-radius:12px;font-weight:800;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;transition:.2s}
+    .btn-main{background:var(--blue);color:#fff;box-shadow:0 8px 18px rgba(34,133,179,.34)} .btn-sub{background:#fff;color:#1f6488;border:1px solid #b7d3e1}
+    .btn:hover{transform:translateY(-2px)}
+    .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.card{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:16px}
+    .ph{min-height:160px;border:1px dashed #9fb5c2;border-radius:12px;background:linear-gradient(140deg,rgba(213,232,244,.75),rgba(255,255,255,.9));display:grid;place-items:center;text-align:center;padding:10px;color:#375b71;font-weight:700}
+    .triple{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:var(--shadow)}
+    th,td{border-bottom:1px solid #e3ebf0;padding:12px;text-align:left;font-size:.94rem}th{background:#eff8fd}
+    .final{background:linear-gradient(125deg,#2d88b2,#236b8e);color:#fff;border-radius:22px;padding:34px;text-align:center;box-shadow:var(--shadow)}
+    .fade{opacity:0;transform:translateY(16px);transition:.7s}.fade.show{opacity:1;transform:none}
+    @media (max-width:1024px){.hero-grid{grid-template-columns:1fr}.cards{grid-template-columns:repeat(2,1fr)}.triple{grid-template-columns:1fr}}
+    @media (max-width:640px){.sec{padding:56px 0}.cards{grid-template-columns:1fr}.btn{width:100%}.hero-visual{min-height:320px}}
   </style>
 </head>
 <body>
-  <header class="hero">
-    <div class="container hero-grid">
-      <div class="fadein">
-        <span class="badge">夏季限定｜6月1日〜9月30日</span>
-        <h1>芝生テラスで、<br>昼から楽しむ<br>冷えた一杯。</h1>
-        <p>期間限定ビアガーデン <strong>Terrace Brew &amp; Grill</strong>。開放感あふれる屋外空間で、こだわりのビールサーバーと肉料理を気軽に楽しめる予約制ビアテラスです。</p>
-        <div class="cta-row">
-          <a href="#reserve" class="btn btn-primary">今すぐ予約する</a>
-          <a href="#pricing" class="btn btn-outline">コースを見る</a>
+  <main>
+    <section class="hero wrap fade">
+      <div class="hero-grid">
+        <div class="hero-visual">画像プレースホルダー<br>（サーバー群 / 注ぎたてビール / 屋外テラス）</div>
+        <div class="hero-copy">
+          <span class="tag">夏季限定開催｜2026.6.1 - 2026.9.30</span>
+          <h1>選ぶ楽しさ、<br>注ぐ楽しさ。</h1>
+          <p>架空店舗 <strong>SUMMER TAP TERRACE</strong>。ビールサーバーにこだわる、大人のビアガーデン。飲み比べ・セルフサーバー体験と肉料理で、普通の飲み放題では味わえない夏を。</p>
+          <div class="cta">
+            <a class="btn btn-main" href="#reserve">サーバー体験を予約する</a>
+            <a class="btn btn-sub" href="#course">コースを見る</a>
+            <a class="btn btn-sub" href="#reserve">空席を確認する</a>
+          </div>
         </div>
       </div>
-      <div class="hero-card fadein">
-        <div class="image-placeholder">画像プレースホルダー<br>（芝生テラス / 昼〜夕方の屋外ビアガーデン）</div>
+    </section>
+
+    <section class="sec wrap fade">
+      <h2>Server Lineup</h2>
+      <div class="cards">
+        <article class="card"><h3>定番ビール</h3><div class="ph">プレースホルダー<br>シャープな喉ごし</div></article>
+        <article class="card"><h3>クラフト系</h3><div class="ph">プレースホルダー<br>香りと個性</div></article>
+        <article class="card"><h3>黒ビール</h3><div class="ph">プレースホルダー<br>コクと余韻</div></article>
+        <article class="card"><h3>プレミアム系</h3><div class="ph">プレースホルダー<br>特別な一杯</div></article>
       </div>
-    </div>
-  </header>
+    </section>
 
-  <section class="section container fadein" id="appeal">
-    <h2 class="section-title">3つの魅力</h2>
-    <p class="section-lead">この夏だけの特別な体験を、ビールと肉で。</p>
-    <div class="cards">
-      <article class="card"><div class="icon">01</div><h3>期間限定オープン</h3><p>夏季だけ楽しめる特設テラス。日差しが心地よい昼下がりから、夕暮れの涼しい時間まで営業します。</p></article>
-      <article class="card"><div class="icon">02</div><h3>選べるサーバー体験</h3><p>定番からクラフト、黒ビール系まで。サーバーの注ぎ分けで、それぞれの香りと喉ごしを最大化します。</p></article>
-      <article class="card"><div class="icon">03</div><h3>肉料理に本気</h3><p>厚切りグリル肉、ジューシーなソーセージ、豪快な肉盛りプレート。ビールとの相性を追求したラインアップです。</p></article>
-    </div>
-  </section>
-
-  <section class="section container fadein" id="server">
-    <h2 class="section-title">サーバー紹介</h2>
-    <div class="split">
-      <article class="card"><h3>定番ビールサーバー</h3><div class="image-placeholder">画像プレースホルダー（定番ラガー）</div><p>温度と泡立ちを安定させるスタンダードサーバーで、毎日飲みたくなる爽快な一杯を。</p></article>
-      <article class="card"><h3>クラフト系サーバー</h3><div class="image-placeholder">画像プレースホルダー（クラフトビール）</div><p>香りを引き出す注ぎ口設計で、フルーティー系からホップ強めまで個性を楽しめます。</p></article>
-      <article class="card"><h3>黒ビール/プレミアム系</h3><div class="image-placeholder">画像プレースホルダー（黒ビール）</div><p>なめらかな泡を作る専用ラインで、コクのある味わいをゆっくり堪能できる贅沢な一杯。</p></article>
-    </div>
-  </section>
-
-  <section class="section container fadein" id="meat">
-    <h2 class="section-title">肉料理紹介</h2>
-    <div class="cards">
-      <article class="card"><h3>炭火香るグリル肉</h3><div class="image-placeholder">画像プレースホルダー（グリル肉）</div></article>
-      <article class="card"><h3>粗挽きソーセージ</h3><div class="image-placeholder">画像プレースホルダー（ソーセージ）</div></article>
-      <article class="card"><h3>肉盛りプレート</h3><div class="image-placeholder">画像プレースホルダー（肉盛り）</div></article>
-    </div>
-  </section>
-
-  <section class="section container fadein" id="scene">
-    <h2 class="section-title">利用シーン</h2>
-    <div class="scene-grid">
-      <article class="card"><h3>仕事帰りに</h3><p>19時以降の短時間プランで、気軽に一杯。</p></article>
-      <article class="card"><h3>休日の昼飲み</h3><p>明るい空の下、ゆったりとした週末時間を。</p></article>
-      <article class="card"><h3>友人グループ</h3><p>少人数でも楽しめるシェアメニューをご用意。</p></article>
-      <article class="card"><h3>会社宴会</h3><p>貸切相談OK。人数に合わせた席レイアウト対応。</p></article>
-    </div>
-  </section>
-
-  <section class="section container pricing fadein" id="pricing">
-    <h2 class="section-title">コース / 料金</h2>
-    <div class="cards">
-      <article class="card"><h3>カジュアルプラン</h3><p class="price">¥4,500</p><p>90分飲み放題 + 肉料理4品</p></article>
-      <article class="card"><h3>スタンダードプラン</h3><p class="price">¥5,800</p><p>120分飲み放題 + 肉料理6品</p></article>
-      <article class="card"><h3>プレミアムプラン</h3><p class="price">¥7,200</p><p>プレミアムビール含む飲み放題 + 肉料理7品</p></article>
-    </div>
-  </section>
-
-  <section class="section container fadein" id="faq">
-    <h2 class="section-title">よくある質問</h2>
-    <div class="faq-item"><h4>Q. 雨天時はどうなりますか？</h4><p>A. テント席をご用意しており、小雨程度であればご利用可能です。荒天時は事前連絡のうえご案内します。</p></div>
-    <div class="faq-item"><h4>Q. 当日予約はできますか？</h4><p>A. 空席があれば当日でも可能です。「空席を確認する」から最新状況をご確認ください。</p></div>
-    <div class="faq-item"><h4>Q. 子ども連れでも利用できますか？</h4><p>A. 昼営業帯はご利用可能です。ベビーカー置き場もございます。</p></div>
-  </section>
-
-  <section class="section container fadein" id="reserve">
-    <div class="final-cta">
-      <h2>この夏だけのテラス席を、今すぐ確保。</h2>
-      <p>人気時間帯は早めに埋まります。まずは空席をチェックしてください。</p>
-      <div class="cta-row" style="justify-content:center; margin-top:12px;">
-        <a class="btn btn-primary" href="#">今すぐ予約する</a>
-        <a class="btn btn-outline" href="#" style="background:rgba(255,255,255,.12); color:#fff; border-color:rgba(255,255,255,.4);">空席を確認する</a>
-        <a class="btn btn-outline" href="#pricing" style="background:rgba(255,255,255,.12); color:#fff; border-color:rgba(255,255,255,.4);">コースを見る</a>
+    <section class="sec wrap fade">
+      <h2>飲み比べ体験</h2>
+      <div class="triple">
+        <article class="card"><h3>好みで選ぶ</h3><p>軽やか・香る・濃厚。気分に合わせてサーバーを選択。</p></article>
+        <article class="card"><h3>料理に合わせる</h3><p>脂の旨みにはキレ、スパイスには香り。ペアリングで一段上の満足感。</p></article>
+        <article class="card"><h3>仲間と楽しむ</h3><p>セルフで注ぎ比べる体験が会話を生み、グループ利用も盛り上がる。</p></article>
       </div>
-    </div>
-  </section>
+    </section>
 
+    <section class="sec wrap fade">
+      <h2>Meat Pairing</h2>
+      <div class="triple">
+        <article class="card"><div class="ph">グリルステーキ写真枠</div><p>定番ラガー × 炭火グリルで王道の満足感。</p></article>
+        <article class="card"><div class="ph">スパイスチキン写真枠</div><p>クラフト系 × スパイス肉で香りを重ねる。</p></article>
+        <article class="card"><div class="ph">肉盛りプレート写真枠</div><p>黒/プレミアム系 × 濃厚ソース肉で贅沢に。</p></article>
+      </div>
+    </section>
+
+    <section class="sec wrap fade">
+      <h2>他店との差別化</h2>
+      <table>
+        <thead><tr><th>比較項目</th><th>SUMMER TAP TERRACE</th><th>一般的な飲み放題</th></tr></thead>
+        <tbody>
+          <tr><td>サーバー種類</td><td>4系統から選べる</td><td>1〜2種中心</td></tr>
+          <tr><td>注ぎ体験</td><td>セルフ体験・注ぎたて重視</td><td>提供中心</td></tr>
+          <tr><td>飲み比べ導線</td><td>ペアリング提案あり</td><td>提案が少ない</td></tr>
+          <tr><td>肉料理との相性訴求</td><td>料理別おすすめ明記</td><td>一律提供</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="course" class="sec wrap fade">
+      <h2>Course</h2>
+      <div class="triple">
+        <article class="card"><h3>TAP CASUAL</h3><p>¥4,900 / 90分<br>4種サーバー + 肉料理4品</p><div class="cta" style="margin-top:10px;"><a class="btn btn-sub" href="#reserve">コースを見る</a></div></article>
+        <article class="card"><h3>TAP STANDARD</h3><p>¥6,200 / 120分<br>飲み比べセット + 肉料理6品</p><div class="cta" style="margin-top:10px;"><a class="btn btn-main" href="#reserve">サーバー体験を予約する</a></div></article>
+        <article class="card"><h3>TAP PREMIUM</h3><p>¥7,600 / 120分<br>プレミアム系含む + 肉料理7品</p><div class="cta" style="margin-top:10px;"><a class="btn btn-sub" href="#reserve">空席を確認する</a></div></article>
+      </div>
+    </section>
+
+    <section class="sec wrap fade">
+      <h2>FAQ</h2>
+      <div class="card"><h3>Q. セルフサーバーは初心者でも使えますか？</h3><p>スタッフが最初に注ぎ方を案内するため、初めてでも安心です。</p></div>
+      <div class="card" style="margin-top:10px;"><h3>Q. 雨天時は利用できますか？</h3><p>屋外テラスに加え、天候対応席をご用意しています。</p></div>
+      <div class="card" style="margin-top:10px;"><h3>Q. 肉料理だけの追加注文は可能ですか？</h3><p>可能です。看板肉料理の追加メニューも当日注文できます。</p></div>
+    </section>
+
+    <section id="reserve" class="sec wrap fade">
+      <div class="final">
+        <h2>一杯ごとに、夏が楽しくなる。</h2>
+        <p>注ぎたての体験席は週末から埋まります。今すぐご確認ください。</p>
+        <div class="cta" style="justify-content:center;">
+          <a class="btn btn-main" href="#">サーバー体験を予約する</a>
+          <a class="btn btn-sub" href="#course" style="background:rgba(255,255,255,.15);color:#fff;border-color:rgba(255,255,255,.45);">コースを見る</a>
+          <a class="btn btn-sub" href="#" style="background:rgba(255,255,255,.15);color:#fff;border-color:rgba(255,255,255,.45);">空席を確認する</a>
+        </div>
+      </div>
+    </section>
+  </main>
   <script>
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('show');
-      });
-    }, { threshold: 0.14 });
-
-    document.querySelectorAll('.fadein').forEach(el => observer.observe(el));
+    const observer = new IntersectionObserver((entries)=>{entries.forEach((e)=>{if(e.isIntersecting)e.target.classList.add('show')})},{threshold:.15});
+    document.querySelectorAll('.fade').forEach((el)=>observer.observe(el));
   </script>
 </body>
 </html>
