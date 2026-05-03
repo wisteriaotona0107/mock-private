@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>日本酒バー KPIダッシュボード</title>
+  <style>
+    :root {
+      --bg: #f6f2ea;
+      --surface: #fffdf8;
+      --surface-2: #f1ece2;
+      --ink: #1f1b16;
+      --ink-soft: #5d564d;
+      --accent: #8b6f47;
+      --accent-2: #6f7a64;
+      --danger: #9a3f3f;
+      --ok: #4d6b50;
+      --shadow: 0 8px 24px rgba(49, 37, 22, 0.08);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at 20% 0%, #fbf8f2, var(--bg));
+      color: var(--ink);
+      font-family: Inter, "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      min-height: 100vh;
+    }
+
+    .app {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 24px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .topbar {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .title-wrap h1 { margin: 0; font-size: 1.4rem; font-weight: 700; }
+    .title-wrap p { margin: 4px 0 0; color: var(--ink-soft); font-size: 0.9rem; }
+
+    .controls { display: flex; gap: 8px; flex-wrap: wrap; }
+    .btn {
+      border: none;
+      border-radius: 999px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 600;
+      padding: 10px 14px;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(100, 75, 46, 0.25);
+    }
+    .btn.secondary { background: var(--surface-2); color: var(--ink); box-shadow: none; border: 1px solid #ded6c8; }
+    .file-label { position: relative; overflow: hidden; }
+    .file-label input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+
+    .grid-kpi {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(120px, 1fr));
+      gap: 14px;
+    }
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+    .kpi-label { color: var(--ink-soft); font-size: 0.82rem; margin-bottom: 8px; }
+    .kpi-value { font-size: 1.4rem; font-weight: 700; letter-spacing: .01em; }
+    .kpi-sub { font-size: 0.82rem; color: var(--ink-soft); margin-top: 6px; }
+
+    .grid-main {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: 14px;
+    }
+
+    .section-title { margin: 0 0 10px; font-size: 1rem; }
+
+    .chart-wrap { height: 260px; display: flex; align-items: end; gap: 8px; }
+    .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .bar {
+      width: 100%;
+      border-radius: 8px 8px 0 0;
+      background: linear-gradient(180deg, #b89a6c 0%, #8b6f47 100%);
+      min-height: 4px;
+      transition: height .3s;
+    }
+    .bar-label { font-size: .73rem; color: var(--ink-soft); }
+    .bar-value { font-size: .72rem; font-variant-numeric: tabular-nums; color: #4f483f; }
+
+    .rank-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+    .rank-item {
+      display: grid;
+      grid-template-columns: 32px 1fr auto;
+      gap: 8px;
+      align-items: center;
+      background: var(--surface-2);
+      border-radius: 12px;
+      padding: 8px 10px;
+    }
+    .rank-no {
+      width: 28px; height: 28px; border-radius: 999px;
+      display: grid; place-items: center; font-weight: 700;
+      background: #e6ddce;
+    }
+    .rank-name { font-weight: 600; }
+    .rank-sales { color: var(--ink-soft); font-size: .85rem; }
+
+    .taste-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .meter {
+      background: linear-gradient(90deg, #d7e0d2, #e8e3d7 50%, #e4d3c9);
+      height: 14px; border-radius: 999px; position: relative;
+      overflow: hidden;
+    }
+    .meter-fill {
+      position: absolute; left: 0; top: 0; bottom: 0;
+      background: linear-gradient(90deg, #5e765f, #8b6f47);
+      border-radius: 999px;
+    }
+    .taste-legend { display:flex; justify-content:space-between; font-size:.8rem; color:var(--ink-soft); margin-bottom:6px; }
+
+    .footer-note { font-size: .8rem; color: var(--ink-soft); text-align: right; }
+
+    @media (max-width: 1100px) {
+      .grid-kpi { grid-template-columns: repeat(3, minmax(120px,1fr)); }
+      .grid-main { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 740px) {
+      .app { padding: 14px; }
+      .grid-kpi { grid-template-columns: repeat(2, minmax(130px,1fr)); }
+      .kpi-value { font-size: 1.2rem; }
+      .chart-wrap { height: 220px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="topbar">
+      <div class="title-wrap">
+        <h1>日本酒バー KPIダッシュボード</h1>
+        <p id="asOf">データ日付: --</p>
+      </div>
+      <div class="controls">
+        <label class="btn file-label">JSONを読み込む
+          <input id="fileInput" type="file" accept="application/json" />
+        </label>
+        <button class="btn secondary" id="useSampleBtn">サンプルを使用</button>
+        <button class="btn secondary" id="clearSavedBtn">保存データ削除</button>
+      </div>
+    </section>
+
+    <section class="grid-kpi">
+      <article class="card"><div class="kpi-label">本日売上</div><div class="kpi-value" id="salesToday">¥0</div><div class="kpi-sub" id="salesTodaySub">-</div></article>
+      <article class="card"><div class="kpi-label">販売数</div><div class="kpi-value" id="unitsSold">0杯</div><div class="kpi-sub" id="unitsSoldSub">-</div></article>
+      <article class="card"><div class="kpi-label">平均単価</div><div class="kpi-value" id="avgUnitPrice">¥0</div><div class="kpi-sub" id="avgUnitPriceSub">-</div></article>
+      <article class="card"><div class="kpi-label">人気銘柄</div><div class="kpi-value" id="topBrand">-</div><div class="kpi-sub" id="topBrandSub">-</div></article>
+      <article class="card"><div class="kpi-label">在庫注意件数</div><div class="kpi-value" id="lowStockCount">0件</div><div class="kpi-sub" id="lowStockSub">-</div></article>
+    </section>
+
+    <section class="grid-main">
+      <article class="card">
+        <h2 class="section-title">売上トレンド（直近7日）</h2>
+        <div class="chart-wrap" id="trendChart"></div>
+      </article>
+
+      <article class="card">
+        <h2 class="section-title">人気商品ランキング</h2>
+        <ol class="rank-list" id="rankingList"></ol>
+      </article>
+
+      <article class="card">
+        <h2 class="section-title">味わい傾向</h2>
+        <div class="taste-grid">
+          <div>
+            <div class="taste-legend"><span>辛口</span><span>甘口</span></div>
+            <div class="meter"><div class="meter-fill" id="drySweetFill"></div></div>
+            <p class="kpi-sub" id="drySweetText"></p>
+          </div>
+          <div>
+            <div class="taste-legend"><span>淡麗</span><span>芳醇</span></div>
+            <div class="meter"><div class="meter-fill" id="lightRichFill"></div></div>
+            <p class="kpi-sub" id="lightRichText"></p>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <h2 class="section-title">在庫注意銘柄</h2>
+        <ul class="rank-list" id="stockAlertList"></ul>
+      </article>
+    </section>
+
+    <div class="footer-note" id="statusText">サンプルデータを表示中</div>
+  </main>
+
+<script>
+const STORAGE_KEY = 'sake_kpi_dashboard_v1';
+
+const SAMPLE_DATA = {
+  as_of: '2026-05-03',
+  kpis: {
+    sales_today: 286400,
+    units_sold: 193,
+    avg_unit_price: 1484,
+    top_brand: { name: '十四代 本丸', cups: 22 },
+    low_stock_count: 4
+  },
+  trends: [
+    { date: '04/27', sales: 191000 }, { date: '04/28', sales: 224000 }, { date: '04/29', sales: 236000 },
+    { date: '04/30', sales: 201000 }, { date: '05/01', sales: 261000 }, { date: '05/02', sales: 274000 },
+    { date: '05/03', sales: 286400 }
+  ],
+  ranking: [
+    { name: '十四代 本丸', cups: 22 }, { name: '新政 No.6', cups: 18 }, { name: '而今 特別純米', cups: 16 },
+    { name: '獺祭 純米大吟醸45', cups: 13 }, { name: '田酒 特別純米', cups: 12 }
+  ],
+  taste: {
+    dry_sweet: 63,
+    light_rich: 58
+  },
+  stock_alerts: [
+    { name: '新政 No.6', remain: 1, unit: '本' },
+    { name: '而今 特別純米', remain: 2, unit: '本' },
+    { name: '仙禽 雪だるま', remain: 1, unit: '本' },
+    { name: '鍋島 純米吟醸', remain: 2, unit: '本' }
+  ]
+};
+
+const yen = n => `¥${Number(n).toLocaleString('ja-JP')}`;
+
+function setText(id, text) { document.getElementById(id).textContent = text; }
+
+function render(data) {
+  setText('asOf', `データ日付: ${data.as_of || '--'}`);
+
+  setText('salesToday', yen(data.kpis?.sales_today ?? 0));
+  setText('salesTodaySub', '前日比はETL側で拡張可能');
+  setText('unitsSold', `${data.kpis?.units_sold ?? 0}杯`);
+  setText('unitsSoldSub', '本日提供合計');
+  setText('avgUnitPrice', yen(data.kpis?.avg_unit_price ?? 0));
+  setText('avgUnitPriceSub', '1杯あたり平均');
+  setText('topBrand', data.kpis?.top_brand?.name ?? '-');
+  setText('topBrandSub', `${data.kpis?.top_brand?.cups ?? 0}杯`);
+  setText('lowStockCount', `${data.kpis?.low_stock_count ?? 0}件`);
+  setText('lowStockSub', '要発注・要確認');
+
+  renderTrend(data.trends || []);
+  renderRanking('rankingList', data.ranking || [], r => `${r.cups}杯`);
+  renderRanking('stockAlertList', data.stock_alerts || [], r => `残り ${r.remain}${r.unit || ''}`);
+  renderTaste(data.taste || {});
+}
+
+function renderTrend(trends) {
+  const host = document.getElementById('trendChart');
+  host.innerHTML = '';
+  if (!trends.length) return;
+  const max = Math.max(...trends.map(t => t.sales), 1);
+  trends.forEach(t => {
+    const col = document.createElement('div');
+    col.className = 'bar-col';
+    const val = document.createElement('div');
+    val.className = 'bar-value';
+    val.textContent = `${Math.round((t.sales / 1000))}k`;
+    const bar = document.createElement('div');
+    bar.className = 'bar';
+    bar.style.height = `${Math.max(8, (t.sales / max) * 180)}px`;
+    const lbl = document.createElement('div');
+    lbl.className = 'bar-label';
+    lbl.textContent = t.date;
+    col.append(val, bar, lbl);
+    host.appendChild(col);
+  });
+}
+
+function renderRanking(id, rows, suffixFn) {
+  const list = document.getElementById(id);
+  list.innerHTML = '';
+  rows.forEach((r, i) => {
+    const li = document.createElement('li');
+    li.className = 'rank-item';
+    li.innerHTML = `<div class="rank-no">${i + 1}</div><div class="rank-name">${r.name}</div><div class="rank-sales">${suffixFn(r)}</div>`;
+    list.appendChild(li);
+  });
+}
+
+function renderTaste(taste) {
+  const ds = Math.min(100, Math.max(0, Number(taste.dry_sweet ?? 50)));
+  const lr = Math.min(100, Math.max(0, Number(taste.light_rich ?? 50)));
+  document.getElementById('drySweetFill').style.width = `${ds}%`;
+  document.getElementById('lightRichFill').style.width = `${lr}%`;
+  setText('drySweetText', `辛口寄り ${ds}%`);
+  setText('lightRichText', `芳醇寄り ${lr}%`);
+}
+
+function saveData(data) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function loadData() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return null;
+  try { return JSON.parse(raw); } catch { return null; }
+}
+
+function applyData(data, sourceText) {
+  render(data);
+  saveData(data);
+  setText('statusText', sourceText);
+}
+
+document.getElementById('useSampleBtn').addEventListener('click', () => {
+  applyData(SAMPLE_DATA, 'サンプルデータを表示中');
+});
+
+document.getElementById('clearSavedBtn').addEventListener('click', () => {
+  localStorage.removeItem(STORAGE_KEY);
+  setText('statusText', '保存データを削除しました（画面は現在の表示を維持）');
+});
+
+document.getElementById('fileInput').addEventListener('change', async (e) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+  try {
+    const text = await file.text();
+    const json = JSON.parse(text);
+    applyData(json, `JSON読込: ${file.name}`);
+  } catch (err) {
+    setText('statusText', `JSON読込エラー: ${err.message}`);
+  } finally {
+    e.target.value = '';
+  }
+});
+
+const initial = loadData() || SAMPLE_DATA;
+render(initial);
+setText('statusText', loadData() ? 'localStorageの前回データを表示中' : 'サンプルデータを表示中');
+</script>
+</body>
+</html>
