@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Rice Field Simulator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+JP:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app">
+    <header class="panel">
+      <div>
+        <h1>Rice Planting Experience</h1>
+        <p class="muted">Tap/drag to plant · Swipe to harvest · Manage water</p>
+      </div>
+      <div class="stats">
+        <div><span>Score</span><strong id="scoreValue">0</strong></div>
+        <div><span>Day</span><strong id="dayValue">0.0</strong></div>
+      </div>
+    </header>
+
+    <section class="panel controls">
+      <label for="waterSlider">Water Level: <strong id="waterValue">0.50</strong></label>
+      <input id="waterSlider" type="range" min="0" max="1" step="0.01" value="0.5" />
+      <div class="control-buttons">
+        <button id="saveBtn">Save</button>
+        <button id="exportJsonBtn">Export JSON</button>
+        <button id="exportCsvBtn">Export CSV</button>
+        <button id="resetBtn" class="danger">Reset</button>
+      </div>
+      <p id="weatherText" class="muted"></p>
+    </section>
+
+    <section class="panel field-wrap">
+      <div id="field" class="field" aria-label="Rice field 8x8" role="grid"></div>
+    </section>
+
+    <section class="panel legend">
+      <h2>Growth Phases</h2>
+      <div class="legend-grid">
+        <span data-phase="empty">Empty</span>
+        <span data-phase="seed">Seed</span>
+        <span data-phase="planted">Planted</span>
+        <span data-phase="growing">Growing</span>
+        <span data-phase="heading">Heading</span>
+        <span data-phase="ripening">Ripening</span>
+        <span data-phase="harvest">Harvested</span>
+      </div>
+    </section>
+
+    <section class="panel logs">
+      <h2>Action Log</h2>
+      <textarea id="logOutput" readonly></textarea>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
