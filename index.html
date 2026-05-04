@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ビアガーデン 樽重量記録</title>
+  <style>
+    :root {
+      --bg: #f5f7f2;
+      --card: #ffffff;
+      --text: #1f2a1f;
+      --muted: #5f6b5f;
+      --primary: #4a7c30;
+      --primary-2: #6cae44;
+      --accent: #dca84f;
+      --warn: #c24b34;
+      --ok: #2f8f5b;
+      --shadow: 0 6px 20px rgba(0,0,0,.12);
+      --radius: 16px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 20% 10%, #fff8e8 0 12%, transparent 13%),
+        radial-gradient(circle at 80% 0%, #fff3d9 0 10%, transparent 11%),
+        linear-gradient(180deg, #e7efdd 0%, #f6f8f2 32%, #f4efe2 100%);
+      min-height: 100vh;
+    }
+    .topbar {
+      padding: 14px 20px;
+      background: linear-gradient(90deg, #5b3c1c, #7a542d);
+      color: #fff8ef;
+      position: sticky; top: 0; z-index: 2;
+      box-shadow: var(--shadow);
+    }
+    .topbar h1 { margin: 0; font-size: 1.25rem; letter-spacing: .03em; }
+    .topbar small { opacity: .9; }
+    main {
+      padding: 16px;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 16px;
+    }
+    .col { display: grid; gap: 16px; align-content: start; }
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+      border: 1px solid #e9eee2;
+    }
+    h2 { font-size: 1.05rem; margin: 0 0 10px; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .grid3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+    label { font-size: .86rem; color: var(--muted); display: block; margin-bottom: 6px; }
+    input, select, button, textarea {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid #d6dfcd;
+      font-size: 1rem;
+      background: #fff;
+    }
+    button {
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      background: var(--primary);
+      color: white;
+      min-height: 46px;
+    }
+    button.secondary { background: #6f7e6f; }
+    button.warn { background: var(--warn); }
+    button.ghost { background: #edf3e6; color: #234; }
+    .status-buttons { display:grid; grid-template-columns: repeat(3,1fr); gap:8px; }
+    .status-buttons button { background:#ecf3e4; color:#2b3a2a; }
+    .status-buttons button.active { background: var(--primary-2); color:#fff; }
+    .kpis { display:grid; grid-template-columns: repeat(2,1fr); gap:10px; }
+    .kpi { background:#f6faef; border:1px solid #e2ecd7; border-radius:12px; padding:10px; }
+    .kpi .v { font-size:1.2rem; font-weight:700; }
+    table { width:100%; border-collapse: collapse; font-size:.9rem; }
+    th, td { text-align:left; padding:8px 6px; border-bottom:1px solid #ecefe7; }
+    th { color:#4f5d50; position: sticky; top: 0; background:#fff; }
+    .list-wrap { max-height: 330px; overflow:auto; }
+    .hint { font-size:.82rem; color:var(--muted); }
+    .alert { color: var(--warn); font-weight:700; }
+    @media (max-width: 1024px) {
+      main { grid-template-columns: 1fr; }
+      .status-buttons { grid-template-columns: repeat(2,1fr); }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <h1>🍺 ビアガーデン 樽重量記録アプリ</h1>
+    <small>オフライン運用 / iPad横画面優先 / localStorage保存</small>
+  </header>
+
+  <main>
+    <section class="col">
+      <div class="card">
+        <h2>1) QR読み取り / product_id入力</h2>
+        <div class="grid2">
+          <div>
+            <label>カメラ起動（ブラウザ対応時）</label>
+            <button id="startScan">QRスキャン開始</button>
+            <div class="hint">※ BarcodeDetector対応ブラウザのみ。未対応時は手入力。</div>
+          </div>
+          <div>
+            <label>product_id（QR文字列）</label>
+            <input id="productId" placeholder="例: BEER-001" />
+          </div>
+        </div>
+        <video id="video" autoplay playsinline style="width:100%;margin-top:10px;border-radius:12px;display:none;"></video>
+      </div>
+
+      <div class="card">
+        <h2>2) 重量登録</h2>
+        <div class="grid2">
+          <div><label>製品名</label><input id="productName" readonly /></div>
+          <div><label>カテゴリ</label><input id="category" readonly /></div>
+          <div><label>タップ番号</label><input id="tapNo" readonly /></div>
+          <div><label>ステータス</label><input id="statusText" readonly /></div>
+        </div>
+        <div class="status-buttons" style="margin:10px 0;">
+          <button data-status="営業開始">営業開始</button>
+          <button data-status="途中確認">途中確認</button>
+          <button data-status="営業終了">営業終了</button>
+          <button data-status="樽交換">樽交換</button>
+          <button data-status="空樽">空樽</button>
+          <button data-status="補正">補正</button>
+        </div>
+        <div class="grid3">
+          <div><label>測定重量(kg)</label><input id="weight" type="number" step="0.01" min="0" placeholder="例: 24.30" /></div>
+          <div><label>残量(L)</label><input id="remainL" readonly /></div>
+          <div><label>残量率(%)</label><input id="remainPct" readonly /></div>
+        </div>
+        <div class="grid2" style="margin-top:10px;">
+          <button id="saveRecord">記録を登録</button>
+          <button class="secondary" id="resetForm">入力クリア</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>8) データ出力 / 保守</h2>
+        <div class="grid3">
+          <button class="ghost" id="downloadRecords">records.json出力</button>
+          <button class="ghost" id="downloadProducts">products.json出力</button>
+          <button class="warn" id="clearStorage">localStorageクリア</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="col">
+      <div class="card">
+        <h2>7) KPI</h2>
+        <div class="kpis">
+          <div class="kpi"><div>現在残量</div><div class="v" id="kpiRemainL">- L</div></div>
+          <div class="kpi"><div>残量率</div><div class="v" id="kpiRemainPct">- %</div></div>
+          <div class="kpi"><div>前回との差分</div><div class="v" id="kpiDiff">- kg</div></div>
+          <div class="kpi"><div>消費速度</div><div class="v" id="kpiSpeed">- L/h</div></div>
+        </div>
+        <p id="kpiAlert" class="hint">交換注意: -</p>
+      </div>
+
+      <div class="card">
+        <h2>6) 最新記録一覧</h2>
+        <div class="list-wrap">
+          <table>
+            <thead><tr><th>時刻</th><th>製品名</th><th>ステータス</th><th>重量</th><th>残量L</th><th>残量率</th></tr></thead>
+            <tbody id="recordTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const LS_PRODUCTS = 'bg_products_v1';
+    const LS_RECORDS = 'bg_records_v1';
+    const SAMPLE_PRODUCTS = [
+      { product_id:'BEER-001', product_name:'ピルスナー樽', keg_capacity_l:20, empty_keg_weight_kg:8.5, full_keg_weight_kg:28.5, tap_no:'T1', category:'生ビール' },
+      { product_id:'BEER-002', product_name:'IPA樽', keg_capacity_l:15, empty_keg_weight_kg:7.2, full_keg_weight_kg:22.2, tap_no:'T2', category:'クラフト' },
+      { product_id:'BEER-003', product_name:'黒ビール樽', keg_capacity_l:20, empty_keg_weight_kg:8.7, full_keg_weight_kg:28.7, tap_no:'T3', category:'スタウト' }
+    ];
+
+    const els = id => document.getElementById(id);
+    let products = JSON.parse(localStorage.getItem(LS_PRODUCTS) || 'null') || SAMPLE_PRODUCTS;
+    let records = JSON.parse(localStorage.getItem(LS_RECORDS) || 'null') || [];
+    if (records.length === 0) {
+      const now = new Date();
+      records = [{
+        record_id: crypto.randomUUID(),
+        product_id: 'BEER-001', product_name:'ピルスナー樽', status:'営業開始', measured_weight_kg:28.1,
+        remain_l:19.6, remain_pct:98, created_date: now.toISOString().slice(0,10), created_time: now.toTimeString().slice(0,8), created_at: now.toISOString()
+      }];
+    }
+
+    let selectedStatus = '途中確認';
+
+    function saveAll(){
+      localStorage.setItem(LS_PRODUCTS, JSON.stringify(products));
+      localStorage.setItem(LS_RECORDS, JSON.stringify(records));
+    }
+
+    function getProduct(pid){ return products.find(p => p.product_id === pid); }
+
+    function calcRemain(product, weight){
+      const net = Math.max(0, weight - product.empty_keg_weight_kg);
+      const totalNet = Math.max(0.0001, product.full_keg_weight_kg - product.empty_keg_weight_kg);
+      const pct = Math.max(0, Math.min(100, (net / totalNet) * 100));
+      const l = Math.max(0, (pct / 100) * product.keg_capacity_l);
+      return { l: +l.toFixed(2), pct: +pct.toFixed(1) };
+    }
+
+    function bindProductInfo(){
+      const pid = els('productId').value.trim();
+      const p = getProduct(pid);
+      els('productName').value = p ? p.product_name : '';
+      els('category').value = p ? p.category : '';
+      els('tapNo').value = p ? p.tap_no : '';
+      computePreview();
+      renderKPI();
+    }
+
+    function computePreview(){
+      const pid = els('productId').value.trim();
+      const p = getProduct(pid);
+      const weight = parseFloat(els('weight').value);
+      if (!p || Number.isNaN(weight)) { els('remainL').value=''; els('remainPct').value=''; return; }
+      const r = calcRemain(p, weight);
+      els('remainL').value = r.l;
+      els('remainPct').value = r.pct;
+    }
+
+    function renderTable(){
+      const tbody = els('recordTable');
+      tbody.innerHTML = '';
+      [...records].sort((a,b)=> b.created_at.localeCompare(a.created_at)).slice(0,100).forEach(r=>{
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${r.created_time}</td><td>${r.product_name}</td><td>${r.status}</td><td>${r.measured_weight_kg}kg</td><td>${r.remain_l}</td><td>${r.remain_pct}%</td>`;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderKPI(){
+      const pid = els('productId').value.trim();
+      const list = records.filter(r => r.product_id === pid).sort((a,b)=> a.created_at.localeCompare(b.created_at));
+      if (list.length === 0) {
+        els('kpiRemainL').textContent='- L'; els('kpiRemainPct').textContent='- %'; els('kpiDiff').textContent='- kg'; els('kpiSpeed').textContent='- L/h'; els('kpiAlert').textContent='交換注意: -';
+        return;
+      }
+      const last = list.at(-1);
+      const prev = list.length > 1 ? list.at(-2) : null;
+      els('kpiRemainL').textContent = `${last.remain_l} L`;
+      els('kpiRemainPct').textContent = `${last.remain_pct} %`;
+      if (prev) {
+        const diffKg = +(last.measured_weight_kg - prev.measured_weight_kg).toFixed(2);
+        els('kpiDiff').textContent = `${diffKg} kg`;
+        const dtH = Math.max(0.001, (new Date(last.created_at)-new Date(prev.created_at))/3600000);
+        const speed = +((prev.remain_l - last.remain_l)/dtH).toFixed(2);
+        els('kpiSpeed').textContent = `${speed} L/h`;
+      } else {
+        els('kpiDiff').textContent = '- kg';
+        els('kpiSpeed').textContent = '- L/h';
+      }
+      const alert = last.remain_pct <= 15 ? '⚠ 樽交換目安（残量15%以下）' : 'OK';
+      els('kpiAlert').textContent = `交換注意: ${alert}`;
+      els('kpiAlert').className = last.remain_pct <= 15 ? 'alert' : 'hint';
+    }
+
+    function setStatus(s){
+      selectedStatus = s;
+      els('statusText').value = s;
+      document.querySelectorAll('.status-buttons button').forEach(b=> b.classList.toggle('active', b.dataset.status===s));
+    }
+
+    function addRecord(){
+      const pid = els('productId').value.trim();
+      const p = getProduct(pid);
+      const w = parseFloat(els('weight').value);
+      if (!p) return alert('product_idが製品マスタにありません。');
+      if (Number.isNaN(w)) return alert('測定重量を入力してください。');
+      const now = new Date();
+      const rem = calcRemain(p, w);
+      records.push({
+        record_id: crypto.randomUUID(),
+        product_id: p.product_id,
+        product_name: p.product_name,
+        status: selectedStatus,
+        measured_weight_kg: +w.toFixed(2),
+        remain_l: rem.l,
+        remain_pct: rem.pct,
+        created_date: now.toISOString().slice(0,10),
+        created_time: now.toTimeString().slice(0,8),
+        created_at: now.toISOString()
+      });
+      saveAll(); renderTable(); renderKPI();
+      alert('記録を登録しました。');
+    }
+
+    async function startScan(){
+      if (!('BarcodeDetector' in window) || !navigator.mediaDevices) {
+        alert('このブラウザではQRカメラ読み取り未対応です。手入力をご利用ください。');
+        return;
+      }
+      const detector = new BarcodeDetector({formats:['qr_code']});
+      const video = els('video');
+      const stream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});
+      video.srcObject = stream; video.style.display = 'block';
+      const timer = setInterval(async ()=>{
+        try {
+          const codes = await detector.detect(video);
+          if (codes.length) {
+            els('productId').value = codes[0].rawValue;
+            bindProductInfo();
+            clearInterval(timer);
+            stream.getTracks().forEach(t=>t.stop());
+            video.style.display='none';
+          }
+        } catch(e){}
+      }, 500);
+    }
+
+    function download(name, data){
+      const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob); a.download = name; a.click();
+      URL.revokeObjectURL(a.href);
+    }
+
+    els('productId').addEventListener('input', bindProductInfo);
+    els('weight').addEventListener('input', computePreview);
+    els('saveRecord').addEventListener('click', addRecord);
+    els('resetForm').addEventListener('click', ()=>{ els('weight').value=''; computePreview(); });
+    els('startScan').addEventListener('click', startScan);
+    document.querySelectorAll('.status-buttons button').forEach(b=> b.addEventListener('click', ()=>setStatus(b.dataset.status)));
+    els('downloadRecords').addEventListener('click', ()=>download('records.json', records));
+    els('downloadProducts').addEventListener('click', ()=>download('products.json', products));
+    els('clearStorage').addEventListener('click', ()=>{ if(confirm('localStorageをクリアしますか？')){ localStorage.removeItem(LS_PRODUCTS); localStorage.removeItem(LS_RECORDS); location.reload(); }});
+
+    saveAll(); setStatus(selectedStatus); renderTable();
+    els('productId').value = 'BEER-001'; bindProductInfo();
+  </script>
+</body>
+</html>
