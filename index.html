@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>焼酎夜性診断</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
+  </head>
+  <body>
+    <div class="background-grain"></div>
+    <main class="app-shell">
+      <section id="hero-screen" class="screen active">
+        <p class="badge">SHOCHU NIGHT PROFILE</p>
+        <h1>焼酎夜性診断</h1>
+        <p class="lead">あなたの夜に合う一杯を、香り・温度・余韻から見つける。</p>
+        <button id="start-btn" class="btn btn-primary">診断をはじめる</button>
+        <p class="notice">お酒は20歳になってから。体質に合わない場合は飲酒を控えてください。</p>
+      </section>
+
+      <section id="question-screen" class="screen" aria-live="polite">
+        <div class="progress-wrap">
+          <p id="progress-label">Question 1 / 8</p>
+          <div class="progress-track"><span id="progress-bar"></span></div>
+        </div>
+
+        <article class="question-card">
+          <p class="question-eyebrow">夜の気分を教えてください</p>
+          <h2 id="question-text"></h2>
+          <div class="answer-grid">
+            <button id="option-a" class="btn answer"></button>
+            <button id="option-b" class="btn answer secondary"></button>
+          </div>
+        </article>
+      </section>
+
+      <section id="result-screen" class="screen" aria-live="polite">
+        <p class="badge">YOUR SHOCHU PROFILE</p>
+        <article class="result-card">
+          <div class="result-header">
+            <p class="result-label">診断結果</p>
+            <h2 id="result-name"></h2>
+            <p id="result-copy" class="result-copy"></p>
+          </div>
+
+          <div class="result-grid">
+            <div><h3>焼酎カテゴリ</h3><p id="result-category"></p></div>
+            <div><h3>味わい傾向</h3><p id="result-profile"></p></div>
+            <div><h3>おすすめの飲み方</h3><p id="result-drink"></p></div>
+            <div><h3>合う料理</h3><p id="result-food"></p></div>
+            <div><h3>銘柄例</h3><p id="result-brands"></p></div>
+            <div><h3>今日の一杯コメント</h3><p id="result-comment"></p></div>
+          </div>
+        </article>
+        <button id="retry-btn" class="btn btn-primary">もう一度診断する</button>
+      </section>
+    </main>
+
+    <script src="assets/js/app.js"></script>
+  </body>
+</html>
