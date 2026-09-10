@@ -1,0 +1,37 @@
+{
+  "nav": ["こだわり", "メニュー", "コース", "料金", "診断", "アクセス"],
+  "hero": {
+    "image": "assets/hero/beer-garden-hero.jpg",
+    "period": "期間限定 6.1 SUN - 9.30 TUE",
+    "eyebrow": "SUMMER BEER GARDEN 2025",
+    "title": "この夏、最高の一杯と\n極上の肉を、屋外で。",
+    "desc": "こだわりのサーバーと、焼きたて肉料理を開放的な空間で。",
+    "ctaPrimary": "今すぐ予約する",
+    "ctaSecondary": "空席を確認する"
+  },
+  "features": [
+    {"title":"期間限定の特別な時間","text":"夏だけのオープンテラスで、特別なひとときを。"},
+    {"title":"選べるビールサーバー","text":"定番からクラフトまで多彩なサーバーを用意。"},
+    {"title":"肉料理へのこだわり","text":"厳選したお肉を香ばしくジューシーにグリル。"}
+  ],
+  "courses": [
+    {"name":"スタンダードコース","price":"4,000円(税込)","desc":"お肉とビールを気軽に楽しむ。","image":"assets/food/meat-grill.jpg"},
+    {"name":"プレミアムコース","price":"5,500円(税込)","desc":"肉のグレードアップと飲み放題。","image":"assets/food/meat-grill.jpg"},
+    {"name":"肉満喫コース","price":"6,500円(税込)","desc":"厚切り肉盛りプレートがメイン。","image":"assets/food/meat-grill.jpg"}
+  ],
+  "panels": [
+    {"title":"BEER SERVER LINEUP","subtitle":"こだわりのビールサーバー","image":"assets/beer/server-lineup.jpg","items":["プレミアムラガー","クラフトIPA","黒ビール","ホワイトエール"],"link":"サーバー一覧を見る"},
+    {"title":"SIGNATURE MEAT","subtitle":"焼きたての肉料理","image":"assets/food/meat-grill.jpg","items":["厚切りステーキ","スペアリブ","ソーセージ盛り合わせ","チキンステーキ"],"link":"メニュー一覧を見る"}
+  ],
+  "scenes": [
+    {"title":"仕事帰りに","text":"冷えたビールで今日の疲れをリセット。","image":"assets/terrace/grass-terrace.jpg"},
+    {"title":"友人とワイワイ","text":"開放的な空間で盛り上がる夜。","image":"assets/terrace/grass-terrace.jpg"},
+    {"title":"休日の昼飲みに","text":"明るい時間から贅沢なひとときを。","image":"assets/terrace/grass-terrace.jpg"},
+    {"title":"会社のご宴会に","text":"団体利用も歓迎。貸切相談も可。","image":"assets/terrace/grass-terrace.jpg"}
+  ],
+  "store": {"hours":"平日16:00-23:00 / 土日祝12:00-23:00","access":"○○駅 徒歩5分","tel":"03-1234-5678"},
+  "faq": [
+    {"q":"雨天時は営業しますか？","a":"屋根付きエリアを優先案内します。"},
+    {"q":"予約なしでも入れますか？","a":"空席があれば当日案内可能です。"}
+  ]
+}
