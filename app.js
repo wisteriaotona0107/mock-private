@@ -86,7 +86,7 @@ function wireInteractions() {
   aside.querySelector(".diagnosis-close").addEventListener("click", () => setDiagnosis(false));
   document.addEventListener("click", (event) => {
     const navLink = event.target.closest('a[href="#diagnosis"]');
-    if (navLink && window.innerWidth < 1100) {
+    if (navLink && window.innerWidth < 1024) {
       event.preventDefault();
       setDiagnosis(true);
     }
