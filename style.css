@@ -65,7 +65,7 @@ section { background: var(--surface); border-bottom: 1px solid var(--line); }
   .hamburger { grid-column: 4; }
   .scenes .cards, .info-grid { grid-template-columns: repeat(4,minmax(0,1fr)); }
 }
-@media (min-width: 1100px) {
+@media (min-width: 1024px) {
   .topbar { grid-template-columns: minmax(180px,1fr) auto auto; }
   .layout { grid-template-columns: minmax(0,2fr) minmax(320px,1fr); }
   .diagnosis, .diagnosis.open { display: block; position: sticky; z-index: 1; inset: auto; top: 72px; width: auto; height: calc(100vh - 72px); overflow: auto; border-left: 1px solid var(--line); box-shadow: none; }
