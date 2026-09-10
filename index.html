@@ -9,9 +9,9 @@
   <body>
     <header class="topbar">
       <div class="brand">GRILL &amp; BEER GARDEN<br /><strong>THE SUMMER TERRACE</strong></div>
-      <nav class="main-nav" id="mainNav"></nav>
+      <nav class="main-nav" id="mainNav" aria-label="ページ内メニュー"></nav>
       <button class="cta-mini" data-action="reserve">今すぐ予約する</button>
-      <button class="hamburger" id="sidebarToggle" aria-label="診断を開く">☰</button>
+      <button class="hamburger" id="sidebarToggle" type="button" aria-label="診断を開く" aria-controls="diagnosis" aria-expanded="false">☰</button>
     </header>
 
     <div class="layout">
@@ -25,9 +25,10 @@
         <section class="faq" id="faq"></section>
       </main>
 
-      <aside class="diagnosis" id="diagnosis"></aside>
+      <aside class="diagnosis" id="diagnosis" aria-label="おすすめ診断"></aside>
     </div>
 
+    <div class="demo-status" id="demoStatus" role="status" aria-live="polite"></div>
     <footer class="footer" id="footer"></footer>
     <script src="app.js"></script>
   </body>
